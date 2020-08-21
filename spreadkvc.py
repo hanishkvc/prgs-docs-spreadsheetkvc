@@ -37,6 +37,10 @@ def cellstr(stdscr, y, x, msg, attr):
     stdscr.addstr(y, x*cw, tmsg, attr)
 
 
+def cellcur(stdscr, y, x):
+    stdscr.move(y,x*me['cw'])
+
+
 def cdraw(stdscr):
     for i in range(me['nc']):
         if (i == me['cc']):
@@ -50,6 +54,7 @@ def cdraw(stdscr):
         else:
             ctype = curses.A_REVERSE
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
+    cellcur(stdscr, me['cr'], me['cc'])
     stdscr.refresh()
 
 
