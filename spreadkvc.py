@@ -2,6 +2,7 @@
 # A simple ncurses based spreadsheet
 # HanishKVC, 2020
 
+import sys
 import curses
 
 me = {
@@ -48,6 +49,7 @@ def cellstr(stdscr, y, x, msg, attr):
     ty,tx = cellpos(y,x)
     if (tx > me['scrCols']) or (ty > me['scrRows']) :
         return
+    print("{},{} = {}".format(ty, tx, tmsg), file=sys.stderr)
     stdscr.addstr(ty, tx, tmsg, attr)
 
 
@@ -62,20 +64,21 @@ def cellcur_left():
     me['curCol'] -= 1
     if (me['curCol'] < 1):
         me['curCol'] = 1
+    if (me['viewColStart'] > me['curCol']):
+        me['viewColStart'] = me['curCol']
 
 
 def cellcur_right():
     me['curCol'] += 1
     if (me['curCol'] > me['numCols']):
         me['curCol'] = me['numCols']
+    if (me['curCol'] > me['dispCols']):
+        me['viewColStart'] = me['curCol'] - me['dispCols']
 
 
 def cdraw(stdscr):
-    if (me['curCol'] > me['dispCols']):
-        colStart = me['curCol'] - me['dispCols']
-    else:
-        colStart = 0
-    colEnd = colStart + me['dispCols']
+    colStart = me['viewColStart']
+    colEnd = colStart + me['dispCols']-1
     if (colEnd > me['numCols']):
         colEnd = me['numCols']
     for i in range(colStart, colEnd+1):
@@ -117,6 +120,10 @@ def runlogic(stdscr):
 
 
 stdscr=cstart()
-runlogic(stdscr)
+try:
+    runlogic(stdscr)
+except Exception as e:
+    print(e, file=sys.stderr)
+    print(sys.exc_info(), file=sys.stderr)
 cend(stdscr)
 
