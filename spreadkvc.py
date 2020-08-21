@@ -103,8 +103,6 @@ def runlogic(stdscr):
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        #print(key, me['curRow'], me['curCol'])
-        #print(curses.KEY_UP)
         if (key == curses.KEY_UP):
             me['curRow'] -= 1
             if (me['curRow'] < 1):
