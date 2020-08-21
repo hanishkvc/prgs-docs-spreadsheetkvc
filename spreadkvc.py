@@ -10,6 +10,7 @@ me = {
         'nc': 25, 'nr': 5,
         'dc': 5, 'dr': 5,
         'cc': 3, 'cr': 1,
+        'viewColStart': 0, 'viewRowStart': 0,
         }
 
 
@@ -18,8 +19,6 @@ def cstart():
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
     me['dr'] = me['scrRows'] - 1
     me['dc'] = int(me['scrCols'] / me['cw']) - 1
-    print(me)
-    exit()
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -34,6 +33,11 @@ def cend(stdscr):
     curses.endwin()
 
 
+def cellpos(row, col):
+    x = (col - me['viewColStart']) * me['cw']
+    y = row
+    return y, x
+
 def cellstr(stdscr, y, x, msg, attr):
     cw = me['cw']
     tmsg = msg[0:cw]
@@ -41,15 +45,17 @@ def cellstr(stdscr, y, x, msg, attr):
     if mlen < cw:
         for i in range(cw-mlen):
             tmsg += " "
-    tx = x*cw
-    ty = y
+    ty,tx = cellpos(y,x)
     if (tx > me['scrCols']) or (ty > me['scrRows']) :
         return
-    stdscr.addstr(y, x*cw, tmsg, attr)
+    stdscr.addstr(ty, tx, tmsg, attr)
 
 
 def cellcur(stdscr, y, x):
-    stdscr.move(y,x*me['cw'])
+    ty,tx = cellpos(y,x)
+    if (tx > me['scrCols']) or (ty > me['scrRows']) :
+        return
+    stdscr.move(ty,tx)
 
 
 def cellcur_left():
