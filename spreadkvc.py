@@ -90,7 +90,7 @@ def cellstr(stdscr, y, x, msg, attr):
         for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
-    if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or (ty > me['scrRows']) :
+    if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=sys.stderr)
     stdscr.addstr(ty, tx, tmsg, attr)
@@ -107,7 +107,7 @@ def cellcur(stdscr, y, x):
     '''
     cellWidth = me['cellWidth']
     ty,tx = cellpos(y,x)
-    if ((tx <0) or ((tx+cellWidth) > me['scrCols'])) or (ty > me['scrRows']) :
+    if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     stdscr.move(ty,tx)
 
