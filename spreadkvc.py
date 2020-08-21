@@ -200,7 +200,7 @@ def _cdraw_coladdrs(colStart, colEnd):
 
 
 def _cdraw_rowaddrs(rowStart, rowEnd):
-    for i in range(me['numRows']+1):
+    for i in range(rowStart, rowEnd+1):
         if (i == me['curRow']):
             ctype = curses.A_NORMAL
         else:
