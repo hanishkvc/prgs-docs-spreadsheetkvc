@@ -4,6 +4,7 @@
 
 import sys
 import curses
+import curses.ascii
 
 '''
 Notes:
@@ -25,6 +26,7 @@ me = {
         'curCol': 1, 'curRow': 1,
         'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 1,
+        'state': 'C'
         }
 
 
@@ -241,19 +243,43 @@ def cdraw(stdscr):
 
 
 def runlogic(stdscr):
+    '''
+    RunLogic between the Command and the other modes
+
+    Command Mode:
+        One can move around the cells.
+        Enter insert mode by pressing i
+        Quit by pressing Q
+
+    Insert Mode:
+        Enter alpha numeric values, follwed by enter key.
+        Escape from the insert mode by pressing Esc
+
+    '''
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        if (key == curses.KEY_UP):
-            cellcur_up()
-        elif (key == curses.KEY_DOWN):
-            cellcur_down()
-        elif (key == curses.KEY_LEFT):
-            cellcur_left()
-        elif (key == curses.KEY_RIGHT):
-            cellcur_right()
-        elif (key == ord('Q')):
-            break
+        if (me['state'] == 'C'):
+            if (key == curses.KEY_UP):
+                cellcur_up()
+            elif (key == curses.KEY_DOWN):
+                cellcur_down()
+            elif (key == curses.KEY_LEFT):
+                cellcur_left()
+            elif (key == curses.KEY_RIGHT):
+                cellcur_right()
+            elif (key == ord('i')):
+                me['state'] = 'I'
+                me['gotStr'] = ""
+            elif (key == ord('Q')):
+                break
+        else:
+            if (key == curses.ascii.ESC):
+                me['state'] = 'C'
+            elif (key == curses.KEY_ENTER):
+                me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
+            else:
+                me['gotStr'] += chr(key)
 
 
 stdscr=cstart()
