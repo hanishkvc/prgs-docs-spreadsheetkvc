@@ -8,6 +8,7 @@ me = {
         'cw': 16, 'ch': 1,
         'scrCols': 10, 'scrRows': 5,
         'nc': 25, 'nr': 5,
+        'dc': 5, 'dr': 5,
         'cc': 3, 'cr': 1,
         }
 
@@ -15,6 +16,10 @@ me = {
 def cstart():
     stdscr = curses.initscr()
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
+    me['dr'] = me['scrRows'] - 1
+    me['dc'] = int(me['scrCols'] / me['cw']) - 1
+    print(me)
+    exit()
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -60,7 +65,14 @@ def cellcur_right():
 
 
 def cdraw(stdscr):
-    for i in range(me['nc']+1):
+    if (me['cc'] > me['dc']):
+        colStart = me['cc'] - me['dc']
+    else:
+        colStart = 0
+    colEnd = colStart + me['dc']
+    if (colEnd > me['nc']):
+        colEnd = me['nc']
+    for i in range(colStart, colEnd+1):
         if (i == me['cc']):
             ctype = curses.A_NORMAL
         else:
