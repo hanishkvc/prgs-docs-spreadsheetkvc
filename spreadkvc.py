@@ -209,8 +209,8 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
-    for r in range(1, me['numRows']+1):
-        for c in range(1, me['numCols']+1):
+    for r in range(rowStart, rowEnd+1):
+        for c in range(colStart, colEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
