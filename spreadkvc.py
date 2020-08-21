@@ -5,11 +5,11 @@
 import curses
 
 me = {
-        'cw': 16, 'ch': 1,
+        'cellWidth': 16, 'cellHeight': 1,
         'scrCols': 10, 'scrRows': 5,
-        'nc': 25, 'nr': 5,
-        'dc': 5, 'dr': 5,
-        'cc': 3, 'cr': 1,
+        'numCols': 25, 'numRows': 5,
+        'dispCols': 5, 'dispRows': 5,
+        'curCol': 3, 'curRow': 1,
         'viewColStart': 0, 'viewRowStart': 0,
         }
 
@@ -17,8 +17,8 @@ me = {
 def cstart():
     stdscr = curses.initscr()
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
-    me['dr'] = me['scrRows'] - 1
-    me['dc'] = int(me['scrCols'] / me['cw']) - 1
+    me['dispRows'] = me['scrRows'] - 1
+    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -34,16 +34,16 @@ def cend(stdscr):
 
 
 def cellpos(row, col):
-    x = (col - me['viewColStart']) * me['cw']
+    x = (col - me['viewColStart']) * me['cellWidth']
     y = row
     return y, x
 
 def cellstr(stdscr, y, x, msg, attr):
-    cw = me['cw']
-    tmsg = msg[0:cw]
+    cellWidth = me['cellWidth']
+    tmsg = msg[0:cellWidth]
     mlen = len(tmsg)
-    if mlen < cw:
-        for i in range(cw-mlen):
+    if mlen < cellWidth:
+        for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
     if (tx > me['scrCols']) or (ty > me['scrRows']) :
@@ -59,38 +59,38 @@ def cellcur(stdscr, y, x):
 
 
 def cellcur_left():
-    me['cc'] -= 1
-    if (me['cc'] < 1):
-        me['cc'] = 1
+    me['curCol'] -= 1
+    if (me['curCol'] < 1):
+        me['curCol'] = 1
 
 
 def cellcur_right():
-    me['cc'] += 1
-    if (me['cc'] > me['nc']):
-        me['cc'] = me['nc']
+    me['curCol'] += 1
+    if (me['curCol'] > me['numCols']):
+        me['curCol'] = me['numCols']
 
 
 def cdraw(stdscr):
-    if (me['cc'] > me['dc']):
-        colStart = me['cc'] - me['dc']
+    if (me['curCol'] > me['dispCols']):
+        colStart = me['curCol'] - me['dispCols']
     else:
         colStart = 0
-    colEnd = colStart + me['dc']
-    if (colEnd > me['nc']):
-        colEnd = me['nc']
+    colEnd = colStart + me['dispCols']
+    if (colEnd > me['numCols']):
+        colEnd = me['numCols']
     for i in range(colStart, colEnd+1):
-        if (i == me['cc']):
+        if (i == me['curCol']):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
         cellstr(stdscr, 0, i, "{}".format(i), ctype)
-    for i in range(me['nr']+1):
-        if (i == me['cr']):
+    for i in range(me['numRows']+1):
+        if (i == me['curRow']):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
-    cellcur(stdscr, me['cr'], me['cc'])
+    cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
 
 
@@ -98,16 +98,16 @@ def runlogic(stdscr):
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        #print(key, me['cr'], me['cc'])
+        #print(key, me['curRow'], me['curCol'])
         #print(curses.KEY_UP)
         if (key == curses.KEY_UP):
-            me['cr'] -= 1
-            if (me['cr'] < 1):
-                me['cr'] = 1
+            me['curRow'] -= 1
+            if (me['curRow'] < 1):
+                me['curRow'] = 1
         elif (key == curses.KEY_DOWN):
-            me['cr'] += 1
-            if (me['cr'] > me['nr']):
-                me['cr'] = me['nr']
+            me['curRow'] += 1
+            if (me['curRow'] > me['numRows']):
+                me['curRow'] = me['numRows']
         elif (key == curses.KEY_LEFT):
             cellcur_left()
         elif (key == curses.KEY_RIGHT):
