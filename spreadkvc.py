@@ -33,6 +33,7 @@ def cstart():
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
     me['dispRows'] = me['scrRows'] - 1
     me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 2
+    print(me, file=sys.stderr)
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -141,15 +142,16 @@ def _cdraw_coladdrs(colStart, colEnd):
         else:
             ctype = curses.A_REVERSE
         iChr = i-1
-        if (iChr < 26):
-            sColAddr = chr(ord('A')+iChr)
+        iMajor = int(iChr/26)
+        if (iMajor < 1):
+            sMajor = ""
+        elif (iMajor > 26):
+            print("ERROR: More than {} cols not supported".format(26*26))
+            exit()
         else:
-            iMajor = int(iChr/26)
-            if (iMajor > 26):
-                print("ERROR: More than {} cols not supported".format(26*26))
-                exit()
-            iMinor = iChr%26
-            sColAddr = "{}{}".format(chr(ord('A')-1+iMajor), chr(ord('A')+iMinor))
+            sMajor=chr(ord('A')-1+iMajor)
+        sMinor = chr(ord('A')+iChr%26)
+        sColAddr = sMajor+sMinor
         cellstr(stdscr, 0, i, sColAddr, ctype)
 
 
