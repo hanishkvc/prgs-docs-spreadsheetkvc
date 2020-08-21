@@ -281,8 +281,9 @@ def runlogic(stdscr):
         else:
             if (key == curses.ascii.ESC):
                 me['state'] = 'C'
-            elif (key == curses.KEY_ENTER):
+            elif (key == curses.ascii.NL):
                 me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
+                print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
 
