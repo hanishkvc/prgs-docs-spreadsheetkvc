@@ -20,11 +20,11 @@ Notes:
 me = {
         'cellWidth': 16, 'cellHeight': 1,
         'scrCols': 10, 'scrRows': 5,
-        'numCols': 100, 'numRows': 5,
+        'numCols': 100, 'numRows': 200,
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
         'viewColStart': 1, 'viewRowStart': 1,
-        'fixedCols': 1, 'fixedRows': 0,
+        'fixedCols': 1, 'fixedRows': 1,
         }
 
 
@@ -65,7 +65,13 @@ def cellpos(row, col):
     else:
         x = (col - me['viewColStart']) * me['cellWidth']
         x += me['fixedCols']*me['cellWidth']
-    y = row
+    if (row == 0):
+        y = row
+    elif (row < me['viewRowStart']):
+        y = -1
+    else:
+        y = (row - me['viewRowStart'])
+        y += me['fixedRows']
     print("cellpos: {},{} => {},{}".format(row,col,y,x), file=sys.stderr)
     return y, x
 
@@ -136,6 +142,24 @@ def cellcur_right():
         print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
 
 
+def cellcur_up():
+    me['curRow'] -= 1
+    if (me['curRow'] < 1):
+        me['curRow'] = 1
+    if (me['viewRowStart'] > me['curRow']):
+        me['viewRowStart'] = me['curRow']
+
+
+def cellcur_down():
+    me['curRow'] += 1
+    if (me['curRow'] > me['numRows']):
+        me['curRow'] = me['numRows']
+    diff = me['curRow'] - me['viewRowStart'] + 1
+    if (diff > me['dispRows']):
+        me['viewRowStart'] = me['curRow'] - me['dispRows'] + 1
+        print("cellcur_down:adjust viewport:{}".format(me), file=sys.stderr)
+
+
 def _cdraw_coladdrs(colStart, colEnd):
     for i in range(colStart, colEnd+1):
         if (i == me['curCol']):
@@ -186,13 +210,9 @@ def runlogic(stdscr):
         cdraw(stdscr)
         key = stdscr.getch()
         if (key == curses.KEY_UP):
-            me['curRow'] -= 1
-            if (me['curRow'] < 1):
-                me['curRow'] = 1
+            cellcur_up()
         elif (key == curses.KEY_DOWN):
-            me['curRow'] += 1
-            if (me['curRow'] > me['numRows']):
-                me['curRow'] = me['numRows']
+            cellcur_down()
         elif (key == curses.KEY_LEFT):
             cellcur_left()
         elif (key == curses.KEY_RIGHT):
