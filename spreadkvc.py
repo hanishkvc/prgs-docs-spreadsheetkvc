@@ -6,7 +6,8 @@ import curses
 
 me = {
         'cw': 5, 'ch': 1,
-        'nc': 5, 'nr': 5, 
+        'nc': 5, 'nr': 5,
+        'cc': 1, 'cr': 1,
         }
 
 
@@ -28,9 +29,17 @@ def cend(stdscr):
 
 def cdraw(stdscr):
     for i in range(me['nc']):
-        stdscr.addstr(0, i*me['cw'], "{}".format(i))
+        if (i == me['cc']):
+            ctype = curses.A_NORMAL
+        else:
+            ctype = curses.A_REVERSE
+        stdscr.addstr(0, i*me['cw'], " {} ".format(i), ctype)
     for i in range(me['nr']):
-        stdscr.addstr(i, 0, "{}".format(i))
+        if (i == me['cr']):
+            ctype = curses.A_NORMAL
+        else:
+            ctype = curses.A_REVERSE
+        stdscr.addstr(i, 0, " {} ".format(i), ctype)
     stdscr.refresh()
 
 
