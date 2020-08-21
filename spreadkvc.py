@@ -32,7 +32,7 @@ def cstart():
     stdscr = curses.initscr()
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
     me['dispRows'] = me['scrRows'] - 1
-    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 2
+    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
     print(me, file=sys.stderr)
     curses.noecho()
     curses.cbreak()
@@ -130,10 +130,9 @@ def cellcur_right():
     me['curCol'] += 1
     if (me['curCol'] > me['numCols']):
         me['curCol'] = me['numCols']
-    diff = me['curCol'] - me['viewColStart']
+    diff = me['curCol'] - me['viewColStart'] + 1
     if (diff > me['dispCols']):
-    #if (me['curCol'] > me['dispCols']):
-        me['viewColStart'] = me['curCol'] - me['dispCols']
+        me['viewColStart'] = me['curCol'] - me['dispCols'] + 1
         print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
 
 
