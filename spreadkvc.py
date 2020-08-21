@@ -27,19 +27,23 @@ def cend(stdscr):
     curses.endwin()
 
 
+def cellstr(stdscr, y, x, msg, attr):
+    stdscr.addstr(y, x*me['cw'], msg, attr)
+
+
 def cdraw(stdscr):
     for i in range(me['nc']):
         if (i == me['cc']):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
-        stdscr.addstr(0, i*me['cw'], " {} ".format(i), ctype)
+        cellstr(stdscr, 0, i, "{}".format(i), ctype)
     for i in range(me['nr']):
         if (i == me['cr']):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
-        stdscr.addstr(i, 0, " {} ".format(i), ctype)
+        cellstr(stdscr, i, 0, "{}".format(i), ctype)
     stdscr.refresh()
 
 
