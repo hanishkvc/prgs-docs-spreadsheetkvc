@@ -47,7 +47,7 @@ def cellstr(stdscr, y, x, msg, attr):
         for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
-    if (tx > me['scrCols']) or (ty > me['scrRows']) :
+    if ((tx < 0) or (tx > me['scrCols'])) or (ty > me['scrRows']) :
         return
     print("{},{} = {}".format(ty, tx, tmsg), file=sys.stderr)
     stdscr.addstr(ty, tx, tmsg, attr)
@@ -55,7 +55,7 @@ def cellstr(stdscr, y, x, msg, attr):
 
 def cellcur(stdscr, y, x):
     ty,tx = cellpos(y,x)
-    if (tx > me['scrCols']) or (ty > me['scrRows']) :
+    if ((tx <0) or (tx > me['scrCols'])) or (ty > me['scrRows']) :
         return
     stdscr.move(ty,tx)
 
@@ -74,13 +74,15 @@ def cellcur_right():
         me['curCol'] = me['numCols']
     if (me['curCol'] > me['dispCols']):
         me['viewColStart'] = me['curCol'] - me['dispCols']
+        print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
 
 
 def cdraw(stdscr):
     colStart = me['viewColStart']
-    colEnd = colStart + me['dispCols']-1
+    colEnd = colStart + me['dispCols']
     if (colEnd > me['numCols']):
         colEnd = me['numCols']
+    print("cdraw: cols {} to {}".format(colStart, colEnd), file=sys.stderr)
     for i in range(colStart, colEnd+1):
         if (i == me['curCol']):
             ctype = curses.A_NORMAL
