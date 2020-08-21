@@ -219,7 +219,11 @@ def cdraw(stdscr):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
-            cellstr(stdscr, r, c, "{},{}".format(r,c), curses.A_NORMAL)
+            if ((r == me['curRow']) and (c == me['curCol'])):
+                ctype = curses.A_REVERSE
+            else:
+                ctype = curses.A_NORMAL
+            cellstr(stdscr, r, c, "{},{}".format(r,c), ctype)
     cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
 
