@@ -199,6 +199,15 @@ def _cdraw_coladdrs(colStart, colEnd):
         cellstr(stdscr, 0, i, sColAddr, ctype)
 
 
+def _cdraw_rowaddrs(rowStart, rowEnd):
+    for i in range(me['numRows']+1):
+        if (i == me['curRow']):
+            ctype = curses.A_NORMAL
+        else:
+            ctype = curses.A_REVERSE
+        cellstr(stdscr, i, 0, "{}".format(i), ctype)
+
+
 def cdraw(stdscr):
     '''
     Draws the screen consisting of the spreadsheet address row and col
@@ -209,14 +218,13 @@ def cdraw(stdscr):
     colEnd = colStart + me['dispCols']
     if (colEnd > me['numCols']):
         colEnd = me['numCols']
-    print("cdraw: cols {} to {}".format(colStart, colEnd), file=sys.stderr)
+    rowStart = me['viewRowStart']
+    rowEnd = rowStart + me['dispRows']
+    if (rowEnd > me['numRows']):
+        rowEnd = me['numRows']
+    print("cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=sys.stderr)
     _cdraw_coladdrs(colStart, colEnd)
-    for i in range(me['numRows']+1):
-        if (i == me['curRow']):
-            ctype = curses.A_NORMAL
-        else:
-            ctype = curses.A_REVERSE
-        cellstr(stdscr, i, 0, "{}".format(i), ctype)
+    _cdraw_rowaddrs(colStart, colEnd)
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
