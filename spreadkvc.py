@@ -62,8 +62,8 @@ def cellcur(stdscr, y, x):
 
 def cellcur_left():
     me['curCol'] -= 1
-    if (me['curCol'] < 1):
-        me['curCol'] = 1
+    if (me['curCol'] < 0):
+        me['curCol'] = 0
     if (me['viewColStart'] > me['curCol']):
         me['viewColStart'] = me['curCol']
 
