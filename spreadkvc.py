@@ -208,6 +208,16 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
 
 
+def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
+    for r in range(1, me['numRows']+1):
+        for c in range(1, me['numCols']+1):
+            if ((r == me['curRow']) and (c == me['curCol'])):
+                ctype = curses.A_REVERSE
+            else:
+                ctype = curses.A_NORMAL
+            cellstr(stdscr, r, c, "{},{}".format(r,c), ctype)
+
+
 def cdraw(stdscr):
     '''
     Draws the screen consisting of the spreadsheet address row and col
@@ -224,14 +234,8 @@ def cdraw(stdscr):
         rowEnd = me['numRows']
     print("cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=sys.stderr)
     _cdraw_coladdrs(colStart, colEnd)
-    _cdraw_rowaddrs(colStart, colEnd)
-    for r in range(1, me['numRows']+1):
-        for c in range(1, me['numCols']+1):
-            if ((r == me['curRow']) and (c == me['curCol'])):
-                ctype = curses.A_REVERSE
-            else:
-                ctype = curses.A_NORMAL
-            cellstr(stdscr, r, c, "{},{}".format(r,c), ctype)
+    _cdraw_rowaddrs(rowStart, rowEnd)
+    _cdraw_data(rowStart, rowEnd, colStart, colEnd)
     cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
 
