@@ -104,6 +104,9 @@ def cellcur(stdscr, y, x):
     As of now the logic will only show that much content as can fit within
     the cellWidth specified, so the check is done wrt cellWidth and not the
     length of the specific content in the cell.
+
+    As cellHeight and amount of data in a cell can only be 1 line, so nothing
+    etc required, or put differently both match to 1.
     '''
     cellWidth = me['cellWidth']
     ty,tx = cellpos(y,x)
@@ -143,6 +146,12 @@ def cellcur_right():
 
 
 def cellcur_up():
+    '''
+    Move the current cell cursor up, if possible.
+
+    It also ensures that the cursor position is 1 or greater.
+    It also adjusts the viewport if required.
+    '''
     me['curRow'] -= 1
     if (me['curRow'] < 1):
         me['curRow'] = 1
@@ -151,6 +160,12 @@ def cellcur_up():
 
 
 def cellcur_down():
+    '''
+    Move the current cell cursor down, if possible.
+
+    It also ensures that the cursor position is within the available data cells.
+    It also adjusts the viewport as required.
+    '''
     me['curRow'] += 1
     if (me['curRow'] > me['numRows']):
         me['curRow'] = me['numRows']
@@ -161,6 +176,10 @@ def cellcur_down():
 
 
 def _cdraw_coladdrs(colStart, colEnd):
+    '''
+    As columns are named alphabetically and not numerically, so the
+    internal numeric address is changed to equivalent alphabetic address.
+    '''
     for i in range(colStart, colEnd+1):
         if (i == me['curCol']):
             ctype = curses.A_NORMAL
