@@ -26,7 +26,8 @@ me = {
         'curCol': 1, 'curRow': 1,
         'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 1,
-        'state': 'C'
+        'state': 'C',
+        'data': dict()
         }
 
 
@@ -217,7 +218,11 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
-            cellstr(stdscr, r, c, "{},{}".format(r,c), ctype)
+            sData = me['data'].get((r,c))
+            print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
+            if sData == None:
+                sData = "{},{}".format(r,c)
+            cellstr(stdscr, r, c, str(sData), ctype)
 
 
 def cdraw(stdscr):
@@ -287,6 +292,9 @@ try:
     runlogic(stdscr)
 except Exception as e:
     print(e, file=sys.stderr)
+    a,b,c = sys.exc_info()
     print(sys.exc_info(), file=sys.stderr)
+    for n in c:
+        print(n, file=sys.stderr)
 cend(stdscr)
 
