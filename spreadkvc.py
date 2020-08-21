@@ -130,7 +130,9 @@ def cellcur_right():
     me['curCol'] += 1
     if (me['curCol'] > me['numCols']):
         me['curCol'] = me['numCols']
-    if (me['curCol'] > me['dispCols']):
+    diff = me['curCol'] - me['viewColStart']
+    if (diff > me['dispCols']):
+    #if (me['curCol'] > me['dispCols']):
         me['viewColStart'] = me['curCol'] - me['dispCols']
         print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
 
