@@ -20,7 +20,7 @@ Notes:
 me = {
         'cellWidth': 16, 'cellHeight': 1,
         'scrCols': 10, 'scrRows': 5,
-        'numCols': 25, 'numRows': 5,
+        'numCols': 100, 'numRows': 5,
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
         'viewColStart': 1, 'viewRowStart': 1,
@@ -134,6 +134,25 @@ def cellcur_right():
         print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
 
 
+def _cdraw_coladdrs(colStart, colEnd):
+    for i in range(colStart, colEnd+1):
+        if (i == me['curCol']):
+            ctype = curses.A_NORMAL
+        else:
+            ctype = curses.A_REVERSE
+        iChr = i-1
+        if (iChr < 26):
+            sColAddr = chr(ord('A')+iChr)
+        else:
+            iMajor = int(iChr/26)
+            if (iMajor > 26):
+                print("ERROR: More than {} cols not supported".format(26*26))
+                exit()
+            iMinor = iChr%26
+            sColAddr = "{}{}".format(chr(ord('A')-1+iMajor), chr(ord('A')+iMinor))
+        cellstr(stdscr, 0, i, sColAddr, ctype)
+
+
 def cdraw(stdscr):
     '''
     Draws the screen consisting of the spreadsheet address row and col
@@ -145,12 +164,7 @@ def cdraw(stdscr):
     if (colEnd > me['numCols']):
         colEnd = me['numCols']
     print("cdraw: cols {} to {}".format(colStart, colEnd), file=sys.stderr)
-    for i in range(colStart, colEnd+1):
-        if (i == me['curCol']):
-            ctype = curses.A_NORMAL
-        else:
-            ctype = curses.A_REVERSE
-        cellstr(stdscr, 0, i, "{}".format(i), ctype)
+    _cdraw_coladdrs(colStart, colEnd)
     for i in range(me['numRows']+1):
         if (i == me['curRow']):
             ctype = curses.A_NORMAL
