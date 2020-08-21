@@ -64,9 +64,25 @@ def cdraw(stdscr):
     stdscr.refresh()
 
 
-stdscr=cstart()
-cdraw(stdscr)
-stdscr.getkey()
-cend(stdscr)
+def runlogic(stdscr):
+    while True:
+        cdraw(stdscr)
+        key = stdscr.getkey()
+        print(key, me['cr'], me['cc'])
+        print(curses.KEY_UP)
+        if (key == curses.KEY_UP):
+            me['cr'] -= 1
+            if (me['cr'] < 1):
+                me['cr'] = 1
+        elif (key == curses.KEY_DOWN):
+            me['cr'] += 1
+            if (me['cr'] > me['nr']):
+                me['cr'] = me['nr']
+        elif (key == 'Q'):
+            break
 
+
+stdscr=cstart()
+runlogic(stdscr)
+cend(stdscr)
 
