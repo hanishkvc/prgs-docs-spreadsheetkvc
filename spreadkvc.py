@@ -28,7 +28,13 @@ def cend(stdscr):
 
 
 def cellstr(stdscr, y, x, msg, attr):
-    stdscr.addstr(y, x*me['cw'], msg, attr)
+    cw = me['cw']
+    tmsg = msg[0:cw]
+    mlen = len(tmsg)
+    if mlen < cw:
+        for i in range(cw-mlen):
+            tmsg += " "
+    stdscr.addstr(y, x*cw, tmsg, attr)
 
 
 def cdraw(stdscr):
