@@ -5,14 +5,19 @@
 import curses
 
 me = {
-        'cw': 5, 'ch': 1,
-        'nc': 5, 'nr': 5,
-        'cc': 1, 'cr': 1,
+        'cw': 16, 'ch': 1,
+        'scrCols': 10, 'scrRows': 5,
+        'nc': 25, 'nr': 5,
+        'cc': 3, 'cr': 1,
         }
 
 
 def cstart():
     stdscr = curses.initscr()
+    print(dir(stdscr))
+    me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
+    print(me)
+    exit()
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
