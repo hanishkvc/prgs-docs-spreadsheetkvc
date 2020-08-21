@@ -5,13 +5,25 @@
 import sys
 import curses
 
+'''
+Notes:
+    0th row or 0th col corresponds to spreadsheets address info
+    1 to numRows and 1 to numCols corresponds to actual data.
+
+    viewColStart and viewRowStart correspond to data cells, so
+    they cant contain 0. Same with curCol and curRow.
+
+    fixedCols|fixedRows for now corresponds to the single fixed
+    row and col related to spreadsheet row|col address info.
+'''
+
 me = {
         'cellWidth': 16, 'cellHeight': 1,
         'scrCols': 10, 'scrRows': 5,
         'numCols': 25, 'numRows': 5,
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
-        'viewColStart': 0, 'viewRowStart': 0,
+        'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 0,
         }
 
@@ -20,7 +32,7 @@ def cstart():
     stdscr = curses.initscr()
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
     me['dispRows'] = me['scrRows'] - 1
-    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
+    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 2
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -36,12 +48,12 @@ def cend(stdscr):
 
 
 def cellpos(row, col):
-    if (col < me['fixedCols']):
+    if (col == 0):
         x = col * me['cellWidth']
     elif (col < me['viewColStart']):
         x = -1
     else:
-        x = ((col-1) - me['viewColStart']) * me['cellWidth']
+        x = (col - me['viewColStart']) * me['cellWidth']
         x += me['fixedCols']*me['cellWidth']
     y = row
     print("cellpos: {},{} => {},{}".format(row,col,y,x), file=sys.stderr)
@@ -63,16 +75,17 @@ def cellstr(stdscr, y, x, msg, attr):
 
 
 def cellcur(stdscr, y, x):
+    cellWidth = me['cellWidth']
     ty,tx = cellpos(y,x)
-    if ((tx <0) or (tx > me['scrCols'])) or (ty > me['scrRows']) :
+    if ((tx <0) or ((tx+cellWidth) > me['scrCols'])) or (ty > me['scrRows']) :
         return
     stdscr.move(ty,tx)
 
 
 def cellcur_left():
     me['curCol'] -= 1
-    if (me['curCol'] < 0):
-        me['curCol'] = 0
+    if (me['curCol'] <= 0):
+        me['curCol'] = 1
     if (me['viewColStart'] > me['curCol']):
         me['viewColStart'] = me['curCol']
 
