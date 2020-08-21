@@ -14,10 +14,7 @@ me = {
 
 def cstart():
     stdscr = curses.initscr()
-    print(dir(stdscr))
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
-    print(me)
-    exit()
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -39,6 +36,10 @@ def cellstr(stdscr, y, x, msg, attr):
     if mlen < cw:
         for i in range(cw-mlen):
             tmsg += " "
+    tx = x*cw
+    ty = y
+    if (tx > me['scrCols']) or (ty > me['scrRows']) :
+        return
     stdscr.addstr(y, x*cw, tmsg, attr)
 
 
