@@ -12,7 +12,7 @@ me = {
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
         'viewColStart': 0, 'viewRowStart': 0,
-        'fixedCols': 0, 'fixedRows': 0,
+        'fixedCols': 1, 'fixedRows': 0,
         }
 
 
@@ -38,11 +38,15 @@ def cend(stdscr):
 def cellpos(row, col):
     if (col < me['fixedCols']):
         x = col * me['cellWidth']
+    elif (col < me['viewColStart']):
+        x = -1
     else:
-        x = (col - me['viewColStart']) * me['cellWidth']
+        x = ((col-1) - me['viewColStart']) * me['cellWidth']
+        x += me['fixedCols']*me['cellWidth']
     y = row
     print("cellpos: {},{} => {},{}".format(row,col,y,x), file=sys.stderr)
     return y, x
+
 
 def cellstr(stdscr, y, x, msg, attr):
     cellWidth = me['cellWidth']
@@ -52,7 +56,7 @@ def cellstr(stdscr, y, x, msg, attr):
         for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
-    if ((tx < 0) or (tx > me['scrCols'])) or (ty > me['scrRows']) :
+    if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or (ty > me['scrRows']) :
         return
     print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=sys.stderr)
     stdscr.addstr(ty, tx, tmsg, attr)
@@ -83,6 +87,7 @@ def cellcur_right():
 
 
 def cdraw(stdscr):
+    #stdscr.clear()
     colStart = me['viewColStart']
     colEnd = colStart + me['dispCols']
     if (colEnd > me['numCols']):
@@ -100,8 +105,8 @@ def cdraw(stdscr):
         else:
             ctype = curses.A_REVERSE
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
-    for r in range(1, me['numRows']-1):
-        for c in range(1, colEnd):
+    for r in range(1, me['numRows']+1):
+        for c in range(1, me['numCols']+1):
             cellstr(stdscr, r, c, "{},{}".format(r,c), curses.A_NORMAL)
     cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
