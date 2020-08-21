@@ -67,9 +67,9 @@ def cdraw(stdscr):
 def runlogic(stdscr):
     while True:
         cdraw(stdscr)
-        key = stdscr.getkey()
-        print(key, me['cr'], me['cc'])
-        print(curses.KEY_UP)
+        key = stdscr.getch()
+        #print(key, me['cr'], me['cc'])
+        #print(curses.KEY_UP)
         if (key == curses.KEY_UP):
             me['cr'] -= 1
             if (me['cr'] < 1):
@@ -78,7 +78,7 @@ def runlogic(stdscr):
             me['cr'] += 1
             if (me['cr'] > me['nr']):
                 me['cr'] = me['nr']
-        elif (key == 'Q'):
+        elif (key == ord('Q')):
             break
 
 
