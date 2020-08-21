@@ -47,6 +47,18 @@ def cellcur(stdscr, y, x):
     stdscr.move(y,x*me['cw'])
 
 
+def cellcur_left():
+    me['cc'] -= 1
+    if (me['cc'] < 1):
+        me['cc'] = 1
+
+
+def cellcur_right():
+    me['cc'] += 1
+    if (me['cc'] > me['nc']):
+        me['cc'] = me['nc']
+
+
 def cdraw(stdscr):
     for i in range(me['nc']+1):
         if (i == me['cc']):
@@ -79,13 +91,9 @@ def runlogic(stdscr):
             if (me['cr'] > me['nr']):
                 me['cr'] = me['nr']
         elif (key == curses.KEY_LEFT):
-            me['cc'] -= 1
-            if (me['cc'] < 1):
-                me['cc'] = 1
+            cellcur_left()
         elif (key == curses.KEY_RIGHT):
-            me['cc'] += 1
-            if (me['cc'] > me['nc']):
-                me['cc'] = me['nc']
+            cellcur_right()
         elif (key == ord('Q')):
             break
 
