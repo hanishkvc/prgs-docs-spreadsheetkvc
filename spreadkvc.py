@@ -48,13 +48,13 @@ def cellcur(stdscr, y, x):
 
 
 def cdraw(stdscr):
-    for i in range(me['nc']):
+    for i in range(me['nc']+1):
         if (i == me['cc']):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
         cellstr(stdscr, 0, i, "{}".format(i), ctype)
-    for i in range(me['nr']):
+    for i in range(me['nr']+1):
         if (i == me['cr']):
             ctype = curses.A_NORMAL
         else:
@@ -78,6 +78,14 @@ def runlogic(stdscr):
             me['cr'] += 1
             if (me['cr'] > me['nr']):
                 me['cr'] = me['nr']
+        elif (key == curses.KEY_LEFT):
+            me['cc'] -= 1
+            if (me['cc'] < 1):
+                me['cc'] = 1
+        elif (key == curses.KEY_RIGHT):
+            me['cc'] += 1
+            if (me['cc'] > me['nc']):
+                me['cc'] = me['nc']
         elif (key == ord('Q')):
             break
 
