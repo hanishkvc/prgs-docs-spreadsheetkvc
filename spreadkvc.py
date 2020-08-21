@@ -48,6 +48,15 @@ def cend(stdscr):
 
 
 def cellpos(row, col):
+    '''
+    Identify the position of the cell in the screen.
+
+    If the col corresponds to the spreadsheet row addresses related column,
+    then handle it directly. It will be 0, but for now indirectly calculated.
+
+    If the col corresponds to a data cell, then check if it is within viewport
+    or not and inturn based on it, calculate the screen x position.
+    '''
     if (col == 0):
         x = col * me['cellWidth']
     elif (col < me['viewColStart']):
@@ -61,6 +70,12 @@ def cellpos(row, col):
 
 
 def cellstr(stdscr, y, x, msg, attr):
+    '''
+    Display contents of the cell, only if it is in the current display viewport
+    as well as if it's contents can be fully shown on the screen.
+
+    In viewport or not is got indirectly from the cellpos call.
+    '''
     cellWidth = me['cellWidth']
     tmsg = msg[0:cellWidth]
     mlen = len(tmsg)
@@ -75,6 +90,14 @@ def cellstr(stdscr, y, x, msg, attr):
 
 
 def cellcur(stdscr, y, x):
+    '''
+    Set the displayed cursor to the specified cell, if it is in the viewport
+    and if its clipped content can be shown fully.
+
+    As of now the logic will only show that much content as can fit within
+    the cellWidth specified, so the check is done wrt cellWidth and not the
+    length of the specific content in the cell.
+    '''
     cellWidth = me['cellWidth']
     ty,tx = cellpos(y,x)
     if ((tx <0) or ((tx+cellWidth) > me['scrCols'])) or (ty > me['scrRows']) :
@@ -83,6 +106,12 @@ def cellcur(stdscr, y, x):
 
 
 def cellcur_left():
+    '''
+    Move the current cell cursor to the left, if possible.
+
+    It also ensures that the cursor position is 1 or greater.
+    It also adjusts the viewport if required.
+    '''
     me['curCol'] -= 1
     if (me['curCol'] <= 0):
         me['curCol'] = 1
@@ -91,6 +120,12 @@ def cellcur_left():
 
 
 def cellcur_right():
+    '''
+    Move the current cell cursor to the right, if possible.
+
+    It also ensures that the cursor position is within the available data cells.
+    It also adjusts the viewport as required.
+    '''
     me['curCol'] += 1
     if (me['curCol'] > me['numCols']):
         me['curCol'] = me['numCols']
@@ -100,6 +135,10 @@ def cellcur_right():
 
 
 def cdraw(stdscr):
+    '''
+    Draws the screen consisting of the spreadsheet address row and col
+    as well as the data cells (i.e data rows and cols).
+    '''
     #stdscr.clear()
     colStart = me['viewColStart']
     colEnd = colStart + me['dispCols']
