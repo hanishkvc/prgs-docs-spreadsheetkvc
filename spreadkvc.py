@@ -296,7 +296,7 @@ def runlogic(stdscr):
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        if (me['state'] == 'C'):
+        if (me['state'] == 'C'):                            #### Command Mode
             if (key == curses.KEY_UP):
                 cellcur_up()
             elif (key == curses.KEY_DOWN):
@@ -329,7 +329,7 @@ def runlogic(stdscr):
                 me['data'][(me['curRow'],me['curCol'])] = ""
             elif (key == ord('Q')):
                 break
-        else:
+        else:                                               #### Edit+ Mode
             if (key == curses.ascii.ESC):
                 if me['backupEdit'] != None:
                     me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
