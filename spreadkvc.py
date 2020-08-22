@@ -315,6 +315,31 @@ def insert_rc_ab(cmd, args):
         me['numCols'] += cnt
 
 
+def delete_rc(cmd, args):
+    '''
+    Delete the current row or column, as specified in the cmd.
+    '''
+    bRowMode = False
+    bColMode = False
+    if cmd[1] == 'r':
+        bRowMode = True
+        me['numRows'] -= 1
+    elif cmd[1] == 'c':
+        bColMode = True
+        me['numCols'] -= 1
+
+    cR = me['curRow']
+    cC = me['curCol']
+    for k in me['data']:
+        r,c = k
+        if bRowMode:
+            if r == cR:
+                me['data'].pop(k, None)
+        if bColMode:
+            if c == cC:
+                me['data'].pop(k, None)
+
+
 def save_file(sFile):
     '''
     Save file in a csv format.
@@ -366,6 +391,8 @@ def explicit_commandmode(cmdArgs):
         if args == None:
             args = "1"
         insert_rc_ab(cmd, args)
+    elif cmd.startswith('d'):
+        delete_rc(cmd, args)
 
 
 def runlogic(stdscr):
