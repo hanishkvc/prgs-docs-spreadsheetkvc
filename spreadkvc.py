@@ -301,7 +301,7 @@ def runlogic(stdscr):
                 me['gotStr'] = ""
             elif (key == ord('e')):
                 me['state'] = 'E'
-                me['gotStr'] = me['data'][(me['curRow'], me['curCol'])]
+                me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
                 if me['gotStr'] == None:
                     me['gotStr'] = ""
             elif (key == ord('Q')):
