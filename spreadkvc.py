@@ -3,7 +3,7 @@
 # HanishKVC, 2020
 # GPL
 
-import sys
+import sys, traceback
 import curses
 import curses.ascii
 
@@ -483,10 +483,10 @@ stdscr=cstart()
 try:
     runlogic(stdscr)
 except Exception as e:
-    print(e, file=sys.stderr)
-    a,b,c = sys.exc_info()
-    print(sys.exc_info(), file=sys.stderr)
-    for n in c:
-        print(n, file=sys.stderr)
-cend(stdscr)
+    print("exception:{}".format(e), file=sys.stderr)
+    print("exc_info:{}".format(sys.exc_info()), file=sys.stderr)
+    traceback.print_exc()
+    print("exception: done", file=sys.stderr)
+finally:
+    cend(stdscr)
 
