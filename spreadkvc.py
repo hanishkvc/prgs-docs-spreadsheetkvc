@@ -33,7 +33,7 @@ me = {
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
         'data': dict(),
-        'clipCell': True
+        'clipCell': False
         }
 
 
