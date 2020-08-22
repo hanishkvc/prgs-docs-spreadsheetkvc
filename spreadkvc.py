@@ -395,6 +395,44 @@ def explicit_commandmode(cmdArgs):
         delete_rc(cmd, args)
 
 
+def rl_commandmode(stdscr, key):
+    if (key == curses.KEY_UP):
+        cellcur_up()
+    elif (key == curses.KEY_DOWN):
+        cellcur_down()
+    elif (key == curses.KEY_LEFT):
+        cellcur_left()
+    elif (key == curses.KEY_RIGHT):
+        cellcur_right()
+    elif (key == ord('d')):
+        me['data'].pop((me['curRow'],me['curCol']), None)
+    elif (key == ord('c')):
+        me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+    elif (key == ord('C')):
+        me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+        me['data'].pop((me['curRow'],me['curCol']), None)
+    elif (key == ord('p')):
+        if me['copyData'] != None:
+            me['data'][(me['curRow'],me['curCol'])] = me['copyData']
+    elif (key == ord('i')):
+        me['state'] = 'E'
+        me['gotStr'] = ""
+        me['backupEdit'] = None
+        me['data'][(me['curRow'],me['curCol'])] = ""
+    elif (key == ord('e')):
+        me['state'] = 'E'
+        me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
+        if me['gotStr'] == None:
+            me['gotStr'] = ""
+        me['backupEdit'] = me['gotStr']
+        me['data'][(me['curRow'],me['curCol'])] = ""
+    elif (key == ord(':')):
+        me['state'] = ':'
+        me['gotStr'] = ""
+    elif (key == ord('Q')):
+        break
+
+
 def runlogic(stdscr):
     '''
     RunLogic between the Command and the other modes
@@ -423,41 +461,7 @@ def runlogic(stdscr):
         cdraw(stdscr)
         key = stdscr.getch()
         if (me['state'] == 'C'):                            #### Command Mode
-            if (key == curses.KEY_UP):
-                cellcur_up()
-            elif (key == curses.KEY_DOWN):
-                cellcur_down()
-            elif (key == curses.KEY_LEFT):
-                cellcur_left()
-            elif (key == curses.KEY_RIGHT):
-                cellcur_right()
-            elif (key == ord('d')):
-                me['data'].pop((me['curRow'],me['curCol']), None)
-            elif (key == ord('c')):
-                me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
-            elif (key == ord('C')):
-                me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
-                me['data'].pop((me['curRow'],me['curCol']), None)
-            elif (key == ord('p')):
-                if me['copyData'] != None:
-                    me['data'][(me['curRow'],me['curCol'])] = me['copyData']
-            elif (key == ord('i')):
-                me['state'] = 'E'
-                me['gotStr'] = ""
-                me['backupEdit'] = None
-                me['data'][(me['curRow'],me['curCol'])] = ""
-            elif (key == ord('e')):
-                me['state'] = 'E'
-                me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
-                if me['gotStr'] == None:
-                    me['gotStr'] = ""
-                me['backupEdit'] = me['gotStr']
-                me['data'][(me['curRow'],me['curCol'])] = ""
-            elif (key == ord(':')):
-                me['state'] = ':'
-                me['gotStr'] = ""
-            elif (key == ord('Q')):
-                break
+            rl_commandmode(stdscr, key)
         else:                                               #### Edit+ Mode
             if (key == curses.ascii.ESC):
                 if me['state'] == 'E':
