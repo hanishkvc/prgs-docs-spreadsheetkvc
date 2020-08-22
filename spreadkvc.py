@@ -444,7 +444,6 @@ def rl_editplusmode(stdscr, key):
     elif (key == curses.KEY_BACKSPACE):
         me['gotStr'] = me['gotStr'][0:-1]
     elif (key == curses.ascii.NL):
-        #me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
         elif me['state'] == ':':
