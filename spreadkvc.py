@@ -285,8 +285,9 @@ def save_file(sFile):
     f.close()
 
 
-def explicit_commandmode():
-    cmd,args = me['gotStr'].split(' ',1)
+def explicit_commandmode(cmdArgs):
+    cmd,args = cmdArgs.split(' ',1)
+    print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
     if cmd == ':w':
         save_file(args)
 
@@ -368,6 +369,7 @@ def runlogic(stdscr):
                 if me['state'] == 'E':
                     me['backupEdit'] = me['gotStr']
                 elif me['state'] == ':':
+                    explicit_commandmode(me['gotStr'])
                     me['state'] = 'C'
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
