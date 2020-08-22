@@ -233,10 +233,10 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             if (sData == None) and bDebug:
                 sData = "{},{}".format(r,c)
             if (sData != None):
-                sRemaining = sData[me['cellWidth']+1:]
+                sRemaining = sData[me['cellWidth']:]
             elif (not me['clipCell']):
                 sData = sRemaining[0:me['cellWidth']]
-                sRemaining = sRemaining[me['cellWidth']+1:]
+                sRemaining = sRemaining[me['cellWidth']:]
                 if (sData != ""):
                     print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=sys.stderr)
             cellstr(stdscr, r, c, str(sData), ctype, True)
