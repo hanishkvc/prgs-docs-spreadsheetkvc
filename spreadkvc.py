@@ -434,6 +434,27 @@ def rl_commandmode(stdscr, key):
     return True
 
 
+def rl_editplusmode(stdscr, key):
+    if (key == curses.ascii.ESC):
+        if me['state'] == 'E':
+            # Restore/set data to the latest backedup edit buffer
+            if me['backupEdit'] != None:
+                me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
+        me['state'] = 'C'
+    elif (key == curses.KEY_BACKSPACE):
+        me['gotStr'] = me['gotStr'][0:-1]
+    elif (key == curses.ascii.NL):
+        #me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
+        if me['state'] == 'E':
+            me['backupEdit'] = me['gotStr']
+        elif me['state'] == ':':
+            explicit_commandmode(me['gotStr'])
+            me['state'] = 'C'
+        print("runLogic:{}".format(me), file=sys.stderr)
+    else:
+        me['gotStr'] += chr(key)
+
+
 def runlogic(stdscr):
     '''
     RunLogic between the Command and the other modes
@@ -461,28 +482,11 @@ def runlogic(stdscr):
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        if (me['state'] == 'C'):                            #### Command Mode
+        if (me['state'] == 'C'):    #### Command Mode
             if not rl_commandmode(stdscr, key):
                 break
-        else:                                               #### Edit+ Mode
-            if (key == curses.ascii.ESC):
-                if me['state'] == 'E':
-                    # Restore/set data to the latest backedup edit buffer
-                    if me['backupEdit'] != None:
-                        me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
-                me['state'] = 'C'
-            elif (key == curses.KEY_BACKSPACE):
-                me['gotStr'] = me['gotStr'][0:-1]
-            elif (key == curses.ascii.NL):
-                #me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
-                if me['state'] == 'E':
-                    me['backupEdit'] = me['gotStr']
-                elif me['state'] == ':':
-                    explicit_commandmode(me['gotStr'])
-                    me['state'] = 'C'
-                print("runLogic:{}".format(me), file=sys.stderr)
-            else:
-                me['gotStr'] += chr(key)
+        else:                       #### Edit+ Mode
+            rl_editplusmode(stdscr, key)
 
 
 stdscr=cstart()
