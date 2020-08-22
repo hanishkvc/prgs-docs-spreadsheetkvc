@@ -330,14 +330,17 @@ def delete_rc(cmd, args):
 
     cR = me['curRow']
     cC = me['curCol']
+    lKeys = []
     for k in me['data']:
         r,c = k
         if bRowMode:
             if r == cR:
-                me['data'].pop(k, None)
+                lKeys.add(k)
         if bColMode:
             if c == cC:
-                me['data'].pop(k, None)
+                lKeys.add(k)
+    for k in lKeys:
+        me['data'].pop(k, None)
 
 
 def save_file(sFile):
