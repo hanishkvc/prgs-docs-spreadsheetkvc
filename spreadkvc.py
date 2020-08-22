@@ -222,6 +222,7 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     for r in range(rowStart, rowEnd+1):
+        sRemaining = ""
         for c in range(colStart, colEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
@@ -229,12 +230,16 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
-            if (sData == None):
-                if bDebug:
-                    sData = "{},{}".format(r,c)
-                else:
-                    sData = ""
-            cellstr(stdscr, r, c, str(sData), ctype, me['clipCell'])
+            if (sData == None) and bDebug:
+                sData = "{},{}".format(r,c)
+            if (sData != None):
+                sRemaining = sData[me['cellWidth']+1:]
+            elif (not me['clipCell']):
+                sData = sRemaining[0:me['cellWidth']]
+                sRemaining = sRemaining[me['cellWidth']+1:]
+                if (sData != ""):
+                    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=sys.stderr)
+            cellstr(stdscr, r, c, str(sData), ctype, True)
     if me['state'] == 'I':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
 
@@ -300,7 +305,6 @@ def runlogic(stdscr):
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
-                me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
 
 
 stdscr=cstart()
