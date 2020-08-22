@@ -275,11 +275,15 @@ def runlogic(stdscr):
     Command Mode:
         One can move around the cells.
         Enter insert mode by pressing i
+        Enter edit mode by pressing e
         Quit by pressing Q
 
     Edit/Insert Mode:
+        Edit mode: Edit existing cell data
+        Insert mode: Put new data in the cell
+
         Enter alpha numeric values, follwed by enter key.
-        Escape from the insert mode by pressing Esc.
+        Escape from the edit/insert mode by pressing Esc.
             Only data locked in by pressing enter will be saved.
             And or data which was already in the edit buffer.
 
@@ -300,6 +304,7 @@ def runlogic(stdscr):
                 me['state'] = 'E'
                 me['gotStr'] = ""
                 me['backupEdit'] = None
+                me['data'][(me['curRow'],me['curCol'])] = ""
             elif (key == ord('e')):
                 me['state'] = 'E'
                 me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
