@@ -273,6 +273,24 @@ def cdraw(stdscr):
     stdscr.refresh()
 
 
+def save_file(sFile):
+    f = open(sFile,"w+")
+    for r in range(1, me['numRows']+1):
+        for c in range(1, me['numCols']+1):
+            data = me['data'].get((r,c))
+            if (data != None):
+                print(data)
+            print(",")
+        print("\n")
+    f.close()
+
+
+def explicit_commandmode():
+    cmd,args = me['gotStr'].split(' ',1)
+    if cmd == ':w':
+        save_file(args)
+
+
 def runlogic(stdscr):
     '''
     RunLogic between the Command and the other modes
