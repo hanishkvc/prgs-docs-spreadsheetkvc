@@ -220,18 +220,15 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
         for c in range(colStart, colEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
-                if me['state'] == 'I':
-                    clip = False
-                else:
-                    clip = True
             else:
                 ctype = curses.A_NORMAL
-                clip = True
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
             if sData == None:
                 sData = "{},{}".format(r,c)
-            cellstr(stdscr, r, c, str(sData), ctype, clip)
+            cellstr(stdscr, r, c, str(sData), ctype)
+    if me['state'] == 'I':
+        cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
 
 
 def cdraw(stdscr):
