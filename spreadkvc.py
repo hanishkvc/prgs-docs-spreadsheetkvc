@@ -405,8 +405,39 @@ def explicit_commandmode(cmdArgs):
         delete_rc(cmd, args)
 
 
+def do_func(sCmd, sArgs):
+    return 0
+
+
 def _nvalue(sData):
-    return float(sData)
+    # Handle functions first
+    sBase = ""
+    sCur = ""
+    i = 0
+    while i < len(sData):
+        c = sData[i]
+        if c.isalnum():
+            sCur += c
+        else:
+            if c == "(":
+                sCmd = sCur
+                sArgs = ""
+                i += 1
+                while i < len(sData):
+                    c = sData[i]
+                    if c == ')':
+                        break
+                    else:
+                        sArgs += c
+                    i += 1
+                val = do_func(sCmd, sArgs)
+                sBase += str(val)
+            else:
+                sBase = sBase + sCur + c
+                sCur = ""
+        i += 1
+    sBase += sCur
+    return float(eval(sBase))
 
 
 def nvalue(addr):
