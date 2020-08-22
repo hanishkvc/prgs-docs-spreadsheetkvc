@@ -279,16 +279,16 @@ def save_file(sFile):
         for c in range(1, me['numCols']+1):
             data = me['data'].get((r,c))
             if (data != None):
-                print(data)
-            print(",")
-        print("\n")
+                print(data, end="", file=f)
+            print(",", end="", file=f)
+        print("\n", end="", file=f)
     f.close()
 
 
 def explicit_commandmode(cmdArgs):
     cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
-    if cmd == ':w':
+    if cmd == 'w':
         save_file(args)
 
 
