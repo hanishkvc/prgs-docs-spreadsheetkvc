@@ -299,6 +299,11 @@ def runlogic(stdscr):
             elif (key == ord('i')):
                 me['state'] = 'E'
                 me['gotStr'] = ""
+            elif (key == ord('e')):
+                me['state'] = 'E'
+                me['gotStr'] = me['data'][(me['curRow'], me['curCol'])]
+                if me['gotStr'] == None:
+                    me['gotStr'] = ""
             elif (key == ord('Q')):
                 break
         else:
