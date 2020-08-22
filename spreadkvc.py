@@ -280,6 +280,7 @@ def insert_rc_ab(cmd, args):
         bRowMode = True
     elif cmd[1] == 'c':
         bColMode = True
+    cnt = int(args)
 
     cR = me['curRow']
     cC = me['curCol']
@@ -294,21 +295,21 @@ def insert_rc_ab(cmd, args):
         if bRowMode:
             nC = c
             if (r > cR):
-                nR = r + 1
+                nR = r + cnt
             else:
                 nR = r
         if bColMode:
             nR = r
             if (c > cC):
-                nC = c + 1
+                nC = c + cnt
             else:
                 nC = c
         newDict[(nR,nC)] = me['data'][k]
     me['data'] = newDict
     if bRowMode:
-        me['numRows'] += 1
+        me['numRows'] += cnt
     if bColMode:
-        me['numCols'] += 1
+        me['numCols'] += cnt
 
 
 def save_file(sFile):
