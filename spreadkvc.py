@@ -33,7 +33,7 @@ me = {
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
         'data': dict(),
-        'clipCell': False
+        'clipCell': True
         }
 
 
@@ -239,6 +239,8 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 sRemaining = sRemaining[me['cellWidth']:]
                 if (sData != ""):
                     print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=sys.stderr)
+            else: # sData == None AND clipCell
+                sData = ""
             cellstr(stdscr, r, c, str(sData), ctype, True)
     if me['state'] == 'I':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
