@@ -344,11 +344,17 @@ def explicit_commandmode(cmdArgs):
         insert n columns after current column
     e path/file_to_export_into
     '''
-    cmd,args = cmdArgs.split(' ',1)
+    if cmdArgs.find(' ') == -1:
+        cmd = cmdArgs
+        args = None
+    else:
+        cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
     if cmd == 'w':
         save_file(args)
     elif cmd.startswith('i'):
+        if args == None:
+            args = "1"
         insert_rc_ab(cmd, args)
 
 
