@@ -276,6 +276,7 @@ def runlogic(stdscr):
         One can move around the cells.
         Enter insert mode by pressing i
         Enter edit mode by pressing e
+        Delete cell content by pressing d
         Quit by pressing Q
 
     Edit/Insert Mode:
@@ -300,6 +301,8 @@ def runlogic(stdscr):
                 cellcur_left()
             elif (key == curses.KEY_RIGHT):
                 cellcur_right()
+            elif (key == ord('d')):
+                me['data'].pop((me['curRow'],me['curCol']), None)
             elif (key == ord('i')):
                 me['state'] = 'E'
                 me['gotStr'] = ""
