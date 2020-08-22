@@ -333,6 +333,7 @@ def runlogic(stdscr):
                 me['data'][(me['curRow'],me['curCol'])] = ""
             elif (key == ord(':')):
                 me['state'] = ':'
+                me['gotStr'] = ""
             elif (key == ord('Q')):
                 break
         else:                                               #### Edit+ Mode
@@ -348,6 +349,8 @@ def runlogic(stdscr):
                 #me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
                 if me['state'] == 'E':
                     me['backupEdit'] = me['gotStr']
+                elif me['state'] == ':':
+                    me['state'] = 'C'
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
