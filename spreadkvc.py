@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # A simple ncurses based spreadsheet
 # HanishKVC, 2020
+# GPL
 
 import sys
 import curses
@@ -286,6 +287,7 @@ def runlogic(stdscr):
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
+                me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
 
 
 stdscr=cstart()
