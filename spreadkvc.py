@@ -242,7 +242,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             else: # sData == None AND clipCell
                 sData = ""
             cellstr(stdscr, r, c, str(sData), ctype, True)
-    if me['state'] == 'I':
+    if me['state'] == 'E':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
 
 
@@ -277,9 +277,11 @@ def runlogic(stdscr):
         Enter insert mode by pressing i
         Quit by pressing Q
 
-    Insert Mode:
+    Edit/Insert Mode:
         Enter alpha numeric values, follwed by enter key.
-        Escape from the insert mode by pressing Esc
+        Escape from the insert mode by pressing Esc.
+            Only data locked in by pressing enter will be saved.
+            And or data which was already in the edit buffer.
 
     '''
     while True:
@@ -295,7 +297,7 @@ def runlogic(stdscr):
             elif (key == curses.KEY_RIGHT):
                 cellcur_right()
             elif (key == ord('i')):
-                me['state'] = 'I'
+                me['state'] = 'E'
                 me['gotStr'] = ""
             elif (key == ord('Q')):
                 break
