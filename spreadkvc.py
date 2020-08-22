@@ -274,6 +274,9 @@ def cdraw(stdscr):
 
 
 def insert_rc_ab(cmd, args):
+    '''
+    Insert n number of rows or columns, before or after the current row|column.
+    '''
     bRowMode = False
     bColMode = False
     if cmd[1] == 'r':
@@ -313,6 +316,12 @@ def insert_rc_ab(cmd, args):
 
 
 def save_file(sFile):
+    '''
+    Save file in a csv format.
+
+    If the cell data contains comma in it, then the cell content
+    is protected within single quotes.
+    '''
     f = open(sFile,"w+")
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
