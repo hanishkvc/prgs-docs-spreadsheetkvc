@@ -279,6 +279,8 @@ def save_file(sFile):
         for c in range(1, me['numCols']+1):
             data = me['data'].get((r,c))
             if (data != None):
+                if data.find(',') != -1:
+                    data = "'{}'".format(data)
                 print(data, end="", file=f)
             print(",", end="", file=f)
         print("\n", end="", file=f)
