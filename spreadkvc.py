@@ -34,7 +34,8 @@ me = {
         'state': 'C',
         'data': dict(),
         'clipCell': False,
-        'copyData': None
+        'copyData': None,
+        'gotStr': ""
         }
 
 
@@ -245,6 +246,9 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             cellstr(stdscr, r, c, str(sData), ctype, True)
     if me['state'] == 'E':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
+    if me['state'] == ':':
+        #cellstr(stdscr, me['numRows']-1, 0, me['gotStr'], curses.A_REVERSE, False)
+        cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, False)
 
 
 def cdraw(stdscr):
@@ -327,6 +331,8 @@ def runlogic(stdscr):
                     me['gotStr'] = ""
                 me['backupEdit'] = me['gotStr']
                 me['data'][(me['curRow'],me['curCol'])] = ""
+            elif (key == ord(':')):
+                me['state'] = ':'
             elif (key == ord('Q')):
                 break
         else:                                               #### Edit+ Mode
