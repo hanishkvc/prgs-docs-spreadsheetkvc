@@ -279,6 +279,7 @@ def runlogic(stdscr):
         Enter edit mode by pressing e
         Delete cell content by pressing d
         Copy cell data by pressing c
+        Cut cell data by pressing C
         Paste cell data by pressing p
         Quit by pressing Q
 
@@ -308,6 +309,9 @@ def runlogic(stdscr):
                 me['data'].pop((me['curRow'],me['curCol']), None)
             elif (key == ord('c')):
                 me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+            elif (key == ord('C')):
+                me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+                me['data'].pop((me['curRow'],me['curCol']), None)
             elif (key == ord('p')):
                 if me['copyData'] != None:
                     me['data'][(me['curRow'],me['curCol'])] = me['copyData']
