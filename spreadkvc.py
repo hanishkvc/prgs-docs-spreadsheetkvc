@@ -229,8 +229,11 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
-            if (sData == None) and bDebug:
-                sData = "{},{}".format(r,c)
+            if (sData == None):
+                if bDebug:
+                    sData = "{},{}".format(r,c)
+                else:
+                    sData = ""
             cellstr(stdscr, r, c, str(sData), ctype, me['clipCell'])
     if me['state'] == 'I':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
