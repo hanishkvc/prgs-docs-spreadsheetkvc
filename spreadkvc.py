@@ -430,7 +430,8 @@ def rl_commandmode(stdscr, key):
         me['state'] = ':'
         me['gotStr'] = ""
     elif (key == ord('Q')):
-        break
+        return False
+    return True
 
 
 def runlogic(stdscr):
@@ -461,7 +462,8 @@ def runlogic(stdscr):
         cdraw(stdscr)
         key = stdscr.getch()
         if (me['state'] == 'C'):                            #### Command Mode
-            rl_commandmode(stdscr, key)
+            if not rl_commandmode(stdscr, key):
+                break
         else:                                               #### Edit+ Mode
             if (key == curses.ascii.ESC):
                 if me['state'] == 'E':
