@@ -288,6 +288,24 @@ def save_file(sFile):
 
 
 def explicit_commandmode(cmdArgs):
+    '''
+    Explicit Command mode, which is entered by pressing ':' followed by
+    one of the commands mentioned below.
+
+    w path/file_to_save
+    l path/file_to_open
+    dr delete row
+    dc delete column
+    irb num_of_rows
+        insert n rows before current row
+    ira num_of_rows
+        insert n rows after current row
+    icb num_of_cols
+        insert n columns before current column
+    ica num_of_cols
+        insert n columns after current column
+    e path/file_to_export_into
+    '''
     cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
     if cmd == 'w':
