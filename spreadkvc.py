@@ -235,7 +235,10 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             if (sData == None) and bDebug:
                 sData = "{},{}".format(r,c)
             if (sData != None):
-                sRemaining = sData[me['cellWidth']:]
+                if sData.startswith("="):
+                    sData = value((r,c))
+                else:
+                    sRemaining = sData[me['cellWidth']:]
             elif (not me['clipCell']):
                 sData = sRemaining[0:me['cellWidth']]
                 sRemaining = sRemaining[me['cellWidth']:]
@@ -400,6 +403,28 @@ def explicit_commandmode(cmdArgs):
         insert_rc_ab(cmd, args)
     elif cmd.startswith('d'):
         delete_rc(cmd, args)
+
+
+def _nvalue(sData):
+    return float(sData)
+
+
+def nvalue(addr):
+    val = me['data'].get(addr)
+    if val == None:
+        return val
+    if not val.startswith("="):
+        return None
+    return _nvalue(val[1:])
+
+
+def value(addr):
+    val = me['data'].get(addr)
+    if val == None:
+        return ""
+    if not val.startswith("="):
+        return val
+    return _nvalue(val[1:])
 
 
 def rl_commandmode(stdscr, key):
