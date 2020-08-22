@@ -7,6 +7,10 @@ import sys
 import curses
 import curses.ascii
 
+
+bDebug = False
+
+
 '''
 Notes:
     0th row or 0th col corresponds to spreadsheets address info
@@ -28,7 +32,8 @@ me = {
         'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
-        'data': dict()
+        'data': dict(),
+        'clipCell': False
         }
 
 
@@ -224,9 +229,9 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
-            if sData == None:
+            if (sData == None) and bDebug:
                 sData = "{},{}".format(r,c)
-            cellstr(stdscr, r, c, str(sData), ctype)
+            cellstr(stdscr, r, c, str(sData), ctype, me['clipCell'])
     if me['state'] == 'I':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
 
