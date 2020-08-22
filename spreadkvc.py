@@ -299,20 +299,26 @@ def runlogic(stdscr):
             elif (key == ord('i')):
                 me['state'] = 'E'
                 me['gotStr'] = ""
+                me['backupEdit'] = None
             elif (key == ord('e')):
                 me['state'] = 'E'
                 me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
                 if me['gotStr'] == None:
                     me['gotStr'] = ""
+                me['backupEdit'] = me['gotStr']
+                me['data'][(me['curRow'],me['curCol'])] = ""
             elif (key == ord('Q')):
                 break
         else:
             if (key == curses.ascii.ESC):
+                if me['backupEdit'] != None:
+                    me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
                 me['state'] = 'C'
             elif (key == curses.KEY_BACKSPACE):
                 me['gotStr'] = me['gotStr'][0:-1]
             elif (key == curses.ascii.NL):
                 me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
+                me['backupEdit'] = me['gotStr']
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
