@@ -273,6 +273,44 @@ def cdraw(stdscr):
     stdscr.refresh()
 
 
+def insert_rc_ab(cmd, args):
+    bRowMode = False
+    bColMode = False
+    if cmd[1] == 'r':
+        bRowMode = True
+    elif cmd[1] == 'c':
+        bColMode = True
+
+    cR = me['curRow']
+    cC = me['curCol']
+    # Logic inserts after cur, so adjust cur, if before
+    if cmd[2] == 'b':
+        cR -= 1
+        cC -= 1
+
+    newDict = dict()
+    for k in me['data']:
+        r,c = k
+        if bRowMode:
+            nC = c
+            if (r > cR):
+                nR = r + 1
+            else:
+                nR = r
+        if bColMode:
+            nR = r
+            if (c > cC):
+                nC = c + 1
+            else:
+                nC = c
+        newDict[(nR,nC)] = me['data'][k]
+    me['data'] = newDict
+    if bRowMode:
+        me['numRows'] += 1
+    if bColMode:
+        me['numCols'] += 1
+
+
 def save_file(sFile):
     f = open(sFile,"w+")
     for r in range(1, me['numRows']+1):
@@ -310,6 +348,8 @@ def explicit_commandmode(cmdArgs):
     print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
     if cmd == 'w':
         save_file(args)
+    elif cmd.startswith('i'):
+        insert_rc_ab(cmd, args)
 
 
 def runlogic(stdscr):
