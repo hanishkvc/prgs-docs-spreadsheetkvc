@@ -80,7 +80,7 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, y, x, msg, attr):
+def cellstr(stdscr, y, x, msg, attr, clipped=True):
     '''
     Display contents of the cell, only if it is in the current display viewport
     as well as if it's contents can be fully shown on the screen.
@@ -88,7 +88,10 @@ def cellstr(stdscr, y, x, msg, attr):
     In viewport or not is got indirectly from the cellpos call.
     '''
     cellWidth = me['cellWidth']
-    tmsg = msg[0:cellWidth]
+    if clipped:
+        tmsg = msg[0:cellWidth]
+    else:
+        tmsg = msg
     mlen = len(tmsg)
     if mlen < cellWidth:
         for i in range(cellWidth-mlen):
@@ -217,13 +220,18 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
         for c in range(colStart, colEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
+                if me['state'] == 'I':
+                    clip = False
+                else:
+                    clip = True
             else:
                 ctype = curses.A_NORMAL
+                clip = True
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
             if sData == None:
                 sData = "{},{}".format(r,c)
-            cellstr(stdscr, r, c, str(sData), ctype)
+            cellstr(stdscr, r, c, str(sData), ctype, clip)
 
 
 def cdraw(stdscr):
