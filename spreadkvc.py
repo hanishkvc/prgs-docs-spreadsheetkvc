@@ -337,14 +337,17 @@ def runlogic(stdscr):
                 break
         else:                                               #### Edit+ Mode
             if (key == curses.ascii.ESC):
-                if me['backupEdit'] != None:
-                    me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
+                if me['state'] == 'E':
+                    # Restore/set data to the latest backedup edit buffer
+                    if me['backupEdit'] != None:
+                        me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
                 me['state'] = 'C'
             elif (key == curses.KEY_BACKSPACE):
                 me['gotStr'] = me['gotStr'][0:-1]
             elif (key == curses.ascii.NL):
-                me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
-                me['backupEdit'] = me['gotStr']
+                #me['data'][(me['curRow'],me['curCol'])] = me['gotStr']
+                if me['state'] == 'E':
+                    me['backupEdit'] = me['gotStr']
                 print("runLogic:{}".format(me), file=sys.stderr)
             else:
                 me['gotStr'] += chr(key)
