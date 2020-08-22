@@ -33,7 +33,8 @@ me = {
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
         'data': dict(),
-        'clipCell': False
+        'clipCell': False,
+        'copyData': None
         }
 
 
@@ -277,6 +278,8 @@ def runlogic(stdscr):
         Enter insert mode by pressing i
         Enter edit mode by pressing e
         Delete cell content by pressing d
+        Copy cell data by pressing c
+        Paste cell data by pressing p
         Quit by pressing Q
 
     Edit/Insert Mode:
@@ -303,6 +306,11 @@ def runlogic(stdscr):
                 cellcur_right()
             elif (key == ord('d')):
                 me['data'].pop((me['curRow'],me['curCol']), None)
+            elif (key == ord('c')):
+                me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+            elif (key == ord('p')):
+                if me['copyData'] != None:
+                    me['data'][(me['curRow'],me['curCol'])] = me['copyData']
             elif (key == ord('i')):
                 me['state'] = 'E'
                 me['gotStr'] = ""
