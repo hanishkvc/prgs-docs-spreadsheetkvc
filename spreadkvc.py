@@ -482,11 +482,14 @@ def runlogic(stdscr):
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
-        if (me['state'] == 'C'):    #### Command Mode
-            if not rl_commandmode(stdscr, key):
-                break
-        else:                       #### Edit+ Mode
-            rl_editplusmode(stdscr, key)
+        try:
+            if (me['state'] == 'C'):    #### Command Mode
+                if not rl_commandmode(stdscr, key):
+                    break
+            else:                       #### Edit+ Mode
+                rl_editplusmode(stdscr, key)
+        except:
+            traceback.print_exc()
 
 
 stdscr=cstart()
