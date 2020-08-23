@@ -30,6 +30,11 @@ keys for achieving the specified operations.
 
 * : can be used to enter the explicit command mode.
 
+* Q can be used to quit the program.
+
+	All unsaved changes will be lost. THe program doesnt warn this condition,
+	so remember to save the data by first using :w explicit command, before quiting.
+
 ### explicit command mode
 
 This mode is entered by pressing : when in the default/implicit command mode.
