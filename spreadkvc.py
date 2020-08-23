@@ -403,6 +403,10 @@ def load_file(sFile):
             else:
                 sCur += t
             i += 1
+        sCur = sCur[:-1]
+        if sCur != "":
+            me['data'][(r,c)] = sCur
+            sCur = ""
     f.close()
     print("loadfile:done:{}".format(sFile), file=sys.stderr)
 
