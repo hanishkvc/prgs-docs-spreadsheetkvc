@@ -457,24 +457,28 @@ def _celladdr_valid(sAddr):
     '''
     iChars = 0
     i = 0
+    alpaAddr = ""
     while i < len(sAddr):
         if not sAddr[i].isalpha():
             break
+        alphaAddr += sAddr[i]
         iChars += 1
         i += 1
     if (iChars == 0) or (iChars > 2): # This limits number of cols
-        return False
+        return False, None
     iNums = 0
+    numAddr = ""
     while i < len(sAddr):
         if not sAddr[i].isnum():
             break
+        numAddr += sAddr[i]
         iNums += 1
         i += 1
     if (iNums == 0) or (iNums > 4): # This limits number of rows
-        return False
+        return False, None
     if i != len(sAddr):
-        return False
-    return True
+        return False, None
+    return True, (alphaAddr, numAddr)
 
 
 def _nvalue_cells(sData):
@@ -490,7 +494,8 @@ def _nvalue_cells(sData):
         if c.isalnum():
             sCur += c
         else:
-            if _celladdr_valid(sCur):
+            bCellAddr, sAddr = _celladdr_valid(sCur):
+            if bCellAddr:
                 val = nvalue_saddr(sCur)
                 sBase += str(val)
             else:
@@ -532,6 +537,9 @@ def nvalue(addr):
     if not val.startswith("="):
         return None
     return _nvalue(val[1:])
+
+
+def nvalue_saddr(saddr):
 
 
 def value(addr):
