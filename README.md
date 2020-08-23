@@ -1,7 +1,7 @@
 # SpreadKVC
 
 Author: HanishKVC, 2020
-Version: v20200822IST2348
+Version: v202008223ST2348
 
 spreadkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -135,4 +135,14 @@ min
 max
 
 	the maximum value among the specified range of cells.
+
+## History
+
+### 20200823IST1829
+
+Implemented as part of the Gauri Ganesh weekend, to scratch a itch I had with need for a
+simple commandline spreadsheet package. And also to explore and think randomly a bit and
+have some fun on the way.
+
+Vasudhaiva Kutumbakam (the World is One Family)
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # A simple ncurses based spreadsheet
 # HanishKVC, 2020
-# GPL
+# GPL, Vasudhaiva Kutumbakam (the World is One Family)
+#
 
 import sys, traceback
 import curses
