@@ -26,7 +26,7 @@ Notes:
 me = {
         'cellWidth': 16, 'cellHeight': 1,
         'scrCols': 10, 'scrRows': 5,
-        'numCols': 100, 'numRows': 200,
+        'numCols': 333, 'numRows': 200,
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
         'viewColStart': 1, 'viewRowStart': 1,
@@ -451,12 +451,45 @@ def _nvalue_funcs(sData):
     return sBase
 
 
+def _celladdr_valid(sAddr):
+    if c.isalpha():
+        if not bFirstAlpha:
+            if not bNextNum:
+                bFirstAlpha = True
+
+
+def _nvalue_cells(sData):
+    sBase = ""
+    sCur = ""
+    i = 0
+    bFirstAlpha = False
+    bNextNum = False
+    bValidCell = True
+    while i < len(sData):
+        c = sData[i]
+        if c.isalnum():
+            sCur += c
+        else:
+            if _celladdr_valid(sCur):
+                val = nvalue_saddr(sCur)
+                sBase += str(val)
+            else:
+                sBase += sCur
+            sBase += c
+            sCur = ""
+        i += 1
+    return sBase
+
+
 def _nvalue(sData):
     # TODO: Remove spaces from eval expression
     # for now dont use spaces in =expression, bcas
     # need to think about this bit more once again
     # Handle functions first
     sBase = _nvalue_funcs(sData)
+    # Handle cell addresses
+    sBase = _nvalue_cells(sBase)
+    # Evaluate
     try:
         val = float(eval(sBase))
     except:
