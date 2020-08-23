@@ -845,14 +845,19 @@ def runlogic(stdscr):
             And or data which was already in the edit buffer.
 
     '''
+    bBackInC = False
     while True:
         cdraw(stdscr)
         key = stdscr.getch()
         try:
             if (me['state'] == 'C'):    #### Command Mode
+                if not bBackInC:
+                    stdscr.clear()
+                    bBackInC = True
                 if not rl_commandmode(stdscr, key):
                     break
             else:                       #### Edit+ Mode
+                bBackInC = False
                 rl_editplusmode(stdscr, key)
         except:
             traceback.print_exc()
