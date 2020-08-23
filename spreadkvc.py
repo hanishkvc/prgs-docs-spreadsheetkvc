@@ -510,6 +510,7 @@ def _nvalue_cells(sData):
             sBase += c
             sCur = ""
         i += 1
+    sBase += sCur
     return sBase
 
 
