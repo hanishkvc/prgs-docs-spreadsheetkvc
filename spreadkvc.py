@@ -381,11 +381,11 @@ def load_file(sFile):
     print("loadfile:{}".format(sFile), file=sys.stderr)
     me['data'] = dict()
     r = 0
-    sCur = ""
     for line in f:
         r += 1
         c = 1
         i = 0
+        sCur = ""
         bInQuote = False
         while i < len(line):
             t = line[i]
