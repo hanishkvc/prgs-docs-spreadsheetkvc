@@ -524,11 +524,10 @@ def _nvalue_cells(sData):
 
 
 def _nvalue(sData):
-    # TODO: Remove spaces from eval expression
-    # for now dont use spaces in =expression, bcas
-    # need to think about this bit more once again
+    # Remove spaces and convert to upper case wrt eval expression
+    sDATA = sData.replace(" ","").upper()
     # Handle functions first
-    sBase = _nvalue_funcs(sData)
+    sBase = _nvalue_funcs(sDATA)
     # Handle cell addresses
     sBase = _nvalue_cells(sBase)
     # Evaluate
@@ -557,8 +556,16 @@ def nvalue(addr):
 
 
 def nvalue_saddr(saddr):
-    print("nvalue_saddr: NOT IMPLEMENTED", file=sys.stderr)
-    exit(11)
+    '''
+    Given the cell address in string notation, return the numeric
+    value corresponding to that cell.
+    If the address is invalid, then None is returned.
+    '''
+    bCellAddr, cellKey = _celladdr_valid(saddr)
+    if bCellAddr:
+        val = nvalue(cellKey)
+        return val
+    return None
 
 
 def value(addr):
