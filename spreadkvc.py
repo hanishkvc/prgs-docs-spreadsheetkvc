@@ -486,7 +486,7 @@ def _celladdr_valid(sAddr):
         num = (ord(alphaAddr[i]) - ord('A'))+1
         numAlphaAddr = numAlphaAddr*26 + num
         i += 1
-    return True, (int(numAlphaAddr), int(numAddr))
+    return True, (int(numAddr), int(numAlphaAddr))
 
 
 def _nvalue_cells(sData):
@@ -505,6 +505,7 @@ def _nvalue_cells(sData):
             bCellAddr, cellKey = _celladdr_valid(sCur)
             if bCellAddr:
                 val = nvalue(cellKey)
+                print("_nvalue_cells:{}:{}:{}".format(sCur, cellKey, val), file=sys.stderr)
                 sBase += str(val)
             else:
                 sBase += sCur
