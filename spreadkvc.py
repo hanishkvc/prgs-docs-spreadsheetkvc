@@ -410,11 +410,12 @@ def do_func(sCmd, sArgs):
     return 0
 
 
-def _nvalue(sData):
-    # TODO: Remove spaces from eval expression
-    # for now dont use spaces in =expression, bcas
-    # need to think about this bit more once again
-    # Handle functions first
+def _nvalue_funcs(sData):
+    '''
+    Find func calls in the given expression and call them
+    to get the numeric value corresponding to them and
+    replace the func call with its returned value.
+    '''
     sBase = ""
     sCur = ""
     i = 0
@@ -447,6 +448,15 @@ def _nvalue(sData):
                 sCur = ""
         i += 1
     sBase += sCur
+    return sBase
+
+
+def _nvalue(sData):
+    # TODO: Remove spaces from eval expression
+    # for now dont use spaces in =expression, bcas
+    # need to think about this bit more once again
+    # Handle functions first
+    sBase = _nvalue_funcs(sData)
     try:
         val = float(eval(sBase))
     except:
