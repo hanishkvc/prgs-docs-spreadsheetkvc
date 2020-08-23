@@ -462,13 +462,17 @@ def do_func(sCmd, sArgs):
     Demux the internally supported functions.
     Unknown function will return None.
     '''
-    print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
-    if sCmd == "SUM":
-        return do_sum(sArgs)
-    elif sCmd == "AVG":
-        return do_avg(sArgs)
-    elif sCmd == "CNT":
-        return do_cnt(sArgs)
+    try:
+        print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
+        if sCmd == "SUM":
+            return do_sum(sArgs)
+        elif sCmd == "AVG":
+            return do_avg(sArgs)
+        elif sCmd == "CNT":
+            return do_cnt(sArgs)
+    except:
+        print("do_func exception", file=sys.stderr)
+        traceback.print_exc()
     return None
 
 
