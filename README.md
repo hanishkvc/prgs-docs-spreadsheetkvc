@@ -71,6 +71,10 @@ In this explicit command mode, the user can enter one of the following commands
 
 	to export the current spreadsheet into a file.
 
+* g(oto) CellAddr
+
+	Center the screen to the specified celladdress.
+
 The user can enter the command and its arguments and then press enter key to trigger
 the command. The user can use backspace to delete the chars to correct mistakes when
 entering the command and the arguments.

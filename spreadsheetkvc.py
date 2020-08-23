@@ -116,8 +116,8 @@ def cellstr(stdscr, y, x, msg, attr, clipped=True):
 
 def cellcur(stdscr, y, x):
     '''
-    Set the displayed cursor to the specified cell, if it is in the viewport
-    and if its clipped content can be shown fully.
+    Set the displayed cursor to the specified cell's start location, if the cell
+    is in the viewport and if its (i.e cell's) clipped content can be shown fully.
 
     As of now the logic will only show that much content as can fit within
     the cellWidth specified, so the check is done wrt cellWidth and not the
