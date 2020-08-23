@@ -378,6 +378,7 @@ def load_file(sFile):
     Load the specified csv file
     '''
     f = open(sFile)
+    print("loadfile:{}".format(sFile), file=sys.stderr)
     me['data'] = dict()
     r = 0
     sCur = ""
@@ -400,7 +401,9 @@ def load_file(sFile):
                     c += 1
             else:
                 sCur += t
+            i += 1
     f.close()
+    print("loadfile:done:{}".format(sFile), file=sys.stderr)
 
 
 def explicit_commandmode(cmdArgs):
