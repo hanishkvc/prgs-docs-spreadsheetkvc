@@ -119,11 +119,11 @@ sum
 
 	sum the contents of the specified range of cells
 
-cnt
+cnt (count)
 
 	get the count of non empty cells in the specified range of cells.
 
-avg
+avg (average)
 
 	calculate the average of the values in the range of cells. It doesnt consider
 	the empty cells.
@@ -136,13 +136,22 @@ max
 
 	the maximum value among the specified range of cells.
 
+## csv file format
+
+The csv file used by this program uses comma [,] to seperate the fields within each row
+i.e within each line in the file.
+
+If any field contains the field seperator (i.e ,) with in its content, then the content
+is embedded within [`]s and not [']s.
+
+
 ## History
 
 ### 20200823IST1829
 
 Implemented as part of the Gauri Ganesh weekend, to scratch a itch I had with need for a
 simple commandline spreadsheet package. And also to explore and think randomly a bit and
-have some fun on the way.
+have some interesting fun on the way.
 
 Vasudhaiva Kutumbakam (the World is One Family)
 

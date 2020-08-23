@@ -573,9 +573,9 @@ def do_func(sCmd, sArgs):
         print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
         if sCmd == "SUM":
             return do_sum(sArgs)
-        elif sCmd == "AVG":
+        elif (sCmd == "AVG") or (sCmd == "AVERAGE"):
             return do_avg(sArgs)
-        elif sCmd == "CNT":
+        elif (sCmd == "CNT") or (sCmd == "COUNT"):
             return do_cnt(sArgs)
         elif sCmd == "MIN":
             return do_min(sArgs)
