@@ -405,7 +405,7 @@ def explicit_commandmode(cmdArgs):
         delete_rc(cmd, args)
 
 
-def _do_sum(args):
+def _do_sum(args, bIgnoreEmpty=True):
     '''
     sum up contents of a matrix of cells.
     It also returns the number of cells involved.
@@ -421,6 +421,8 @@ def _do_sum(args):
     cnt = 0
     for r in range(sR, eR+1):
         for c in range(sC, eC+1):
+            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
+                continue
             total += nvalue((r,c))
             cnt += 1
     return total, cnt
