@@ -405,6 +405,38 @@ def explicit_commandmode(cmdArgs):
         delete_rc(cmd, args)
 
 
+def _do_minmax(args, bIgnoreEmpty=True):
+    '''
+    Find the min and max from the matrix of cells.
+    '''
+    start,end = args.split(':')
+    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    if not bCellAddr:
+        return None, None, None
+    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    if not bCellAddr:
+        return None, None, None
+    lItems = []
+    for r in range(sR, eR+1):
+        for c in range(sC, eC+1):
+            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
+                continue
+            lItems.add(nvalue((r,c)))
+    tMin = min(lItems)
+    tMax = max(lItems)
+    return tMin, tMax, len(lItems)
+
+
+def do_min(args):
+    tmin, tmax, tcnt = _do_minmax(args)
+    return tmin
+
+
+def do_max(args):
+    tmin, tmax, tcnt = _do_minmax(args)
+    return tmax
+
+
 def _do_sum(args, bIgnoreEmpty=True):
     '''
     sum up contents of a matrix of cells.
@@ -470,6 +502,10 @@ def do_func(sCmd, sArgs):
             return do_avg(sArgs)
         elif sCmd == "CNT":
             return do_cnt(sArgs)
+        elif sCmd == "MIN":
+            return do_min(sArgs)
+        elif sCmd == "MAX":
+            return do_max(sArgs)
     except:
         print("do_func exception", file=sys.stderr)
         traceback.print_exc()
