@@ -457,7 +457,7 @@ def _celladdr_valid(sAddr):
     '''
     iChars = 0
     i = 0
-    alpaAddr = ""
+    alphaAddr = ""
     while i < len(sAddr):
         if not sAddr[i].isalpha():
             break
@@ -469,7 +469,7 @@ def _celladdr_valid(sAddr):
     iNums = 0
     numAddr = ""
     while i < len(sAddr):
-        if not sAddr[i].isnum():
+        if not sAddr[i].isnumeric():
             break
         numAddr += sAddr[i]
         iNums += 1
@@ -485,6 +485,7 @@ def _celladdr_valid(sAddr):
     while i < len(alphaAddr):
         num = (ord(alphaAddr[i]) - ord('A'))+1
         numAlphaAddr = numAlphaAddr*26 + num
+        i += 1
     return True, (int(numAlphaAddr), int(numAddr))
 
 
