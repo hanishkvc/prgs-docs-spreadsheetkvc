@@ -384,7 +384,7 @@ def load_file(sFile):
     sCur = ""
     for line in f:
         r += 1
-        c = 0
+        c = 1
         i = 0
         bInQuote = False
         while i < len(line):
