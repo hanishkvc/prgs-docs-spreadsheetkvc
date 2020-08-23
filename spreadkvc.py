@@ -437,6 +437,15 @@ def do_sum(args):
     return total
 
 
+def do_cnt(args):
+    '''
+    Return the cnt of non-empty cells in the specified range of cells.
+    It could be 1D vector or 2D vector of cells.
+    '''
+    total, cnt = _do_sum(args)
+    return cnt
+
+
 def do_avg(args):
     '''
     Return the avg for specified range of cells.
@@ -458,6 +467,8 @@ def do_func(sCmd, sArgs):
         return do_sum(sArgs)
     elif sCmd == "AVG":
         return do_avg(sArgs)
+    elif sCmd == "CNT":
+        return do_cnt(sArgs)
     return None
 
 
