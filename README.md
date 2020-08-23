@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v202008223ST2348
+Version: v20200823IST2336
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -11,7 +11,7 @@ It works with a slightly modified form of csv file.
 
 The program supports the following modes command mode, edit/insert mode and explicit command mode.
 
-### command mode
+### command mode (implicit)
 
 The program by default runs in the implicit command mode. In this mode one can press the following
 keys for achieving the specified operations.
@@ -32,7 +32,8 @@ keys for achieving the specified operations.
 
 ### explicit command mode
 
-In the explicit command mode, the user can enter one of the following commands
+This mode is entered by pressing : when in the default/implicit command mode.
+In this explicit command mode, the user can enter one of the following commands
 
 * w file
 
@@ -74,9 +75,12 @@ The user can enter the command and its arguments and then press enter key to tri
 the command. The user can use backspace to delete the chars to correct mistakes when
 entering the command and the arguments.
 
+On pressing the enter key, the specified command will be run and the program reverts
+back to implicit command mode.
+
 ### edit/insert mode
 
-On pressing 'i', 'e' from the command mode, the user can enter this mode.
+On pressing 'i', 'e' from the implicit command mode, the user can enter this mode.
 
 In this mode the user either enters a new content for the cell and or edit the existing
 content of the cell.
@@ -85,12 +89,16 @@ As and when the user presses the enter key, the data entered till that point get
 into the cell. If one exits without pressing enter then any data entered after the last
 enter key press will be lost.
 
-User can press the ESC key to exit from this mode into the command mode.
+User can press the ESC key to exit from this mode and go back to the implicit command mode.
 
 NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
 mode, however when escaping back into the command mode, the cell content wont wrap into
 next line. The content will overflow into adjacent cells on the same line/row, if those
 adjacent cells dont have any content (even empty string is a content) of their own.
+
+	If the cell containing the long text is scrolled beyond the screen, then the
+	overflowing text will not be visible. Contents of a cell including its overflowing
+	text will be visible only if that cell is currently in the screen.
 
 If you feel there is a empty string in any field and you want to remove it, use the 'd'
 command in the command mode, which will delete any content from the current cell, including
@@ -103,7 +111,7 @@ One can enter a textual data / string directly into the cell.
 However if one wants to enter numeric values or expressions, one requires to prefix them
 with = symbol.
 
-example
+Example
 
 	=2
 
@@ -164,6 +172,15 @@ i.e within each line in the file.
 If any field contains the field seperator (i.e ,) with in its content, then the content
 is embedded within [`]s and not [']s.
 
+To avoid confusing the program, dont use ` char as part of the spreadsheet contents.
+
+## Misc Notes
+
+If you dont want any exception text to appear on the screen and distract from using
+the programs, then you can run the program like below to avoid the screen getting
+messed up with stderr contents
+
+	spreadsheetkvc.py 2> /tmp/sskvc.stderr
 
 ## History
 
