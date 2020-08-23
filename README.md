@@ -146,6 +146,16 @@ max
 
 	the maximum value among the specified range of cells.
 
+var and varp
+
+	gives the variance assuming the specified range of cells as representing
+	either a sample space (var) or a full population (varp)
+
+stdev,stddev and stdevp,stddevp
+
+	gives the standard deviation of the specified range of cells, by assuming them
+	to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)
+
 ## csv file format
 
 The csv file used by this program uses comma [,] to seperate the fields within each row

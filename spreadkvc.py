@@ -513,9 +513,10 @@ def do_sum(args):
     return total
 
 
-def do_stddev(args, bIgnoreEmpty=True):
+def _do_stddev(args, bIgnoreEmpty=True):
     '''
-    get the standard deviation for the contents of a matrix of cells.
+    get variance/standard deviation wrt sample/population space,
+    for the contents of a matrix of cells.
     It also returns the number of cells involved.
     '''
     start,end = args.split(':')
@@ -534,8 +535,29 @@ def do_stddev(args, bIgnoreEmpty=True):
                 continue
             total += (nvalue((r,c)) - avg)**2
             cnt += 1
-    sd = sqrt(total/cnt)
-    return sd
+    varp = total/cnt
+    stdevp = sqrt(varp)
+    var = total/(cnt-1)
+    stdev = sqrt(var)
+    return varp, stdevp, var, stdev, cnt
+
+
+def do_stddev(sCmd, args):
+    '''
+    Return variance assuming the cell range represents a sample space
+    Return variance assuming the cell range represents a full population
+    Return stddev assuming the cell range represents a sample space
+    Return stddevp assuming the cell range represents a full population
+    '''
+    varp, stdevp, var, stdev, cnt = _do_stddev(args)
+    if (sCmd == "stddev") or (sCmd == "stdev"):
+        return stdev
+    if (sCmd == "stddevp") or (sCmd == "stdevp"):
+        return stdevp
+    if (sCmd == "var"):
+        return var
+    if (sCmd == "varp"):
+        return varp
 
 
 def _do_prod(args, bIgnoreEmpty=True):
@@ -609,8 +631,10 @@ def do_func(sCmd, sArgs):
             return do_max(sArgs)
         elif sCmd == "PROD":
             return do_prod(sArgs)
-        elif sCmd == "STDDEV":
-            return do_stddev(sArgs)
+        elif (sCmd.startswith("STDDEV") or sCmd.startswith("STDEV")):
+            return do_stddev(sCmd, sArgs)
+        elif sCmd.startswith("var"):
+            return do_stddev(sCmd, sArgs)
     except:
         print("do_func exception", file=sys.stderr)
         traceback.print_exc()
