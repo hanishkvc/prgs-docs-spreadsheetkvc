@@ -447,7 +447,13 @@ def _nvalue(sData):
                 sCur = ""
         i += 1
     sBase += sCur
-    return float(eval(sBase))
+    try:
+        val = float(eval(sBase))
+    except:
+        print("_nvalue exception", file=sys.stderr)
+        traceback.print_exc()
+        val = None
+    return val
 
 
 def nvalue(addr):
