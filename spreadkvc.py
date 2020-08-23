@@ -406,6 +406,7 @@ def explicit_commandmode(cmdArgs):
 
 
 def do_func(sCmd, sArgs):
+    print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
     return 0
 
 
@@ -426,6 +427,8 @@ def _nvalue(sData):
                 if (sCur == ""):
                     sBase += c
                 else:
+                    # Currently one cant embed one func call
+                    # within another
                     sCmd = sCur
                     sArgs = ""
                     i += 1
