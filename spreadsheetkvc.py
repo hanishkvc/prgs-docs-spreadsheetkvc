@@ -48,7 +48,7 @@ def cstart():
     me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
     me['dispRows'] = me['scrRows'] - 1
     me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
-    print(me, file=sys.stderr)
+    print(me, file=GLOGFILE)
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
@@ -87,7 +87,7 @@ def cellpos(row, col):
     else:
         y = (row - me['viewRowStart'])
         y += me['fixedRows']
-    print("cellpos: {},{} => {},{}".format(row,col,y,x), file=sys.stderr)
+    print("cellpos: {},{} => {},{}".format(row,col,y,x), file=GLOGFILE)
     return y, x
 
 
@@ -110,7 +110,7 @@ def cellstr(stdscr, y, x, msg, attr, clipped=True):
     ty,tx = cellpos(y,x)
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
-    print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=sys.stderr)
+    print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GLOGFILE)
     stdscr.addstr(ty, tx, tmsg, attr)
 
 
@@ -160,7 +160,7 @@ def cellcur_right():
     diff = me['curCol'] - me['viewColStart'] + 1
     if (diff > me['dispCols']):
         me['viewColStart'] = me['curCol'] - me['dispCols'] + 1
-        print("cellcur_right:adjust viewport:{}".format(me), file=sys.stderr)
+        print("cellcur_right:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
 def cellcur_up():
@@ -190,7 +190,7 @@ def cellcur_down():
     diff = me['curRow'] - me['viewRowStart'] + 1
     if (diff > me['dispRows']):
         me['viewRowStart'] = me['curRow'] - me['dispRows'] + 1
-        print("cellcur_down:adjust viewport:{}".format(me), file=sys.stderr)
+        print("cellcur_down:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
 def _cdraw_coladdrs(colStart, colEnd):
@@ -235,7 +235,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             else:
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
-            print("cdrawdata: {},{}={}".format(r,c,sData), file=sys.stderr)
+            print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
             if (sData == None) and bDebug:
                 sData = "{},{}".format(r,c)
             if (sData != None):
@@ -247,7 +247,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 sData = sRemaining[0:me['cellWidth']]
                 sRemaining = sRemaining[me['cellWidth']:]
                 if (sData != ""):
-                    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=sys.stderr)
+                    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # sData == None AND clipCell
                 sData = ""
             cellstr(stdscr, r, c, str(sData), ctype, True)
@@ -273,7 +273,7 @@ def cdraw(stdscr):
     rowEnd = rowStart + me['dispRows']
     if (rowEnd > me['numRows']):
         rowEnd = me['numRows']
-    print("cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=sys.stderr)
+    print("cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=GLOGFILE)
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     _cdraw_data(rowStart, rowEnd, colStart, colEnd)
@@ -379,7 +379,7 @@ def load_file(sFile):
     Load the specified csv file
     '''
     f = open(sFile)
-    print("loadfile:{}".format(sFile), file=sys.stderr)
+    print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
     r = 0
     for line in f:
@@ -411,7 +411,7 @@ def load_file(sFile):
     f.close()
     me['numRows'] = r
     me['numCols'] = c
-    print("loadfile:done:{}".format(me), file=sys.stderr)
+    print("loadfile:done:{}".format(me), file=GLOGFILE)
 
 
 def explicit_commandmode(cmdArgs):
@@ -438,7 +438,7 @@ def explicit_commandmode(cmdArgs):
         args = None
     else:
         cmd,args = cmdArgs.split(' ',1)
-    print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
+    print("cmd:{}, args:{}".format(cmd,args), file=GLOGFILE)
     if cmd == 'w':
         save_file(args)
     elif cmd == 'l':
@@ -620,7 +620,7 @@ def do_func(sCmd, sArgs):
     Unknown function will return None.
     '''
     try:
-        print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
+        print("do_func:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
         if sCmd == "SUM":
             return do_sum(sArgs)
         elif (sCmd == "AVG") or (sCmd == "AVERAGE"):
@@ -638,7 +638,7 @@ def do_func(sCmd, sArgs):
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
     except:
-        print("do_func exception", file=sys.stderr)
+        print("do_func exception", file=GLOGFILE)
         traceback.print_exc()
     return None
 
@@ -730,7 +730,7 @@ def _cellvalue_or_str(sCheck):
     bCellAddr, cellKey = _celladdr_valid(sCheck)
     if bCellAddr:
         val = nvalue(cellKey)
-        print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=sys.stderr)
+        print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=GLOGFILE)
         return str(val)
     return sCheck
 
@@ -767,7 +767,7 @@ def _nvalue(sData):
     try:
         val = float(eval(sBase))
     except:
-        print("_nvalue exception:{}".format(sData), file=sys.stderr)
+        print("_nvalue exception:{}".format(sData), file=GLOGFILE)
         traceback.print_exc()
         val = None
     return val
@@ -870,7 +870,7 @@ def rl_editplusmode(stdscr, key):
         elif me['state'] == ':':
             explicit_commandmode(me['gotStr'])
             me['state'] = 'C'
-        print("runLogic:{}".format(me), file=sys.stderr)
+        print("runLogic:{}".format(me), file=GLOGFILE)
     else:
         me['gotStr'] += chr(key)
 
@@ -917,14 +917,21 @@ def runlogic(stdscr):
             traceback.print_exc()
 
 
+def setup_logfile(logfile="/dev/null"):
+    f = open(logfile, "w+")
+    return f
+
+
+GLOGFILE=setup_logfile()
 stdscr=cstart()
 try:
     runlogic(stdscr)
 except Exception as e:
-    print("exception:{}".format(e), file=sys.stderr)
-    print("exc_info:{}".format(sys.exc_info()), file=sys.stderr)
+    print("exception:{}".format(e), file=GLOGFILE)
+    print("exc_info:{}".format(sys.exc_info()), file=GLOGFILE)
     traceback.print_exc()
-    print("exception: done", file=sys.stderr)
+    print("exception: done", file=GLOGFILE)
 finally:
     cend(stdscr)
+    GLOGFILE.close()
 
