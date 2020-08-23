@@ -37,6 +37,7 @@ In the explicit command mode, the user can enter one of the following commands
 * w file
 
 	to save the contents of the current spreadsheet into specified file.
+	Do note that it will overwrite the file, if it already exists.
 
 * l file
 
@@ -85,6 +86,15 @@ into the cell. If one exits without pressing enter then any data entered after t
 enter key press will be lost.
 
 User can press the ESC key to exit from this mode into the command mode.
+
+NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
+mode, however when escaping back into the command mode, the cell content wont wrap into
+next line. The content will overflow into adjacent cells on the same line/row, if those
+adjacent cells dont have any content (even empty string is a content) of their own.
+
+If you feel there is a empty string in any field and you want to remove it, use the 'd'
+command in the command mode, which will delete any content from the current cell, including
+empty string.
 
 ## Cell contents and =expressions
 
