@@ -432,6 +432,7 @@ def _nvalue(sData):
                     i += 1
                 val = do_func(sCmd, sArgs)
                 sBase += str(val)
+                sCur = ""
             else:
                 sBase = sBase + sCur + c
                 sCur = ""
