@@ -133,6 +133,29 @@ def cellcur(stdscr, y, x):
     stdscr.move(ty,tx)
 
 
+def _goto_cell(stdscr, r, c):
+    '''
+    Center the specified cell on the screen.
+    '''
+    tr = r - int(me['dispRows']/2)
+    if tr < 1:
+        tr = 1
+    me['viewRowStart'] = tr
+    tc = c - int(me['dispCols']/2)
+    if tc < 1:
+        tc = 1
+    me['viewColStart'] = tc
+    stdscr.clear()
+    cdraw(stdscr)
+    cellcur(stdscr, r, c)
+
+
+def goto_cell(stdscr, args):
+    bCellAddr, (r,c) = _celladdr_valid(args)
+    if bCellAddr:
+        _goto_cell(stdscr, r, c)
+
+
 def cellcur_left():
     '''
     Move the current cell cursor to the left, if possible.
@@ -414,7 +437,7 @@ def load_file(sFile):
     print("loadfile:done:{}".format(me), file=GLOGFILE)
 
 
-def explicit_commandmode(cmdArgs):
+def explicit_commandmode(stdscr, cmdArgs):
     '''
     Explicit Command mode, which is entered by pressing ':' followed by
     one of the commands mentioned below.
@@ -449,6 +472,9 @@ def explicit_commandmode(cmdArgs):
         insert_rc_ab(cmd, args)
     elif cmd.startswith('d'):
         delete_rc(cmd, args)
+    elif cmd.startswith('g'):
+        if args != None:
+            goto_cell(stdscr, args)
 
 
 def _do_minmax(args, bIgnoreEmpty=True):
@@ -868,7 +894,7 @@ def rl_editplusmode(stdscr, key):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
         elif me['state'] == ':':
-            explicit_commandmode(me['gotStr'])
+            explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
         print("runLogic:{}".format(me), file=GLOGFILE)
     else:
@@ -935,3 +961,4 @@ finally:
     cend(stdscr)
     GLOGFILE.close()
 
+# vim: set sts=4 expandtab: #
