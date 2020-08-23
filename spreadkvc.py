@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# A simple ncurses based spreadsheet
+# A simple ncurses based spreadsheet for the commandline
 # HanishKVC, 2020
 # GPL, Vasudhaiva Kutumbakam (the World is One Family)
 #
@@ -7,6 +7,7 @@
 import sys, traceback
 import curses
 import curses.ascii
+from math import *
 
 
 bDebug = False
@@ -512,6 +513,31 @@ def do_sum(args):
     return total
 
 
+def do_stddev(args, bIgnoreEmpty=True):
+    '''
+    get the standard deviation for the contents of a matrix of cells.
+    It also returns the number of cells involved.
+    '''
+    start,end = args.split(':')
+    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    if not bCellAddr:
+        return None, None
+    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    if not bCellAddr:
+        return None, None
+    avg = do_avg(args)
+    total = 0
+    cnt = 0
+    for r in range(sR, eR+1):
+        for c in range(sC, eC+1):
+            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
+                continue
+            total += (nvalue((r,c)) - avg)**2
+            cnt += 1
+    sd = sqrt(total/cnt)
+    return sd
+
+
 def _do_prod(args, bIgnoreEmpty=True):
     '''
     Multiply the contents of a matrix of cells.
@@ -583,6 +609,8 @@ def do_func(sCmd, sArgs):
             return do_max(sArgs)
         elif sCmd == "PROD":
             return do_prod(sArgs)
+        elif sCmd == "STDDEV":
+            return do_stddev(sArgs)
     except:
         print("do_func exception", file=sys.stderr)
         traceback.print_exc()
