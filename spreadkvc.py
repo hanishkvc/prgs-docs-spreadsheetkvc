@@ -10,6 +10,8 @@ import curses.ascii
 
 
 bDebug = False
+THEQUOTE = '`'
+THEFIELDSEP = ','
 
 
 '''
@@ -371,6 +373,36 @@ def save_file(sFile):
     f.close()
 
 
+def load_file(sFile):
+    '''
+    Load the specified csv file
+    '''
+    f = open(sFile)
+    me['data'] = dict()
+    r = 0
+    sCur = ""
+    for line in f:
+        r += 1
+        c = 0
+        i = 0
+        bInQuote = False
+        while i < len(line):
+            t = line[i]
+            if t == THEQUOTE:
+                bInQuote = not bInQuote
+                sCur += t
+            elif t == THEFIELDSEP:
+                if bInQuote:
+                    sCur += t
+                else:
+                    me['data'][(r,c)] = sCur
+                    sCur = ""
+                    c += 1
+            else:
+                sCur += t
+    f.close()
+
+
 def explicit_commandmode(cmdArgs):
     '''
     Explicit Command mode, which is entered by pressing ':' followed by
@@ -398,6 +430,8 @@ def explicit_commandmode(cmdArgs):
     print("cmd:{}, args:{}".format(cmd,args), file=sys.stderr)
     if cmd == 'w':
         save_file(args)
+    elif cmd == 'l':
+        load_file(args)
     elif cmd.startswith('i'):
         if args == None:
             args = "1"
