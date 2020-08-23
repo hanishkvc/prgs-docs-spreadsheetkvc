@@ -489,6 +489,19 @@ def _celladdr_valid(sAddr):
     return True, (int(numAddr), int(numAlphaAddr))
 
 
+def _cellvalue_or_str(sCheck):
+    '''
+    If passed a cell address, then return the corresponding cells numeric value
+    Else return the passed string back again.
+    '''
+    bCellAddr, cellKey = _celladdr_valid(sCheck)
+    if bCellAddr:
+        val = nvalue(cellKey)
+        print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=sys.stderr)
+        return str(val)
+    return sCheck
+
+
 def _nvalue_cells(sData):
     '''
     Identify the cell addresses in the given string and replace them
@@ -502,17 +515,11 @@ def _nvalue_cells(sData):
         if c.isalnum():
             sCur += c
         else:
-            bCellAddr, cellKey = _celladdr_valid(sCur)
-            if bCellAddr:
-                val = nvalue(cellKey)
-                print("_nvalue_cells:{}:{}:{}".format(sCur, cellKey, val), file=sys.stderr)
-                sBase += str(val)
-            else:
-                sBase += sCur
+            sBase += _cellvalue_or_str(sCur)
             sBase += c
             sCur = ""
         i += 1
-    sBase += sCur
+    sBase += _cellvalue_or_str(sCur)
     return sBase
 
 
