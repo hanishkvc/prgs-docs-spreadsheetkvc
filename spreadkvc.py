@@ -396,8 +396,9 @@ def load_file(sFile):
                 if bInQuote:
                     sCur += t
                 else:
-                    me['data'][(r,c)] = sCur
-                    sCur = ""
+                    if sCur != "":
+                        me['data'][(r,c)] = sCur
+                        sCur = ""
                     c += 1
             else:
                 sCur += t
