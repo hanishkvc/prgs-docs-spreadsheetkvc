@@ -405,9 +405,58 @@ def explicit_commandmode(cmdArgs):
         delete_rc(cmd, args)
 
 
+def _do_sum(args):
+    '''
+    sum up contents of a matrix of cells.
+    It also returns the number of cells involved.
+    '''
+    start,end = args.split(':')
+    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    if not bCellAddr:
+        return None, None
+    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    if not bCellAddr:
+        return None, None
+    total = 0
+    cnt = 0
+    for r in range(sR, eR+1):
+        for c in range(sC, eC+1):
+            total += nvalue((r,c))
+            cnt += 1
+    return total, cnt
+
+
+def do_sum(args):
+    '''
+    Return the sum of specified range of cells.
+    It could be 1D vector or 2D vector.
+    '''
+    total, cnt = _do_sum(args)
+    return total
+
+
+def do_avg(args):
+    '''
+    Return the avg for specified range of cells.
+    It could be 1D vector or 2D vector of cells.
+    '''
+    total, cnt = _do_sum(args)
+    if (total == None):
+        return None
+    return total/cnt
+
+
 def do_func(sCmd, sArgs):
+    '''
+    Demux the internally supported functions.
+    Unknown function will return None.
+    '''
     print("do_func:{}:{}".format(sCmd, sArgs), file=sys.stderr)
-    return 0
+    if sCmd == "SUM":
+        return do_sum(sArgs)
+    elif sCmd == "AVG":
+        return do_avg(sArgs)
+    return None
 
 
 def _nvalue_funcs(sData):
