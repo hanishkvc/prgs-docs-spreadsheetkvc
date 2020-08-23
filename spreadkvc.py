@@ -421,7 +421,7 @@ def _do_minmax(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            lItems.add(nvalue((r,c)))
+            lItems.append(nvalue((r,c)))
     tMin = min(lItems)
     tMax = max(lItems)
     return tMin, tMax, len(lItems)
