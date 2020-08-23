@@ -550,13 +550,13 @@ def do_stddev(sCmd, args):
     Return stddevp assuming the cell range represents a full population
     '''
     varp, stdevp, var, stdev, cnt = _do_stddev(args)
-    if (sCmd == "stddev") or (sCmd == "stdev"):
+    if (sCmd == "STDDEV") or (sCmd == "STDEV"):
         return stdev
-    if (sCmd == "stddevp") or (sCmd == "stdevp"):
+    if (sCmd == "STDDEVP") or (sCmd == "STDEVP"):
         return stdevp
-    if (sCmd == "var"):
+    if (sCmd == "VAR"):
         return var
-    if (sCmd == "varp"):
+    if (sCmd == "VARP"):
         return varp
 
 
@@ -633,7 +633,7 @@ def do_func(sCmd, sArgs):
             return do_prod(sArgs)
         elif (sCmd.startswith("STDDEV") or sCmd.startswith("STDEV")):
             return do_stddev(sCmd, sArgs)
-        elif sCmd.startswith("var"):
+        elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
     except:
         print("do_func exception", file=sys.stderr)
@@ -765,7 +765,7 @@ def _nvalue(sData):
     try:
         val = float(eval(sBase))
     except:
-        print("_nvalue exception", file=sys.stderr)
+        print("_nvalue exception:{}".format(sData), file=sys.stderr)
         traceback.print_exc()
         val = None
     return val
