@@ -410,6 +410,9 @@ def do_func(sCmd, sArgs):
 
 
 def _nvalue(sData):
+    # TODO: Remove spaces from eval expression
+    # for now dont use spaces in =expression, bcas
+    # need to think about this bit more once again
     # Handle functions first
     sBase = ""
     sCur = ""
@@ -420,19 +423,22 @@ def _nvalue(sData):
             sCur += c
         else:
             if c == "(":
-                sCmd = sCur
-                sArgs = ""
-                i += 1
-                while i < len(sData):
-                    c = sData[i]
-                    if c == ')':
-                        break
-                    else:
-                        sArgs += c
+                if (sCur == ""):
+                    sBase += c
+                else:
+                    sCmd = sCur
+                    sArgs = ""
                     i += 1
-                val = do_func(sCmd, sArgs)
-                sBase += str(val)
-                sCur = ""
+                    while i < len(sData):
+                        c = sData[i]
+                        if c == ')':
+                            break
+                        else:
+                            sArgs += c
+                        i += 1
+                    val = do_func(sCmd, sArgs)
+                    sBase += str(val)
+                    sCur = ""
             else:
                 sBase = sBase + sCur + c
                 sCur = ""
