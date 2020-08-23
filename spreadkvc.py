@@ -572,7 +572,7 @@ def _do_prod(args, bIgnoreEmpty=True):
     bCellAddr, (eR,eC) = _celladdr_valid(end)
     if not bCellAddr:
         return None, None
-    prod = 0
+    prod = 1
     cnt = 0
     for r in range(sR, eR+1):
         for c in range(sC, eC+1):
