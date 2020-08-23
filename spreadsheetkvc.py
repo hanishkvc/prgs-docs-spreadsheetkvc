@@ -409,7 +409,9 @@ def load_file(sFile):
             me['data'][(r,c)] = sCur
             sCur = ""
     f.close()
-    print("loadfile:done:{}".format(sFile), file=sys.stderr)
+    me['numRows'] = r
+    me['numCols'] = c
+    print("loadfile:done:{}".format(me), file=sys.stderr)
 
 
 def explicit_commandmode(cmdArgs):
