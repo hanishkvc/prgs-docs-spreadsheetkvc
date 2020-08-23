@@ -478,7 +478,14 @@ def _celladdr_valid(sAddr):
         return False, None
     if i != len(sAddr):
         return False, None
-    return True, (alphaAddr, numAddr)
+    # Get the data key for the cell
+    i = 0
+    alphaAddr = alphaAddr.upper()
+    numAlphaAddr = 0
+    while i < len(alphaAddr):
+        num = (ord(alphaAddr[i]) - ord('A'))+1
+        numAlphaAddr = numAlphaAddr*26 + num
+    return True, (int(numAlphaAddr), int(numAddr))
 
 
 def _nvalue_cells(sData):
@@ -494,9 +501,9 @@ def _nvalue_cells(sData):
         if c.isalnum():
             sCur += c
         else:
-            bCellAddr, sAddr = _celladdr_valid(sCur):
+            bCellAddr, cellKey = _celladdr_valid(sCur)
             if bCellAddr:
-                val = nvalue_saddr(sCur)
+                val = nvalue(cellKey)
                 sBase += str(val)
             else:
                 sBase += sCur
@@ -540,6 +547,8 @@ def nvalue(addr):
 
 
 def nvalue_saddr(saddr):
+    print("nvalue_saddr: NOT IMPLEMENTED", file=sys.stderr)
+    exit(11)
 
 
 def value(addr):
