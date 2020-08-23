@@ -264,7 +264,7 @@ def cdraw(stdscr):
     as well as the data cells (i.e data rows and cols).
     '''
     #stdscr.clear()
-    cellstr(stdscr, 0, 0, "spreadkvc", curses.A_NORMAL)
+    cellstr(stdscr, 0, 0, "SpreadSheetKVC", curses.A_NORMAL)
     colStart = me['viewColStart']
     colEnd = colStart + me['dispCols']
     if (colEnd > me['numCols']):

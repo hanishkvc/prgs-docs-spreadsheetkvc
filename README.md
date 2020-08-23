@@ -1,9 +1,9 @@
-# SpreadKVC
+# SpreadSheetKVC
 
 Author: HanishKVC, 2020
 Version: v202008223ST2348
 
-spreadkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
+spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
 It works with a slightly modified form of csv file.
 
