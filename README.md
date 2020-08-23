@@ -86,3 +86,53 @@ enter key press will be lost.
 
 User can press the ESC key to exit from this mode into the command mode.
 
+## Cell contents and =expressions
+
+One can enter a textual data / string directly into the cell.
+
+However if one wants to enter numeric values or expressions, one requires to prefix them
+with = symbol.
+
+example
+
+	=2
+
+	=5+3/6.8*2**32
+
+	= (5+3)/(6.8*2)**32
+
+Few functions are also supported by the program, as mentioned below. These functions can
+also be used as part of the =expressions.
+
+Example
+
+	=10-5+sum(B10:C99)
+
+	=cnt(B10:C99)
+
+NOTE that the =expressions are evaluated using pythons eval function. So basic python
+expressions can be evaluated as part of =expressions.
+
+## Supported functions
+
+sum
+
+	sum the contents of the specified range of cells
+
+cnt
+
+	get the count of non empty cells in the specified range of cells.
+
+avg
+
+	calculate the average of the values in the range of cells. It doesnt consider
+	the empty cells.
+
+min
+
+	the minimum value among the specified range of cells.
+
+max
+
+	the maximum value among the specified range of cells.
+
