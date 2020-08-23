@@ -135,7 +135,9 @@ def cellcur(stdscr, y, x):
 
 def _goto_cell(stdscr, r, c):
     '''
-    Center the specified cell on the screen.
+    Center the specified cell on the screen. It also sets
+        the program's current cell info variables as well as
+        the cursor libraries cursor position to this cell.
     '''
     tr = r - int(me['dispRows']/2)
     if tr < 1:
@@ -145,6 +147,8 @@ def _goto_cell(stdscr, r, c):
     if tc < 1:
         tc = 1
     me['viewColStart'] = tc
+    me['curRow'] = r
+    me['curCol'] = c
     stdscr.clear()
     cdraw(stdscr)
     cellcur(stdscr, r, c)
