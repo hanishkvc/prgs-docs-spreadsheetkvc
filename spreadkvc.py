@@ -452,19 +452,39 @@ def _nvalue_funcs(sData):
 
 
 def _celladdr_valid(sAddr):
-    if c.isalpha():
-        if not bFirstAlpha:
-            if not bNextNum:
-                bFirstAlpha = True
+    '''
+    Check if the given string is a cell address or not.
+    '''
+    iChars = 0
+    i = 0
+    while i < len(sAddr):
+        if not sAddr[i].isalpha():
+            break
+        iChars += 1
+        i += 1
+    if (iChars == 0) or (iChars > 2): # This limits number of cols
+        return False
+    iNums = 0
+    while i < len(sAddr):
+        if not sAddr[i].isnum():
+            break
+        iNums += 1
+        i += 1
+    if (iNums == 0) or (iNums > 4): # This limits number of rows
+        return False
+    if i != len(sAddr):
+        return False
+    return True
 
 
 def _nvalue_cells(sData):
+    '''
+    Identify the cell addresses in the given string and replace them
+    with the numeric value got from the corresponding cell.
+    '''
     sBase = ""
     sCur = ""
     i = 0
-    bFirstAlpha = False
-    bNextNum = False
-    bValidCell = True
     while i < len(sData):
         c = sData[i]
         if c.isalnum():
@@ -500,6 +520,12 @@ def _nvalue(sData):
 
 
 def nvalue(addr):
+    '''
+    Return the numeric value associated with the given cell.
+    It will either return None (if not numeric or error in expression)
+    or else will return the numeric value associated with the cell.
+    If the cell contains a =expression, it will be evaluated.
+    '''
     val = me['data'].get(addr)
     if val == None:
         return val
@@ -509,6 +535,12 @@ def nvalue(addr):
 
 
 def value(addr):
+    '''
+    Return the value associated with the given cell.
+    It will be a empty string if no data in the cell.
+    It will be the numeric value if the cell has a =expression.
+    Else it will return the textual data in the cell.
+    '''
     val = me['data'].get(addr)
     if val == None:
         return ""
