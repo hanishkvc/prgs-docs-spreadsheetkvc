@@ -183,13 +183,24 @@ is embedded within [`]s and not [']s.
 
 To avoid confusing the program, dont use ` char as part of the spreadsheet contents.
 
-## Misc Notes
+## Misc
+
+### Notes
 
 If you dont want any exception text to appear on the screen and distract from using
 the programs, then you can run the program like below to avoid the screen getting
 messed up with stderr contents
 
 	spreadsheetkvc.py 2> /tmp/sskvc.stderr
+
+
+### TODO
+
+ncurses cursor is currently not updated/positioned beyond the current cells begining
+position. So also the program doesnt allow one to edit anywhere in the middle of the
+cell contents, user can only either add to the existing text/content and or delete
+the last char using backspace.
+
 
 ## History
 
