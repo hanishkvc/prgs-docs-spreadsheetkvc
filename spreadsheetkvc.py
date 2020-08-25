@@ -13,6 +13,7 @@ from math import *
 bDebug = False
 THEQUOTE = '`'
 THEFIELDSEP = ','
+DONTEXIT = -9999
 
 
 '''
@@ -29,7 +30,7 @@ Notes:
     dirty tells if any modifications exist that havent been saved
     back to the disk yet.
 
-    exit triggers a exit from the program, if its not -9999.
+    exit triggers a exit from the program, if its not DONTEXIT.
 '''
 
 me = {
@@ -45,8 +46,8 @@ me = {
         'clipCell': False,
         'copyData': None,
         'gotStr': "",
-        'dirty': False
-        'exit': -9999
+        'dirty': False,
+        'exit': DONTEXIT
         }
 
 
@@ -478,15 +479,20 @@ def load_file(sFile):
 
 
 def quit(scr):
-    iQuit=-9999
+    '''
+    Check that no unsaved changes exists, before gracefully quiting.
+
+    If any unsaved changes exist, then the decision is passed to the
+    user to decide whether to quit or not. The default if user just
+    presses enter is to NOT quit. User has to explicitly enter y or Y
+    to exit.
+    '''
     if me['dirty']:
         got = dlg(scr, ["Unsaved changes, Do you want to quit [y/N]:"])
         if chr(got).upper() == 'Y':
-            iQuit=1
+            me['exit'] = 1
     else:
-        iQuit=0
-    if iQuit != -9999 :
-        exit(iQuit)
+        me['exit'] = 0
 
 
 def explicit_commandmode(stdscr, cmdArgs):
@@ -1014,6 +1020,8 @@ def runlogic(stdscr):
             else:                       #### Edit+ Mode
                 bBackInC = False
                 rl_editplusmode(stdscr, key)
+            if me['exit'] != DONTEXIT:
+                break
         except:
             traceback.print_exc()
 
