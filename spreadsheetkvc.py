@@ -730,7 +730,7 @@ def do_func(sCmd, sArgs):
             return do_stddev(sCmd, sArgs)
     except:
         print("do_func exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
-        traceback.print_exc()
+        traceback.print_exc(file=GERRFILE)
     return None
 
 
@@ -859,7 +859,7 @@ def _nvalue(sData):
         val = float(eval(sBase))
     except:
         print("_nvalue exception:{}".format(sData), file=GLOGFILE)
-        traceback.print_exc()
+        traceback.print_exc(file=GERRFILE)
         val = None
     return val
 
@@ -1024,7 +1024,7 @@ def runlogic(stdscr):
                 break
         except:
             print("runlogic exception", file=GLOGFILE)
-            traceback.print_exc()
+            traceback.print_exc(file=GERRFILE)
 
 
 def setup_logfile(logfile="/dev/null"):
@@ -1032,16 +1032,19 @@ def setup_logfile(logfile="/dev/null"):
     return f
 
 
-def setup_stderr(errfile=None):
+def setup_errfile(errfile=None):
     if (errfile == None):
-        sys.stderr = tempfile.NamedTemporaryFile(prefix="sskvc", delete=False)
+        return tempfile.NamedTemporaryFile(mode="w+", prefix="sskvc_", delete=False)
     else:
-        sys.stderr = errfile
+        return open(logfile, "w+")
 
+
+GLOGFILE=None
+GERRFILE=None
 def setup_files():
-    global GLOGFILE
+    global GLOGFILE, GERRFILE
     GLOGFILE=setup_logfile()
-    setup_stderr()
+    GERRFILE=setup_errfile()
 
 
 setup_files()
@@ -1051,7 +1054,7 @@ try:
 except Exception as e:
     print("exception:{}".format(e), file=GLOGFILE)
     print("exc_info:{}".format(sys.exc_info()), file=GLOGFILE)
-    traceback.print_exc()
+    traceback.print_exc(file=GERRFILE)
     print("exception: done", file=GLOGFILE)
 finally:
     cend(stdscr)
