@@ -420,9 +420,9 @@ def _get_linekey(lineNum, userKey, fileKey):
                 algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
                 backend = cryptography.hazmat.backends.default_backend())
     hasher.update(userKey)
-    hasher.update(lineNum)
+    hasher.update(lineNum.to_bytes(4,'little'))
     hasher.update(fileKey)
-    key = base64.urlsafe_b64encode(hasher.finalise())
+    key = base64.urlsafe_b64encode(hasher.finalize())
     return key
 
 
