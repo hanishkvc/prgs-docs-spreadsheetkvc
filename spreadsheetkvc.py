@@ -1164,7 +1164,33 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
+def print_usage():
+    print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
+    print("    --help              Prints this usage info")
+    print("    --fieldsep ','      Specify the csv field seperator explicitly")
+    exit(0)
+
+
+def process_cmdline(args):
+    '''
+    Process commandline arguments for the program
+    '''
+    global THEFIELDSEP
+    i = 1
+    while i < len(args):
+        if args[i] == "--fieldsep":
+            i += 1
+            THEFIELDSEP = args[i][0]
+        elif args[i] == "--help":
+            print_usage()
+        i += 1
+
+
+
+### Main logic starts ###
+
 setup_files()
+process_cmdline(sys.argv)
 stdscr=cstart()
 try:
     runlogic(stdscr)

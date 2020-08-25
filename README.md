@@ -11,9 +11,35 @@ It allows the saved csv file to be encrypted and inturn load such encrypted csv 
 
 ## Usage
 
-The program supports the following modes command mode, edit/insert mode and explicit command mode.
+### command line arguments
 
-### command mode (implicit)
+The program supports the following commandline arguments
+
+	--help
+
+		program prints info about the commandline arguments supported by it.
+
+	--fieldsep <seperator>
+
+		By default the program uses ',' i.e comma as the field seperator of the csv files.
+		However the user can change this to a different character by using this argument.
+
+		--fieldsep ';'
+
+
+
+### program modes
+
+The program supports the following modes
+
+	command mode,
+
+	edit/insert mode and
+
+	explicit command mode.
+
+
+#### command mode (implicit)
 
 The program by default runs in the implicit command mode. In this mode one can press the following
 keys for achieving the specified operations.
@@ -33,7 +59,7 @@ keys for achieving the specified operations.
 * : can be used to enter the explicit command mode.
 
 
-### explicit command mode
+#### explicit command mode
 
 This mode is entered by pressing : when in the default/implicit command mode.
 In this explicit command mode, the user can enter one of the following commands
@@ -101,7 +127,7 @@ entering the command and the arguments.
 On pressing the enter key, the specified command will be run and the program reverts
 back to implicit command mode.
 
-### edit/insert mode
+#### edit/insert mode
 
 On pressing 'i', 'e' from the implicit command mode, the user can enter this mode.
 
@@ -126,6 +152,7 @@ adjacent cells dont have any content (even empty string is a content) of their o
 If you feel there is a empty string in any field and you want to remove it, use the 'd'
 command in the command mode, which will delete any content from the current cell, including
 empty string.
+
 
 ## Cell contents and =expressions
 
@@ -201,6 +228,8 @@ is embedded within [`]s and not [']s.
 
 To avoid confusing the program, dont use ` char as part of the spreadsheet contents.
 
+User can set a different field seperator from the commandline.
+
 ### Encryption support
 
 The program allows the csv file to be encrypted while saving it using a special write
@@ -239,7 +268,9 @@ the saved encrypted file.
 
 ## Misc
 
+
 ### Notes
+
 
 #### log files, stderr, ...
 
@@ -255,21 +286,17 @@ getting messed up with such messages
 
 	spreadsheetkvc.py 2> /tmp/sskvc.stderr
 
-#### Non csv or non comma csv file
 
-Currently the program doesnt provide a option for user to specify a different field
-seperator.
+#### Non csv or csv file with wrong fieldsep
 
-Loading such file can lead to the loaded file setting the programs display to a single
-column view. So also the content of the file will be clipped from display perspective.
-One could run the command
+Loading a Non csv file and or a csv file with a different field seperator will lead
+to the loaded file setting the program's display to a single column view. So also the
+content of the file will be clipped from display perspective. One could run the command
 
 	:ira 25
 
 	or so to allow the overflowing text to be visible.
 
-Currently One will have to change global constant defined for field seperator in the
-program, if required to work with such a file.
 
 #### Exit code
 
@@ -305,6 +332,8 @@ Automatically redirect exception messages to a named temp file.
 
 Add en|de-cryption support for files, so that they can be saved/stored in a secure manner.
 
+Add support for specifying csv fieldseperator from the commandline.
 
-Vasudhaiva Kutumbakam (the World is One Family)
+
+## Vasudhaiva Kutumbakam (the World is One Family)
 
