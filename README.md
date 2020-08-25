@@ -191,9 +191,15 @@ To avoid confusing the program, dont use ` char as part of the spreadsheet conte
 
 ### Notes
 
-If you dont want any exception text to appear on the screen and distract from using
-the programs, then you can run the program like below to avoid the screen getting
-messed up with stderr contents
+By default any exception data is written to a named temp file, which is not deleted
+on program exit.
+
+All log and error messages are redirected to /dev/null by default.
+
+If by some chance any exception or error message which should have gone into one of
+the above mentioned log files, appears on the screen and thus leading to distraction
+wrt using the program, then you can run the program like below to avoid the screen
+getting messed up with such messages
 
 	spreadsheetkvc.py 2> /tmp/sskvc.stderr
 
@@ -219,6 +225,8 @@ have some interesting fun on the way.
 Make the program more forgiving, by alerting before overwriting as well as before quiting
 without saving changes. Also remove implicit command mode Q quiting. Now user has to enter
 :q explicit command, to quit the program.
+
+Automatically redirect exception messages to a named temp file.
 
 
 Vasudhaiva Kutumbakam (the World is One Family)
