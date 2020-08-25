@@ -729,7 +729,7 @@ def do_func(sCmd, sArgs):
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
     except:
-        print("do_func exception", file=GLOGFILE)
+        print("do_func exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
         traceback.print_exc()
     return None
 
@@ -1023,6 +1023,7 @@ def runlogic(stdscr):
             if me['exit'] != DONTEXIT:
                 break
         except:
+            print("runlogic exception", file=GLOGFILE)
             traceback.print_exc()
 
 
