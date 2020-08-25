@@ -4,7 +4,7 @@
 # GPL, Vasudhaiva Kutumbakam (the World is One Family)
 #
 
-import sys, traceback
+import sys, traceback, os
 import curses
 import curses.ascii
 from math import *
@@ -112,6 +112,12 @@ def cellstr(stdscr, y, x, msg, attr, clipped=True):
         return
     print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GLOGFILE)
     stdscr.addstr(ty, tx, tmsg, attr)
+
+
+def dlg(scr, y, x, msgs, attr):
+    for i in range(len(msgs)):
+        cellstr(scr, y+i, x, msgs[i], attr, False)
+    return scr.getch()
 
 
 def cellcur(stdscr, y, x):
@@ -381,13 +387,17 @@ def delete_rc(cmd, args):
     me['data'] = newDict
 
 
-def save_file(sFile):
+def save_file(scr, sFile):
     '''
     Save file in a csv format.
 
     If the cell data contains comma in it, then the cell content
     is protected within single quotes.
     '''
+    if (os.path.exists(sFile)):
+        got = dlg(scr, 0, 0, ["File:{}:exists overwrite? [Y/n]".format(sFile)], curses.A_NORMAL)
+        if got.upper() == "N":
+            return
     f = open(sFile,"w+")
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
@@ -467,7 +477,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=GLOGFILE)
     if cmd == 'w':
-        save_file(args)
+        save_file(stdscr, args)
     elif cmd == 'l':
         load_file(args)
     elif cmd.startswith('i'):
