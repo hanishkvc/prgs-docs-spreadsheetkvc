@@ -519,11 +519,11 @@ def _load_file(sFile, filePass=None):
     me['data'] = dict()
     r = 0
     for line in f:
+        r += 1
         if filePass != None:
             lineKey = get_linekey(r, userKey, fileKey)
             sym = cryptography.fernet.Fernet(lineKey)
             line = sym.decrypt(line.encode()).decode()
-        r += 1
         c = 1
         i = 0
         sCur = ""
