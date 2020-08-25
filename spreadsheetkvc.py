@@ -1028,20 +1028,32 @@ def runlogic(stdscr):
 
 
 def setup_logfile(logfile="/dev/null"):
+    '''
+    create a file handle for logging.
+    '''
     f = open(logfile, "w+")
     return f
 
 
 def setup_errfile(errfile=None):
+    '''
+    create a file handle for logging error data.
+
+    If file name is not specified explicitly, then use named temp file to log errors.
+    It is not deleted on program exit.
+    '''
     if (errfile == None):
         return tempfile.NamedTemporaryFile(mode="w+", prefix="sskvc_", delete=False)
     else:
-        return open(logfile, "w+")
+        return open(errfile, "w+")
 
 
 GLOGFILE=None
 GERRFILE=None
 def setup_files():
+    '''
+    Setup the global file handles related to log and error data.
+    '''
     global GLOGFILE, GERRFILE
     GLOGFILE=setup_logfile()
     GERRFILE=setup_errfile()
