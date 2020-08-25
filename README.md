@@ -7,6 +7,8 @@ spreadsheetkvc is a simple spreadsheet program which runs on the commandline usi
 
 It works with a slightly modified form of csv file.
 
+It allows the saved csv file to be encrypted and inturn load such encrypted csv files.
+
 ## Usage
 
 The program supports the following modes command mode, edit/insert mode and explicit command mode.
@@ -41,9 +43,17 @@ In this explicit command mode, the user can enter one of the following commands
 	to save the contents of the current spreadsheet into specified file.
 	If the file already exists, it asks the user whether to overwrite or not.
 
+* pw passwd file
+
+	to encrypt and save the file.
+
 * l file
 
 	to load the specified spreadsheet.
+
+* pl passwd file
+
+	to decrypt a previously encrypted file and load it.
 
 * dr
 
@@ -144,6 +154,9 @@ Example
 NOTE that the =expressions are evaluated using pythons eval function. So basic python
 expressions can be evaluated as part of =expressions.
 
+NOTE: =expressions can only refer to other =expression cells and not text cells.
+
+
 ## Supported functions
 
 sum
@@ -179,6 +192,7 @@ stdev,stddev and stdevp,stddevp
 
 ## csv file format
 
+### General Info
 The csv file used by this program uses comma [,] to seperate the fields within each row
 i.e within each line in the file.
 
@@ -186,6 +200,38 @@ If any field contains the field seperator (i.e ,) with in its content, then the 
 is embedded within [`]s and not [']s.
 
 To avoid confusing the program, dont use ` char as part of the spreadsheet contents.
+
+### Encryption support
+
+The program allows the csv file to be encrypted while saving it using a special write
+command (pw). And inturn there is a matching pl command to load such encrypted files.
+
+It uses the python cryptography library to do the actual encryption and decryption
+logic and inturn uses its standardised recipe layer for the actual encrypt and decrypt
+logic, for now. So also saves the encrypted data in the base64 encoded format. This
+also keeps the logic for working with normal and encrypted files almost the same wrt
+load and save operations.
+
+THere are two passwords that the program uses wrt each file
+
+	P1. A user level password, this is specific to a user and shared for all the
+	encrypted files operated by the user. This is stored in users home folder at
+
+		~/.config/spreadsheetkvc/userpass
+
+		If this file is missing, then a default password is used. THis is
+		also the simplest way to share encrypted files with others.
+
+		If a user makes use of this, then they should remember to keep its
+		access restricted to the user and not share to group or all.
+
+	P2. The file password, this is specific to each file that is encrypted.
+	This is specified as part of the pw and pl commands.
+
+If the user is sharing encrypted files with others, then dont specify the user level
+password. Only use the file specific password, unless you dont mind sharing your user
+level password of this program with others.
+
 
 ## Misc
 
