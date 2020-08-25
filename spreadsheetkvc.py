@@ -483,7 +483,10 @@ def save_file(scr, sFile, filePass=None):
             status(scr, ["Overwriting {}".format(sFile)])
     f = open(sFile,"w+")
     if filePass != None:
-        userKey, fileKey = get_basekeys(filePass, b"Later01234abcdef")
+        salt = secrets.token_bytes(16)
+        userKey, fileKey = get_basekeys(filePass, salt)
+        salt = base64.urlsafe_b64encode(salt)
+        print("{}\n".format(salt), end="", file=f)
     for r in range(1, me['numRows']+1):
         curRow = ""
         for c in range(1, me['numCols']+1):
@@ -511,7 +514,9 @@ def _load_file(sFile, filePass=None):
     '''
     f = open(sFile)
     if filePass != None:
-        userKey, fileKey = get_basekeys(filePass, b"Later01234abcdef")
+        line = f.readline()
+        salt = base64.urlsafe_b64decode(line)
+        userKey, fileKey = get_basekeys(filePass, salt)
     print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
     r = 0
