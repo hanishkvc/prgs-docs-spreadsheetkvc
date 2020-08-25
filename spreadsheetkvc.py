@@ -9,6 +9,7 @@ import curses
 import curses.ascii
 from math import *
 import tempfile
+import cryptography.fernet, cryptography.hazmat
 
 
 bDebug = False
@@ -588,6 +589,9 @@ def explicit_commandmode(stdscr, cmdArgs):
     print("cmd:{}, args:{}".format(cmd,args), file=GLOGFILE)
     if cmd == 'w':
         save_file(stdscr, args)
+    elif cmd == 'pw':
+        filePass, args = args.split(' ',1)
+        save_file(stdscr, args, filePass)
     elif cmd == 'l':
         load_file(stdscr, args)
     elif cmd.startswith('i'):
