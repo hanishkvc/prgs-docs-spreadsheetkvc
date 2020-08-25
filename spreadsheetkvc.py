@@ -465,7 +465,7 @@ def get_basekeys(filePass, salt):
     return userKey, fileKey
 
 
-def save_file(scr, sFile, filePass=None):
+def _save_file(scr, sFile, filePass=None):
     '''
     Save file in a csv format.
 
@@ -508,6 +508,16 @@ def save_file(scr, sFile, filePass=None):
     f.close()
     me['dirty'] = False
     print("savefile:{}".format(sFile), file=GLOGFILE)
+
+
+def save_file(scr, sFile, filePass=None):
+    try:
+        _save_file(scr, sFile, filePass)
+    except:
+        a,b,c = sys.exc_info()
+        print("savefile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
+        traceback.print_exc(file=GERRFILE)
+        dlg(scr, ["savefile:exception:{}:{}".format(a, sFile), "Press any key to continue"])
 
 
 def _load_file(sFile, filePass=None):
