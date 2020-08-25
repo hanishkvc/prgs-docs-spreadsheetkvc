@@ -25,6 +25,9 @@ Notes:
 
     fixedCols|fixedRows for now corresponds to the single fixed
     row and col related to spreadsheet row|col address info.
+
+    dirty tells if any modifications exist that havent been saved
+    back to the disk yet.
 '''
 
 me = {
@@ -39,7 +42,8 @@ me = {
         'data': dict(),
         'clipCell': False,
         'copyData': None,
-        'gotStr': ""
+        'gotStr': "",
+        'dirty': False
         }
 
 
@@ -404,8 +408,10 @@ def save_file(scr, sFile):
     '''
     Save file in a csv format.
 
-    If the cell data contains comma in it, then the cell content
-    is protected within single quotes.
+    If the cell data contains the field seperator in it, then
+    the cell content is protected within single quotes.
+
+    If successfully saved, then Clear the dirty bit.
     '''
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
@@ -425,6 +431,7 @@ def save_file(scr, sFile):
             print(THEFIELDSEP, end="", file=f)
         print("\n", end="", file=f)
     f.close()
+    me['dirty'] = False
 
 
 def load_file(sFile):
@@ -467,6 +474,10 @@ def load_file(sFile):
     print("loadfile:done:{}".format(me), file=GLOGFILE)
 
 
+def quit(scr):
+    pass
+
+
 def explicit_commandmode(stdscr, cmdArgs):
     '''
     Explicit Command mode, which is entered by pressing ':' followed by
@@ -485,6 +496,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     ica num_of_cols
         insert n columns after current column
     e path/file_to_export_into
+    q to quit the program
     '''
     if cmdArgs.find(' ') == -1:
         cmd = cmdArgs
@@ -505,6 +517,8 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif cmd.startswith('g'):
         if args != None:
             goto_cell(stdscr, args)
+    elif cmd == 'q':
+        quit(stdscr)
 
 
 def _do_minmax(args, bIgnoreEmpty=True):
@@ -873,6 +887,12 @@ def value(addr):
 
 
 def rl_commandmode(stdscr, key):
+    '''
+    Handle keys wrt the implicit command mode.
+
+    By pressing e or i one enters the edit(or insert) mode.
+    By pressing : one enters the explicit command mode.
+    '''
     if (key == curses.KEY_UP):
         cellcur_up()
     elif (key == curses.KEY_DOWN):
@@ -912,6 +932,16 @@ def rl_commandmode(stdscr, key):
 
 
 def rl_editplusmode(stdscr, key):
+    '''
+    Handle key presses in edit/insert/explicit command modes
+
+    ESC key allows returning back to the implicit command mode.
+    Enter key either saves the text entry/changes till now to
+        a temporary buffer, if in edit/insert mode.
+            It also sets the dirty flag.
+        Or trigger the explicit command handling logic in
+        explicit command mode.
+    '''
     if (key == curses.ascii.ESC):
         if me['state'] == 'E':
             # Restore/set data to the latest backedup edit buffer
@@ -923,6 +953,7 @@ def rl_editplusmode(stdscr, key):
     elif (key == curses.ascii.NL):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
+            me['dirty'] = True
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
