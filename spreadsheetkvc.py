@@ -919,7 +919,6 @@ def rl_commandmode(stdscr, key):
         c helps copy cell data.
         C helps Cut cell data.
         p helps Paste cell data.
-        Quit by pressing Q
     '''
     if (key == curses.KEY_UP):
         cellcur_up()
@@ -954,8 +953,6 @@ def rl_commandmode(stdscr, key):
     elif (key == ord(':')):
         me['state'] = ':'
         me['gotStr'] = ""
-    elif (key == ord('Q')):
-        return False
     return True
 
 
@@ -1018,8 +1015,7 @@ def runlogic(stdscr):
                 if not bBackInC:
                     stdscr.clear()
                     bBackInC = True
-                if not rl_commandmode(stdscr, key):
-                    break
+                rl_commandmode(stdscr, key)
             else:                       #### Edit+ Mode
                 bBackInC = False
                 rl_editplusmode(stdscr, key)
