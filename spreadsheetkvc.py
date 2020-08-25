@@ -450,10 +450,10 @@ def get_linekey(lineNum, filePass, salt):
     except:
         userPass = "changemeuser"
     userKey = base64.urlsafe_b64encode(kdf.derive(userPass))
-    return _get_key(lineNum, userKey, fileKey)
+    return _get_linekey(lineNum, userKey, fileKey)
 
 
-def save_file(scr, sFile):
+def save_file(scr, sFile, filePass=None):
     '''
     Save file in a csv format.
 
@@ -480,6 +480,10 @@ def save_file(scr, sFile):
             else:
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
+        if filePass != None:
+            lineKey = get_linekey(r, filePass, b"Later")
+            sym = cryptography.fernet.Fernet(lineKey)
+            curRow = sym.encrypt(curRow)
         print("{}\n".format(curRow), end="", file=f)
     f.close()
     me['dirty'] = False
