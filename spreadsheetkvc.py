@@ -491,7 +491,8 @@ def save_file(scr, sFile, filePass=None):
         if filePass != None:
             lineKey = get_linekey(r, filePass, b"Later")
             sym = cryptography.fernet.Fernet(lineKey)
-            curRow = sym.encrypt(curRow)
+            curRow = sym.encrypt(curRow.encode()).decode()
+            status(scr, ["saving line {}".format(r)])
         print("{}\n".format(curRow), end="", file=f)
     f.close()
     me['dirty'] = False
