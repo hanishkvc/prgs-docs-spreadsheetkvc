@@ -409,7 +409,7 @@ def save_file(scr, sFile):
     '''
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
-        if got.upper() == "N":
+        if chr(got).upper() == "N":
             status(scr, ["Saving is aborted"])
             return
         else:

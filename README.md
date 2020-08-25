@@ -43,7 +43,7 @@ In this explicit command mode, the user can enter one of the following commands
 * w file
 
 	to save the contents of the current spreadsheet into specified file.
-	Do note that it will overwrite the file, if it already exists.
+	If the file already exists, it asks the user whether to overwrite or not.
 
 * l file
 
