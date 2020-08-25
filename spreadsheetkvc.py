@@ -427,16 +427,19 @@ def save_file(scr, sFile):
             status(scr, ["Overwriting {}".format(sFile)])
     f = open(sFile,"w+")
     for r in range(1, me['numRows']+1):
+        curRow = ""
         for c in range(1, me['numCols']+1):
             data = me['data'].get((r,c))
             if (data != None):
                 if data.find(THEFIELDSEP) != -1:
                     data = "{}{}{}".format(THEQUOTE, data, THEQUOTE)
-                print(data, end="", file=f)
-            print(THEFIELDSEP, end="", file=f)
-        print("\n", end="", file=f)
+            else:
+                data = ""
+            curRow += "{}{}".format(data,THEFIELDSEP)
+        print("{}\n".format(curRow), end="", file=f)
     f.close()
     me['dirty'] = False
+    print("savefile:{}".format(sFile), file=GLOGFILE)
 
 
 def load_file(sFile):
