@@ -114,10 +114,23 @@ def cellstr(stdscr, y, x, msg, attr, clipped=True):
     stdscr.addstr(ty, tx, tmsg, attr)
 
 
-def dlg(scr, y, x, msgs, attr):
+def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
+    '''
+    Show a simple dialog, with the messages passed to it.
+    And return a keypress from the user.
+    '''
     for i in range(len(msgs)):
         cellstr(scr, y+i, x, msgs[i], attr, False)
     return scr.getch()
+
+
+def status(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
+    '''
+    Display the messages passed to it at a given location.
+    If location not given, then show at top left corner.
+    '''
+    for i in range(len(msgs)):
+        cellstr(scr, y+i, x, msgs[i], attr, False)
 
 
 def cellcur(stdscr, y, x):
@@ -395,9 +408,12 @@ def save_file(scr, sFile):
     is protected within single quotes.
     '''
     if (os.path.exists(sFile)):
-        got = dlg(scr, 0, 0, ["File:{}:exists overwrite? [Y/n]".format(sFile)], curses.A_NORMAL)
+        got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
         if got.upper() == "N":
+            status(scr, ["Saving is aborted"])
             return
+        else:
+            status(scr, ["Overwriting {}".format(sFile)])
     f = open(sFile,"w+")
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
