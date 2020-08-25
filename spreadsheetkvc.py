@@ -559,9 +559,9 @@ def load_file(scr, sFile, filePass=None):
         _load_file(sFile, filePass)
     except:
         a,b,c = sys.exc_info()
-        print("load_file exception:{}".format(sFile), file=GLOGFILE)
+        print("loadfile:exception:{}:{}".format(b, sFile), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
-        dlg(scr, ["loadfile:{}:{}".format(b, sFile), "Press any key to continue"])
+        dlg(scr, ["loadfile:exception:{}:{}".format(b, sFile), "Press any key to continue"])
 
 
 def quit(scr):
@@ -820,7 +820,7 @@ def do_func(sCmd, sArgs):
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
     except:
-        print("do_func exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
+        print("do_func:exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
     return None
 
