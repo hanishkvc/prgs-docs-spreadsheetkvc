@@ -9,8 +9,9 @@ import curses
 import curses.ascii
 from math import *
 import tempfile
-import cryptography.fernet, cryptography.hazmat
-
+import cryptography.fernet
+import cryptography.hazmat.primitives.kdf.pbkdf2, cryptography.hazmat.primitives.hashes
+import base64
 
 bDebug = False
 THEQUOTE = '`'
@@ -441,7 +442,7 @@ def get_linekey(lineNum, filePass, salt):
             salt = salt,
             iterations = 186926, # Gandhi+
             backend = cryptography.hazmat.backends.default_backend())
-    fileKey = base64.urlsafe_b64encode(kdf.derive(filePass))
+    fileKey = base64.urlsafe_b64encode(kdf.derive(bytes(filePass,"utf-8")))
     # get and process user password
     try:
         f = open("~/.config/spreadsheetkvc/userpass")
@@ -450,7 +451,7 @@ def get_linekey(lineNum, filePass, salt):
         f.close()
     except:
         userPass = "changemeuser"
-    userKey = base64.urlsafe_b64encode(kdf.derive(userPass))
+    userKey = base64.urlsafe_b64encode(kdf.derive(bytes(userPass,"utf-8")))
     return _get_linekey(lineNum, userKey, fileKey)
 
 
