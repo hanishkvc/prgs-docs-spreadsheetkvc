@@ -1,6 +1,6 @@
 
 run:
-	python3 spreadsheetkvc.py 2> /tmp/t.1
+	python3 spreadsheetkvc.py
 
 pdf: README.md
 	pandoc -o README.pdf README.md
