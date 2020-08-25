@@ -890,8 +890,16 @@ def rl_commandmode(stdscr, key):
     '''
     Handle keys wrt the implicit command mode.
 
-    By pressing e or i one enters the edit(or insert) mode.
-    By pressing : one enters the explicit command mode.
+    By pressing
+        e one enters the edit mode.
+        i one enters the insert edit mode.
+        : one enters the explicit command mode.
+        arrow keys one can move around the cells.
+        d one can delete current cell's content.
+        c helps copy cell data.
+        C helps Cut cell data.
+        p helps Paste cell data.
+        Quit by pressing Q
     '''
     if (key == curses.KEY_UP):
         cellcur_up()
@@ -966,15 +974,10 @@ def runlogic(stdscr):
     '''
     RunLogic between the Command and the other modes
 
-    Command Mode:
-        One can move around the cells.
-        Enter insert mode by pressing i
-        Enter edit mode by pressing e
-        Delete cell content by pressing d
-        Copy cell data by pressing c
-        Cut cell data by pressing C
-        Paste cell data by pressing p
-        Quit by pressing Q
+    Command Mode: (Default/Implicit) This mode is used to
+        navigate across the matrix of cells,
+        As well as to copy/cut/paste/delete contents,
+        As well as to enter insert/edit or explicit command mode.
 
     Edit/Insert Mode:
         Edit mode: Edit existing cell data
