@@ -412,7 +412,7 @@ def delete_rc(cmd, args):
     me['data'] = newDict
 
 
-def _get_linekey(lineNum, userKey, fileKey):
+def get_linekey(lineNum, userKey, fileKey):
     '''
     Get line number specific key by hashing
     userkey, linenum and filekey
@@ -428,7 +428,7 @@ def _get_linekey(lineNum, userKey, fileKey):
     return key
 
 
-def get_linekey(lineNum, filePass, salt):
+def get_basekeys(filePass, salt):
     '''
     Generate user and file keys from the respective passwords
     and a hopefully random salt.
@@ -460,7 +460,7 @@ def get_linekey(lineNum, filePass, salt):
             iterations = 186922, # Gandhi+
             backend = cryptography.hazmat.backends.default_backend())
     userKey = base64.urlsafe_b64encode(kdf.derive(bytes(userPass,"utf-8")))
-    return _get_linekey(lineNum, userKey, fileKey)
+    return userKey, fileKey
 
 
 def save_file(scr, sFile, filePass=None):
@@ -471,6 +471,8 @@ def save_file(scr, sFile, filePass=None):
     the cell content is protected within single quotes.
 
     If successfully saved, then Clear the dirty bit.
+
+    If filePass is provided then encrypt the file.
     '''
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
@@ -480,6 +482,8 @@ def save_file(scr, sFile, filePass=None):
         else:
             status(scr, ["Overwriting {}".format(sFile)])
     f = open(sFile,"w+")
+    if filePass != None:
+        userKey, fileKey = get_basekeys(filePass, b"Later01234abcdef")
     for r in range(1, me['numRows']+1):
         curRow = ""
         for c in range(1, me['numCols']+1):
@@ -491,7 +495,7 @@ def save_file(scr, sFile, filePass=None):
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
         if filePass != None:
-            lineKey = get_linekey(r, filePass, b"Later01234abcdef")
+            lineKey = get_linekey(r, userKey, fileKey)
             sym = cryptography.fernet.Fernet(lineKey)
             curRow = sym.encrypt(curRow.encode()).decode()
             status(scr, ["saving line {}".format(r)],y=1)
