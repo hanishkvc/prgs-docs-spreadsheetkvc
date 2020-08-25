@@ -1167,7 +1167,7 @@ def setup_files():
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --help              Prints this usage info")
-    print("    --fieldsep ','      Specify the csv field seperator explicitly")
+    print("    --fieldsep '{}'      Specify the csv field seperator explicitly".format(THEFIELDSEP))
     exit(0)
 
 
