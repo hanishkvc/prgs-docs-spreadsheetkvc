@@ -508,15 +508,21 @@ def save_file(scr, sFile, filePass=None):
     print("savefile:{}".format(sFile), file=GLOGFILE)
 
 
-def _load_file(sFile):
+def _load_file(sFile, filePass=None):
     '''
     Load the specified csv file
     '''
     f = open(sFile)
+    if filePass != None:
+        userKey, fileKey = get_basekeys(filePass, b"Later01234abcdef")
     print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
     r = 0
     for line in f:
+        if filePass != None:
+            lineKey = get_linekey(r, userKey, fileKey)
+            sym = cryptography.fernet.Fernet(lineKey)
+            line = sym.decrypt(line.encode()).decode()
         r += 1
         c = 1
         i = 0
@@ -548,9 +554,9 @@ def _load_file(sFile):
     print("loadfile:done:{}".format(me), file=GLOGFILE)
 
 
-def load_file(scr, sFile):
+def load_file(scr, sFile, filePass=None):
     try:
-        _load_file(sFile)
+        _load_file(sFile, filePass)
     except:
         a,b,c = sys.exc_info()
         print("load_file exception:{}".format(sFile), file=GLOGFILE)
