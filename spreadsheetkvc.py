@@ -424,7 +424,7 @@ def get_linekey(lineNum, userKey, fileKey):
     hasher.update(lineNum.to_bytes(4,'little'))
     hasher.update(fileKey)
     key = base64.urlsafe_b64encode(hasher.finalize())
-    print("linekey:{}:{}:{}={}".format(lineNum, userKey, fileKey, key), file=GERRFILE)
+    #print("linekey:{}:{}:{}={}".format(lineNum, userKey, fileKey, key), file=GERRFILE)
     return key
 
 
@@ -497,11 +497,8 @@ def save_file(scr, sFile, filePass=None):
         if filePass != None:
             lineKey = get_linekey(r, userKey, fileKey)
             sym = cryptography.fernet.Fernet(lineKey)
-            #curRow = sym.encrypt(curRow.encode()).decode()
-            curRowIn = curRow.encode()
-            curRow = sym.encrypt(curRowIn).decode()
-            print("savefile:{}:{}".format(curRowIn, curRow), file=GERRFILE)
-            status(scr, ["saving line {}".format(r)],y=1)
+            curRow = sym.encrypt(curRow.encode()).decode()
+            #status(scr, ["saving line {}".format(r)],y=1)
         print("{}\n".format(curRow), end="", file=f)
     f.close()
     me['dirty'] = False
