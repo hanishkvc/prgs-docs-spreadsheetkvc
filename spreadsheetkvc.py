@@ -424,6 +424,7 @@ def _get_linekey(lineNum, userKey, fileKey):
     hasher.update(lineNum.to_bytes(4,'little'))
     hasher.update(fileKey)
     key = base64.urlsafe_b64encode(hasher.finalize())
+    print("linekey:{}:{}:{}={}".format(lineNum, userKey, fileKey, key), file=GERRFILE)
     return key
 
 
@@ -490,7 +491,7 @@ def save_file(scr, sFile, filePass=None):
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
         if filePass != None:
-            lineKey = get_linekey(r, filePass, b"Later")
+            lineKey = get_linekey(r, filePass, b"Later01234abcdef")
             sym = cryptography.fernet.Fernet(lineKey)
             curRow = sym.encrypt(curRow.encode()).decode()
             status(scr, ["saving line {}".format(r)],y=1)
