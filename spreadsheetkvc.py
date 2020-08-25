@@ -617,6 +617,9 @@ def explicit_commandmode(stdscr, cmdArgs):
         save_file(stdscr, args, filePass)
     elif cmd == 'l':
         load_file(stdscr, args)
+    elif cmd == 'pl':
+        filePass, args = args.split(' ',1)
+        load_file(stdscr, args, filePass)
     elif cmd.startswith('i'):
         if args == None:
             args = "1"
