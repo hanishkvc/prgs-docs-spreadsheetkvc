@@ -497,7 +497,10 @@ def save_file(scr, sFile, filePass=None):
         if filePass != None:
             lineKey = get_linekey(r, userKey, fileKey)
             sym = cryptography.fernet.Fernet(lineKey)
-            curRow = sym.encrypt(curRow.encode()).decode()
+            #curRow = sym.encrypt(curRow.encode()).decode()
+            curRowIn = curRow.encode()
+            curRow = sym.encrypt(curRowIn).decode()
+            print("savefile:{}:{}".format(curRowIn, curRow), file=GERRFILE)
             status(scr, ["saving line {}".format(r)],y=1)
         print("{}\n".format(curRow), end="", file=f)
     f.close()
