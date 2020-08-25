@@ -219,8 +219,9 @@ THere are two passwords that the program uses wrt each file
 
 		~/.config/spreadsheetkvc/userpass
 
-		If this file is missing, then a default password is used. THis is
-		also the simplest way to share encrypted files with others.
+		If this file is missing, then a default password is used. Not using
+		user level password is also the simplest way to share encrypted files
+		with others.
 
 		If a user makes use of this, then they should remember to keep its
 		access restricted to the user and not share to group or all.
@@ -240,6 +241,8 @@ the saved encrypted file.
 
 ### Notes
 
+#### log files, stderr, ...
+
 By default any exception data is written to a named temp file, which is not deleted
 on program exit.
 
@@ -251,6 +254,29 @@ wrt using the program, then you can run the program like below to avoid the scre
 getting messed up with such messages
 
 	spreadsheetkvc.py 2> /tmp/sskvc.stderr
+
+#### Non csv or non comma csv file
+
+Currently the program doesnt provide a option for user to specify a different field
+seperator.
+
+Loading such file can lead to the loaded file setting the programs display to a single
+column view. So also the content of the file will be clipped from display perspective.
+One could run the command
+
+	:ira 25
+
+	or so to allow the overflowing text to be visible.
+
+Currently One will have to change global constant defined for field seperator in the
+program, if required to work with such a file.
+
+#### Exit code
+
+If the program exits normally then it returns 0.
+
+If the program is exited normally by the user, by ignoring the warning about unsaved
+changes, then it returns 1.
 
 
 ### TODO
