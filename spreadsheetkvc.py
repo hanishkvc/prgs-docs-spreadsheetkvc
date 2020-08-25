@@ -559,9 +559,9 @@ def load_file(scr, sFile, filePass=None):
         _load_file(sFile, filePass)
     except:
         a,b,c = sys.exc_info()
-        print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GERRFILE)
+        print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
-        dlg(scr, ["loadfile:exception:{}:{}".format(b, sFile), "Press any key to continue"])
+        dlg(scr, ["loadfile:exception:{}:{}".format(a, sFile), "Press any key to continue"])
 
 
 def quit(scr):
