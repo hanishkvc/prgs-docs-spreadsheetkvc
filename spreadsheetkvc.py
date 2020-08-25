@@ -409,6 +409,50 @@ def delete_rc(cmd, args):
     me['data'] = newDict
 
 
+def _get_linekey(lineNum, userKey, fileKey):
+    '''
+    Get line number specific key by hashing
+    userkey, linenum and filekey
+    '''
+    hasher = cryptography.hazmat.primitives.hashes.Hash(
+                algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
+                backend = cryptography.hazmat.backends.default_backend())
+    hasher.update(userKey)
+    hasher.update(lineNum)
+    hasher.update(fileKey)
+    key = base64.urlsafe_b64encode(hasher.finalise())
+    return key
+
+
+def get_linekey(lineNum, filePass, salt):
+    '''
+    Generate user and file keys from the respective passwords
+    and a hopefully random salt.
+
+    user password if not provided, fallsback to a default.
+    If provided, it should be readable only by the user and
+    not by group or all.
+    '''
+    # process file password
+    kdf = cryptography.hazmat.primitives.kdf.pbkdf2.PBKDF2HMAC(
+            algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
+            length = 32,
+            salt = salt,
+            iterations = 186926, # Gandhi+
+            backend = cryptography.hazmat.backends.default_backend())
+    fileKey = base64.urlsafe_b64encode(kdf.derive(filePass))
+    # get and process user password
+    try:
+        f = open("~/.config/spreadsheetkvc/userpass")
+        l = f.readline()
+        userPass = l.strip()
+        f.close()
+    except:
+        userPass = "changemeuser"
+    userKey = base64.urlsafe_b64encode(kdf.derive(userPass))
+    return _get_key(lineNum, userKey, fileKey)
+
+
 def save_file(scr, sFile):
     '''
     Save file in a csv format.
