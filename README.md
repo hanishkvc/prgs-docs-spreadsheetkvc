@@ -232,6 +232,9 @@ If the user is sharing encrypted files with others, then dont specify the user l
 password. Only use the file specific password, unless you dont mind sharing your user
 level password of this program with others.
 
+A random salt is also used each time a file is saved. This inturn is embedded within
+the saved encrypted file.
+
 
 ## Misc
 
@@ -273,6 +276,8 @@ without saving changes. Also remove implicit command mode Q quiting. Now user ha
 :q explicit command, to quit the program.
 
 Automatically redirect exception messages to a named temp file.
+
+Add en|de-cryption support for files, so that they can be saved/stored in a secure manner.
 
 
 Vasudhaiva Kutumbakam (the World is One Family)
