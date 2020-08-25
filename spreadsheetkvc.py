@@ -12,6 +12,8 @@ import tempfile
 import cryptography.fernet
 import cryptography.hazmat.primitives.kdf.pbkdf2, cryptography.hazmat.primitives.hashes
 import base64
+import secrets
+
 
 bDebug = False
 THEQUOTE = '`'
@@ -485,7 +487,7 @@ def save_file(scr, sFile, filePass=None):
     if filePass != None:
         salt = secrets.token_bytes(16)
         userKey, fileKey = get_basekeys(filePass, salt)
-        salt = base64.urlsafe_b64encode(salt)
+        salt = base64.urlsafe_b64encode(salt).decode()
         print("{}\n".format(salt), end="", file=f)
     for r in range(1, me['numRows']+1):
         curRow = ""
@@ -515,7 +517,7 @@ def _load_file(sFile, filePass=None):
     f = open(sFile)
     if filePass != None:
         line = f.readline()
-        salt = base64.urlsafe_b64decode(line)
+        salt = base64.urlsafe_b64decode(line.encode())
         userKey, fileKey = get_basekeys(filePass, salt)
     print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
