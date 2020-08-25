@@ -122,7 +122,6 @@ def cellstr(stdscr, y, x, msg, attr, clipped=True):
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GLOGFILE)
-    print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GERRFILE)
     stdscr.addstr(ty, tx, tmsg, attr)
 
 
@@ -143,8 +142,7 @@ def status(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
     '''
     for i in range(len(msgs)):
         cellstr(scr, y+i, x, msgs[i], attr, False)
-        print("status:{},{}:{}".format(y+i, x, msgs[i]), file=GERRFILE)
-    scr.getch()
+    scr.refresh()
 
 
 def cellcur(stdscr, y, x):
