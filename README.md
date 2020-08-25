@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200823IST2336
+Version: v20200825IST2235
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
