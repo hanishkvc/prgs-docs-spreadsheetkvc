@@ -451,6 +451,12 @@ def get_linekey(lineNum, filePass, salt):
         f.close()
     except:
         userPass = "changemeuser"
+    kdf = cryptography.hazmat.primitives.kdf.pbkdf2.PBKDF2HMAC(
+            algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
+            length = 32,
+            salt = salt,
+            iterations = 186922, # Gandhi+
+            backend = cryptography.hazmat.backends.default_backend())
     userKey = base64.urlsafe_b64encode(kdf.derive(bytes(userPass,"utf-8")))
     return _get_linekey(lineNum, userKey, fileKey)
 
