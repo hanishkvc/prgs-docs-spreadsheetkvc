@@ -30,10 +30,6 @@ keys for achieving the specified operations.
 
 * : can be used to enter the explicit command mode.
 
-* Q can be used to quit the program.
-
-	All unsaved changes will be lost. THe program doesnt warn this condition,
-	so remember to save the data by first using :w explicit command, before quiting.
 
 ### explicit command mode
 
@@ -79,6 +75,14 @@ In this explicit command mode, the user can enter one of the following commands
 * g(oto) CellAddr
 
 	Center the screen to the specified celladdress.
+
+* q
+
+	is used to quit the program.
+
+	All unsaved changes will be lost. Program does warn about this condition and
+	gives the user the chance to abort the quit. Remember to save the data by first
+	using :w command explicitly, before quiting, if you want all edits to be saved.
 
 The user can enter the command and its arguments and then press enter key to trigger
 the command. The user can use backspace to delete the chars to correct mistakes when
@@ -209,6 +213,13 @@ the last char using backspace.
 Implemented as part of the Gauri Ganesh weekend, to scratch a itch I had with need for a
 simple commandline spreadsheet package. And also to explore and think randomly a bit and
 have some interesting fun on the way.
+
+### 20200825IST1220
+
+Make the program more forgiving, by alerting before overwriting as well as before quiting
+without saving changes. Also remove implicit command mode Q quiting. Now user has to enter
+:q explicit command, to quit the program.
+
 
 Vasudhaiva Kutumbakam (the World is One Family)
 
