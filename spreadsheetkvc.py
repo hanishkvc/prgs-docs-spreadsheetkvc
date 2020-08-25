@@ -28,6 +28,8 @@ Notes:
 
     dirty tells if any modifications exist that havent been saved
     back to the disk yet.
+
+    exit triggers a exit from the program, if its not -9999.
 '''
 
 me = {
@@ -44,6 +46,7 @@ me = {
         'copyData': None,
         'gotStr': "",
         'dirty': False
+        'exit': -9999
         }
 
 
@@ -475,7 +478,15 @@ def load_file(sFile):
 
 
 def quit(scr):
-    pass
+    iQuit=-9999
+    if me['dirty']:
+        got = dlg(scr, ["Unsaved changes, Do you want to quit [y/N]:"])
+        if chr(got).upper() == 'Y':
+            iQuit=1
+    else:
+        iQuit=0
+    if iQuit != -9999 :
+        exit(iQuit)
 
 
 def explicit_commandmode(stdscr, cmdArgs):
