@@ -442,7 +442,7 @@ def save_file(scr, sFile):
     print("savefile:{}".format(sFile), file=GLOGFILE)
 
 
-def load_file(sFile):
+def _load_file(sFile):
     '''
     Load the specified csv file
     '''
@@ -480,6 +480,16 @@ def load_file(sFile):
     me['numRows'] = r
     me['numCols'] = c
     print("loadfile:done:{}".format(me), file=GLOGFILE)
+
+
+def load_file(scr, sFile):
+    try:
+        _load_file(sFile)
+    except:
+        a,b,c = sys.exc_info()
+        print("load_file exception:{}".format(sFile), file=GLOGFILE)
+        traceback.print_exc(file=GERRFILE)
+        dlg(scr, ["loadfile:{}:{}".format(b, sFile), "Press any key to continue"])
 
 
 def quit(scr):
@@ -531,7 +541,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     if cmd == 'w':
         save_file(stdscr, args)
     elif cmd == 'l':
-        load_file(args)
+        load_file(stdscr, args)
     elif cmd.startswith('i'):
         if args == None:
             args = "1"
