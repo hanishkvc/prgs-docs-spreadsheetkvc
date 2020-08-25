@@ -8,6 +8,7 @@ import sys, traceback, os
 import curses
 import curses.ascii
 from math import *
+import tempfile
 
 
 bDebug = False
@@ -1030,7 +1031,19 @@ def setup_logfile(logfile="/dev/null"):
     return f
 
 
-GLOGFILE=setup_logfile()
+def setup_stderr(errfile=None):
+    if (errfile == None):
+        sys.stderr = tempfile.NamedTemporaryFile(prefix="sskvc", delete=False)
+    else:
+        sys.stderr = errfile
+
+def setup_files():
+    global GLOGFILE
+    GLOGFILE=setup_logfile()
+    setup_stderr()
+
+
+setup_files()
 stdscr=cstart()
 try:
     runlogic(stdscr)
