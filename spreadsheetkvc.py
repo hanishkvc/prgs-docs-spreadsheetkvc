@@ -486,6 +486,9 @@ def quit(scr):
     user to decide whether to quit or not. The default if user just
     presses enter is to NOT quit. User has to explicitly enter y or Y
     to exit.
+
+    The exit code can be used to indicate whether there was any unsaved
+    changes when quiting.
     '''
     if me['dirty']:
         got = dlg(scr, ["Unsaved changes, Do you want to quit [y/N]:"])
@@ -1043,5 +1046,6 @@ except Exception as e:
 finally:
     cend(stdscr)
     GLOGFILE.close()
+exit(me['exit'])
 
 # vim: set sts=4 expandtab: #
