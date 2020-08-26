@@ -744,8 +744,10 @@ def explicit_commandmode(stdscr, cmdArgs):
         if args == None:
             args = "1"
         insert_rc_ab(cmd, args)
+        me['dirty'] = True
     elif cmd.startswith('d'):
         delete_rc(cmd, args)
+        me['dirty'] = True
     elif cmd.startswith('g'):
         if args != None:
             goto_cell(stdscr, args)
@@ -1150,10 +1152,12 @@ def rl_commandmode(stdscr, key):
         me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
     elif (key == ord('C')):
         me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
-        me['data'].pop((me['curRow'],me['curCol']), None)
+        if me['data'].pop((me['curRow'],me['curCol']), None) != None:
+            me['dirty'] = True
     elif (key == ord('p')):
         if me['copyData'] != None:
             me['data'][(me['curRow'],me['curCol'])] = me['copyData']
+            me['dirty'] = True
     elif (key == ord('i')):
         me['state'] = 'E'
         me['gotStr'] = ""

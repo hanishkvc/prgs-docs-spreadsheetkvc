@@ -358,6 +358,8 @@ NOTE: Paste in a copy-cut/paste flow doesnt adjust any cell addresses.
 NOTE: While deleting rows or cols, the deleted row or col's address refered in other cells,
 is not touched/modified. However subsequent row/col's addresses are udpated suitably.
 
+Set dirty flag in more places, so that program doesnt just silently quit, if user has not
+written any possible|potential changes to a file.
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
