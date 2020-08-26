@@ -13,6 +13,7 @@ import cryptography.fernet
 import cryptography.hazmat.primitives.kdf.pbkdf2, cryptography.hazmat.primitives.hashes
 import base64
 import secrets
+import enum
 
 
 bDebug = False
@@ -253,6 +254,21 @@ def cellcur_down():
         print("cellcur_down:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
+def coladdr_num2alpha(iAddr):
+    iChr = iAddr-1
+    iMajor = int(iChr/26)
+    if (iMajor < 1):
+        sMajor = ""
+    elif (iMajor > 26):
+        print("ERROR: More than {} cols not supported".format(26*26))
+        exit()
+    else:
+        sMajor=chr(ord('A')-1+iMajor)
+    sMinor = chr(ord('A')+iChr%26)
+    sColAddr = sMajor+sMinor
+    return sColAddr
+
+
 def _cdraw_coladdrs(colStart, colEnd):
     '''
     As columns are named alphabetically and not numerically, so the
@@ -263,17 +279,7 @@ def _cdraw_coladdrs(colStart, colEnd):
             ctype = curses.A_NORMAL
         else:
             ctype = curses.A_REVERSE
-        iChr = i-1
-        iMajor = int(iChr/26)
-        if (iMajor < 1):
-            sMajor = ""
-        elif (iMajor > 26):
-            print("ERROR: More than {} cols not supported".format(26*26))
-            exit()
-        else:
-            sMajor=chr(ord('A')-1+iMajor)
-        sMinor = chr(ord('A')+iChr%26)
-        sColAddr = sMajor+sMinor
+        sColAddr = coladdr_num2alpha(i)
         cellstr(stdscr, 0, i, sColAddr, ctype)
 
 
@@ -341,7 +347,7 @@ def cdraw(stdscr):
     stdscr.refresh()
 
 
-TType = enum("TType", ["CellAddr", "Func"])
+TType = enum.Enum("TType", ["CellAddr", "Func"])
 def get_token(sIn, startPos=0, ttype=TType.CellAddr):
     '''
     Get first valid token from the given string and its position.
