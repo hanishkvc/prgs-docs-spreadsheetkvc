@@ -1075,7 +1075,7 @@ def _nvalue(sData):
     try:
         val = float(eval(sBase))
     except:
-        print("_nvalue exception:{}".format(sData), file=GLOGFILE)
+        print("_nvalue exception:{}:{}".format(sData, sBase), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
         val = None
     return val

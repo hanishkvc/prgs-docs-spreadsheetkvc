@@ -217,6 +217,11 @@ stdev,stddev and stdevp,stddevp
 	gives the standard deviation of the specified range of cells, by assuming them
 	to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)
 
+prod
+
+	product of the contents in the specified range of cells.
+
+
 ## csv file format
 
 ### General Info
@@ -279,6 +284,19 @@ press Esc few times and see that it comes back to default/implicit command mode.
 
 You will know that you are in default/implicit command mode, when you see the
 program's name in the top left corner of the terminal (i.e 0,0 cell).
+
+
+#### =expressions and None
+
+Do keep in mind that =expressions which allow numeric evaluation of the specified
+expression in a given cell, expects any cell references|addresses used in them to
+inturn (i.e those referenced cells) also contain =expressions and not plain text
+data (even if they are numbers). If not the result will be a None.
+
+So if you get a None instead of a numeric value which you were expecting, then
+cross check that all cells refered by that cell or any other cell indirectly
+referenced through a chain of =expressions, all contain =expressions, even for
+simple numeric values like say a number i.e represent it has =number (ex =10).
 
 
 #### log files, stderr, ...
