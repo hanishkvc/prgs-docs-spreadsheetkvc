@@ -400,13 +400,16 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
     by adjusting the address by given incR or incC amount, provided
     the address is beyond afterR or afterC.
     '''
+    #print("updateCellAddrs:In:{}".format(sIn), file=GERRFILE)
     iPos = 0
     sOut = sIn
     while True:
         # Find token
         bToken, sToken, iPos = get_token(sOut, iPos, TType.CellAddr)
         if not bToken:
+            #print("updateCellAddrs:Out:{}".format(sOut), file=GERRFILE)
             return sOut
+        #print("updateCellAddrs:Btw:{}".format(sToken), file=GERRFILE)
         bCellAddr, (r,c) = _celladdr_valid(sToken)
         # If not valid cell addr, skip it
         if not bCellAddr:
@@ -997,7 +1000,7 @@ def _celladdr_valid(sAddr):
         iChars += 1
         i += 1
     if (iChars == 0) or (iChars > 2): # This limits number of cols
-        return False, None
+        return False, (None, None)
     iNums = 0
     numAddr = ""
     while i < len(sAddr):
@@ -1007,9 +1010,9 @@ def _celladdr_valid(sAddr):
         iNums += 1
         i += 1
     if (iNums == 0) or (iNums > 4): # This limits number of rows
-        return False, None
+        return False, (None, None)
     if i != len(sAddr):
-        return False, None
+        return False, (None, None)
     # Get the data key for the cell
     i = 0
     alphaAddr = alphaAddr.upper()
