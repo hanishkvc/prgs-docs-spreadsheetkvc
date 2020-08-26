@@ -497,16 +497,17 @@ def delete_rc(cmd, args):
     newDict = dict()
     for k in me['data']:
         r,c = k
+        curData = me['data'][k]
         if bRowMode:
             if r < cR:
-                newDict[k] = me['data'][k]
+                newDict[k] = curData
             elif r > cR:
-                newDict[(r-1,c)] = me['data'][k]
+                newDict[(r-1,c)] = curData
         if bColMode:
             if c < cC:
-                newDict[k] = me['data'][k]
+                newDict[k] = curData
             elif c > cC:
-                newDict[(r,c-1)] = me['data'][k]
+                newDict[(r,c-1)] = curData
     me['data'] = newDict
 
 
