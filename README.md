@@ -350,6 +350,14 @@ and or deleted. This is a quick go at it, in the middle of doing other things, a
 tested fully (not that other things have been tested fully ;-), but at a basic level it
 should potentially work to some extent if not more.
 
+NOTE: Even thou the token logic checks for $ as part of cell address, it isnt handled in
+any other place and will fail, if used.
+
+NOTE: Paste in a copy-cut/paste flow doesnt adjust any cell addresses.
+
+NOTE: While deleting rows or cols, the deleted row or col's address refered in other cells,
+is not touched/modified. However subsequent row/col's addresses are udpated suitably.
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
