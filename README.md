@@ -272,6 +272,15 @@ the saved encrypted file.
 ### Notes
 
 
+#### Esc, Esc, Essscccccccc
+
+If a explicit command seems to get stuck or not do anything, remember to try and
+press Esc few times and see that it comes back to default/implicit command mode.
+
+You will know that you are in default/implicit command mode, when you see the
+program's name in the top left corner of the terminal (i.e 0,0 cell).
+
+
 #### log files, stderr, ...
 
 By default any exception data is written to a named temp file, which is not deleted
@@ -333,6 +342,13 @@ Automatically redirect exception messages to a named temp file.
 Add en|de-cryption support for files, so that they can be saved/stored in a secure manner.
 
 Add support for specifying csv fieldseperator from the commandline.
+
+### 20200826IST2304
+
+Added basic logic to adjust cell addresses in =expressions, when rows or cols are added
+and or deleted. This is a quick go at it, in the middle of doing other things, and not
+tested fully (not that other things have been tested fully ;-), but at a basic level it
+should potentially work to some extent if not more.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
