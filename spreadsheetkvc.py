@@ -841,8 +841,12 @@ def _do_stddev(args, bIgnoreEmpty=True):
             cnt += 1
     varp = total/cnt
     stdevp = sqrt(varp)
-    var = total/(cnt-1)
-    stdev = sqrt(var)
+    try:
+        var = total/(cnt-1)
+        stdev = sqrt(var)
+    except:
+        var = None
+        stdev = None
     return varp, stdevp, var, stdev, cnt
 
 
