@@ -341,6 +341,85 @@ def cdraw(stdscr):
     stdscr.refresh()
 
 
+TType = enum("TType", ["CellAddr", "Func"])
+def get_token(sIn, startPos=0, ttype=TType.CellAddr):
+    '''
+    Get first valid token from the given string and its position.
+
+    By using the startPos argument, one can get the tokens in a
+    given string one after the other by passing the last got
+    position from this function back to it in the next call as
+    its startPos argument.
+
+    One could either fetch a CellAddr or FuncName token.
+
+    NOTE: This is not a generic token parser. It mainly extracts
+    tokens which match the CellAddr kind or Func kind. Numbers
+    on their own will not be extracted, nor will operators or
+    Plus/Minus or so.
+
+    TODO: In future, if I support functions which take string
+    arguments, then I will have to look for strings and skip
+    their contents.
+    '''
+    i = startPos
+    sOut = ""
+    iPos = i
+    bInToken = False
+    while i < len(sIn):
+        if not bInToken:
+            if sIn[i].isalpha():
+                iPos = i
+                bInToken = True
+            elif (ttype == TType.CellAddr) and (sIn[i] == "$"):
+                iPos = i
+                bInToken = True
+        if bInToken:
+            if sIn[i].isalnum():
+                sOut += sIn[i]
+            elif (ttype == TType.CellAddr) and (sIn[i] == "$"):
+                sOut += sIn[i]
+            else:
+                if (sOut != ""):
+                    break
+        i += 1
+    if sOut == "$": # If nothing but $ only, then not valid
+        bInToken = False
+    return bInToken, sOut, iPos
+
+
+def update_celladdrs(sIn, afterR, incR, afterC, incC):
+    '''
+    Update any cell addresses found in given string,
+    by adjusting the address by given incR or incC amount, provided
+    the address is beyond afterR or afterC.
+    '''
+    iPos = 0
+    sOut = sIn
+    while True:
+        # Find token
+        bToken, sToken, iPos = get_token(sOut, iPos, TType.CellAddr)
+        if not bToken:
+            return sOut
+        bCellAddr, (r,c) = _celladdr_valid(sToken)
+        # If not valid cell addr, skip it
+        if not bCellAddr:
+            iPos += len(sToken)
+            continue
+        # A valid cell address, so update
+        sBefore = sOut[0:iPos]
+        sAfter = sOut[iPos+len(sToken):]
+        if (r > afterR):
+            r += incR
+        if (c > afterC):
+            c += incC
+        sNewToken = "{}{}".format(coladdr_num2alpha(c),r)
+        sOut = sBefore + sNewToken
+        iPos = len(sOut)
+        sOut += sAfter
+
+
+
 def insert_rc_ab(cmd, args):
     '''
     Insert n number of rows or columns, before or after the current row|column.
