@@ -485,12 +485,15 @@ def delete_rc(cmd, args):
     '''
     bRowMode = False
     bColMode = False
+    incR = incC = 0
     if cmd[1] == 'r':
         bRowMode = True
         me['numRows'] -= 1
+        incR = -1
     elif cmd[1] == 'c':
         bColMode = True
         me['numCols'] -= 1
+        incC = -1
 
     cR = me['curRow']
     cC = me['curCol']
@@ -498,6 +501,9 @@ def delete_rc(cmd, args):
     for k in me['data']:
         r,c = k
         curData = me['data'][k]
+        if len(curData) > 0:
+            if (type(curData) == str) and (curData[0] == '='):
+                curData = update_celladdrs(curData, cR, incR, cC, incC)
         if bRowMode:
             if r < cR:
                 newDict[k] = curData
