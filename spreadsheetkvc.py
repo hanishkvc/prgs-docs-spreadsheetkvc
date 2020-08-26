@@ -423,14 +423,20 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
 def insert_rc_ab(cmd, args):
     '''
     Insert n number of rows or columns, before or after the current row|column.
+
+    Call update_celladdr to adjust =expressions where required.
     '''
     bRowMode = False
     bColMode = False
+    cnt = int(args)
+    incR = 0
+    incC = 0
     if cmd[1] == 'r':
         bRowMode = True
+        incR = cnt
     elif cmd[1] == 'c':
         bColMode = True
-    cnt = int(args)
+        incC = cnt
 
     cR = me['curRow']
     cC = me['curCol']
@@ -454,7 +460,12 @@ def insert_rc_ab(cmd, args):
                 nC = c + cnt
             else:
                 nC = c
-        newDict[(nR,nC)] = me['data'][k]
+        curData = me['data'][k]
+        newData = curData
+        if len(curData) > 0:
+            if (type(curData) == str) and (curData[0] == '='):
+                newData = update_celladdrs(curData, cR, incR, cC, incC)
+        newDict[(nR,nC)] = newData
     me['data'] = newDict
     if bRowMode:
         me['numRows'] += cnt
