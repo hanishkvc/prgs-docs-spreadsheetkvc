@@ -328,8 +328,14 @@ the last char using backspace.
 ### 20200823IST1829
 
 Implemented as part of the Gauri Ganesh weekend, to scratch a itch I had with need for a
-simple commandline spreadsheet package. And also to explore and think randomly a bit and
-have some interesting fun on the way.
+simple commandline spreadsheet package, compounded on top by the fact that libreoffice
+is a slippery slop trying to run on chromebooks(chrome os). Then there was the need to
+storing things securely on the disk, when required. And as mostly always also to explore
+and think randomly and or something different for a bit and have some interesting fun
+on the way.
+
+A usable at a basic level (nothing fancy, yet;) commandline spreadsheet logic has been
+implemented to some extent.
 
 ### 20200825IST1220
 
