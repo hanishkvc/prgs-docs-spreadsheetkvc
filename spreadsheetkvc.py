@@ -57,6 +57,8 @@ me = {
         'exit': DONTEXIT
         }
 
+CursesKeys = [ curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT, curses.KEY_BACKSPACE ]
+
 
 def cstart():
     stdscr = curses.initscr()
@@ -1213,7 +1215,7 @@ def rl_editplusmode(stdscr, key):
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
         print("runLogic:{}".format(me), file=GLOGFILE)
-    else:
+    elif not key in CursesKeys: # chr(key).isprintable() wont do
         me['gotStr'] += chr(key)
         me['crsrOffset'] = len(me['gotStr'])
 
