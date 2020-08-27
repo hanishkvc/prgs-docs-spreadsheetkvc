@@ -418,6 +418,23 @@ need to dip(wrap around) into next line during editing.
 	happening in a relatively straight way, when it occurs so not forcing a screen refresh
 	for now.
 
+#### editAnywhere Branch
+
+Allow editing anywhere in the edit buffer, in the editplus mode i.e edit(inc insert) and
+explicit command modes. One can delete characters from anywhere in the current cell as
+well as characters to anywhere in the current cell. Rather the logic works on the current
+edit buffer, so it could be a cell's edit/insert mode data or explicit command and its args.
+
+TODO: If a long line overflows/wraps into the next line, then the cursor wont be visible,
+if it goes into this wrapped around line. i.e edit cursor will be visible only if it is in
+the original line itself or at the end of the wrapped around line. Need to update cellcur
+to update the row passed to move if required, along with the adjusted new col position also.
+
+TODO: If such long lines wrap beyond the screen space vertically, then curses addstr will
+raise a exception. Need to handle this situation appropriately. NOTE that this creates a
+problem only in edit mode. In normal mode as line is not allowed to wrap into next line,
+this situation doesnt occur.
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
