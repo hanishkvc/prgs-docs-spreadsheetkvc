@@ -1229,6 +1229,14 @@ def rl_editplusmode(stdscr, key):
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
         print("runLogic:{}".format(me), file=GLOGFILE)
+    elif key == curses.KEY_LEFT:
+        me['crsrOffset'] -= 1
+        if me['crsrOffset'] < 0:
+            me['crsrOffset'] = 0
+    elif key == curses.KEY_RIGHT:
+        me['crsrOffset'] += 1
+        if me['crsrOffset'] > len(me['gotStr']):
+            me['crsrOffset'] = len(me['gotStr'])
     elif not key in CursesKeys: # chr(key).isprintable() wont do
         me['gotStr'] += chr(key)
         me['crsrOffset'] += 1
