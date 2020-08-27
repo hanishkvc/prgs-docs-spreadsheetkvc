@@ -390,5 +390,14 @@ written any possible|potential changes to a file.
 Added logic to show text cursor in edit and explicit command mode. While in default/implicit
 command mode it doesnt show any cursor, because one cant edit any text buffer in this mode.
 
+On entering edit (including insert) mode, the blinking text cursor is not shown till user
+presses some key. Using arrow key will trigger the showing of text cursor, while at same time
+ignoring the arrow key press in the edit mode.
+
+NOTE: arrow keys allow moving across cells in default/implicit command mode. While they are
+ignored in edit/explicit command mode currently. In future may allow user to edit somewhere
+other than the end of the edit buffer, in which case the arrow keys will be used to position
+the cursor as required within the edit buffer.
+
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
