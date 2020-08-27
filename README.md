@@ -399,5 +399,11 @@ ignored in edit/explicit command mode currently. In future may allow user to edi
 other than the end of the edit buffer, in which case the arrow keys will be used to position
 the cursor as required within the edit buffer.
 
+Set dirty flag if required, when entering insert edit mode.
+
+Trap exception from curses, when editing long lines which go beyond the visible screen and
+need to dip(wrap around) into next line during editing.
+
+
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
