@@ -1172,7 +1172,10 @@ def rl_commandmode(stdscr, key):
         me['state'] = 'E'
         me['gotStr'] = ""
         me['backupEdit'] = None
-        me['data'][(me['curRow'],me['curCol'])] = ""
+        curData = me['data'].get((me['curRow'],me['curCol']))
+        if curData != None:
+            me['dirty'] = True
+            me['data'][(me['curRow'],me['curCol'])] = ""
     elif (key == ord('e')):
         me['state'] = 'E'
         me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
