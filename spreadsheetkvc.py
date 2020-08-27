@@ -156,6 +156,10 @@ def cellcur(stdscr, y, x):
     Set the displayed cursor to the specified cell's start location, if the cell
     is in the viewport and if its (i.e cell's) clipped content can be shown fully.
 
+        In edit and explicit command mode, the logic accounts for any crsrOffset
+        that may be specified, which will be added to the start location of specified
+        cell.
+
     As of now the logic will only show that much content as can fit within
     the cellWidth specified, so the check is done wrt cellWidth and not the
     length of the specific content in the cell.
