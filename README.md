@@ -404,6 +404,20 @@ Set dirty flag if required, when entering insert edit mode.
 Trap exception from curses, when editing long lines which go beyond the visible screen and
 need to dip(wrap around) into next line during editing.
 
+	When using backspace to remove characters from end of such long wrapped line and the
+	line comes back to fit with in the current line, there could be few chars belonging
+	to the line visible on the screen on the right edge in some cases, as I dont clear
+	the full screen in the middle of a edit, while at same time if a new cell cant fully
+	fit within the available screen space, then the extra space at right edge is not
+	used normally. Such space will get used only during such wrapping long line edits
+	and this leads to those chars remaining at right edge of the screen, even after
+	backspacing them. However if user inputs new characters to reach that area of the
+	screen again, the previous char will get overwritten properly in the screen.
+
+	Parallely it doesnt affect data in any way, and also user should be able to see whats
+	happening in a relatively straight way, when it occurs so not forcing a screen refresh
+	for now.
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
