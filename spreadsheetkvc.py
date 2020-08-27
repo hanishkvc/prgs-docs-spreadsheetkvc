@@ -171,7 +171,10 @@ def cellcur(stdscr, y, x):
         tx += me['crsrOffset']
     elif me['state'] == ":":
         tx += (me['crsrOffset'] + 1)
-    stdscr.move(ty,tx)
+    try:
+        stdscr.move(ty,tx)
+    except:
+        print("cellcur:exception:move:ignoring:{}".format(sys.exc_info()), file=GERRFILE)
 
 
 def _goto_cell(stdscr, r, c):
