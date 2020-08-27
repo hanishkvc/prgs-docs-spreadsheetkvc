@@ -1217,10 +1217,13 @@ def rl_editplusmode(stdscr, key):
                 me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
-        me['gotStr'] = me['gotStr'][0:-1]
-        me['crsrOffset'] -= 1
-        if me['crsrOffset'] < 0:
-            me['crsrOffset'] = 0
+        if me['crsrOffset'] > 0:
+            sBefore = me['gotStr'][0:me['crsrOffset']-1]
+            sAfter = me['gotStr'][me['crsrOffset']:]
+            me['gotStr'] = sBefore+sAfter
+            me['crsrOffset'] -= 1
+            if me['crsrOffset'] < 0:
+                me['crsrOffset'] = 0
     elif (key == curses.ascii.NL):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
