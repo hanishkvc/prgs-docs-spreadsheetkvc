@@ -385,5 +385,10 @@ is not touched/modified. However subsequent row/col's addresses are udpated suit
 Set dirty flag in more places, so that program doesnt just silently quit, if user has not
 written any possible|potential changes to a file.
 
+### 20200827IST2322
+
+Added logic to show text cursor in edit and explicit command mode. While in default/implicit
+command mode it doesnt show any cursor, because one cant edit any text buffer in this mode.
+
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
