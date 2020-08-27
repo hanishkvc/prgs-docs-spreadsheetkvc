@@ -165,6 +165,8 @@ def cellcur(stdscr, y, x):
     ty,tx = cellpos(y,x)
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
+    if me['state'] == "E":
+        tx += me['crsrOffset']
     stdscr.move(ty,tx)
 
 
@@ -1169,6 +1171,7 @@ def rl_commandmode(stdscr, key):
         me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
         if me['gotStr'] == None:
             me['gotStr'] = ""
+        me['crsrOffset'] = len(me['gotStr'])
         me['backupEdit'] = me['gotStr']
         me['data'][(me['curRow'],me['curCol'])] = ""
     elif (key == ord(':')):
@@ -1196,6 +1199,7 @@ def rl_editplusmode(stdscr, key):
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
         me['gotStr'] = me['gotStr'][0:-1]
+        me['crsrOffset'] = len(me['gotStr'])
     elif (key == curses.ascii.NL):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
@@ -1206,6 +1210,7 @@ def rl_editplusmode(stdscr, key):
         print("runLogic:{}".format(me), file=GLOGFILE)
     else:
         me['gotStr'] += chr(key)
+        me['crsrOffset'] = len(me['gotStr'])
 
 
 def runlogic(stdscr):
