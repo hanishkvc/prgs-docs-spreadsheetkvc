@@ -1174,6 +1174,7 @@ def rl_commandmode(stdscr, key):
     elif (key == ord('i')):
         me['state'] = 'E'
         me['gotStr'] = ""
+        me['crsrOffset'] = 0
         me['backupEdit'] = None
         curData = me['data'].get((me['curRow'],me['curCol']))
         if curData != None:
@@ -1190,6 +1191,7 @@ def rl_commandmode(stdscr, key):
     elif (key == ord(':')):
         me['state'] = ':'
         me['gotStr'] = ""
+        me['crsrOffset'] = 0
     return True
 
 
@@ -1225,7 +1227,7 @@ def rl_editplusmode(stdscr, key):
         print("runLogic:{}".format(me), file=GLOGFILE)
     elif not key in CursesKeys: # chr(key).isprintable() wont do
         me['gotStr'] += chr(key)
-        me['crsrOffset'] = len(me['gotStr'])
+        me['crsrOffset'] += 1
 
 
 def runlogic(stdscr):
