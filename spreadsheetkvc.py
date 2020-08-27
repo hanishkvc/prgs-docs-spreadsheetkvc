@@ -1238,7 +1238,9 @@ def rl_editplusmode(stdscr, key):
         if me['crsrOffset'] > len(me['gotStr']):
             me['crsrOffset'] = len(me['gotStr'])
     elif not key in CursesKeys: # chr(key).isprintable() wont do
-        me['gotStr'] += chr(key)
+        sBefore = me['gotStr'][0:me['crsrOffset']]
+        sAfter = me['gotStr'][me['crsrOffset']:]
+        me['gotStr'] = "{}{}{}".format(sBefore, chr(key), sAfter)
         me['crsrOffset'] += 1
 
 
