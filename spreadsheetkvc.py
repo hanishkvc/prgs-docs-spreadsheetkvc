@@ -167,6 +167,8 @@ def cellcur(stdscr, y, x):
         return
     if me['state'] == "E":
         tx += me['crsrOffset']
+    elif me['state'] == ":":
+        tx += (me['crsrOffset'] + 1)
     stdscr.move(ty,tx)
 
 
@@ -346,7 +348,10 @@ def cdraw(stdscr):
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     _cdraw_data(rowStart, rowEnd, colStart, colEnd)
-    cellcur(stdscr, me['curRow'], me['curCol'])
+    if me['state'] == ":":
+        cellcur(stdscr, 0, 0)
+    else:
+        cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
 
 
