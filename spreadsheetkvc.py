@@ -45,6 +45,7 @@ me = {
         'numCols': 333, 'numRows': 200,
         'dispCols': 5, 'dispRows': 5,
         'curCol': 1, 'curRow': 1,
+        'crsrOffset': 0,
         'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
@@ -1235,9 +1236,12 @@ def runlogic(stdscr):
                 if not bBackInC:
                     stdscr.clear()
                     bBackInC = True
+                    curses.curs_set(0)
                 rl_commandmode(stdscr, key)
             else:                       #### Edit+ Mode
-                bBackInC = False
+                if bBackInC:
+                    bBackInC = False
+                    curses.curs_set(2)
                 rl_editplusmode(stdscr, key)
             if me['exit'] != DONTEXIT:
                 break
