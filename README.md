@@ -440,6 +440,9 @@ this situation doesnt occur.
 Allow one to modify any location in the edit buffer in editplus mode i.e edit/insert or explicit
 command mode. Even if the edit buffer/line overflows into multiple lines it is handled properly.
 
+Logic which protects cell text content with field seperator in it, works in a more controlled
+manner by adding the protecting QUOTE only when required wrt the both ends of the text content.
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 

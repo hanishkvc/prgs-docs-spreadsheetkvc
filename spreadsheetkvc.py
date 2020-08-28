@@ -622,8 +622,10 @@ def _save_file(scr, sFile, filePass=None):
             data = me['data'].get((r,c))
             if (data != None):
                 if data.find(THEFIELDSEP) != -1:
-                    if not(data.startswith('`') and data.endswith('`')):
-                        data = "{}{}{}".format(THEQUOTE, data, THEQUOTE)
+                    if not data.startswith('`'):
+                        data = "{}{}".format(THEQUOTE, data)
+                    elif not data.endswith('`')):
+                        data = "{}{}".format(data, THEQUOTE)
             else:
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
