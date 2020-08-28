@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Security from Primitives
+# Security Recipes from Primitives
 # HanishKVC, 2020
 
 import cryptography
@@ -11,6 +11,7 @@ from cryptography.hazmat.primitives.hmac import HMAC
 from cryptography.hazmat.backends import default_backend
 #cryptography.hazmat.primitives.padding
 import os
+import base64
 
 
 def aes_cbc_enc(aesKey, sPlainMsg):
@@ -48,6 +49,14 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     return encMsg, macMsg
 
 
+def aes_cbc_enc_b64(aesKey, sPlainMsg):
+    '''
+    AuthenticatedENcryption returning base64 encoded encrypted msg and mac
+    '''
+    encMsg, macMsg = aes_cbc_enc(aesKey, sPlainMsg)
+    return base64.urlsafe_b64encode(encMsg), base64.urlsafe_b64encode(macMsg)
+
+
 def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     '''
     AuthenticatedEncryption - Check mac then decrypt given encrypted message.
@@ -79,12 +88,24 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     return decMsg
 
 
+def aes_cbc_dec_b64(aesKey, b64EncMsg, b64MacMsg):
+    '''
+    AuthenticatedENcryption based decryption takes base64 encoded encrypted msg and mac
+    '''
+    bsEncMsg = base64.urlsafe_b64decode(b64EncMsg)
+    bsMac = base64.urlsafe_b64decode(b64MacMsg)
+    return aes_cbc_dec(aesKey, bsEncMsg, bsMac)
+
 
 bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', "hello world")
 sDecMsg = aes_cbc_dec(b'0123456789abcdee', bsEncMsg, bsMac)
 sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 print("DBUG:decMsg:{}".format(sDecMsg))
 
+b64EncMsg, b64Mac = aes_cbc_enc_b64(b'0123456789abcdef', "new world")
+sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMsg, b64Mac)
+sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMsg, b64Mac)
+print("DBUG:decMsg:{}".format(sDecMsg))
 
 
 # vim: set sts=4 expandtab: #
