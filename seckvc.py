@@ -13,9 +13,9 @@ from cryptography.hazmat.backends import default_backend
 import os
 
 
-def aes_cbc_enc(aesKey, plainMsg):
+def aes_cbc_enc(aesKey, sPlainMsg):
     '''
-    Do a encrypt then mac operation on given message.
+    AuthenticatedEncryption - Do a encrypt then mac operation on given message.
     '''
     ### Prepare for encryption
     blockLen = len(aesKey)
@@ -27,14 +27,17 @@ def aes_cbc_enc(aesKey, plainMsg):
     random0thBlock = os.urandom(blockLen)
     # This allows iv to be discarded
     # so also while decrypting discard the 0th block
-    plainMsg = random0thBlock + plainMsg
+    plainMsg = random0thBlock + sPlainMsg.encode('utf-8')
     padLen = blockLen - (len(plainMsg)%blockLen)
     # Space padding will do in this particular usecase
     for i in range(padLen):
-        plainMsg += ' '
+        plainMsg += b' '
     ### do encrypt
-    aesCbcEnc.update(plainMsg)
-    encMsg = aesCbcEnc.finalize()
+    print("DBUG:Msg2Enc:{}:{}".format(len(plainMsg),plainMsg))
+    encMsg = aesCbcEnc.update(plainMsg)
+    encFina = aesCbcEnc.finalize()
+    encMsg = encMsg + encFina
+    print("DBUG:EncMsg:{}:{}".format(len(encMsg),encMsg))
     ### Prepare for mac
     sha256=SHA256()
     hmac=HMAC(aesKey,sha256,default_backend())
