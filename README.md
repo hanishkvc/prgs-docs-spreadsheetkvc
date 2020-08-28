@@ -435,6 +435,11 @@ raise a exception. Need to handle this situation appropriately. NOTE that this c
 problem only in edit mode. In normal mode as line is not allowed to wrap into next line,
 this situation doesnt occur.
 
+### 20200828IST2057
+
+Allow one to modify any location in the edit buffer in editplus mode i.e edit/insert or explicit
+command mode. Even if the edit buffer/line overflows into multiple lines it is handled properly.
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
