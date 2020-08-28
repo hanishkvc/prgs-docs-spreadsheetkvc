@@ -84,6 +84,8 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     decFina = aesCbcDec.finalize()
     decMsg = decMsg + decFina
     print("DBUG:AesCbcDec:DecMsg:{}:{}".format(len(decMsg),decMsg))
+    # Discard the initial random block, as corresponding enc and this dec uses
+    # non communicated random iv and inturn discardable random 0th block
     decMsg = decMsg[blockLen:]
     return decMsg
 
