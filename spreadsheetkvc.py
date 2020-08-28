@@ -175,6 +175,9 @@ def cellcur(stdscr, y, x):
         tx += me['crsrOffset']
     elif me['state'] == ":":
         tx += (me['crsrOffset'] + 1)
+    if (tx > me['scrCols']):
+        ty += 1
+        tx = tx - me['scrCols']
     try:
         stdscr.move(ty,tx)
     except:
