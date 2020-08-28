@@ -366,7 +366,7 @@ def _cdraw(stdscr):
     rowEnd = rowStart + me['dispRows']
     if (rowEnd > me['numRows']):
         rowEnd = me['numRows']
-    print("cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=GLOGFILE)
+    print("_cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=GLOGFILE)
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     _cdraw_data(rowStart, rowEnd, colStart, colEnd)
@@ -387,6 +387,8 @@ def cdraw(stdscr):
         except:
             me['viewRowStart'] += 3
             stdscr.clear()
+            print("cdraw:exception:{}".format(sys.exc_info()), file=GLOGFILE)
+            traceback.print_exc(file=GERRFILE)
 
 
 TType = enum.Enum("TType", ["CellAddr", "Func"])
