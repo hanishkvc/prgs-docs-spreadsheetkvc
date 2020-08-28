@@ -644,7 +644,7 @@ def _save_file(scr, sFile, filePass=None):
                 if data.find(THEFIELDSEP) != -1:
                     if not data.startswith('`'):
                         data = "{}{}".format(THEQUOTE, data)
-                    elif not data.endswith('`')):
+                    if not data.endswith('`'):
                         data = "{}{}".format(data, THEQUOTE)
             else:
                 data = ""
