@@ -66,18 +66,23 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     hmac.update(bsEncMsg)
     macMsg = hmac.finalize()
     print("DBUG:MacMsg:{}={}".format(macMsg, bsMacMsg))
+    if (macMsg != bsMacMsg):
+        print("DBUG:AesCbcDec: MAC Mismatch, bailing out")
+        return None
     ### do decrypt
     print("DBUG:Msg2Dec:{}:{}".format(len(bsEncMsg),bsEncMsg))
     decMsg = aesCbcDec.update(bsEncMsg)
     decFina = aesCbcDec.finalize()
     decMsg = decMsg + decFina
     print("DBUG:DecMsg:{}:{}".format(len(decMsg),decMsg))
+    decMsg = decMsg[blockLen:]
     return decMsg
 
 
 
 bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', "hello world")
 sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
+print("DBUG:decMsg:{}".format(sDecMsg))
 
 
 
