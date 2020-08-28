@@ -105,6 +105,7 @@ sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 print("DBUG:decMsg:{}".format(sDecMsg))
 
 b64EncMsg, b64Mac = aes_cbc_enc_b64(b'0123456789abcdef', "new world")
+print("DBUG:b64EncMsg:{}:b64Mac:{}".format(b64EncMsg, b64Mac))
 sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMsg, b64Mac)
 sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMsg, b64Mac)
 print("DBUG:decMsg:{}".format(sDecMsg))
