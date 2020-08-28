@@ -385,7 +385,8 @@ def cdraw(stdscr):
             _cdraw(stdscr)
             bDone = True
         except:
-            me['viewColStart'] += 3
+            me['viewRowStart'] += 3
+            stdscr.clear()
 
 
 TType = enum.Enum("TType", ["CellAddr", "Func"])
