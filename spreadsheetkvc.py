@@ -351,7 +351,7 @@ def _cdraw_editbuffer(stdscr):
         cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, False)
 
 
-def cdraw(stdscr):
+def _cdraw(stdscr):
     '''
     Draws the screen consisting of the spreadsheet address row and col
     as well as the data cells (i.e data rows and cols).
@@ -376,6 +376,16 @@ def cdraw(stdscr):
     else:
         cellcur(stdscr, me['curRow'], me['curCol'])
     stdscr.refresh()
+
+
+def cdraw(stdscr):
+    bDone = False
+    while not bDone:
+        try:
+            _cdraw(stdscr)
+            bDone = True
+        except:
+            me['viewColStart'] += 3
 
 
 TType = enum.Enum("TType", ["CellAddr", "Func"])
