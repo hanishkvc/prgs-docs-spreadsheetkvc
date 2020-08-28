@@ -33,18 +33,18 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     for i in range(padLen):
         plainMsg += b' '
     ### do encrypt
-    print("DBUG:Msg2Enc:{}:{}".format(len(plainMsg),plainMsg))
+    print("DBUG:AesCbcEnc:Msg2Enc:{}:{}".format(len(plainMsg),plainMsg))
     encMsg = aesCbcEnc.update(plainMsg)
     encFina = aesCbcEnc.finalize()
     encMsg = encMsg + encFina
-    print("DBUG:EncMsg:{}:{}".format(len(encMsg),encMsg))
+    print("DBUG:AesCbcEnc:EncMsg:{}:{}".format(len(encMsg),encMsg))
     ### Prepare for mac
     sha256=SHA256()
     hmac=HMAC(aesKey,sha256,default_backend())
     ### do mac
     hmac.update(encMsg)
     macMsg = hmac.finalize()
-    print("DBUG:MacMsg:{}".format(macMsg))
+    print("DBUG:AesCbcEnc:MacMsg:{}".format(macMsg))
     return encMsg, macMsg
 
 
@@ -65,22 +65,23 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     ### do mac
     hmac.update(bsEncMsg)
     macMsg = hmac.finalize()
-    print("DBUG:MacMsg:{}={}".format(macMsg, bsMacMsg))
+    print("DBUG:AesCbcDec:MacMsg:{}={}".format(macMsg, bsMacMsg))
     if (macMsg != bsMacMsg):
         print("DBUG:AesCbcDec: MAC Mismatch, bailing out")
         return None
     ### do decrypt
-    print("DBUG:Msg2Dec:{}:{}".format(len(bsEncMsg),bsEncMsg))
+    print("DBUG:AesCbcDec:Msg2Dec:{}:{}".format(len(bsEncMsg),bsEncMsg))
     decMsg = aesCbcDec.update(bsEncMsg)
     decFina = aesCbcDec.finalize()
     decMsg = decMsg + decFina
-    print("DBUG:DecMsg:{}:{}".format(len(decMsg),decMsg))
+    print("DBUG:AesCbcDec:DecMsg:{}:{}".format(len(decMsg),decMsg))
     decMsg = decMsg[blockLen:]
     return decMsg
 
 
 
 bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', "hello world")
+sDecMsg = aes_cbc_dec(b'0123456789abcdee', bsEncMsg, bsMac)
 sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 print("DBUG:decMsg:{}".format(sDecMsg))
 
