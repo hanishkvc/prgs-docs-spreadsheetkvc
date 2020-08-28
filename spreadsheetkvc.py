@@ -311,6 +311,9 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
+    '''
+    Display the cells which are currently visible on the screen.
+    '''
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
         for c in range(colStart, colEnd+1):
@@ -335,6 +338,12 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             else: # sData == None AND clipCell
                 sData = ""
             cellstr(stdscr, r, c, str(sData), ctype, True)
+
+
+def _cdraw_editbuffer(stdscr):
+    '''
+    Show the edit buffer as required, if in Edit or Explicit command mode.
+    '''
     if me['state'] == 'E':
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
     if me['state'] == ':':
@@ -361,6 +370,7 @@ def cdraw(stdscr):
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     _cdraw_data(rowStart, rowEnd, colStart, colEnd)
+    _cdraw_editbuffer(stdscr)
     if me['state'] == ":":
         cellcur(stdscr, 0, 0)
     else:
