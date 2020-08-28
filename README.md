@@ -443,6 +443,11 @@ command mode. Even if the edit buffer/line overflows into multiple lines it is h
 Logic which protects cell text content with field seperator in it, works in a more controlled
 manner by adding the protecting QUOTE only when required wrt the both ends of the text content.
 
+If edit buffer overflows beyond the screen vertically, then the view is scrolled down by few
+lines, so that the user can continue to edit the overflowing edit buffer, as it will be with in
+the screen now.
+
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
