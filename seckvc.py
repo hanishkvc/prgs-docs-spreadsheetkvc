@@ -44,11 +44,40 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     ### do mac
     hmac.update(encMsg)
     macMsg = hmac.finalize()
+    print("DBUG:MacMsg:{}".format(macMsg))
     return encMsg, macMsg
 
 
-print(aes_cbc_enc(b'0123456789abcdef', "hello world"))
+def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
+    '''
+    AuthenticatedEncryption - Check mac then decrypt given encrypted message.
+    '''
+    ### Prepare for decryption
+    blockLen = len(aesKey)
+    iv = os.urandom(blockLen)
+    aes=AES(aesKey)
+    cbc = CBC(iv)
+    aesCbc=Cipher(aes,cbc,default_backend())
+    aesCbcDec=aesCbc.decryptor()
+    ### Prepare for mac
+    sha256=SHA256()
+    hmac=HMAC(aesKey,sha256,default_backend())
+    ### do mac
+    hmac.update(bsEncMsg)
+    macMsg = hmac.finalize()
+    print("DBUG:MacMsg:{}={}".format(macMsg, bsMacMsg))
+    ### do decrypt
+    print("DBUG:Msg2Dec:{}:{}".format(len(bsEncMsg),bsEncMsg))
+    decMsg = aesCbcDec.update(bsEncMsg)
+    decFina = aesCbcDec.finalize()
+    decMsg = decMsg + decFina
+    print("DBUG:DecMsg:{}:{}".format(len(decMsg),decMsg))
+    return decMsg
 
+
+
+bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', "hello world")
+sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 
 
 
