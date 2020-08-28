@@ -447,6 +447,9 @@ If edit buffer overflows beyond the screen vertically, then the view is scrolled
 lines, so that the user can continue to edit the overflowing edit buffer, as it will be with in
 the screen now.
 
+Merge editAnywhere branch into master branch, as the edit anywhere in the edit buffer related
+logic has been handled reasonably now. This also brings in few of the other updates/cleanups/
+fixes mentioned before into the main branch now.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
