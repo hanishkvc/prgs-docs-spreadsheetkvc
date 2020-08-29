@@ -53,7 +53,6 @@ def aes_cbc_enc(aesKey, sPlainMsg):
         pad = PKCS7(blockLen*8).padder()
         plainMsg = pad.update(plainMsg)
         plainMsg += pad.finalize()
-    print("DBUG:AesCbcEnc:Padded plainMsg:{}:{}".format(len(plainMsg), plainMsg))
     ### do encrypt
     encMsg = aesCbcEnc.update(plainMsg)
     encFina = aesCbcEnc.finalize()
@@ -93,7 +92,6 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     ### do mac
     hmac.update(bsEncMsg)
     macMsg = hmac.finalize()
-    print("DBUG:AesCbcDec:MacMsg:{}={}".format(macMsg, bsMacMsg))
     if (macMsg != bsMacMsg):
         print("DBUG:AesCbcDec: MAC Mismatch, bailing out")
         return None
@@ -101,7 +99,6 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     decMsg = aesCbcDec.update(bsEncMsg)
     decFina = aesCbcDec.finalize()
     decMsg = decMsg + decFina
-    print("DBUG:AesCbcDec:\n\tEncMsg:{}:{}\n\tDecMsg:{}:{}".format(len(bsEncMsg), bsEncMsg, len(decMsg), decMsg))
     # do pkcs7 depadding
     unpad = PKCS7(blockLen*8).unpadder()
     decMsg = unpad.update(decMsg)
