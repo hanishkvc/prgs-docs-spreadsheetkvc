@@ -39,40 +39,49 @@ def cellstr(scr, y, x, msg, attr):
     '''
     if ((x < 0) or (x >= me['scrCols'])) or ((y < 0) or (y >= me['scrRows'])) :
         return
+    print("cellstr:{},{}:{}".format(y, x, msg))
     scr.addstr(y, x, msg, attr)
 
 
-def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False):
+def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
     If location not given, then show at top left corner.
     '''
-    borderWidth = 0
-    if border:
+    if border or newwin:
+        borderWidth = 0
         for i in range(len(msgs)):
             msgLen = len(msgs[i])
             if borderWidth < msgLen:
                 borderWidth = msgLen
         borderWidth += 2
-        tX = x+1
         revAttr = curses.A_REVERSE
         if attr == curses.A_REVERSE:
             revAttr = curses.A_NORMAL
+    if newwin:
+        scr = curses.newwin(len(msgs), borderWidth, y, x)
+        scr.clear()
+        y = 0
+        x = 0
+    if border:
+        tX = x+1
         borderStr = ""
         for i in range(borderWidth):
             borderStr += " "
         cellstr(scr, y, x, borderStr, revAttr)
         cellstr(scr, y+1, tX, msgs[0], attr)
         cellstr(scr, y+2, x, borderStr, revAttr)
-        tY = y+3
+        tY = y+2
     else:
         cellstr(scr, y, x, msgs[0], attr)
-        tY = y+1
+        tY = y
         tX = x
     for i in range(1, len(msgs)):
         cellstr(scr, tY+i, tX, msgs[i], attr)
-    return scr.getch()
+    got = scr.getch()
+    scr.clear()
+    return got
 
 
 def status(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
