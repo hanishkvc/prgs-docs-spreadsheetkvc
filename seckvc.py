@@ -40,10 +40,11 @@ def aes_cbc_enc(aesKey, sPlainMsg):
         that new oracles arent opened up, beyond the minimal unavoidable oracle.
     '''
     ### Prepare for encryption
-    blockLen = len(aesKey)
+    blockLen = 16
     iv = os.urandom(blockLen)
     aes=AES(aesKey)
     cbc = CBC(iv)
+    print("aesKey[{}], blockLen[{}], iv[{}]".format(aesKey, blockLen, iv))
     aesCbc=Cipher(aes,cbc,default_backend())
     aesCbcEnc=aesCbc.encryptor()
     random0thBlock = os.urandom(blockLen)
@@ -95,7 +96,7 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
         print("ERRR:AesCbcDec: MAC Mismatch, bailing out")
         return None
     ### Prepare for decryption
-    blockLen = len(aesKey)
+    blockLen = 16
     iv = os.urandom(blockLen)
     aes=AES(aesKey)
     cbc = CBC(iv)
