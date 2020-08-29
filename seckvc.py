@@ -44,7 +44,6 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     iv = os.urandom(blockLen)
     aes=AES(aesKey)
     cbc = CBC(iv)
-    print("aesKey[{}], blockLen[{}], iv[{}]".format(aesKey, blockLen, iv))
     aesCbc=Cipher(aes,cbc,default_backend())
     aesCbcEnc=aesCbc.encryptor()
     random0thBlock = os.urandom(blockLen)
