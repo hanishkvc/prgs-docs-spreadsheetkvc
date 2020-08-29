@@ -122,15 +122,33 @@ def aes_cbc_dec_b64(aesKey, b64EncMacMsg):
 
 sPlainMsg = "hello world"
 bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', sPlainMsg)
-sDecMsg = aes_cbc_dec(b'0123456789abcdee', bsEncMsg, bsMac)
 sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 print("DBUG:Normal:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(bsEncMsg), bsEncMsg, len(bsMac), bsMac, len(sDecMsg), sDecMsg))
 
+print("DBUG:Wrong Key")
+print(aes_cbc_dec(b'0123456789abcdee', bsEncMsg, bsMac))
+
+print("DBUG:Modified EncData")
+bsCrptEncMsg = bytearray(bsEncMsg)
+bsCrptEncMsg[3] = 99
+print(aes_cbc_dec(b'0123456789abcdef', bytes(bsCrptEncMsg), bsMac))
+
+print("DBUG:Modified Mac")
+bsCrptMac = bytearray(bsMac)
+savedMacByte = bsCrptMac[3]
+bsCrptMac[3] = 99
+print(aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bytes(bsCrptMac)))
+
+print("DBUG:BackTo proper key,encMsg,mac")
+bsCrptMac[3] = savedMacByte
+print(aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bytes(bsCrptMac)))
+
+
 sPlainMsg = "new world"
 b64EncMac = aes_cbc_enc_b64(b'0123456789abcdef', sPlainMsg)
-sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMac)
 sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMac)
 print("DBUG:Base64:\n\tsPlainMsg:{}:{}\n\tencMac:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(b64EncMac), b64EncMac, len(sDecMsg), sDecMsg))
+sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMac)
 
 
 # vim: set sts=4 expandtab: #
