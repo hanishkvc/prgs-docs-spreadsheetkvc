@@ -39,7 +39,7 @@ def cellstr(scr, y, x, msg, attr):
     '''
     if ((x < 0) or (x >= me['scrCols'])) or ((y < 0) or (y >= me['scrRows'])) :
         return
-    print("cellstr:{},{}:{}".format(y, x, msg))
+    #print("cellstr:{},{}:{}".format(y, x, msg))
     scr.addstr(y, x, msg, attr)
 
 

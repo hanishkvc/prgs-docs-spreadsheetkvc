@@ -15,6 +15,8 @@ import base64
 import secrets
 import enum
 import seckvc as sec
+import helpdlg
+import cuikvc as cui
 
 
 bDebug = False
@@ -65,23 +67,16 @@ CursesKeys = [ curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT
 
 
 def cstart():
-    stdscr = curses.initscr()
-    me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
+    stdscr = cui.cstart()
+    me['scrRows'], me['scrCols'] = cui.me['scrRows'], cui.me['scrCols']
     me['dispRows'] = me['scrRows'] - 1
     me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
     print(me, file=GLOGFILE)
-    curses.noecho()
-    curses.cbreak()
-    stdscr.keypad(True)
-    stdscr.clear()
     return stdscr
 
 
 def cend(stdscr):
-    curses.nocbreak()
-    stdscr.keypad(False)
-    curses.echo()
-    curses.endwin()
+    cui.cend(stdscr)
 
 
 def cellpos(row, col):
@@ -1391,6 +1386,7 @@ setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
 try:
+    helpdlg.help_dlg(stdscr)
     runlogic(stdscr)
 except Exception as e:
     print("exception:{}".format(e), file=GLOGFILE)
