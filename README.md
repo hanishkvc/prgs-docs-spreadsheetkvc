@@ -21,10 +21,10 @@ The program supports the following commandline arguments
 
 	--fieldsep <seperator>
 
-		By default the program uses ',' i.e comma as the field seperator of the csv files.
+		By default the program uses ';' i.e semicolon as the field seperator of the csv files.
 		However the user can change this to a different character by using this argument.
 
-		--fieldsep ';'
+		--fieldsep ','
 
 
 
@@ -225,13 +225,14 @@ prod
 ## csv file format
 
 ### General Info
-The csv file used by this program uses comma [,] to seperate the fields within each row
+The csv file used by this program uses semicolon [;] to seperate the fields within each row
 i.e within each line in the file.
 
-If any field contains the field seperator (i.e ,) with in its content, then the content
+If any field contains this field seperator with in its content, then the content
 is embedded within [`]s and not [']s.
 
-To avoid confusing the program, dont use ` char as part of the spreadsheet contents.
+To avoid confusing the program, dont use ` char as part of the spreadsheet contents, other
+than for quoting text contents with field seperator in them.
 
 User can set a different field seperator from the commandline.
 

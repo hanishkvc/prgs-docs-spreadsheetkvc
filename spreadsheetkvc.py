@@ -19,7 +19,7 @@ import seckvc as sec
 
 bDebug = False
 THEQUOTE = '`'
-THEFIELDSEP = ','
+THEFIELDSEP = ';'
 DONTEXIT = -9999
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
 # Both use similar concepts, but bitstreams are not directly interchangable
