@@ -734,6 +734,7 @@ def _load_file(sFile, filePass=None):
 def load_file(scr, sFile, filePass=None):
     try:
         _load_file(sFile, filePass)
+        me['dirty'] = False
     except:
         a,b,c = sys.exc_info()
         print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
