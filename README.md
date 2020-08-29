@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200825IST2235
+Version: v20200829IST1730
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -465,6 +465,7 @@ NOTE: The internal and external AE implementations are not bitstream compatible 
 even thou both are potentially following similar concept to some extent. So a password protected
 file saved using one ae implementation cant be loaded by the other implementation.
 
+Merge secFromPrimitives into master branch
 
 
 
