@@ -42,14 +42,36 @@ def cellstr(scr, y, x, msg, attr):
     scr.addstr(y, x, msg, attr)
 
 
-def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
+def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
     If location not given, then show at top left corner.
     '''
-    for i in range(len(msgs)):
-        cellstr(scr, y+i, x, msgs[i], attr)
+    borderWidth = 0
+    if border:
+        for i in range(len(msgs)):
+            msgLen = len(msgs[i])
+            if borderWidth < msgLen:
+                borderWidth = msgLen
+        borderWidth += 2
+        tX = x+1
+        revAttr = curses.A_REVERSE
+        if attr == curses.A_REVERSE:
+            revAttr = curses.A_NORMAL
+        borderStr = ""
+        for i in range(borderWidth):
+            borderStr += " "
+        cellstr(scr, y, x, borderStr, revAttr)
+        cellstr(scr, y+1, tX, msgs[0], attr)
+        cellstr(scr, y+2, x, borderStr, revAttr)
+        tY = y+3
+    else:
+        cellstr(scr, y, x, msgs[0], attr)
+        tY = y+1
+        tX = x
+    for i in range(1, len(msgs)):
+        cellstr(scr, tY+i, tX, msgs[i], attr)
     return scr.getch()
 
 
