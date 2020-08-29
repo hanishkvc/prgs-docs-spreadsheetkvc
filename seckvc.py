@@ -63,7 +63,6 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     ### do mac
     hmac.update(encMsg)
     macMsg = hmac.finalize()
-    print("DBUG:AesCbcEnc:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(encMsg), encMsg, len(macMsg), macMsg))
     return encMsg, macMsg
 
 
@@ -93,7 +92,7 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     hmac.update(bsEncMsg)
     macMsg = hmac.finalize()
     if (macMsg != bsMacMsg):
-        print("DBUG:AesCbcDec: MAC Mismatch, bailing out")
+        print("ERRR:AesCbcDec: MAC Mismatch, bailing out")
         return None
     ### do decrypt
     decMsg = aesCbcDec.update(bsEncMsg)
@@ -106,7 +105,6 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     # Discard the initial random block, as corresponding enc and this dec uses
     # non communicated random iv and inturn discardable random 0th block
     decMsg = decMsg[blockLen:]
-    print("DBUG:AesCbcDec:\n\tEncMsg:{}:{}\n\tDecMsg:{}:{}".format(len(bsEncMsg), bsEncMsg, len(decMsg), decMsg))
     return decMsg
 
 
@@ -119,16 +117,17 @@ def aes_cbc_dec_b64(aesKey, b64EncMsg, b64MacMsg):
     return aes_cbc_dec(aesKey, bsEncMsg, bsMac)
 
 
-bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', "hello world")
+sPlainMsg = "hello world"
+bsEncMsg, bsMac = aes_cbc_enc(b'0123456789abcdef', sPlainMsg)
 sDecMsg = aes_cbc_dec(b'0123456789abcdee', bsEncMsg, bsMac)
 sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
-print("DBUG:decMsg:{}".format(sDecMsg))
+print("DBUG:Normal:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(bsEncMsg), bsEncMsg, len(bsMac), bsMac, len(sDecMsg), sDecMsg))
 
-b64EncMsg, b64Mac = aes_cbc_enc_b64(b'0123456789abcdef', "new world")
-print("DBUG:b64EncMsg:{}:b64Mac:{}".format(b64EncMsg, b64Mac))
+sPlainMsg = "new world"
+b64EncMsg, b64Mac = aes_cbc_enc_b64(b'0123456789abcdef', sPlainMsg)
 sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMsg, b64Mac)
 sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMsg, b64Mac)
-print("DBUG:decMsg:{}".format(sDecMsg))
+print("DBUG:Base64:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(b64EncMsg), b64EncMsg, len(b64Mac), b64Mac, len(sDecMsg), sDecMsg))
 
 
 # vim: set sts=4 expandtab: #
