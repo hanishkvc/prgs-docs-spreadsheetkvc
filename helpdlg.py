@@ -19,7 +19,7 @@ def defaultmode_dlg(scr):
                 "\t\t[p] Paste a previously copied/cut content into current cell",
                 "\t\t[:] Enter explicit commands mode",
                 ]
-    cui.dlg(scr, helpMsgs, 5, 10)
+    cui.dlg(scr, helpMsgs, 2, 3)
 
 
 def explicitcommandmode_dlg(scr):
@@ -34,7 +34,7 @@ def explicitcommandmode_dlg(scr):
                 "\t\t[p] Paste a previously copied/cut content into current cell",
                 "\t\t[:] Enter explicit commands mode",
                 ]
-    cui.dlg(scr, helpMsgs, 5, 10)
+    cui.dlg(scr, helpMsgs, 2, 3)
 
 
 def help_dlg(scr):
@@ -57,7 +57,7 @@ def help_dlg(scr):
                 "\t\t [press e] to get additional info",
                 ]
     while True:
-        got = cui.dlg(scr, helpMsgs, 5, 10)
+        got = cui.dlg(scr, helpMsgs, 2, 3)
         got = chr(got).upper()
         if got == 'D':
             defaultmode_dlg(scr)
