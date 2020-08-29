@@ -3,7 +3,11 @@
 # HanishKVC, 2020
 #
 
-def defaultmode_dlg(stdscr):
+
+import cuikvc as cui
+
+
+def defaultmode_dlg(scr):
     helpMsgs = [ "SpreadsheetKVC - Default Mode",
                 "",
                 "\t\t[arrow keys] Move around the cells",
@@ -15,10 +19,10 @@ def defaultmode_dlg(stdscr):
                 "\t\t[p] Paste a previously copied/cut content into current cell",
                 "\t\t[:] Enter explicit commands mode",
                 ]
-    dlg(stdscr, helpMsgs, 5, 10)
+    cui.dlg(scr, helpMsgs, 5, 10)
 
 
-def explicitcommandmode_dlg(stdscr):
+def explicitcommandmode_dlg(scr):
     helpMsgs = [ "SpreadsheetKVC - Default Mode",
                 "",
                 "\t\t[arrow keys] Move around the cells",
@@ -30,10 +34,10 @@ def explicitcommandmode_dlg(stdscr):
                 "\t\t[p] Paste a previously copied/cut content into current cell",
                 "\t\t[:] Enter explicit commands mode",
                 ]
-    dlg(stdscr, helpMsgs, 5, 10)
+    cui.dlg(scr, helpMsgs, 5, 10)
 
 
-def help_dlg(stdscr):
+def help_dlg(scr):
     helpMsgs = [ "SpreadsheetKVC - a commandline curses based spreadsheet",
                 "",
                 " The program supports 3 modes",
@@ -53,12 +57,12 @@ def help_dlg(stdscr):
                 "\t\t [press e] to get additional info",
                 ]
     while True:
-        got = dlg(stdscr, helpMsgs, 5, 10)
+        got = cui.dlg(scr, helpMsgs, 5, 10)
         got = chr(got).upper()
         if got == 'D':
-            defaultmode_dlg(stdscr)
+            defaultmode_dlg(scr)
         elif got == 'E':
-            explicitcommandmode_dlg(stdscr)
+            explicitcommandmode_dlg(scr)
         else:
             break
 
