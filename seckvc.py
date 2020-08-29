@@ -43,10 +43,15 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     # This allows iv to be discarded
     # so also while decrypting discard the 0th block
     plainMsg = random0thBlock + sPlainMsg.encode('utf-8')
-    padLen = blockLen - (len(plainMsg)%blockLen)
+    #padLen = blockLen - (len(plainMsg)%blockLen)
     # do PKCS7 padding
-    for i in range(padLen):
-        plainMsg += int.to_bytes(padLen,1,'little')
+    #for i in range(padLen):
+    #    plainMsg += int.to_bytes(padLen,1,'little')
+    pad = PKCS7(blockLen*8).padder()
+    padMsg = pad.update(plainMsg)
+    padMsg += pad.finalize()
+    plainMsg = padMsg
+    print("DBUG:AesCbcEnc:Padded plainMsg:{}:{}".format(len(plainMsg), plainMsg))
     ### do encrypt
     encMsg = aesCbcEnc.update(plainMsg)
     encFina = aesCbcEnc.finalize()
