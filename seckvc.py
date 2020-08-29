@@ -92,7 +92,7 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     hmac.update(bsEncMsg)
     macMsg = hmac.finalize()
     if (macMsg != bsMacMsg):
-        print("ERRR:AesCbcDec: MAC Mismatch, bailing out")
+        raise Exception("ERRR:AEDecrypt:Mismatch, skipping")
         return None
     ### Prepare for decryption
     blockLen = 16
