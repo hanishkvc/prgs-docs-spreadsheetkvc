@@ -14,6 +14,7 @@ import os
 import base64
 
 
+bInternalPadder=True
 def aes_cbc_enc(aesKey, sPlainMsg):
     '''
     AuthenticatedEncryption - Do a encrypt then mac operation on given message.
@@ -43,13 +44,15 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     # This allows iv to be discarded
     # so also while decrypting discard the 0th block
     plainMsg = random0thBlock + sPlainMsg.encode('utf-8')
-    #padLen = blockLen - (len(plainMsg)%blockLen)
     # do PKCS7 padding
-    #for i in range(padLen):
-    #    plainMsg += int.to_bytes(padLen,1,'little')
-    pad = PKCS7(blockLen*8).padder()
-    plainMsg = pad.update(plainMsg)
-    plainMsg += pad.finalize()
+    if bInternalPadder:
+        padLen = blockLen - (len(plainMsg)%blockLen)
+        for i in range(padLen):
+            plainMsg += int.to_bytes(padLen,1,'little')
+    else:
+        pad = PKCS7(blockLen*8).padder()
+        plainMsg = pad.update(plainMsg)
+        plainMsg += pad.finalize()
     print("DBUG:AesCbcEnc:Padded plainMsg:{}:{}".format(len(plainMsg), plainMsg))
     ### do encrypt
     encMsg = aesCbcEnc.update(plainMsg)
