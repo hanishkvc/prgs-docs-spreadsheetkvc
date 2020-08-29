@@ -14,12 +14,16 @@ import cryptography.hazmat.primitives.kdf.pbkdf2, cryptography.hazmat.primitives
 import base64
 import secrets
 import enum
+import seckvc as sec
 
 
 bDebug = False
 THEQUOTE = '`'
 THEFIELDSEP = ','
 DONTEXIT = -9999
+# Whether to use internal or cryptography libraries AuthenticatedEncryption
+# Both use similar concepts, but bitstreams are not directly interchangable
+bInternalEncDec = True
 
 
 '''
@@ -654,8 +658,11 @@ def _save_file(scr, sFile, filePass=None):
             curRow += "{}{}".format(data,THEFIELDSEP)
         if filePass != None:
             lineKey = get_linekey(r, userKey, fileKey)
-            sym = cryptography.fernet.Fernet(lineKey)
-            curRow = sym.encrypt(curRow.encode()).decode()
+            if bInternalEncDec:
+                curRow = sec.aes_cbc_enc_b64(base64.urlsafe_b64decode(lineKey), curRow).decode()
+            else:
+                sym = cryptography.fernet.Fernet(lineKey)
+                curRow = sym.encrypt(curRow.encode()).decode()
             #status(scr, ["saving line {}".format(r)],y=1)
         print("{}\n".format(curRow), end="", file=f)
     f.close()
@@ -689,8 +696,11 @@ def _load_file(sFile, filePass=None):
         r += 1
         if filePass != None:
             lineKey = get_linekey(r, userKey, fileKey)
-            sym = cryptography.fernet.Fernet(lineKey)
-            line = sym.decrypt(line.encode()).decode()
+            if bInternalEncDec:
+                line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
+            else:
+                sym = cryptography.fernet.Fernet(lineKey)
+                line = sym.decrypt(line.encode()).decode()
         c = 1
         i = 0
         sCur = ""
