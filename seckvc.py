@@ -71,7 +71,8 @@ def aes_cbc_enc_b64(aesKey, sPlainMsg):
     AuthenticatedENcryption returning base64 encoded encrypted msg and mac
     '''
     encMsg, macMsg = aes_cbc_enc(aesKey, sPlainMsg)
-    return base64.urlsafe_b64encode(encMsg), base64.urlsafe_b64encode(macMsg)
+    encPlusMac = encMsg+macMsg
+    return base64.urlsafe_b64encode(encPlusMac)
 
 
 def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
@@ -108,12 +109,14 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     return decMsg
 
 
-def aes_cbc_dec_b64(aesKey, b64EncMsg, b64MacMsg):
+def aes_cbc_dec_b64(aesKey, b64EncMacMsg):
     '''
     AuthenticatedENcryption based decryption takes base64 encoded encrypted msg and mac
     '''
-    bsEncMsg = base64.urlsafe_b64decode(b64EncMsg)
-    bsMac = base64.urlsafe_b64decode(b64MacMsg)
+    bsEncMac = base64.urlsafe_b64decode(b64EncMacMsg)
+    macLen = int(256/8)
+    bsEncMsg = bsEncMac[:-macLen]
+    bsMac = bsEncMac[-macLen:]
     return aes_cbc_dec(aesKey, bsEncMsg, bsMac)
 
 
@@ -124,10 +127,10 @@ sDecMsg = aes_cbc_dec(b'0123456789abcdef', bsEncMsg, bsMac)
 print("DBUG:Normal:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(bsEncMsg), bsEncMsg, len(bsMac), bsMac, len(sDecMsg), sDecMsg))
 
 sPlainMsg = "new world"
-b64EncMsg, b64Mac = aes_cbc_enc_b64(b'0123456789abcdef', sPlainMsg)
-sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMsg, b64Mac)
-sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMsg, b64Mac)
-print("DBUG:Base64:\n\tsPlainMsg:{}:{}\n\tencMsg:{}:{}\n\tMacMsg:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(b64EncMsg), b64EncMsg, len(b64Mac), b64Mac, len(sDecMsg), sDecMsg))
+b64EncMac = aes_cbc_enc_b64(b'0123456789abcdef', sPlainMsg)
+sDecMsg = aes_cbc_dec_b64(b'0123456789abcdee', b64EncMac)
+sDecMsg = aes_cbc_dec_b64(b'0123456789abcdef', b64EncMac)
+print("DBUG:Base64:\n\tsPlainMsg:{}:{}\n\tencMac:{}:{}\n\tdecMsg:{}:{}".format(len(sPlainMsg), sPlainMsg, len(b64EncMac), b64EncMac, len(sDecMsg), sDecMsg))
 
 
 # vim: set sts=4 expandtab: #
