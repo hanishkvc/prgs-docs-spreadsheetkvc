@@ -32,6 +32,12 @@ def aes_cbc_enc(aesKey, sPlainMsg):
 
         The length of key passed automatically determines the block size, and user
         can use any valid aes key size.
+
+        This is similar to the age old encrypt as well as sign messages to ensure
+        confidentiality as well as authenticity. But then instead of using asymm
+        logic for signing, use a hash with hidden key based logic. Also make sure
+        that one checks the authenticity before trying to use it or work on it, so
+        that new oracles arent opened up, beyond the minimal unavoidable oracle.
     '''
     ### Prepare for encryption
     blockLen = len(aesKey)
