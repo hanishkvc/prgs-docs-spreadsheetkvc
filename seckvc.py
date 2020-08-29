@@ -78,13 +78,6 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     '''
     AuthenticatedEncryption - Check mac then decrypt given encrypted message.
     '''
-    ### Prepare for decryption
-    blockLen = len(aesKey)
-    iv = os.urandom(blockLen)
-    aes=AES(aesKey)
-    cbc = CBC(iv)
-    aesCbc=Cipher(aes,cbc,default_backend())
-    aesCbcDec=aesCbc.decryptor()
     ### Prepare for mac
     sha256=SHA256()
     hmac=HMAC(aesKey,sha256,default_backend())
@@ -94,6 +87,13 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     if (macMsg != bsMacMsg):
         print("ERRR:AesCbcDec: MAC Mismatch, bailing out")
         return None
+    ### Prepare for decryption
+    blockLen = len(aesKey)
+    iv = os.urandom(blockLen)
+    aes=AES(aesKey)
+    cbc = CBC(iv)
+    aesCbc=Cipher(aes,cbc,default_backend())
+    aesCbcDec=aesCbc.decryptor()
     ### do decrypt
     decMsg = aesCbcDec.update(bsEncMsg)
     decFina = aesCbcDec.finalize()
