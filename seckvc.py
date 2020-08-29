@@ -48,9 +48,8 @@ def aes_cbc_enc(aesKey, sPlainMsg):
     #for i in range(padLen):
     #    plainMsg += int.to_bytes(padLen,1,'little')
     pad = PKCS7(blockLen*8).padder()
-    padMsg = pad.update(plainMsg)
-    padMsg += pad.finalize()
-    plainMsg = padMsg
+    plainMsg = pad.update(plainMsg)
+    plainMsg += pad.finalize()
     print("DBUG:AesCbcEnc:Padded plainMsg:{}:{}".format(len(plainMsg), plainMsg))
     ### do encrypt
     encMsg = aesCbcEnc.update(plainMsg)
@@ -101,7 +100,7 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
     decMsg = decMsg + decFina
     print("DBUG:AesCbcDec:\n\tEncMsg:{}:{}\n\tDecMsg:{}:{}".format(len(bsEncMsg), bsEncMsg, len(decMsg), decMsg))
     # do pkcs7 depadding
-    unpad = PKCS7(blockLen).unpadder()
+    unpad = PKCS7(blockLen*8).unpadder()
     decMsg = unpad.update(decMsg)
     decMsg += unpad.finalize()
     # Discard the initial random block, as corresponding enc and this dec uses
