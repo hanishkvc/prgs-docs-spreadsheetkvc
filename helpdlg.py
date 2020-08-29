@@ -32,7 +32,7 @@ def explicitcommandmode_dlg(scr):
                 " [dr] delete cur row; [dc] del cur column",
                 " [irb n] insert n rows before cur; [ira n] ins after",
                 " [icb n] insert n cols before cur; [ica n] ins after",
-                " [q] to quit program",
+                " [q] to quit program; [g celladdr] goto given cell",
                 "[arrow left|right] move cursor to edit inbetween",
                 "[Esc] to exit back to default mode",
                 ]
