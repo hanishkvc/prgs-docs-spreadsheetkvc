@@ -91,14 +91,18 @@ def aes_cbc_dec(aesKey, bsEncMsg, bsMacMsg):
         print("DBUG:AesCbcDec: MAC Mismatch, bailing out")
         return None
     ### do decrypt
-    print("DBUG:AesCbcDec:Msg2Dec:{}:{}".format(len(bsEncMsg),bsEncMsg))
     decMsg = aesCbcDec.update(bsEncMsg)
     decFina = aesCbcDec.finalize()
     decMsg = decMsg + decFina
-    print("DBUG:AesCbcDec:DecMsg:{}:{}".format(len(decMsg),decMsg))
+    print("DBUG:AesCbcDec:\n\tEncMsg:{}:{}\n\tDecMsg:{}:{}".format(len(bsEncMsg), bsEncMsg, len(decMsg), decMsg))
+    # do pkcs7 depadding
+    unpad = PKCS7(blockLen).unpadder()
+    decMsg = unpad.update(decMsg)
+    decMsg += unpad.finalize()
     # Discard the initial random block, as corresponding enc and this dec uses
     # non communicated random iv and inturn discardable random 0th block
     decMsg = decMsg[blockLen:]
+    print("DBUG:AesCbcDec:\n\tEncMsg:{}:{}\n\tDecMsg:{}:{}".format(len(bsEncMsg), bsEncMsg, len(decMsg), decMsg))
     return decMsg
 
 
