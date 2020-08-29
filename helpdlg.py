@@ -19,47 +19,45 @@ def defaultmode_dlg(scr):
                 " [p] Paste a previously copied/cut content into current cell",
                 " [:] Enter explicit commands mode",
                 ]
-    cui.dlg(scr, helpMsgs, 2, 3, border=True)
+    cui.dlg(scr, helpMsgs, 1, 2, border=True)
 
 
 def explicitcommandmode_dlg(scr):
     helpMsgs = [ "SpreadsheetKVC - ExplicitCommand Mode",
-                "",
-                " w file : write current spreadsheet to file",
-                " l file : load specified file",
-                " pw passwd file : write encrypted file",
-                " pl passwd file : load encrypted file",
-                " dr : delete cur row; dc : del cur column",
-                " irb n : insert n rows before cur; ira n : ins after",
-                " icb n : insert n cols before cur; ica n : ins after",
-                " q : to quit program",
-                "arrow left|right : move cursor to edit inbetween",
-                "Esc to exit back to default mode",
+                "Pressing ':' enters this ExplicitCommand Mode",
+                " [w file] write current spreadsheet to file",
+                " [l file] load specified file",
+                " [pw passwd file] write encrypted file",
+                " [pl passwd file] load encrypted file",
+                " [dr] delete cur row; [dc] del cur column",
+                " [irb n] insert n rows before cur; [ira n] ins after",
+                " [icb n] insert n cols before cur; [ica n] ins after",
+                " [q] to quit program",
+                "[arrow left|right] move cursor to edit inbetween",
+                "[Esc] to exit back to default mode",
                 ]
-    cui.dlg(scr, helpMsgs, 2, 3, border=True)
+    cui.dlg(scr, helpMsgs, 1, 2, border=True)
 
 
 def help_dlg(scr):
     helpMsgs = [ "SpreadsheetKVC - a commandline curses based spreadsheet",
-                "The program supports 3 modes",
-                "",
-                "Default Mode - used for navigating,",
-                "    editing across cells, entering other modes",
-                "    Esc key reverts to Default from other modes",
-                "    [press d] to get additional info",
-                "Cell Edit Mode - Entered by pressing i or e",
+                "Default Mode - used for navigating, editing across cells",
+                "    and for entering other modes; Esc reverts to default",
+                "Cell Edit Mode - Entered by pressing 'i' or 'e'",
                 "    Arrow keys to move cursor in edit buffer",
                 "    Enter key to save edit till now",
                 "    prefix = for numeric or calc expressions",
                 "    without = prefix, content treated as text",
-                "Explicit Command Mode - : to enter this mode",
+                "Explicit Command Mode - Entered by pressing ':'",
                 "    w <file> to write; l <file> to load file",
                 "    pw <passwd> <file> encrypt to file",
                 "    q to quit prg",
-                "    [press e] to get additional info",
+                "Esc key reverts to Default from other modes",
+                "More info on DefaultMode [press d], ExplicitCmds [press e]",
+                "*******Press any other key to get into the program********",
                 ]
     while True:
-        got = cui.dlg(scr, helpMsgs, 2, 3, border=True)
+        got = cui.dlg(scr, helpMsgs, 1, 2, border=True)
         got = chr(got).upper()
         if got == 'D':
             defaultmode_dlg(scr)
