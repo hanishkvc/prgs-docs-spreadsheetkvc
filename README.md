@@ -451,6 +451,22 @@ Merge editAnywhere branch into master branch, as the edit anywhere in the edit b
 logic has been handled reasonably now. This also brings in few of the other updates/cleanups/
 fixes mentioned before into the main branch now.
 
+### 20200829IST1619
+
+Added a new secFromPrimitives branch which implements a form of authenticated encryption on its
+own using the primitives in the cryptography.hazmat package, rather than depending on cryptograpy
+fernet recipe.
+
+Spreadsheet package updated to use this new internal implementation as part of its password
+protected save (pw) and load (pl) commands, by default. User can change bInternalEncDec var to
+switch between internal and fernet logics.
+
+NOTE: The internal and external AE implementations are not bitstream compatible with one another,
+even thou both are potentially following similar concept to some extent. So a password protected
+file saved using one ae implementation cant be loaded by the other implementation.
+
+
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
