@@ -1216,6 +1216,7 @@ def rl_commandmode(stdscr, key):
         c helps copy cell data.
         C helps Cut cell data.
         p helps Paste cell data.
+        h|? show help dialog
     '''
     if (key == curses.KEY_UP):
         cellcur_up()
@@ -1258,6 +1259,8 @@ def rl_commandmode(stdscr, key):
         me['state'] = ':'
         me['gotStr'] = ""
         me['crsrOffset'] = 0
+    elif (key == ord('h')) or (key == ord('?')):
+        helpdlg.help_dlg(stdscr)
     return True
 
 

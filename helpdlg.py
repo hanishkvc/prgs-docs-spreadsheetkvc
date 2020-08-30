@@ -18,6 +18,7 @@ def defaultmode_dlg(scr):
                 " [c] Copy the contents of the current cell",
                 " [C] Cut the contents of the current cell",
                 " [p] Paste a previously copied/cut content into current cell ",
+                " [h|?] show help / usage info",
                 " [:] Enter explicit commands mode",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
@@ -43,21 +44,21 @@ def explicitcommandmode_dlg(scr):
 
 def help_dlg(scr):
     helpMsgs = [
-                " SpreadsheetKVC - a commandline curses based spreadsheet ",
-                "Default Mode - used for navigating, editing across cells",
-                "    and for entering other modes; Esc reverts to default",
-                "Cell Edit Mode - Entered by pressing 'i' or 'e'",
-                "    Arrow keys to move cursor in edit buffer",
-                "    Enter key to save edit till now",
-                "    prefix = for numeric or calc expressions",
-                "    without = prefix, content treated as text",
-                "Explicit Command Mode - Entered by pressing ':'",
-                "    w <file> to write; l <file> to load file",
-                "    pw|pl <passwd> <file> for encrypted files",
-                "    q to quit prg",
-                "Esc key reverts to Default from other modes",
-                "More info on DefaultMode [press d], ExplicitCmds [press e]",
-                "*******Press any other key to get into the program********",
+                "   SpreadsheetKVC - a commandline curses based spreadsheet  ",
+                "| Default Mode - used for navigating, editing across cells |",
+                "|     and for entering other modes; Esc reverts to default |",
+                "| Cell Edit Mode - Entered by pressing 'i' or 'e'          |",
+                "|     Arrow keys to move cursor in edit buffer             |",
+                "|     Enter key to save edit till now                      |",
+                "|     prefix = for numeric or calc expressions             |",
+                "|     without = prefix, content treated as text            |",
+                "| Explicit Command Mode - Entered by pressing ':'          |",
+                "|     w <file> to write; l <file> to load file             |",
+                "|     pw|pl <passwd> <file> for encrypted files            |",
+                "|     q to quit prg                                        |",
+                "| Esc key reverts to Default from other modes              |",
+                "|More info on DefaultMode [press d], ExplicitCmds [press e]|",
+                "********Press any other key to get into the program*********",
                 ]
     while True:
         got = cui.dlg(scr, helpMsgs, 1, 2, border=True)
