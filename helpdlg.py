@@ -50,7 +50,7 @@ def help_dlg(scr):
                 "    without = prefix, content treated as text",
                 "Explicit Command Mode - Entered by pressing ':'",
                 "    w <file> to write; l <file> to load file",
-                "    pw <passwd> <file> encrypt to file",
+                "    pw|pl <passwd> <file> for encrypted files",
                 "    q to quit prg",
                 "Esc key reverts to Default from other modes",
                 "More info on DefaultMode [press d], ExplicitCmds [press e]",
