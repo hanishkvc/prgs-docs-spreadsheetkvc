@@ -124,6 +124,7 @@ def cellstr(stdscr, y, x, msg, attr, clipToCell=True):
         for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
+    cellWidth=2
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GLOGFILE)
@@ -384,8 +385,15 @@ def cdraw(stdscr):
             _cdraw(stdscr)
             bDone = True
         except:
-            me['viewRowStart'] += 3
-            stdscr.clear()
+            if me['state'] == 'E':
+                a,b,c = sys.exc_info()
+                print("cdraw:exception:{},{},{}".format(a,b,c), file=GERRFILE)
+                me['viewRowStart'] += 3
+                if (me['viewRowStart'] + me['dispRows']) > me['numRows']:
+                    bDone = True
+                stdscr.clear()
+            else:
+                bDone = True
             print("cdraw:exception:{}".format(sys.exc_info()), file=GLOGFILE)
             traceback.print_exc(file=GERRFILE)
 
