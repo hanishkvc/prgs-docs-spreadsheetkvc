@@ -9,6 +9,17 @@ me = {
         'scrCols': 10, 'scrRows': 5,
 	}
 
+GLOGFILE=None
+GERRFILE=None
+
+
+def dprint(sMsg, file=file, end="\n"):
+    '''
+    debug print to specified file, if not None
+    '''
+    if file != None:
+        print(sMsg, end=end, file=toFile)
+
 
 def cstart():
     '''
@@ -33,13 +44,19 @@ def cend(scr):
     curses.endwin()
 
 
-def cellstr(scr, y, x, msg, attr):
+def cellstr(scr, y, x, msg, attr, clipToScreen=True):
     '''
     Display message onlyy if it is in the current display viewport
     '''
     if ((x < 0) or (x >= me['scrCols'])) or ((y < 0) or (y >= me['scrRows'])) :
         return
-    #print("cellstr:{},{}:{}".format(y, x, msg))
+    if clipToScreen:
+        msgLen = len(msg)
+        msgSpace = me['scrCols'] - x
+        if msgLen > msgSpace:
+            msgLen = msgSpace
+        msg = msg[:msgLen]
+    dprint("cellstr:{},{}:{}".format(y, x, msg), file=GLOGFILE)
     scr.addstr(y, x, msg, attr)
 
 
