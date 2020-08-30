@@ -28,14 +28,14 @@ def explicitcommandmode_dlg(scr):
     helpMsgs = [
                 "        SpreadsheetKVC - ExplicitCommand Mode        ",
                 "Pressing ':' enters this ExplicitCommand Mode",
-                "   [w file] write current spreadsheet to file",
-                "   [l file] load specified file",
                 "   [pw passwd file] write encrypted file",
                 "   [pl passwd file] load encrypted file",
+                "   [w file] write to file;            [l file] load file",
                 "   [dr] delete cur row;               [dc] del cur column   ",
                 "   [irb n] insert n rows before cur;  [ira n] ins after     ",
                 "   [icb n] insert n cols before cur;  [ica n] ins after     ",
-                "   [g celladdr] goto given cell;      [q] Quits the Prg",
+                "   [g celladdr] goto given cell;      [clear] clear sheet   ",
+                "   [q] Quits the Prg",
                 "[arrow left|right] move cursor to edit inbetween",
                 "[Esc] to exit back to default mode",
                 ]
