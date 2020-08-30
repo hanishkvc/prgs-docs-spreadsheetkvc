@@ -565,19 +565,23 @@ def delete_rc(cmd, args):
     bColMode = False
     cnt = int(args)
     incR = incC = 0
+    sR = me['curRow']
+    sC = me['curCol']
     if cmd[1] == 'r':
         bRowMode = True
-        me['numRows'] -= 1
+        eR = sR + cnt -1
+        if eR > me['numRows']:
+            eR = me['numRows']
+        cnt = eR - sR + 1
         incR = -1*cnt
     elif cmd[1] == 'c':
         bColMode = True
-        me['numCols'] -= 1
+        eC = sC + cnt -1
+        if eC > me['numCols']:
+            eC = me['numCols']
+        cnt = eC - sC + 1
         incC = -1*cnt
 
-    sR = me['curRow']
-    sC = me['curCol']
-    eR = sR + cnt -1
-    eC = sC + cnt -1
     newDict = dict()
     for k in me['data']:
         r,c = k
