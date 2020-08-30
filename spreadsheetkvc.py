@@ -1386,10 +1386,12 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep startnohelp")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
-    print("    --help              Prints this usage info")
-    print("    --fieldsep '{}'      Specify the csv field seperator explicitly".format(THEFIELDSEP))
+    print("    --{}          Prints this usage info".format(CmdArgs.help.name))
+    print("    --{} '{}'  Specify the csv field seperator explicitly".format(CmdArgs.fieldsep.name, THEFIELDSEP))
+    print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
     exit(0)
 
 
@@ -1400,10 +1402,11 @@ def process_cmdline(args):
     global THEFIELDSEP
     i = 1
     while i < len(args):
-        if args[i] == "--fieldsep":
+        cmd = args[i][2:]
+        if cmd == CmdArgs.fieldsep.name:
             i += 1
             THEFIELDSEP = args[i][0]
-        elif args[i] == "--help":
+        elif cmd == CmdArgs.help.name:
             print_usage()
         i += 1
 
