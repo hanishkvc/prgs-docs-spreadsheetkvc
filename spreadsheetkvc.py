@@ -107,15 +107,15 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, y, x, msg, attr, clipped=True):
+def cellstr(stdscr, y, x, msg, attr, clipToCell=True):
     '''
     Display contents of the cell, only if it is in the current display viewport
-    as well as if it's contents can be fully shown on the screen.
+    as well as if the cell (not its contents) can be fully shown on the screen.
 
     In viewport or not is got indirectly from the cellpos call.
     '''
     cellWidth = me['cellWidth']
-    if clipped:
+    if clipToCell:
         tmsg = msg[0:cellWidth]
     else:
         tmsg = msg
