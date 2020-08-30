@@ -86,28 +86,35 @@ In this explicit command mode, the user can enter one of the following commands
 
 	to decrypt a previously encrypted file and load it.
 
-* dr
+* dr [numOfRows]
 
-	used to delete the current row.
-* dc
+	used to delete n number of rows starting from current row.
+	If numOfRows not specified, it defaults to 1.
 
-	used to delete the current column.
+* dc [numOfCols]
 
-* irb num_of_rows
+	used to delete n number of cols starting from current column.
+	If numOfCols not specified, it defaults to 1.
+
+* irb [numOfRows]
 
 	insert n rows before current row.
+	If numOfRows not specified, it defaults to 1.
 
-* ira num_of_rows
+* ira [numOfRows]
 
 	insert n rows after current row.
+	If numOfRows not specified, it defaults to 1.
 
-* icb num_of_cols
+* icb [numOfCols]
 
 	insert n columns before current column.
+	If numOfCols not specified, it defaults to 1.
 
-* ica num_of_cols
+* ica [numOfCols]
 
 	insert n columns after current column.
+	If numOfCols not specified, it defaults to 1.
 
 * e file (in future)
 
@@ -527,6 +534,8 @@ Adapt to terminal window size changes automatically.
 Clear command to clear current spread sheet.
 
 Show help dialogs by pressing h or ? in default mode or by giving :help explicit command.
+
+Updated dr and dc explicit commands to delete n rows/cols.
 
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
