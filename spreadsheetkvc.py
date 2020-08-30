@@ -26,6 +26,7 @@ DONTEXIT = -9999
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
 # Both use similar concepts, but bitstreams are not directly interchangable
 bInternalEncDec = True
+gbStartNoHelp = False
 
 
 '''
@@ -1389,7 +1390,7 @@ def setup_files():
 CmdArgs = enum.Enum("CmdArgs", "help fieldsep startnohelp")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
-    print("    --{}          Prints this usage info".format(CmdArgs.help.name))
+    print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
     print("    --{} '{}'  Specify the csv field seperator explicitly".format(CmdArgs.fieldsep.name, THEFIELDSEP))
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
     exit(0)
@@ -1400,6 +1401,7 @@ def process_cmdline(args):
     Process commandline arguments for the program
     '''
     global THEFIELDSEP
+    global gbStartNoHelp
     i = 1
     while i < len(args):
         cmd = args[i][2:]
@@ -1408,6 +1410,8 @@ def process_cmdline(args):
             THEFIELDSEP = args[i][0]
         elif cmd == CmdArgs.help.name:
             print_usage()
+        elif cmd == CmdArgs.startnohelp.name:
+            gbStartNoHelp = True
         i += 1
 
 
@@ -1418,7 +1422,8 @@ setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
 try:
-    helpdlg.help_dlg(stdscr)
+    if not gbStartNoHelp:
+        helpdlg.help_dlg(stdscr)
     runlogic(stdscr)
 except Exception as e:
     print("exception:{}".format(e), file=GLOGFILE)
