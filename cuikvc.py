@@ -74,7 +74,7 @@ def _extend_str(strIn, length, filler=' '):
     return strOut
 
 
-def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True):
+def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
@@ -87,8 +87,8 @@ def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, c
     '''
     if border or newwin or clear:
         borderWidth = 0
-        for i in range(len(msgs)):
-            msgLen = len(msgs[i])
+        for i in range(len(msgsIn)):
+            msgLen = len(msgsIn[i])
             if borderWidth < msgLen:
                 borderWidth = msgLen
         borderWidth += 2
@@ -96,8 +96,11 @@ def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, c
         if attr == curses.A_REVERSE:
             revAttr = curses.A_NORMAL
     if clear:
-        for i in range(len(msgs)):
-            msgs[i] = _extend_str(msgs[i], borderWidth, " ")
+        msgs = []
+        for i in range(len(msgsIn)):
+            msgs.append(_extend_str(msgsIn[i], borderWidth, " "))
+    else:
+        msgs = msgsIn
     if newwin:
         scr = curses.newwin(len(msgs), borderWidth, y, x)
         scr.clear()
