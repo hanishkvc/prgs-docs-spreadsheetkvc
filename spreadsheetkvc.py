@@ -389,7 +389,6 @@ def _cdraw(stdscr):
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     try:
-        #t = 1/0
         _cdraw_data(rowStart, rowEnd, colStart, colEnd)
     finally:
         _cdraw_editbuffer(stdscr)
