@@ -375,8 +375,10 @@ def _cdraw(stdscr):
     print("_cdraw: rows {} to {}, cols {} to {}".format(rowStart, rowEnd, colStart, colEnd), file=GLOGFILE)
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
-    _cdraw_data(rowStart, rowEnd, colStart, colEnd)
-    _cdraw_editbuffer(stdscr)
+    try:
+        _cdraw_data(rowStart, rowEnd, colStart, colEnd)
+    finally:
+        _cdraw_editbuffer(stdscr)
     if me['state'] == ":":
         cellcur(stdscr, 0, 0)
     else:
