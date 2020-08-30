@@ -21,12 +21,16 @@ def dprint(sMsg, file=GLOGFILE, end="\n"):
         print(sMsg, end=end, file=file)
 
 
+def _screen_size(scr):
+    me['scrRows'], me['scrCols'] = scr.getmaxyx()
+
+
 def cstart():
     '''
     Initialise the curses ui
     '''
     stdscr = curses.initscr()
-    me['scrRows'], me['scrCols'] = stdscr.getmaxyx()
+    _screen_size(stdscr)
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)

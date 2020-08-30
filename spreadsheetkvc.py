@@ -4,7 +4,7 @@
 # GPL, Vasudhaiva Kutumbakam (the World is One Family)
 #
 
-import sys, traceback, os
+import sys, traceback, os, signal
 import curses
 import curses.ascii
 from math import *
@@ -67,13 +67,18 @@ me = {
 CursesKeys = [ curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT, curses.KEY_BACKSPACE ]
 
 
+def cscreenadapt(stdscr):
+    cui._screen_size(stdscr)
+    me['scrRows'], me['scrCols'] = cui.me['scrRows'], cui.me['scrCols']
+    me['dispRows'] = me['scrRows'] - 1
+    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
+
+
 def cstart():
     cui.GERRFILE=GERRFILE
     cui.GLOGFILE=GLOGFILE
     stdscr = cui.cstart()
-    me['scrRows'], me['scrCols'] = cui.me['scrRows'], cui.me['scrCols']
-    me['dispRows'] = me['scrRows'] - 1
-    me['dispCols'] = int(me['scrCols'] / me['cellWidth']) - 1
+    cscreenadapt(stdscr)
     print(me, file=GLOGFILE)
     return stdscr
 
@@ -1355,6 +1360,16 @@ def runlogic(stdscr):
             traceback.print_exc(file=GERRFILE)
 
 
+def cwinsize_change(sig, whatelse):
+    print("cwinsizechange:in:{}".format(me), file=GERRFILE)
+    cscreenadapt(stdscr)
+    print("cwinsizechange:ou:{}".format(me), file=GERRFILE)
+
+
+def setup_sighandlers():
+    signal.signal(signal.SIGWINCH, cwinsize_change)
+
+
 def setup_logfile(logfile="/dev/null"):
     '''
     create a file handle for logging.
@@ -1421,6 +1436,7 @@ def process_cmdline(args):
 setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
+setup_sighandlers()
 try:
     if gbStartHelp:
         helpdlg.help_dlg(stdscr)
