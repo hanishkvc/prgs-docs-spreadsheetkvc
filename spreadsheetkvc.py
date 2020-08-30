@@ -357,10 +357,23 @@ def _cdraw_editbuffer(stdscr):
         cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
 
 
+def _cdraw_showcursor(stdscr):
+    '''
+    Show the text cursor at the appropriate location based on mode.
+    '''
+    if me['state'] == ":":
+        cellcur(stdscr, 0, 0)
+    else:
+        cellcur(stdscr, me['curRow'], me['curCol'])
+
+
 def _cdraw(stdscr):
     '''
     Draws the screen consisting of the spreadsheet address row and col
     as well as the data cells (i.e data rows and cols).
+
+    It also ensures that the edit/explicit command edit buffer and cursor
+    is shown, even if printing data raises any exception.
     '''
     #stdscr.clear()
     cellstr(stdscr, 0, 0, "SpreadSheetKVC", curses.A_NORMAL)
@@ -376,13 +389,11 @@ def _cdraw(stdscr):
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     try:
+        #t = 1/0
         _cdraw_data(rowStart, rowEnd, colStart, colEnd)
     finally:
         _cdraw_editbuffer(stdscr)
-    if me['state'] == ":":
-        cellcur(stdscr, 0, 0)
-    else:
-        cellcur(stdscr, me['curRow'], me['curCol'])
+        _cdraw_showcursor(stdscr)
     stdscr.refresh()
 
 
