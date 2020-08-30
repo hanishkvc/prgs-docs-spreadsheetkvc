@@ -67,6 +67,8 @@ CursesKeys = [ curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT
 
 
 def cstart():
+    cui.GERRFILE=GERRFILE
+    cui.GLOGFILE=GLOGFILE
     stdscr = cui.cstart()
     me['scrRows'], me['scrCols'] = cui.me['scrRows'], cui.me['scrCols']
     me['dispRows'] = me['scrRows'] - 1
@@ -124,11 +126,11 @@ def cellstr(stdscr, y, x, msg, attr, clipToCell=True):
         for i in range(cellWidth-mlen):
             tmsg += " "
     ty,tx = cellpos(y,x)
-    cellWidth=2
+    cellWidth=0
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
-    print("cellstr: {},{} = {}".format(ty, tx, tmsg), file=GLOGFILE)
-    stdscr.addstr(ty, tx, tmsg, attr)
+    print("cellstr:{},{}:{},{}:{}".format(y, x, ty, tx, tmsg), file=GERRFILE)
+    cui.cellstr(stdscr, ty, tx, tmsg, attr)
 
 
 def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
