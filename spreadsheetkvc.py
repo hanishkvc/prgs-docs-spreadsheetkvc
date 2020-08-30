@@ -596,6 +596,10 @@ def delete_rc(cmd, args):
             elif c > eC:
                 newDict[(r,c+incC)] = curData
     me['data'] = newDict
+    if bRowMode:
+        me['numRows'] -= cnt
+    if bColMode:
+        me['numCols'] -= cnt
 
 
 def get_linekey(lineNum, userKey, fileKey):
@@ -836,6 +840,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         insert_rc_ab(cmd, args)
         me['dirty'] = True
     elif cmd.startswith('d'):
+        if args == None:
+            args = "1"
         delete_rc(cmd, args)
         me['dirty'] = True
     elif cmd.startswith('g'):
