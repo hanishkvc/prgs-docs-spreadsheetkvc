@@ -563,35 +563,38 @@ def delete_rc(cmd, args):
     '''
     bRowMode = False
     bColMode = False
+    cnt = int(args)
     incR = incC = 0
     if cmd[1] == 'r':
         bRowMode = True
         me['numRows'] -= 1
-        incR = -1
+        incR = -1*cnt
     elif cmd[1] == 'c':
         bColMode = True
         me['numCols'] -= 1
-        incC = -1
+        incC = -1*cnt
 
-    cR = me['curRow']
-    cC = me['curCol']
+    sR = me['curRow']
+    sC = me['curCol']
+    eR = sR + cnt -1
+    eC = sC + cnt -1
     newDict = dict()
     for k in me['data']:
         r,c = k
         curData = me['data'][k]
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                curData = update_celladdrs(curData, cR, incR, cC, incC)
+                curData = update_celladdrs(curData, sR, incR, sC, incC)
         if bRowMode:
-            if r < cR:
+            if r < sR:
                 newDict[k] = curData
-            elif r > cR:
-                newDict[(r-1,c)] = curData
+            elif r > eR:
+                newDict[(r+incR,c)] = curData
         if bColMode:
-            if c < cC:
+            if c < sC:
                 newDict[k] = curData
-            elif c > cC:
-                newDict[(r,c-1)] = curData
+            elif c > eC:
+                newDict[(r,c+incC)] = curData
     me['data'] = newDict
 
 
