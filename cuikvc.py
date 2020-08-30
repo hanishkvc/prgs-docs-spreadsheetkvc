@@ -18,7 +18,7 @@ def dprint(sMsg, file=GLOGFILE, end="\n"):
     debug print to specified file, if not None
     '''
     if file != None:
-        print(sMsg, end=end, file=toFile)
+        print(sMsg, end=end, file=file)
 
 
 def cstart():
@@ -31,6 +31,7 @@ def cstart():
     curses.cbreak()
     stdscr.keypad(True)
     stdscr.clear()
+    dprint(me, file=GLOGFILE)
     return stdscr
 
 
@@ -55,11 +56,14 @@ def cellstr(scr, y, x, msg, attr, clipToScreen=True):
         return
     if clipToScreen:
         msgLen = len(msg)
-        msgSpace = me['scrCols'] - x
+        # Even text cursor going beyond screen after text is written till edge
+        # also seems to trigger a exception. So when clipToScreen is true,
+        # clip by 1 additional char to take care of this.
+        msgSpace = me['scrCols'] - x -1
         if msgLen > msgSpace:
             msgLen = msgSpace
         msg = msg[:msgLen]
-    dprint("cellstr:{},{}:{}".format(y, x, msg), file=GLOGFILE)
+    dprint("cellstr:{},{}:[{}]".format(y, x, msg), file=GLOGFILE)
     scr.addstr(y, x, msg, attr)
 
 
