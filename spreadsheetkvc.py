@@ -588,7 +588,7 @@ def delete_rc(cmd, args):
         curData = me['data'][k]
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                curData = update_celladdrs(curData, sR, incR, sC, incC)
+                curData = update_celladdrs(curData, sR-1, incR, sC-1, incC)
         if bRowMode:
             if r < sR:
                 newDict[k] = curData
