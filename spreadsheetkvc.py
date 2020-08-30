@@ -109,7 +109,7 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, y, x, msg, attr, clipToCell=True):
+def cellstr(stdscr, y, x, msg, attr, clipToCell=True, clipToScreen=True):
     '''
     Display contents of the cell, only if it is in the current display viewport
     as well as if the cell (not its contents) can be fully shown on the screen.
@@ -130,16 +130,18 @@ def cellstr(stdscr, y, x, msg, attr, clipToCell=True):
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     print("cellstr:{},{}:{},{}:{}".format(y, x, ty, tx, tmsg), file=GERRFILE)
-    cui.cellstr(stdscr, ty, tx, tmsg, attr)
+    cui.cellstr(stdscr, ty, tx, tmsg, attr, clipToScreen)
 
 
 def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
+
+    y,x are specified interms of matrix of cells and not screen y,x.
     '''
     for i in range(len(msgs)):
-        cellstr(scr, y+i, x, msgs[i], attr, False)
+        cellstr(scr, y+i, x, msgs[i], attr, clipToCell=False)
     return scr.getch()
 
 
@@ -147,9 +149,11 @@ def status(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
     '''
     Display the messages passed to it at a given location.
     If location not given, then show at top left corner.
+
+    y,x are specified interms of matrix of cells and not screen y,x.
     '''
     for i in range(len(msgs)):
-        cellstr(scr, y+i, x, msgs[i], attr, False)
+        cellstr(scr, y+i, x, msgs[i], attr, clipToCell=False)
     scr.refresh()
 
 
@@ -339,7 +343,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                     print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # sData == None AND clipCell
                 sData = ""
-            cellstr(stdscr, r, c, str(sData), ctype, True)
+            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
 
 
 def _cdraw_editbuffer(stdscr):
@@ -347,10 +351,10 @@ def _cdraw_editbuffer(stdscr):
     Show the edit buffer as required, if in Edit or Explicit command mode.
     '''
     if me['state'] == 'E':
-        cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, False)
+        cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, clipToCell=False, clipToScreen=False)
     if me['state'] == ':':
         #cellstr(stdscr, me['numRows']-1, 0, me['gotStr'], curses.A_REVERSE, False)
-        cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, False)
+        cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
 
 
 def _cdraw(stdscr):
