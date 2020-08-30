@@ -117,6 +117,10 @@ In this explicit command mode, the user can enter one of the following commands
 
 	Center the screen to the specified celladdress.
 
+* clear
+
+	clear the contents of the current spreadsheet.
+
 * q
 
 	is used to quit the program.
@@ -372,6 +376,11 @@ delete the last char using backspace.
 	cursor around in the edit/insert mode so that one can modify any part of
 	the cell content.
 
+Allow Multi Row/Col delete.
+
+If Row/Col is deleted, then corresponding cell address references should be flagged.
+
+
 
 ## History
 
@@ -510,6 +519,8 @@ Handle exception during cell data printing so that user still can see and trigge
 commands if required.
 
 Adapt to terminal window size changes automatically.
+
+Clear command to clear current spread sheet.
 
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.

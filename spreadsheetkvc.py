@@ -807,6 +807,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     ica num_of_cols
         insert n columns after current column
     e path/file_to_export_into
+    clear to clear the current spreadsheet
     q to quit the program
     '''
     if cmdArgs.find(' ') == -1:
@@ -836,6 +837,10 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif cmd.startswith('g'):
         if args != None:
             goto_cell(stdscr, args)
+    elif cmd == 'clear':
+        if len(me['data']) > 0:
+            me['data'] = dict()
+            me['dirty'] = True
     elif cmd == 'q':
         quit(stdscr)
 
