@@ -1,13 +1,16 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200829IST1730
+Version: v20200830IST1619
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
 It works with a slightly modified form of csv file.
 
 It allows the saved csv file to be encrypted and inturn load such encrypted csv files.
+
+Remember that numbers and expressions should be prefixed with '=' ie equal. Else it will be
+treated as text content.
 
 ## Usage
 
@@ -32,16 +35,16 @@ The program supports the following commandline arguments
 
 The program supports the following modes
 
-	command mode,
+	default command mode,
 
 	edit/insert mode and
 
 	explicit command mode.
 
 
-#### command mode (implicit)
+#### default command mode
 
-The program by default runs in the implicit command mode. In this mode one can press the following
+The program by default runs in the default command mode. In this mode one can press the following
 keys for achieving the specified operations.
 
 * i can be used to insert new content in the current cell.
@@ -58,10 +61,12 @@ keys for achieving the specified operations.
 
 * : can be used to enter the explicit command mode.
 
+* h or ? can be used to show a help/usage dialog.
+
 
 #### explicit command mode
 
-This mode is entered by pressing : when in the default/implicit command mode.
+This mode is entered by pressing : when in the default command mode.
 In this explicit command mode, the user can enter one of the following commands
 
 * w file
@@ -125,11 +130,11 @@ the command. The user can use backspace to delete the chars to correct mistakes 
 entering the command and the arguments.
 
 On pressing the enter key, the specified command will be run and the program reverts
-back to implicit command mode.
+back to default command mode.
 
 #### edit/insert mode
 
-On pressing 'i', 'e' from the implicit command mode, the user can enter this mode.
+On pressing 'i', 'e' from the default command mode, the user can enter this mode.
 
 In this mode the user either enters a new content for the cell and or edit the existing
 content of the cell.
@@ -138,7 +143,7 @@ As and when the user presses the enter key, the data entered till that point get
 into the cell. If one exits without pressing enter then any data entered after the last
 enter key press will be lost.
 
-User can press the ESC key to exit from this mode and go back to the implicit command mode.
+User needs to press ESC key to exit from this mode and go back to default command mode.
 
 NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
 mode, however when escaping back into the command mode, the cell content wont wrap into
@@ -150,13 +155,13 @@ adjacent cells dont have any content (even empty string is a content) of their o
 	text will be visible only if that cell is currently in the screen.
 
 If you feel there is a empty string in any field and you want to remove it, use the 'd'
-command in the command mode, which will delete any content from the current cell, including
-empty string.
+command in the default command mode, which will delete any content from the current cell,
+including empty string.
 
 
 ## Cell contents and =expressions
 
-One can enter a textual data / string directly into the cell.
+In the edit/insert mode one can enter textual data / string directly into the cell.
 
 However if one wants to enter numeric values or expressions, one requires to prefix them
 with = symbol.
@@ -169,8 +174,8 @@ Example
 
 	= (5+3)/(6.8*2)**32
 
-Few functions are also supported by the program, as mentioned below. These functions can
-also be used as part of the =expressions.
+The program also allows few predefined functions to be used to operate on the data in the
+cells, as mentioned below. These functions needs to be used as part of the =expressions.
 
 Example
 
@@ -186,40 +191,52 @@ NOTE: =expressions can only refer to other =expression cells and not text cells.
 
 ## Supported functions
 
-sum
+sum(CellAddressRange)
 
 	sum the contents of the specified range of cells
 
-cnt (count)
+cnt(CellAddressRange), even count can be used in place of cnt
 
 	get the count of non empty cells in the specified range of cells.
 
-avg (average)
+avg(CellAddressRange), even average can be used in place of avg
 
 	calculate the average of the values in the range of cells. It doesnt consider
 	the empty cells.
 
-min
+min(CellAddressRange)
 
 	the minimum value among the specified range of cells.
 
-max
+max(CellAddressRange)
 
 	the maximum value among the specified range of cells.
 
-var and varp
+var(CellAddressRange) and varp(CellAddressRange)
 
 	gives the variance assuming the specified range of cells as representing
 	either a sample space (var) or a full population (varp)
 
-stdev,stddev and stdevp,stddevp
+stdev(CellAddressRange),
+stddev(CellAddressRange), and
+stdevp(CellAddressRange),
+stddevp(CellAddressRange)
 
 	gives the standard deviation of the specified range of cells, by assuming them
 	to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)
 
-prod
+prod(CellAddressRange)
 
 	product of the contents in the specified range of cells.
+
+
+### CellAddressRange
+
+The Cols addressed starting from A to ZZ
+
+The Rows are addressed starting from 1 to ...
+
+So the Cell is addressed as ColRowAddr like for example A1 or D55 or DC999 or so ...
 
 
 ## csv file format
@@ -241,11 +258,20 @@ User can set a different field seperator from the commandline.
 The program allows the csv file to be encrypted while saving it using a special write
 command (pw). And inturn there is a matching pl command to load such encrypted files.
 
-It uses the python cryptography library to do the actual encryption and decryption
-logic and inturn uses its standardised recipe layer for the actual encrypt and decrypt
-logic, for now. So also saves the encrypted data in the base64 encoded format. This
-also keeps the logic for working with normal and encrypted files almost the same wrt
-load and save operations.
+It uses the python cryptography library for the actual low level security algorithms.
+In turn it can either use the standardised recipe layer provided by the cryptography
+library OR use its own internal recipe layer (this is the default) for doing the actual
+encryption and decryption of the encryption protected files.
+
+[DevelNote: Even thou both the internal and cryptography library's recipe layers use
+similar concepts, the bitstreams are not compatible between them, so dont intermix
+them between saving and loading, as it will fail].
+
+It uses authenticated encrytion mechanism so that any tampering of the encrypted content
+can be identified. The encrypted data is stored in the base64 url safe encoding format.
+
+[DevelNote: This also keeps the logic for working with normal and encrypted files almost
+the same wrt load and save operations.]
 
 THere are two passwords that the program uses wrt each file
 
@@ -281,10 +307,10 @@ the saved encrypted file.
 #### Esc, Esc, Essscccccccc
 
 If a explicit command seems to get stuck or not do anything, remember to try and
-press Esc few times and see that it comes back to default/implicit command mode.
+press Esc 1 or more times and see if the program comes back to default command mode.
 
-You will know that you are in default/implicit command mode, when you see the
-program's name in the top left corner of the terminal (i.e 0,0 cell).
+You will know that you are in default command mode, when you see the program's name
+in the top left corner of the terminal (i.e 0,0 cell).
 
 
 #### =expressions and None
@@ -303,7 +329,7 @@ simple numeric values like say a number i.e represent it has =number (ex =10).
 #### log files, stderr, ...
 
 By default any exception data is written to a named temp file, which is not deleted
-on program exit.
+on program exit. Such files have a sskvc\_ prefix.
 
 All log and error messages are redirected to /dev/null by default.
 
@@ -317,7 +343,7 @@ getting messed up with such messages
 
 #### Non csv or csv file with wrong fieldsep
 
-Loading a Non csv file and or a csv file with a different field seperator will lead
+Loading a Non csv file and or a csv file with a different field seperator can lead
 to the loaded file setting the program's display to a single column view. So also the
 content of the file will be clipped from display perspective. One could run the command
 
@@ -334,12 +360,17 @@ If the program is exited normally by the user, by ignoring the warning about uns
 changes, then it returns 1.
 
 
-### TODO
+### TODO/DONE
 
-ncurses cursor is currently not updated/positioned beyond the current cells begining
-position. So also the program doesnt allow one to edit anywhere in the middle of the
-cell contents, user can only either add to the existing text/content and or delete
-the last char using backspace.
+[DONE] ncurses cursor is currently not updated/positioned beyond the current cells
+begining position. So also the program doesnt allow one to edit anywhere in the middle
+of the cell contents, user can only either add to the existing text/content and or
+delete the last char using backspace.
+
+	This has been implemented now and the user can edit any part of the cell's
+	content. One needs to use the left and right arrow keys to move the text
+	cursor around in the edit/insert mode so that one can modify any part of
+	the cell content.
 
 
 ## History
@@ -478,6 +509,8 @@ of screen. Useful on small terminal screens like 80x24 or so...
 Handle exception during cell data printing so that user still can see and trigger explicit
 commands if required.
 
+THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
+festival weekend.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
