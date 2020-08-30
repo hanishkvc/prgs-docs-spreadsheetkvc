@@ -121,6 +121,10 @@ In this explicit command mode, the user can enter one of the following commands
 
 	clear the contents of the current spreadsheet.
 
+* help
+
+	show the help dialogs.
+
 * q
 
 	is used to quit the program.
@@ -521,6 +525,8 @@ commands if required.
 Adapt to terminal window size changes automatically.
 
 Clear command to clear current spread sheet.
+
+Show help dialogs by pressing h or ? in default mode or by giving :help explicit command.
 
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
