@@ -509,6 +509,8 @@ of screen. Useful on small terminal screens like 80x24 or so...
 Handle exception during cell data printing so that user still can see and trigger explicit
 commands if required.
 
+Adapt to terminal window size changes automatically.
+
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
 

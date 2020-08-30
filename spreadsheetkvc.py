@@ -1361,8 +1361,10 @@ def runlogic(stdscr):
 
 
 def cwinsize_change(sig, whatelse):
+    global stdscr
     print("cwinsizechange:in:{}".format(me), file=GERRFILE)
-    cscreenadapt(stdscr)
+    cend(stdscr)
+    stdscr=cstart()
     print("cwinsizechange:ou:{}".format(me), file=GERRFILE)
 
 
