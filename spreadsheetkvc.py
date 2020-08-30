@@ -26,7 +26,7 @@ DONTEXIT = -9999
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
 # Both use similar concepts, but bitstreams are not directly interchangable
 bInternalEncDec = True
-gbStartNoHelp = False
+gbStartHelp = True
 
 
 '''
@@ -1401,7 +1401,7 @@ def process_cmdline(args):
     Process commandline arguments for the program
     '''
     global THEFIELDSEP
-    global gbStartNoHelp
+    global gbStartHelp
     i = 1
     while i < len(args):
         cmd = args[i][2:]
@@ -1411,7 +1411,7 @@ def process_cmdline(args):
         elif cmd == CmdArgs.help.name:
             print_usage()
         elif cmd == CmdArgs.startnohelp.name:
-            gbStartNoHelp = True
+            gbStartHelp = False
         i += 1
 
 
@@ -1422,7 +1422,7 @@ setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
 try:
-    if not gbStartNoHelp:
+    if gbStartHelp:
         helpdlg.help_dlg(stdscr)
     runlogic(stdscr)
 except Exception as e:
