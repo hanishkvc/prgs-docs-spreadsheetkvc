@@ -8,7 +8,8 @@ import cuikvc as cui
 
 
 def defaultmode_dlg(scr):
-    helpMsgs = [ "SpreadsheetKVC - Default Mode",
+    helpMsgs = [
+                "          SpreadsheetKVC - Default Mode    ",
                 "",
                 " [arrow keys] Move around the cells",
                 " [i] Insert new content  into current cell",
@@ -16,14 +17,15 @@ def defaultmode_dlg(scr):
                 " [d] Delete the contents of the current cell",
                 " [c] Copy the contents of the current cell",
                 " [C] Cut the contents of the current cell",
-                " [p] Paste a previously copied/cut content into current cell",
+                " [p] Paste a previously copied/cut content into current cell ",
                 " [:] Enter explicit commands mode",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
 
 
 def explicitcommandmode_dlg(scr):
-    helpMsgs = [ "SpreadsheetKVC - ExplicitCommand Mode",
+    helpMsgs = [
+                "    SpreadsheetKVC - ExplicitCommand Mode    ",
                 "Pressing ':' enters this ExplicitCommand Mode",
                 " [w file] write current spreadsheet to file",
                 " [l file] load specified file",
@@ -40,7 +42,8 @@ def explicitcommandmode_dlg(scr):
 
 
 def help_dlg(scr):
-    helpMsgs = [ "SpreadsheetKVC - a commandline curses based spreadsheet",
+    helpMsgs = [
+                " SpreadsheetKVC - a commandline curses based spreadsheet ",
                 "Default Mode - used for navigating, editing across cells",
                 "    and for entering other modes; Esc reverts to default",
                 "Cell Edit Mode - Entered by pressing 'i' or 'e'",

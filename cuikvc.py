@@ -91,7 +91,6 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
             msgLen = len(msgsIn[i])
             if borderWidth < msgLen:
                 borderWidth = msgLen
-        borderWidth += 2
         revAttr = curses.A_REVERSE
         if attr == curses.A_REVERSE:
             revAttr = curses.A_NORMAL
@@ -107,7 +106,7 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
         y = 0
         x = 0
     if border:
-        tX = x+1
+        tX = x
         borderStr = ""
         borderStr = _extend_str(borderStr, borderWidth, " ")
         cellstr(scr, y, x, borderStr, revAttr)
