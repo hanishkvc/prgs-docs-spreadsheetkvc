@@ -537,6 +537,14 @@ Show help dialogs by pressing h or ? in default mode or by giving :help explicit
 
 Updated dr and dc explicit commands to delete n rows/cols.
 
+If the deleted rows or cols is explicitly referenced in a =expression as a celladdress reference,
+then it will be tagged with a Err tag and that address will not be adjusted.
+
+	TODO: In future check if the explicit cell address reference is part of a range and if so
+	see if it can be adjusted to a shorter range. However the current logic is also sufficient
+	at a basic level to alert the user that things have changed after a delete and the user
+	should adjust the affected =expressions as required by them.
+
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
 

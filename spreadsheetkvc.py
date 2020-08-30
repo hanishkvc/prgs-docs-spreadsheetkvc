@@ -475,6 +475,20 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
     by adjusting the address by given incR or incC amount, provided
     the address is beyond afterR or afterC.
     '''
+    bDelRowMode = bDelColMode = False
+    if (incR < 0):
+        bDelRowMode = True
+        sDR = afterR + 1
+        eDR = afterR - incR
+    if (incC < 0):
+        bDelColMode = True
+        sDC = afterC + 1
+        eDC = afterC - incC
+    bInsRowMode = bInsColMode = False
+    if (incR > 0):
+        bInsRowMode = True
+    if (incC > 0):
+        bInsColMode = True
     #print("updateCellAddrs:In:{}".format(sIn), file=GERRFILE)
     iPos = 0
     sOut = sIn
@@ -491,13 +505,24 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
             iPos += len(sToken)
             continue
         # A valid cell address, so update
+        sErr = ""
         sBefore = sOut[0:iPos]
         sAfter = sOut[iPos+len(sToken):]
-        if (r > afterR):
+        if (bInsRowMode and (r > afterR)):
             r += incR
-        if (c > afterC):
+        if (bInsColMode and (c > afterC)):
             c += incC
-        sNewToken = "{}{}".format(coladdr_num2alpha(c),r)
+        if bDelRowMode:
+            if (r >= sDR) and (r <= eDR):
+                sErr = "ErrR_"
+            if (r > eDR):
+                r += incR
+        if bDelColMode:
+            if (c >= sDC) and (c <= eDC):
+                sErr += "ErrC_"    # + not required but for flexibility for future, just in case
+            if (c > eDC):
+                c += incC
+        sNewToken = "{}{}{}".format(sErr,coladdr_num2alpha(c),r)
         sOut = sBefore + sNewToken
         iPos = len(sOut)
         sOut += sAfter
