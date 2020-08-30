@@ -468,6 +468,16 @@ file saved using one ae implementation cant be loaded by the other implementatio
 
 Merge secFromPrimitives into master branch
 
+Add a Basic HelpDialog which is shown on startup.
+
+### 20200830IST1537
+
+Let program use full text screen, i.e even a partial cell column is now shown at the right edge
+of screen. Useful on small terminal screens like 80x24 or so...
+
+Handle exception during cell data printing so that user still can see and trigger explicit
+commands if required.
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
