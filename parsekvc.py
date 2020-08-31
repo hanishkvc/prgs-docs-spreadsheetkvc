@@ -140,8 +140,8 @@ def get_tokens(sIn):
     '''
     Return a list of tokens in the given string.
 
-    NOTE: This doesnt return the token type returned by the
-    lower level get_token function.
+    It also returns a list of token types which corresponds to
+    type of each token in the tokenList.
     '''
     iPos = 0
     tokenList = []
@@ -158,22 +158,21 @@ def get_tokens(sIn):
 
 def get_evalparts(sIn):
     '''
-    Extract function arguments of a function passed as a single
-    string, as individual arguments.
+    Extract parts that can be evaluated on their own and operations
+    sorrounding them.
 
-    IF there are complex data structures like set or list or dict
-    as a function argument, it will be identified as a single func
-    argument rather than spliting its individual elements up into
-    multiple args.
+    The main parts include numbers, functions and cell addresses.
+
+    The function element consists of the function name as well as
+    the arguments to the function.
+
+    The argument of a function could inturn be another function.
+
+    An element could even be a complex data structure like a list
+    or a set or a dict.
 
     It doesnt distinguish between the different types of brackets,
     however it does handle embedded brackets.
-
-        [ 1, 2, 3 ] and [ 1, 2, 3 } are same to it, and treated
-        as a single function argument.
-
-        [ 1, 2, [a, {what, else} ], 99] will be treated as a single
-        function argument.
 
     The sIn shouldnt contain the ( and ) at the begin and end of the
     sIn, else it will be returned as a single argument.
@@ -181,10 +180,12 @@ def get_evalparts(sIn):
     tokenList, typeList = get_tokens(sIn)
     lParts = []
     iBracket = 0
+    i = 0
     while i < len(typeList):
         if typeList[i] == TokenType.BracketStart:
+            if iBracket == 0:
+                iStartBracket = i
             iBracket += 1
-            iStartBracket = i
             i += 1
             continue
         if typeList[i] == TokenType.BracketEnd:
