@@ -1053,6 +1053,11 @@ def do_avg(args):
     return total/cnt
 
 
+def do_pyfunc(sCmd, sArgs):
+    sPyFunc = "{}({})".format(sCmd.lower(), sArgs)
+    return eval(sPyFunc)
+
+
 def do_func(sCmd, sArgs):
     '''
     Demux the internally supported functions.
@@ -1077,7 +1082,7 @@ def do_func(sCmd, sArgs):
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
         else:
-            return "{}({})".format(sCmd.lower(), sArgs)
+            return do_pyfunc(sCmd, sArgs)
     except:
         print("do_func:exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
