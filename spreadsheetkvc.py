@@ -1068,9 +1068,12 @@ def do_pyfunc(sCmd, sArgs):
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
-        sValOrArg += _cellvalue_or_str(sCur)
-        theArgs += ("," + sValOrArgs)
+        sValOrArg = _cellvalue_or_str(curArg)
+        theArgs += ("," + sValOrArg)
+    if theArgs[0] == ',':
+        theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd.lower(), theArgs)
+    print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
     return eval(sPyFunc)
 
 
