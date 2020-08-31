@@ -585,7 +585,7 @@ put the full cell content inside quotes,  to protect such white space, if requir
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
 
-### 20200901IST0234
+### 20200901IST0234 - OnamRelease
 
 Now one can call builtin python functions as part of =expressions.
 
