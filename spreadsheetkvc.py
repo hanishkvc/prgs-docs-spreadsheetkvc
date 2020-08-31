@@ -135,7 +135,7 @@ def cellstr(stdscr, y, x, msg, attr, clipToCell=True, clipToScreen=True):
     cellWidth=0
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
-    print("cellstr:{},{}:{},{}:{}".format(y, x, ty, tx, tmsg), file=GERRFILE)
+    #print("cellstr:{},{}:{},{}:{}".format(y, x, ty, tx, tmsg), file=GERRFILE)
     cui.cellstr(stdscr, ty, tx, tmsg, attr, clipToScreen)
 
 
@@ -1076,6 +1076,8 @@ def do_func(sCmd, sArgs):
             return do_stddev(sCmd, sArgs)
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
+        else:
+            return "{}({})".format(sCmd.lower(), sArgs)
     except:
         print("do_func:exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
