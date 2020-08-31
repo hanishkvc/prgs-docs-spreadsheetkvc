@@ -196,13 +196,16 @@ def get_evalparts(sIn):
                 except:
                     bFunc = False
                 curPart = ""
-                if bFunc:
-                    iStart = iStartBracket-1
-                else:
-                    iStart = iStartBracket
-                for j in range(iStart, i+1):
+                for j in range(iStartBracket, i+1):
                     curPart += tokenList[j]
-                lParts.append(curPart)
+                if bFunc:
+                    try:
+                        sFuncName = lParts[-1]
+                        lParts[-1] = "{}{}".format(sFuncName, curPart)
+                    except: # This shouldnt trigger normally, but just in case
+                        lParts.append(curPart)
+                else:
+                    lParts.append(curPart)
             i += 1
             continue
         if iBracket == 0:
