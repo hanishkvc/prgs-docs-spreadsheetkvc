@@ -1268,7 +1268,7 @@ def _nvalue(sData):
             sNew += evalParts[i]
     # Evaluate
     try:
-        val = float(eval(sNew))
+        val = eval(sNew)
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
