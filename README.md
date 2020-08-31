@@ -9,8 +9,8 @@ It works with a slightly modified form of csv file.
 
 It allows the saved csv file to be encrypted and inturn load such encrypted csv files.
 
-Remember that numbers and expressions should be prefixed with '=' ie equal. Else it will be
-treated as text content.
+Remember that numbers and expressions|forumulas should be prefixed with '=' ie equal.
+Else it will be treated as text content.
 
 ## Usage
 
@@ -245,13 +245,25 @@ prod(CellAddressRange)
 	product of the contents in the specified range of cells.
 
 
-### CellAddressRange
+### CellAddress And Ranges
 
 The Cols addressed starting from A to ZZ
 
 The Rows are addressed starting from 1 to ...
 
 So the Cell is addressed as ColRowAddr like for example A1 or D55 or DC999 or so ...
+
+To specify a range of cells use startCellAddress:endCellAddress like
+
+	=A1:A10
+
+	=A1:Z1
+
+	= ZA22:ZZ62
+
+	=sum(AB57:CD60)
+
+	= prod (HO99 : WO100 )
 
 
 ## csv file format
