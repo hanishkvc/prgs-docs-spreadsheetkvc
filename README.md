@@ -570,6 +570,10 @@ then it will be tagged with a Err tag and that address will not be adjusted.
 	at a basic level to alert the user that things have changed after a delete and the user
 	should adjust the affected =expressions as required by them.
 
+### 20200831IST1347
+
+Changed the text quoting char from ` to ' to avoid confusion to end users.
+
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
 
