@@ -5,7 +5,7 @@
 
 import enum
 
-TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign Brackets Unknown")
+TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
 def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
     '''
     Get first valid token from the given string and its position.
@@ -73,10 +73,14 @@ def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
             if bInToken:
                 return TokenType.AlphaNum, sOut, iPosStart
             return TokenType.Sign, sIn[i], i
-        if sIn[i] in [ '(', ')' ]:
+        if sIn[i] in [ '(', '[', '{' ]:
             if bInToken:
                 return TokenType.AlphaNum, sOut, iPosStart
-            return TokenType.Brackets, sIn[i], i
+            return TokenType.BracketStart, sIn[i], i
+        if sIn[i] in [ ')', ']', '}' ]:
+            if bInToken:
+                return TokenType.AlphaNum, sOut, iPosStart
+            return TokenType.BracketEnd, sIn[i], i
         break
     if bInToken:
         return TokenType.AlphaNum, sOut, iPosStart
