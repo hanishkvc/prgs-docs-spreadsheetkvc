@@ -1221,7 +1221,7 @@ def _nvalue_cells(sData):
     return sBase
 
 
-def _nvalue(sData):
+def _nvalue_OLD_TOREMOVE(sData):
     # Remove spaces and convert to upper case wrt eval expression
     sDATA = sData.replace(" ","").upper()
     # Handle functions first
@@ -1233,6 +1233,40 @@ def _nvalue(sData):
         val = float(eval(sBase))
     except:
         print("_nvalue exception:{}:{}".format(sData, sBase), file=GLOGFILE)
+        traceback.print_exc(file=GERRFILE)
+        val = None
+    return val
+
+
+def _nvalue(sData):
+    '''
+    Evaluate the given expression.
+
+    It identifies parts of the expression like functions, celladdresses,
+    groups etc and then try and find their value.
+
+    Finally evaluate the simplified expression using python.
+    '''
+    evalParts, evalTypes = parse.get_evalparts(sData)
+    sNew = ""
+    for i in range(len(evalParts)):
+        if evalTypes[i] == parse.EvalPartType.Func:
+            sCmd, sArgs = evalParts[i].split('(',1)
+            sArgs = sArgs[:-1]
+            sVal = do_func(sCmd, sArgs)
+            sNew += sVal
+        elif evalTypes[i] == parse.EvalPartType.AlphaNum:
+            sNew += _cellvalue_or_str(evalParts[i])
+        elif evalTypes[i] == parse.EvalPartType.Group:
+            sVal = _nvalue(evalParts[i][1:-1])
+            sNew += "({})".format(sVal)
+        else:
+            sNew += evalParts[i]
+    # Evaluate
+    try:
+        val = float(eval(sNew))
+    except:
+        print("_nvalue:exception:{}:{}".format(sData, sNew), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
         val = None
     return val
