@@ -15,16 +15,17 @@ def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
     position from this function back to it in the next call as
     its startPos argument.
 
-    One could either fetch a CellAddr or FuncName token.
+    It drops white spaces and extracts other chars as logically
+    related tokens of a predefined set of types.
 
-    NOTE: This is not a generic token parser. It mainly extracts
-    tokens which match the CellAddr kind or Func kind. Numbers
-    on their own will not be extracted, nor will operators or
-    Plus/Minus or so.
+    This could include brackets, symbols, signs, alphanumeric
+    words/numbers (including decimal numbers).
 
-    TODO: In future, if I support functions which take string
-    arguments, then I will have to look for strings and skip
-    their contents.
+        alphanumeric words could represent function names or
+        celladdresses or so.
+
+    If it finds a string quoted using single quotes, then it
+    will be extracted as a single string token.
     '''
     if sIn == "":
         return TokenType.NoMore, "", -1
@@ -90,6 +91,27 @@ def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
 
 
 def get_funcargs(sIn):
+    '''
+    Extract function arguments of a function passed as a single
+    string, as individual arguments.
+
+    IF there are complex data structures like set or list or dict
+    as a function argument, it will be identified as a single func
+    argument rather than spliting its individual elements up into
+    multiple args.
+
+    It doesnt distinguish between the different types of brackets,
+    however it does handle embedded brackets.
+
+        [ 1, 2, 3 ] and [ 1, 2, 3 } are same to it, and treated
+        as a single function argument.
+
+        [ 1, 2, [a, {what, else} ], 99] will be treated as a single
+        function argument.
+
+    The sIn shouldnt contain the ( and ) at the begin and end of the
+    sIn, else it will be returned as a single argument.
+    '''
     iPos = 0
     sArgs = []
     curArg = ""
@@ -122,6 +144,14 @@ def print_tokens(sIn):
             break
         print("Token:[{}]".format(sOut))
         iPos += len(sOut)
+
+
+def test_101():
+    sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}"
+    print(get_funcargs(sFuncArgs))
+    print_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2 3 ")
+
+
 
 
 # vim: set sts=4 expandtab: #
