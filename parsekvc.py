@@ -93,16 +93,21 @@ def get_funcargs(sIn):
     iPos = 0
     sArgs = []
     curArg = ""
+    iBracket = 0
     while True:
         tokenType, sOut, iPos = get_token(sIn, iPos)
         if tokenType == TokenType.NoMore:
             break
         iPos += len(sOut)
         if tokenType == TokenType.Symbol:
-            if sOut == ",":
+            if (iBracket == 0) and (sOut == ","):
                 sArgs.append(curArg)
                 curArg = ""
                 continue
+        if tokenType == TokenType.BracketStart:
+            iBracket += 1
+        if tokenType == TokenType.BracketEnd:
+            iBracket -= 1
         curArg += sOut
     if (curArg != ""):
         sArgs.append(curArg)
