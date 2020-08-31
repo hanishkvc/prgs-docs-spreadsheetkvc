@@ -1256,7 +1256,7 @@ def _nvalue(sData):
             sCmd, sArgs = evalParts[i].split('(',1)
             sArgs = sArgs[:-1]
             sVal = do_func(sCmd, sArgs)
-            sNew += sVal
+            sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum:
             sNew += _cellvalue_or_str(evalParts[i])
         elif evalTypes[i] == parse.EvalPartType.Group:
