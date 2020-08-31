@@ -1112,47 +1112,6 @@ def do_func(sCmdIn, sArgs):
     return None
 
 
-def _nvalue_funcs_OLD_TOREMOVE(sData):
-    '''
-    Find func calls in the given expression and call them
-    to get the numeric value corresponding to them and
-    replace the func call with its returned value.
-    '''
-    sBase = ""
-    sCur = ""
-    i = 0
-    while i < len(sData):
-        c = sData[i]
-        if c.isalnum():
-            sCur += c
-        else:
-            if c == "(":
-                if (sCur == ""):
-                    sBase += c
-                else:
-                    # Currently one cant embed one func call
-                    # within another
-                    sCmd = sCur
-                    sArgs = ""
-                    i += 1
-                    while i < len(sData):
-                        c = sData[i]
-                        if c == ')':
-                            break
-                        else:
-                            sArgs += c
-                        i += 1
-                    val = do_func(sCmd, sArgs)
-                    sBase += str(val)
-                    sCur = ""
-            else:
-                sBase = sBase + sCur + c
-                sCur = ""
-        i += 1
-    sBase += sCur
-    return sBase
-
-
 def _celladdr_valid(sAddr):
     '''
     Check if the given string is a cell address or not.
@@ -1229,7 +1188,7 @@ def _nvalue(sData):
     '''
     Evaluate the given expression.
 
-    It identifies parts of the expression like functions, celladdresses,
+    It identifies sub parts of the expression like functions, celladdresses,
     groups etc and then try and find their value.
 
     Finally evaluate the simplified expression using python.
@@ -1245,7 +1204,7 @@ def _nvalue(sData):
             sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
             sNew += _cellvalue_or_str(evalParts[i])
-        elif evalTypes[i] == parse.EvalPartType.Group:
+        elif evalTypes[i] == parse.EvalPartType.Group: # Bracket grouped subexpression
             sVal = _nvalue(evalParts[i][1:-1])
             sNew += "({})".format(sVal)
         else:
