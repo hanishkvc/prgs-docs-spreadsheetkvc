@@ -85,6 +85,26 @@ def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
     return TokenType.Unknown, sIn[i], i
 
 
+def get_funcargs(sIn):
+    iPos = 0
+    sArgs = []
+    curArg = ""
+    while True:
+        tokenType, sOut, iPos = get_token(sIn, iPos)
+        if tokenType == TokenType.NoMore:
+            break
+        iPos += len(sOut)
+        if tokenType == TokenType.Symbol:
+            if sOut == ",":
+                sArgs.append(curArg)
+                curArg = ""
+                continue
+        curArg += sOut
+    if (curArg != ""):
+        sArgs.append(curArg)
+    return sArgs
+
+
 def print_tokens(sIn):
     iPos = 0
     while True:
