@@ -17,6 +17,7 @@ import enum
 import seckvc as sec
 import helpdlg
 import cuikvc as cui
+import parsekvc as parse
 
 
 bDebug = False
@@ -1054,7 +1055,22 @@ def do_avg(args):
 
 
 def do_pyfunc(sCmd, sArgs):
-    sPyFunc = "{}({})".format(sCmd.lower(), sArgs)
+    '''
+    Try evaluating the command and the arguments as a python function
+
+    In the process expand any cellAddress, to the numeric value corresponding
+    to the specified cell.
+
+    NOTE: If a cellAddressRange is specified, it wont be handled properly.
+    However maybe in future, I may expand a cell address range into a list
+    or so, time permitting.
+    '''
+    argsList = parse.get_funcargs(sArgs)
+    theArgs = ""
+    for curArg in argsList:
+        sValOrArg += _cellvalue_or_str(sCur)
+        theArgs += ("," + sValOrArgs)
+    sPyFunc = "{}({})".format(sCmd.lower(), theArgs)
     return eval(sPyFunc)
 
 
