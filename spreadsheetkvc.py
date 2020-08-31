@@ -1061,6 +1061,8 @@ def do_pyfunc(sCmd, sArgs):
     In the process expand any cellAddress, to the numeric value corresponding
     to the specified cell.
 
+    It also allows any argument which is a function call to be handled properly.
+
     NOTE: If a cellAddressRange is specified, it wont be handled properly.
     However maybe in future, I may expand a cell address range into a list
     or so, time permitting.
@@ -1068,8 +1070,8 @@ def do_pyfunc(sCmd, sArgs):
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
-        sValOrArg = _cellvalue_or_str(curArg)
-        theArgs += ("," + sValOrArg)
+        sValOrArg = _nvalue(curArg)
+        theArgs += ",{}".format(sValOrArg)
     if theArgs[0] == ',':
         theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd, theArgs)
@@ -1268,7 +1270,7 @@ def _nvalue(sData):
     try:
         val = float(eval(sNew))
     except:
-        print("_nvalue:exception:{}:{}".format(sData, sNew), file=GLOGFILE)
+        print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
         val = None
     return val
