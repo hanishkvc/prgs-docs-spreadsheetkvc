@@ -165,10 +165,15 @@ In this mode the user either enters a new content for the cell and or edit the e
 content of the cell.
 
 As and when the user presses the enter key, the data entered till that point gets saved
-into the cell. If one exits without pressing enter then any data entered after the last
-enter key press will be lost.
+into the cell. If one exits edit mode without pressing enter then any data entered after
+the last enter key press will be lost.
 
 User needs to press ESC key to exit from this mode and go back to default command mode.
+This also triggers the logic to remove any white space at the begining and end of the
+current edit buffer, as it gets saved into the cell. So use the currently configured
+quote char at the begining and end of the cell content being edited, if you have white
+space at the begin or end of the current cell content, which you want to save as part
+of the cell.
 
 NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
 mode, however when escaping back into the command mode, the cell content wont wrap into
@@ -573,6 +578,9 @@ then it will be tagged with a Err tag and that address will not be adjusted.
 ### 20200831IST1347
 
 Changed the text quoting char from ` to ' to avoid confusion to end users.
+
+Strip white space from begin and end of edit buffer before saving into cell. So user will need to
+put the full cell content inside quotes,  to protect such white space, if required.
 
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.

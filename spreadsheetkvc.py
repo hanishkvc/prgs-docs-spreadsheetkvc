@@ -1331,7 +1331,7 @@ def rl_editplusmode(stdscr, key):
         if me['state'] == 'E':
             # Restore/set data to the latest backedup edit buffer
             if me['backupEdit'] != None:
-                me['data'][(me['curRow'],me['curCol'])] = me['backupEdit']
+                me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
         if me['crsrOffset'] > 0:
