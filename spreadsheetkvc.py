@@ -1072,18 +1072,20 @@ def do_pyfunc(sCmd, sArgs):
         theArgs += ("," + sValOrArg)
     if theArgs[0] == ',':
         theArgs = theArgs[1:]
-    sPyFunc = "{}({})".format(sCmd.lower(), theArgs)
+    sPyFunc = "{}({})".format(sCmd, theArgs)
     print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
     return eval(sPyFunc)
 
 
-def do_func(sCmd, sArgs):
+def do_func(sCmdIn, sArgs):
     '''
     Demux the internally supported functions.
-    Unknown function will return None.
+    Next try and solve it has a python function.
+    Unknown and invalid/exception rising function will return None.
     '''
+    sCmd = sCmdIn.upper()
     try:
-        print("do_func:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
+        print("do_func:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
         if sCmd == "SUM":
             return do_sum(sArgs)
         elif (sCmd == "AVG") or (sCmd == "AVERAGE"):
@@ -1101,9 +1103,9 @@ def do_func(sCmd, sArgs):
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
         else:
-            return do_pyfunc(sCmd, sArgs)
+            return do_pyfunc(sCmdIn, sArgs)
     except:
-        print("do_func:exception:{}:{}".format(sCmd, sArgs), file=GLOGFILE)
+        print("do_func:exception:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
     return None
 
