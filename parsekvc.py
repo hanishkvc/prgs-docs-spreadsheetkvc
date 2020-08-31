@@ -156,6 +156,7 @@ def get_tokens(sIn):
     return tokenList, typeList
 
 
+EvalPartType = enum.Enum("EvalPartType", "Any Group Func AlphaNum")
 def get_evalparts(sIn):
     '''
     Extract parts that can be evaluated on their own and operations
@@ -179,6 +180,7 @@ def get_evalparts(sIn):
     '''
     tokenList, typeList = get_tokens(sIn)
     lParts = []
+    lTypes = []
     iBracket = 0
     i = 0
     while i < len(typeList):
@@ -202,17 +204,24 @@ def get_evalparts(sIn):
                     try:
                         sFuncName = lParts[-1]
                         lParts[-1] = "{}{}".format(sFuncName, curPart)
+                        lTypes[-1] = EvalPartType.Func
                     except: # This shouldnt trigger normally, but just in case
                         lParts.append(curPart)
+                        lTypes.append(EvalPartType.Group)
                 else:
                     lParts.append(curPart)
+                    lTypes.append(EvalPartType.Group)
             i += 1
             continue
         if iBracket == 0:
             lParts.append(tokenList[i])
+            if typeList[i] == TokenType.AlphaNum:
+                lTypes.append(EvalPartType.AlphaNum)
+            else:
+                lTypes.append(EvalPartType.Any)
         i += 1
         continue
-    return lParts
+    return lParts, lTypes
 
 
 
