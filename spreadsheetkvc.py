@@ -1163,27 +1163,6 @@ def _cellvalue_or_str(sCheck):
     return sCheck
 
 
-def _nvalue_cells(sData):
-    '''
-    Identify the cell addresses in the given string and replace them
-    with the numeric value got from the corresponding cell.
-    '''
-    sBase = ""
-    sCur = ""
-    i = 0
-    while i < len(sData):
-        c = sData[i]
-        if c.isalnum():
-            sCur += c
-        else:
-            sBase += _cellvalue_or_str(sCur)
-            sBase += c
-            sCur = ""
-        i += 1
-    sBase += _cellvalue_or_str(sCur)
-    return sBase
-
-
 def _nvalue(sData):
     '''
     Evaluate the given expression.
