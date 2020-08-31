@@ -231,6 +231,8 @@ def test_101():
     sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}, 'test what'  "
     print(get_funcargs(sFuncArgs))
     print(get_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2.234 3 "))
+    print(get_evalparts("(=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c])"))
+    print(get_evalparts("=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c]"))
 
 
 

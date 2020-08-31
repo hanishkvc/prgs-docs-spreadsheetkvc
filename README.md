@@ -585,6 +585,24 @@ put the full cell content inside quotes,  to protect such white space, if requir
 THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam
 festival weekend.
 
+### 20200901IST0234
+
+Now one can call builtin python functions as part of =expressions.
+
+Updated to a new _nvalue and associated logic, which is more flexible and allows =expressions to be
+more complex, including calling functions within functions i.e a function's argument can inturn be
+a function call. Also it evaluates the parts of a =expression in a more structured way. Also it no
+longer forces the result of the evaluation to be a float.
+
+
+	This allows round and int python functions to be used as part of =expressions in a more
+	flexible manner.
+
+Added new parse module and the same is used for many parts of the parsing logic of the program now.
+
+
+
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 
