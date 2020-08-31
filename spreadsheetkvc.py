@@ -1112,7 +1112,7 @@ def do_func(sCmdIn, sArgs):
     return None
 
 
-def _nvalue_funcs(sData):
+def _nvalue_funcs_OLD_TOREMOVE(sData):
     '''
     Find func calls in the given expression and call them
     to get the numeric value corresponding to them and
@@ -1225,23 +1225,6 @@ def _nvalue_cells(sData):
     return sBase
 
 
-def _nvalue_OLD_TOREMOVE(sData):
-    # Remove spaces and convert to upper case wrt eval expression
-    sDATA = sData.replace(" ","").upper()
-    # Handle functions first
-    sBase = _nvalue_funcs(sDATA)
-    # Handle cell addresses
-    sBase = _nvalue_cells(sBase)
-    # Evaluate
-    try:
-        val = float(eval(sBase))
-    except:
-        print("_nvalue exception:{}:{}".format(sData, sBase), file=GLOGFILE)
-        traceback.print_exc(file=GERRFILE)
-        val = None
-    return val
-
-
 def _nvalue(sData):
     '''
     Evaluate the given expression.
@@ -1251,15 +1234,16 @@ def _nvalue(sData):
 
     Finally evaluate the simplified expression using python.
     '''
+    # Remove spaces and identify independent subparts that can be simplified/evaluated.
     evalParts, evalTypes = parse.get_evalparts(sData)
     sNew = ""
     for i in range(len(evalParts)):
-        if evalTypes[i] == parse.EvalPartType.Func:
+        if evalTypes[i] == parse.EvalPartType.Func: # Handle functions
             sCmd, sArgs = evalParts[i].split('(',1)
             sArgs = sArgs[:-1]
             sVal = do_func(sCmd, sArgs)
             sNew += str(sVal)
-        elif evalTypes[i] == parse.EvalPartType.AlphaNum:
+        elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
             sNew += _cellvalue_or_str(evalParts[i])
         elif evalTypes[i] == parse.EvalPartType.Group:
             sVal = _nvalue(evalParts[i][1:-1])
