@@ -20,7 +20,7 @@ import cuikvc as cui
 
 
 bDebug = False
-THEQUOTE = '`'
+THEQUOTE = "'"
 THEFIELDSEP = ';'
 DONTEXIT = -9999
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
@@ -1450,11 +1450,12 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep startnohelp")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
-    print("    --{} '{}'  Specify the csv field seperator explicitly".format(CmdArgs.fieldsep.name, THEFIELDSEP))
+    print('    --{} "{}"  Specify the csv field seperator to use'.format(CmdArgs.fieldsep.name, THEFIELDSEP))
+    print('    --{} "{}"     Specify the csv field text quote to use'.format(CmdArgs.quote.name, THEQUOTE))
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
     exit(0)
 
@@ -1464,6 +1465,7 @@ def process_cmdline(args):
     Process commandline arguments for the program
     '''
     global THEFIELDSEP
+    global THEQUOTE
     global gbStartHelp
     i = 1
     while i < len(args):
@@ -1471,6 +1473,9 @@ def process_cmdline(args):
         if cmd == CmdArgs.fieldsep.name:
             i += 1
             THEFIELDSEP = args[i][0]
+        elif cmd == CmdArgs.quote.name:
+            i += 1
+            THEQUOTE = args[i][0]
         elif cmd == CmdArgs.help.name:
             print_usage()
         elif cmd == CmdArgs.startnohelp.name:

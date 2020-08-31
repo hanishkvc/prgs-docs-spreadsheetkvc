@@ -24,11 +24,21 @@ The program supports the following commandline arguments
 
 	--fieldsep <seperator>
 
-		By default the program uses ';' i.e semicolon as the field seperator of the csv files.
+		By default the program uses [;] i.e semicolon as the field seperator of the csv files.
 		However the user can change this to a different character by using this argument.
 
 		--fieldsep ','
 
+	--quote <textquote>
+
+		By default program uses ['] i.e single quote, if required, as the field text quote in the
+		csv files.  However user can change this to a different character by using this argument.
+
+		--quote '`'
+
+	--startnohelp
+
+		To avoid showing the help dialog on program start.
 
 
 ### program modes
@@ -273,12 +283,15 @@ The csv file used by this program uses semicolon [;] to seperate the fields with
 i.e within each line in the file.
 
 If any field contains this field seperator with in its content, then the content
-is embedded within [`]s and not [']s.
+is embedded within ['] ie single quotes.
 
-To avoid confusing the program, dont use ` char as part of the spreadsheet contents, other
+To avoid confusing the program, dont use ' char as part of the spreadsheet contents, other
 than for quoting text contents with field seperator in them.
 
-User can set a different field seperator from the commandline.
+Also if you want to have white space at the beginning and or end of the text contents of a cell,
+put the full cell text content within quotes.
+
+User can set a different field seperator or quote char from the commandline.
 
 ### Encryption support
 
