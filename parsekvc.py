@@ -136,21 +136,29 @@ def get_funcargs(sIn):
     return sArgs
 
 
-def print_tokens(sIn):
+def get_tokens(sIn):
+    '''
+    Return a list of tokens in the given string.
+
+    NOTE: This doesnt return the token type returned by the
+    lower level get_token function.
+    '''
     iPos = 0
+    tokenList = []
     while True:
         tokenType, sOut, iPos = get_token(sIn, iPos)
         if tokenType == TokenType.NoMore:
             break
-        print("Token:[{}]".format(sOut))
+        tokenList.append(sOut)
         iPos += len(sOut)
+    return tokenList
 
 
 def test_101():
     sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}"
     sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}, 'test what'  "
     print(get_funcargs(sFuncArgs))
-    print_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2 3 ")
+    print(get_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2.234 3 "))
 
 
 
