@@ -145,13 +145,72 @@ def get_tokens(sIn):
     '''
     iPos = 0
     tokenList = []
+    typeList = []
     while True:
         tokenType, sOut, iPos = get_token(sIn, iPos)
         if tokenType == TokenType.NoMore:
             break
         tokenList.append(sOut)
+        typeList.append(tokenType)
         iPos += len(sOut)
-    return tokenList
+    return tokenList, typeList
+
+
+def get_evalparts(sIn):
+    '''
+    Extract function arguments of a function passed as a single
+    string, as individual arguments.
+
+    IF there are complex data structures like set or list or dict
+    as a function argument, it will be identified as a single func
+    argument rather than spliting its individual elements up into
+    multiple args.
+
+    It doesnt distinguish between the different types of brackets,
+    however it does handle embedded brackets.
+
+        [ 1, 2, 3 ] and [ 1, 2, 3 } are same to it, and treated
+        as a single function argument.
+
+        [ 1, 2, [a, {what, else} ], 99] will be treated as a single
+        function argument.
+
+    The sIn shouldnt contain the ( and ) at the begin and end of the
+    sIn, else it will be returned as a single argument.
+    '''
+    tokenList, typeList = get_tokens(sIn)
+    lParts = []
+    iBracket = 0
+    while i < len(typeList):
+        if typeList[i] == TokenType.BracketStart:
+            iBracket += 1
+            iStartBracket = i
+            i += 1
+            continue
+        if typeList[i] == TokenType.BracketEnd:
+            iBracket -= 1
+            if iBracket == 0:
+                try:
+                    bFunc = (typeList[iStartBracket-1] == TokenType.AlphaNum)
+                except:
+                    bFunc = False
+                curPart = ""
+                if bFunc:
+                    iStart = iStartBracket-1
+                else:
+                    iStart = iStartBracket
+                for j in range(iStart, i+1):
+                    curPart += tokenList[j]
+                lParts.append(curPart)
+            i += 1
+            continue
+        if iBracket == 0:
+            lParts.append(tokenList[i])
+        i += 1
+        continue
+    return lParts
+
+
 
 
 def test_101():
