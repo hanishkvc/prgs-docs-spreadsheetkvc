@@ -17,6 +17,20 @@ contents are italicised and dim compared to =expression (which includes numeric 
 
 After program is up and running. Press Esc key to be sure that we are in default mode.
 
+Key in the following command to load the help.csv file with basic usage help.
+
+	:help<ENTERKEY>
+
+NOTE: You can exit this help mode by either
+
+	(a) creating a new spreadsheet in memory by using new command i.e
+
+		:new<ENTERKEY>
+
+	(b) Or by loading a existing file into memory
+
+		:l pathto/filename<ENTERKEY>
+
 Key in following command to load a file named filename from path pathto.
 
 	:l pathto/filename<ENTERKEY>
