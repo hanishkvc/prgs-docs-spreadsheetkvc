@@ -757,6 +757,7 @@ def load_file(scr, sFile, filePass=None):
             status(scr, ["Canceled loading of {}".format(sFile)])
             return
     try:
+        scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
     except:

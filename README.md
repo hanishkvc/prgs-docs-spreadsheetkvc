@@ -478,7 +478,7 @@ delete the last char using backspace.
 
 [DONE] If Row/Col is deleted, then corresponding cell address references should be flagged.
 
-Refresh screen draw after a file load operation.
+[DONE] Refresh screen draw as part of file load operation.
 
 [DONE] Change delete default mode command from 'd' to 'D', so that user doesnt unknownling trigger it.
 
@@ -675,6 +675,8 @@ Differentiate between text and numeric(=expression) cells.
 Default mode delete command changed from 'd' to 'D' key press.
 
 Alert user, if trying to load a file, while unsaved changes are in memory.
+
+Clear screen when loading a file.
 
 
 
