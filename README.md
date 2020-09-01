@@ -605,6 +605,7 @@ Base and Line key logic moved into sec module.
 
 Functions logic moved into funcs module.
 
+Differentiate between text and numeric(=expression) cells.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
