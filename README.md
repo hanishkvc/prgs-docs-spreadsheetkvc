@@ -601,6 +601,7 @@ longer forces the result of the evaluation to be a float.
 Added new parse module and the same is used for many parts of the parsing logic of the program now.
 This is a cleaner, simpler and at same time flexible logic.
 
+Base and Line key logic moved into sec module.
 
 
 

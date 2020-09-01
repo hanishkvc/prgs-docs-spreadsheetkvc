@@ -653,7 +653,7 @@ def _save_file(scr, sFile, filePass=None):
     f = open(sFile,"w+")
     if filePass != None:
         salt = secrets.token_bytes(16)
-        userKey, fileKey = get_basekeys(filePass, salt)
+        userKey, fileKey = sec.get_basekeys(filePass, salt)
         salt = base64.urlsafe_b64encode(salt).decode()
         print("{}\n".format(salt), end="", file=f)
     for r in range(1, me['numRows']+1):
@@ -670,7 +670,7 @@ def _save_file(scr, sFile, filePass=None):
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
         if filePass != None:
-            lineKey = get_linekey(r, userKey, fileKey)
+            lineKey = sec.get_linekey(r, userKey, fileKey)
             if bInternalEncDec:
                 curRow = sec.aes_cbc_enc_b64(base64.urlsafe_b64decode(lineKey), curRow).decode()
             else:
@@ -701,14 +701,14 @@ def _load_file(sFile, filePass=None):
     if filePass != None:
         line = f.readline()
         salt = base64.urlsafe_b64decode(line.encode())
-        userKey, fileKey = get_basekeys(filePass, salt)
+        userKey, fileKey = sec.get_basekeys(filePass, salt)
     print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
     r = 0
     for line in f:
         r += 1
         if filePass != None:
-            lineKey = get_linekey(r, userKey, fileKey)
+            lineKey = sec.get_linekey(r, userKey, fileKey)
             if bInternalEncDec:
                 line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
             else:
