@@ -345,6 +345,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 if sData.startswith("="):
                     sData = value((r,c))
                     ctype &= (~CATTR_TEXT & 0xFFFF_FFFF)
+                    sRemaining = ""
                 else:
                     sRemaining = sData[me['cellWidth']:]
             elif (not me['clipCell']):

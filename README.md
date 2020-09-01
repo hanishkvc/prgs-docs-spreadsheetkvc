@@ -678,6 +678,9 @@ Alert user, if trying to load a file, while unsaved changes are in memory.
 
 Clear screen when loading a file.
 
+Make sure that not just a text cell, but also a =expression cell blocks overflowing text from
+adjacent cell that is towards it's left.
+
 
 
 
