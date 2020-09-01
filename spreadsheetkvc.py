@@ -28,8 +28,12 @@ DONTEXIT = -9999
 # Both use similar concepts, but bitstreams are not directly interchangable
 bInternalEncDec = True
 gbStartHelp = True
+# How to differentiate text cells compared to =expression cells
 CATTR_TEXT = (curses.A_ITALIC)
 CATTR_TEXT = (curses.A_ITALIC | curses.A_DIM)
+# How many columns to left of current display viewport should one peek
+# to see, if there is any overflowing text that needs to be displayed.
+DATACOLSTART_OVERSCAN = 20
 
 
 '''
@@ -329,9 +333,12 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
+    dataColStart = colStart - DATACOLSTART_OVERSCAN
+    if dataColStart < 1:
+        dataColStart = 1
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
-        for c in range(colStart, colEnd+1):
+        for c in range(dataColStart, colEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
@@ -355,6 +362,8 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                     print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # sData == None AND clipCell
                 sData = ""
+            if (c < colStart):
+                continue
             cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
 
 

@@ -482,7 +482,7 @@ delete the last char using backspace.
 
 [DONE] Change delete default mode command from 'd' to 'D', so that user doesnt unknownling trigger it.
 
-Show overflowing content of cells beyond what is currently visible, by maintaining a larger
+[DONE] Show overflowing content of cells beyond what is currently visible, by maintaining a larger
 content viewport than the display viewport.
 
 
@@ -680,6 +680,12 @@ Clear screen when loading a file.
 
 Make sure that not just a text cell, but also a =expression cell blocks overflowing text from
 adjacent cell that is towards it's left.
+
+Have a larger data viewport compared to display viewport, so that any overflowing text from
+adjacent cells which are no longer in the display viewport is still displayed. However to keep
+the processing load of drawing of cell matrix efficient, the data viewport is bigger to display
+viewport by 20 cells to the left side (because cells on left is what can overflow into current
+or more cells). User can modify this if required by updating the source. Power To SOURCE ;)
 
 
 
