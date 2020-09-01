@@ -486,6 +486,8 @@ delete the last char using backspace.
 [DONE] Show overflowing content of cells beyond what is currently visible, by maintaining a larger
 content viewport than the display viewport.
 
+Add a View only mode.
+
 
 ## History
 
@@ -690,6 +692,9 @@ or more cells). User can modify this if required by updating the source. Power T
 
 Avoid exception cornercase by converting char to int, rather than int to char. Because getch
 can send crazy value if a terminal window size change occurs.
+
+Set terminal title when a file is successfully loaded.
+
 
 
 
