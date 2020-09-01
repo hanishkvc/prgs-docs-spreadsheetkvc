@@ -10,7 +10,6 @@ import curses.ascii
 from math import *
 import tempfile
 import cryptography.fernet
-import cryptography.hazmat.primitives.kdf.pbkdf2, cryptography.hazmat.primitives.hashes
 import base64
 import secrets
 import enum
