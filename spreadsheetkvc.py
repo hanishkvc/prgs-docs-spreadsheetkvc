@@ -658,6 +658,8 @@ def _save_file(scr, sFile, filePass=None):
     If successfully saved, then Clear the dirty bit.
 
     If filePass is provided then encrypt the file.
+
+    If the file already exists, then alert the user about same.
     '''
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
@@ -761,6 +763,15 @@ def _load_file(sFile, filePass=None):
 
 
 def load_file(scr, sFile, filePass=None):
+    '''
+    load the specified spreadsheet into memory.
+
+    It checks if there is a dirty spreadsheet in memory, in which case, it gives option
+    to user to abort the load_file operation.
+
+    As a user could come out of help mode by using load_file, so it reverts from help mode,
+    if that is the case.
+    '''
     if me['dirty']:
         got = dlg(scr, ["Spreadsheet not saved, discard and load new file? [y/N]".format(sFile)])
         if chr(got).upper() == "Y":
@@ -784,6 +795,11 @@ def load_file(scr, sFile, filePass=None):
 
 
 def load_help(scr):
+    '''
+    load help.csv file in readonly mode.
+
+    If already in help mode, dont do anything.
+    '''
     if me['helpModeSavedReadOnly'] != None:
         return
     if load_file(scr, "{}/help.csv".format(sys.path[0])):
