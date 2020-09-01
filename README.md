@@ -67,7 +67,7 @@ keys for achieving the specified operations.
 
 * p can be used to paste a previously copied/cut cell content into current cell.
 
-* d can be used to delete the contents of the current cell.
+* D can be used to delete the contents of the current cell.
 
 * : can be used to enter the explicit command mode.
 
@@ -184,7 +184,7 @@ adjacent cells dont have any content (even empty string is a content) of their o
 	overflowing text will not be visible. Contents of a cell including its overflowing
 	text will be visible only if that cell is currently in the screen.
 
-If you feel there is a empty string in any field and you want to remove it, use the 'd'
+If you feel there is a empty string in any field and you want to remove it, use the 'D'
 command in the default command mode, which will delete any content from the current cell,
 including empty string.
 
@@ -477,7 +477,7 @@ delete the last char using backspace.
 
 Refresh screen draw after a file load operation.
 
-Change delete default mode command from 'd' to 'D', so that user doesnt unknownling trigger it.
+[DONE] Change delete default mode command from 'd' to 'D', so that user doesnt unknownling trigger it.
 
 Show overflowing content of cells beyond what is currently visible, by maintaining a larger
 content viewport than the display viewport.
@@ -668,6 +668,10 @@ Base and Line key logic moved into sec module.
 Functions logic moved into funcs module.
 
 Differentiate between text and numeric(=expression) cells.
+
+Default mode delete command changed from 'd' to 'D' key press.
+
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)

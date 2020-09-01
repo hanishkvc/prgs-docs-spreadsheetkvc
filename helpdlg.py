@@ -14,7 +14,7 @@ def defaultmode_dlg(scr):
                 "  [arrow keys] Move around the cells",
                 "  [i] Insert new content  into current cell",
                 "  [e] Edit the existing content in the current cell",
-                "  [d] Delete the contents of the current cell",
+                "  [D] Delete the contents of the current cell",
                 "  [c] Copy the contents of the current cell",
                 "  [C] Cut the contents of the current cell",
                 "  [p] Paste previously copied/Cut content into currentCell  ",

@@ -978,7 +978,7 @@ def rl_commandmode(stdscr, key):
         i one enters the insert edit mode.
         : one enters the explicit command mode.
         arrow keys one can move around the cells.
-        d one can delete current cell's content.
+        D one can delete current cell's content.
         c helps copy cell data.
         C helps Cut cell data.
         p helps Paste cell data.
@@ -992,7 +992,7 @@ def rl_commandmode(stdscr, key):
         cellcur_left()
     elif (key == curses.KEY_RIGHT):
         cellcur_right()
-    elif (key == ord('d')):
+    elif (key == ord('D')):
         me['data'].pop((me['curRow'],me['curCol']), None)
     elif (key == ord('c')):
         me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
