@@ -11,6 +11,7 @@ def defaultmode_dlg(scr):
     helpMsgs = [
                 "          SpreadsheetKVC - Default Mode    ",
                 "",
+                "",
                 "  [arrow keys] Move around the cells",
                 "  [i] Insert new content  into current cell",
                 "  [e] Edit the existing content in the current cell",
@@ -20,6 +21,9 @@ def defaultmode_dlg(scr):
                 "  [p] Paste previously copied/Cut content into currentCell  ",
                 "  [h|?] show help / usage info",
                 "  [:] Enter explicit commands mode",
+                "",
+                "",
+                "******* Look at README.md and help.csv for more info *******",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
 
@@ -27,7 +31,7 @@ def defaultmode_dlg(scr):
 def explicitcommandmode_dlg(scr):
     helpMsgs = [
                 "        SpreadsheetKVC - ExplicitCommand Mode        ",
-                "Pressing ':' enters this ExplicitCommand Mode",
+                "Pressing ':' in defaultMode enters this ExplicitCommand Mode",
                 "   [pw passwd file] write encrypted file",
                 "   [pl passwd file] load encrypted file",
                 "   [w file] write to file;            [l file] load file",
@@ -39,6 +43,8 @@ def explicitcommandmode_dlg(scr):
                 "   [q] Quits the Prg",
                 "[arrow left|right] move cursor to edit inbetween",
                 "[Esc] to exit back to default mode",
+                "",
+                "******* Look at README.md and help.csv for more info *******",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
 
