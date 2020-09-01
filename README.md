@@ -41,6 +41,14 @@ The program supports the following commandline arguments
 
 		To avoid showing the help dialog on program start.
 
+	--readonly
+
+		The program starts in readonly mode, where user cant modify the loaded spreadsheets.
+		That is one cant insert or delete rows/cols. Nor can one edit/insert/cut/delete/paste cells.
+
+		However user can switch to readwrite mode by giving :readwrite explicit command.
+
+
 
 ### program modes
 
@@ -486,8 +494,9 @@ delete the last char using backspace.
 [DONE] Show overflowing content of cells beyond what is currently visible, by maintaining a larger
 content viewport than the display viewport.
 
-Add a View only mode.
+[DONE] Add a View only mode.
 
+TOTHINK should I use help.csv in readonly mode as the buitin help and remove the helpdlgs???
 
 ## History
 
@@ -696,7 +705,7 @@ can send crazy value if a terminal window size change occurs.
 Set terminal title when a file is successfully loaded.
 
 readonly, readwrite explicit commands. In readonly mode one cant change the spreadsheet contents.
-
+Also readonly commandline option.
 
 
 

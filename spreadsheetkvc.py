@@ -1205,13 +1205,14 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp readonly")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
     print('    --{} "{}"  Specify the csv field seperator to use'.format(CmdArgs.fieldsep.name, THEFIELDSEP))
     print('    --{} "{}"     Specify the csv field text quote to use'.format(CmdArgs.quote.name, THEQUOTE))
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
+    print("    --{}      run in readonly|view mode".format(CmdArgs.readonly.name))
     exit(0)
 
 
@@ -1235,6 +1236,8 @@ def process_cmdline(args):
             print_usage()
         elif cmd == CmdArgs.startnohelp.name:
             gbStartHelp = False
+        elif cmd == CmdArgs.readonly.name:
+            me['readOnly'] = True
         i += 1
 
 
