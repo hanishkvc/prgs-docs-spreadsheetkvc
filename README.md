@@ -13,6 +13,43 @@ Remember that a cell containing a number or expression|forumula to be evaluated/
 prefix it's contents with '=' ie equal. Else it will be treated as text content cell. Text cell's
 contents are italicised and dim compared to =expression (which includes numeric also) cells.
 
+## Sample usage session
+
+After program is up and running. Press Esc key to be sure that we are in default mode.
+
+Key in following command to load a file named filename from path pathto.
+
+	:l pathto/filename<ENTERKEY>
+
+Use arrow keys to move around the cells in the spreadsheet.
+
+To insert new content into a cell, use arrow keys to highlight the required cell.
+Next press 'i' key to enter insert cell content edit mode.
+
+	key in the required content into the cell.
+
+	press Enter key to lock in the changes in the edit buffer.
+
+	press Esc key to return back to the default mode.
+
+	NOTE: TO edit contents of a cell, follow a similar flow, the only change is to
+	press 'e' key instead of 'i' key in the above mentioned flow, to switch from
+	the default mode into edit mode.
+
+To save changes to the spreadsheet key in the following explicit command.
+
+	:w pathto/filename<ENTERKEY>
+
+Instead if you want to save the spreadsheet into a password protected file key in the following.
+
+	:pw password pathto/filename<ENTERKEY>
+
+Inturn to load a password protected file key in the following.
+
+	:pl password pathto/filename<ENTERKEY>
+
+
+
 ## Usage
 
 ### command line arguments
