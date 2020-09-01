@@ -703,7 +703,7 @@ festival weekend.
 
 Now one can call builtin python functions as part of =expressions.
 
-Updated to a new _nvalue and associated logic, which is more flexible and allows =expressions to be
+Updated to a new \_nvalue and associated logic, which is more flexible and allows =expressions to be
 more complex, including calling functions within functions i.e a function's argument can inturn be
 a function call. Also it evaluates the parts of a =expression in a more structured way. Also it no
 longer forces the result of the evaluation to be a float.
@@ -743,6 +743,17 @@ Set terminal title when a file is successfully loaded.
 
 readonly, readwrite explicit commands. In readonly mode one cant change the spreadsheet contents.
 Also readonly commandline option.
+
+
+### 20200902IST0147 - OnamRelease
+
+:help explicit command loads help.csv file in readonly mode. This uses the new load_help logic.
+
+Cell content delete command sets dirty flag, if there was content to delete.
+
+TODO: Currently once we load_help, we cant comeout, unless we load a existing file. If someone
+wants to work on a new file, there is no command for it, in such a situation.
+
 
 
 
