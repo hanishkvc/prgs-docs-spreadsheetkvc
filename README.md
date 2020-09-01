@@ -688,6 +688,8 @@ the processing load of drawing of cell matrix efficient, the data viewport is bi
 viewport by 20 cells to the left side (because cells on left is what can overflow into current
 or more cells). User can modify this if required by updating the source. Power To SOURCE ;)
 
+Avoid exception cornercase by converting char to int, rather than int to char. Because getch
+can send crazy value if a terminal window size change occurs.
 
 
 

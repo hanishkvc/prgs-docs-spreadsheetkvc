@@ -69,10 +69,9 @@ def help_dlg(scr):
                 ]
     while True:
         got = cui.dlg(scr, helpMsgs, 1, 2, border=True)
-        got = chr(got).upper()
-        if got == 'D':
+        if (got == ord('D')) or (got == ord('d')):
             defaultmode_dlg(scr)
-        elif got == 'E':
+        elif (got == ord('E')) or (got == ord('e')):
             explicitcommandmode_dlg(scr)
         else:
             break
