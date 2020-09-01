@@ -6,7 +6,8 @@ Version: v20200901IST1450
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
 It works with csv file. It allows the saved csv file to be optionally encrypted and inturn load such
-encrypted csv files.
+encrypted csv files. If encrypted file is manipulated, the program will be able to notice the same,
+and inturn stop processing the same, because it uses authenticated encryption concept.
 
 Remember that numbers and expressions|forumulas should be prefixed with '=' ie equal, in the cell.
 Else it will be treated as text content cell. Text cell's contents are italicised and dim compared
