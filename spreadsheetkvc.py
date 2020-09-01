@@ -805,6 +805,9 @@ def load_help(scr):
     if load_file(scr, "{}/help.csv".format(sys.path[0])):
         me['helpModeSavedReadOnly'] = me['readOnly']
         me['readOnly'] = True
+    else:
+        dlg(scr, ["loadhelp: save current spreadsheet or allow discarding of changes", "before loading the help file", "Press any key to continue"])
+
 
 
 def revertfrom_help_ifneeded():
