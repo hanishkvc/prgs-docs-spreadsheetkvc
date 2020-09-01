@@ -187,9 +187,14 @@ In this explicit command mode, the user can enter one of the following commands
 
 	clear the contents of the current spreadsheet.
 
+* new
+
+	create a new spreadsheet in memory.
+
 * help
 
-	show the help dialogs.
+	show help.csv file. User can either create a new spreadsheet or load an
+	existing spreadsheet to exit out of help.
 
 * q
 
