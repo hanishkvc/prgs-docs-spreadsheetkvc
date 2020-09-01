@@ -63,6 +63,7 @@ me = {
         'viewColStart': 1, 'viewRowStart': 1,
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
+        'readOnly': False,
         'data': dict(),
         'clipCell': False,
         'copyData': None,
@@ -1002,6 +1003,9 @@ def rl_commandmode(stdscr, key):
         C helps Cut cell data.
         p helps Paste cell data.
         h|? show help dialog
+
+    If program is in readOnly Mode, it wont allow
+        edit, insert, cut, paste and delete operations.
     '''
     if (key == curses.KEY_UP):
         cellcur_up()
@@ -1011,19 +1015,19 @@ def rl_commandmode(stdscr, key):
         cellcur_left()
     elif (key == curses.KEY_RIGHT):
         cellcur_right()
-    elif (key == ord('D')):
+    elif (key == ord('D')) and not me['readOnly']:
         me['data'].pop((me['curRow'],me['curCol']), None)
     elif (key == ord('c')):
         me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
-    elif (key == ord('C')):
+    elif (key == ord('C')) and not me['readOnly']:
         me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
-    elif (key == ord('p')):
+    elif (key == ord('p')) and not me['readOnly']:
         if me['copyData'] != None:
             me['data'][(me['curRow'],me['curCol'])] = me['copyData']
             me['dirty'] = True
-    elif (key == ord('i')):
+    elif (key == ord('i')) and not me['readOnly']:
         me['state'] = 'E'
         me['gotStr'] = ""
         me['crsrOffset'] = 0
@@ -1032,7 +1036,7 @@ def rl_commandmode(stdscr, key):
         if curData != None:
             me['dirty'] = True
             me['data'][(me['curRow'],me['curCol'])] = ""
-    elif (key == ord('e')):
+    elif (key == ord('e')) and not me['readOnly']:
         me['state'] = 'E'
         me['gotStr'] = me['data'].get((me['curRow'], me['curCol']))
         if me['gotStr'] == None:
