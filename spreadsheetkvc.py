@@ -819,6 +819,8 @@ def explicit_commandmode(stdscr, cmdArgs):
     e path/file_to_export_into
     clear to clear the current spreadsheet
     help to show the help dialogs.
+    ro | readonly - set readonly mode.
+    rw | readwrite - set readwrite mode.
     q to quit the program
     '''
     if cmdArgs.find(' ') == -1:
@@ -856,6 +858,10 @@ def explicit_commandmode(stdscr, cmdArgs):
         if len(me['data']) > 0:
             me['data'] = dict()
             me['dirty'] = True
+    elif (cmd == 'readonly') or (cmd == 'ro'):
+        me['readOnly'] = True
+    elif (cmd == 'readwrite') or (cmd == 'rw'):
+        me['readOnly'] = False
     elif cmd == 'q':
         quit(stdscr)
 
