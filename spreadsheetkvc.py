@@ -749,6 +749,13 @@ def _load_file(sFile, filePass=None):
 
 
 def load_file(scr, sFile, filePass=None):
+    if me['dirty']:
+        got = dlg(scr, ["Spreadsheet not saved, discard and load new file? [y/N]".format(sFile)])
+        if chr(got).upper() == "Y":
+            status(scr, ["Loading file {}".format(sFile)])
+        else:
+            status(scr, ["Canceled loading of {}".format(sFile)])
+            return
     try:
         _load_file(sFile, filePass)
         me['dirty'] = False

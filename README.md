@@ -91,6 +91,9 @@ In this explicit command mode, the user can enter one of the following commands
 * l file
 
 	to load the specified spreadsheet.
+	If the spreadsheet already in memory has unsaved changes, then it alerts
+	the user. So user can decide whether to continue with load and lose changes
+	in memory and or abort the load.
 
 * pl passwd file
 
@@ -670,6 +673,8 @@ Functions logic moved into funcs module.
 Differentiate between text and numeric(=expression) cells.
 
 Default mode delete command changed from 'd' to 'D' key press.
+
+Alert user, if trying to load a file, while unsaved changes are in memory.
 
 
 
