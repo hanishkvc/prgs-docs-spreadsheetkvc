@@ -772,9 +772,7 @@ def load_file(scr, sFile, filePass=None):
         scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
-        if me['helpModeSavedReadOnly'] != None:
-            me['readOnly'] = me['helpModeSavedReadOnly']
-            me['helpModeSavedReadOnly'] = None
+        revertfrom_help_ifneeded()
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
         return True
     except:
@@ -791,6 +789,37 @@ def load_help(scr):
     if load_file(scr, "{}/help.csv".format(sys.path[0])):
         me['helpModeSavedReadOnly'] = me['readOnly']
         me['readOnly'] = True
+
+
+def revertfrom_help_ifneeded():
+    '''
+    Revert from help mode, if already in help mode.
+    '''
+    if me['helpModeSavedReadOnly'] != None:
+        me['readOnly'] = me['helpModeSavedReadOnly']
+        me['helpModeSavedReadOnly'] = None
+
+
+def new_file(scr):
+    '''
+    Create a new spreadsheet in memory.
+
+    It checks if there is a dirty spreadsheet in memory, in which case, it gives option
+    to user to abort the new_file operation.
+
+    As a user could come out of help mode by using new_file, so it reverts from help mode,
+    if that is the case.
+    '''
+    if me['dirty']:
+        got = dlg(scr, ["Spreadsheet not saved, discard and create new? [y/N]".format(sFile)])
+        if chr(got).upper() == "Y":
+            status(scr, ["Creating new spreadsheet in memory"])
+        else:
+            status(scr, ["Canceled new spreadsheet creation"])
+            return False
+    revertfrom_help_ifneeded()
+    me['data'] = dict()
+    me['dirty'] = False
 
 
 def quit(scr):
@@ -832,7 +861,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         insert n columns after current column
     e path/file_to_export_into
     clear to clear the current spreadsheet
-    help to show the help dialogs.
+    help - show the help.csv file in temporary-readonly help mode.
+    new - create a new spreadsheet in memory.
     ro | readonly - set readonly mode.
     rw | readwrite - set readwrite mode.
     q to quit the program
@@ -875,6 +905,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         if len(me['data']) > 0:
             me['data'] = dict()
             me['dirty'] = True
+    elif (cmd == 'new'):
+        new_file(stdscr)
     elif (cmd == 'readonly') or (cmd == 'ro'):
         me['readOnly'] = True
     elif (cmd == 'readwrite') or (cmd == 'rw'):
