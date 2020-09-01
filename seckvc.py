@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 # Security Recipes from Primitives
 # HanishKVC, 2020
+#
 
 import cryptography
 from cryptography.hazmat.primitives.ciphers.base import Cipher
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
 from cryptography.hazmat.primitives.ciphers.modes import CBC
+from cryptography.hazmat.primitives.hashes import Hash
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.hmac import HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.padding import PKCS7
+from cryptography.hazmat.primitives.kdf import pbkdf2
 import os
 import base64
 
@@ -124,6 +127,55 @@ def aes_cbc_dec_b64(aesKey, b64EncMacMsg):
     bsEncMsg = bsEncMac[:-macLen]
     bsMac = bsEncMac[-macLen:]
     return aes_cbc_dec(aesKey, bsEncMsg, bsMac)
+
+
+def get_linekey(lineNum, userKey, fileKey):
+    '''
+    Get line number specific key by hashing
+    userkey, linenum and filekey
+    '''
+    hasher = Hash(algorithm = SHA256(), backend = default_backend())
+    hasher.update(userKey)
+    hasher.update(lineNum.to_bytes(4,'little'))
+    hasher.update(fileKey)
+    key = base64.urlsafe_b64encode(hasher.finalize())
+    #print("linekey:{}:{}:{}={}".format(lineNum, userKey, fileKey, key), file=GERRFILE)
+    return key
+
+
+def get_basekeys(filePass, salt):
+    '''
+    Generate user and file keys from the respective passwords
+    and a hopefully random salt.
+
+    user password if not provided, fallsback to a default.
+    If provided, it should be readable only by the user and
+    not by group or all.
+    '''
+    # process file password
+    kdf = pbkdf2.PBKDF2HMAC(
+            algorithm = SHA256(),
+            length = 32,
+            salt = salt,
+            iterations = 186926, # Gandhi+
+            backend = default_backend())
+    fileKey = base64.urlsafe_b64encode(kdf.derive(bytes(filePass,"utf-8")))
+    # get and process user password
+    try:
+        f = open("~/.config/spreadsheetkvc/userpass")
+        l = f.readline()
+        userPass = l.strip()
+        f.close()
+    except:
+        userPass = "changemeuser"
+    kdf = pbkdf2.PBKDF2HMAC(
+            algorithm = SHA256(),
+            length = 32,
+            salt = salt,
+            iterations = 186922, # Gandhi+
+            backend = default_backend())
+    userKey = base64.urlsafe_b64encode(kdf.derive(bytes(userPass,"utf-8")))
+    return userKey, fileKey
 
 
 def test_101():

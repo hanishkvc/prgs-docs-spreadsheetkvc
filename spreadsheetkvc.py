@@ -632,57 +632,6 @@ def delete_rc(cmd, args):
         me['numCols'] -= cnt
 
 
-def get_linekey(lineNum, userKey, fileKey):
-    '''
-    Get line number specific key by hashing
-    userkey, linenum and filekey
-    '''
-    hasher = cryptography.hazmat.primitives.hashes.Hash(
-                algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
-                backend = cryptography.hazmat.backends.default_backend())
-    hasher.update(userKey)
-    hasher.update(lineNum.to_bytes(4,'little'))
-    hasher.update(fileKey)
-    key = base64.urlsafe_b64encode(hasher.finalize())
-    #print("linekey:{}:{}:{}={}".format(lineNum, userKey, fileKey, key), file=GERRFILE)
-    return key
-
-
-def get_basekeys(filePass, salt):
-    '''
-    Generate user and file keys from the respective passwords
-    and a hopefully random salt.
-
-    user password if not provided, fallsback to a default.
-    If provided, it should be readable only by the user and
-    not by group or all.
-    '''
-    # process file password
-    kdf = cryptography.hazmat.primitives.kdf.pbkdf2.PBKDF2HMAC(
-            algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
-            length = 32,
-            salt = salt,
-            iterations = 186926, # Gandhi+
-            backend = cryptography.hazmat.backends.default_backend())
-    fileKey = base64.urlsafe_b64encode(kdf.derive(bytes(filePass,"utf-8")))
-    # get and process user password
-    try:
-        f = open("~/.config/spreadsheetkvc/userpass")
-        l = f.readline()
-        userPass = l.strip()
-        f.close()
-    except:
-        userPass = "changemeuser"
-    kdf = cryptography.hazmat.primitives.kdf.pbkdf2.PBKDF2HMAC(
-            algorithm = cryptography.hazmat.primitives.hashes.SHA256(),
-            length = 32,
-            salt = salt,
-            iterations = 186922, # Gandhi+
-            backend = cryptography.hazmat.backends.default_backend())
-    userKey = base64.urlsafe_b64encode(kdf.derive(bytes(userPass,"utf-8")))
-    return userKey, fileKey
-
-
 def _save_file(scr, sFile, filePass=None):
     '''
     Save file in a csv format.
