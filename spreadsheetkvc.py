@@ -770,7 +770,7 @@ def load_file(scr, sFile, filePass=None):
         scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
-        print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), end="", file=sys.stdout)
+        print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
     except:
         a,b,c = sys.exc_info()
         print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
