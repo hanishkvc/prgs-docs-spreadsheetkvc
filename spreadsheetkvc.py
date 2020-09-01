@@ -334,6 +334,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
+            ctype |= curses.A_ITALIC
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
             if (sData == None) and bDebug:
@@ -341,6 +342,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             if (sData != None):
                 if sData.startswith("="):
                     sData = value((r,c))
+                    ctype &= (~curses.A_ITALIC & 0xFFFF_FFFF)
                 else:
                     sRemaining = sData[me['cellWidth']:]
             elif (not me['clipCell']):
