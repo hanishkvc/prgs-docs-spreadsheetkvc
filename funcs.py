@@ -204,7 +204,7 @@ def do_pyfunc(sCmd, sArgs):
     if theArgs[0] == ',':
         theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd, theArgs)
-    print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
+    #print("do_pyfunc:{}".format(sPyFunc), file=GLOGFILE)
     return eval(sPyFunc)
 
 
