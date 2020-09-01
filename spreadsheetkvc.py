@@ -64,7 +64,7 @@ me = {
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
         'readOnly': False,
-        'helpSavedReadOnly': None,
+        'helpModeSavedReadOnly': None,
         'data': dict(),
         'clipCell': False,
         'copyData': None,
@@ -767,28 +767,30 @@ def load_file(scr, sFile, filePass=None):
             status(scr, ["Loading file {}".format(sFile)])
         else:
             status(scr, ["Canceled loading of {}".format(sFile)])
-            return
+            return False
     try:
         scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
-        if me['helpSavedReadOnly'] != None:
-            me['readOnly'] = me['helpSavedReadOnly']
-            me['helpSavedReadOnly'] = None
+        if me['helpModeSavedReadOnly'] != None:
+            me['readOnly'] = me['helpModeSavedReadOnly']
+            me['helpModeSavedReadOnly'] = None
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
+        return True
     except:
         a,b,c = sys.exc_info()
         print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
         dlg(scr, ["loadfile:exception:{}:{}".format((a,b), sFile), "Press any key to continue"])
+        return False
 
 
 def load_help(scr):
-    if me['helpSavedReadOnly'] != None:
+    if me['helpModeSavedReadOnly'] != None:
         return
-    load_file(scr, "{}/help.csv".format(sys.path[0]))
-    me['helpSavedReadOnly'] = me['readOnly']
-    me['readOnly'] = True
+    if load_file(scr, "{}/help.csv".format(sys.path[0])):
+        me['helpModeSavedReadOnly'] = me['readOnly']
+        me['readOnly'] = True
 
 
 def quit(scr):
