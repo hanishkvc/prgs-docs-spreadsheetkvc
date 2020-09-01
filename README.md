@@ -695,6 +695,8 @@ can send crazy value if a terminal window size change occurs.
 
 Set terminal title when a file is successfully loaded.
 
+readonly, readwrite explicit commands. In readonly mode one cant change the spreadsheet contents.
+
 
 
 

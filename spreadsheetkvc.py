@@ -822,6 +822,9 @@ def explicit_commandmode(stdscr, cmdArgs):
     ro | readonly - set readonly mode.
     rw | readwrite - set readwrite mode.
     q to quit the program
+
+    if program in readOnly mode, dont allow
+        insert, delete and clear operations
     '''
     if cmdArgs.find(' ') == -1:
         cmd = cmdArgs
@@ -839,12 +842,12 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif cmd == 'pl':
         filePass, args = args.split(' ',1)
         load_file(stdscr, args, filePass)
-    elif cmd.startswith('i'):
+    elif cmd.startswith('i') and not me['readOnly']:
         if args == None:
             args = "1"
         insert_rc_ab(cmd, args)
         me['dirty'] = True
-    elif cmd.startswith('d'):
+    elif cmd.startswith('d') and not me['readOnly']:
         if args == None:
             args = "1"
         delete_rc(cmd, args)
@@ -854,7 +857,7 @@ def explicit_commandmode(stdscr, cmdArgs):
             goto_cell(stdscr, args)
     elif cmd == 'help':
         helpdlg.help_dlg(stdscr)
-    elif cmd == 'clear':
+    elif (cmd == 'clear') and not me['readOnly']:
         if len(me['data']) > 0:
             me['data'] = dict()
             me['dirty'] = True
