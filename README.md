@@ -1,16 +1,16 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200830IST1619
+Version: v20200901IST1450
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
-It works with a slightly modified form of csv file.
+It works with csv file. It allows the saved csv file to be optionally encrypted and inturn load such
+encrypted csv files.
 
-It allows the saved csv file to be encrypted and inturn load such encrypted csv files.
-
-Remember that numbers and expressions|forumulas should be prefixed with '=' ie equal.
-Else it will be treated as text content.
+Remember that numbers and expressions|forumulas should be prefixed with '=' ie equal, in the cell.
+Else it will be treated as text content cell. Text cell's contents are italicised and dim compared
+to =expression (which includes numeric also) cells.
 
 ## Usage
 
@@ -216,10 +216,12 @@ Example
 NOTE that the =expressions are evaluated using pythons eval function. So basic python
 expressions can be evaluated as part of =expressions.
 
-NOTE: =expressions can only refer to other =expression cells and not text cells.
+NOTE: =expressions should only refer to other =expression cells and not text cells.
 
 
-## Supported functions
+## Supported functions for =expressions
+
+### Native functions
 
 sum(CellAddressRange)
 
@@ -260,7 +262,40 @@ prod(CellAddressRange)
 	product of the contents in the specified range of cells.
 
 
-### CellAddress And Ranges
+### Python builtin functions
+
+#### Generic note
+
+The arguments of python functions could be specified either as a
+
+	* numeric value or
+
+	* function which returns a numeric value or
+
+	* cell address (but not a cell address range)
+
+
+#### python functions
+
+round(number, precision)
+
+	round the specified number to have the specified number of digits following dot.
+
+pow(base, exponent)
+
+	calculate base raised to exponent
+
+
+int(numeric)
+
+	convert the numeric value to be a integer
+
+float(numeric)
+
+	convert to float value
+
+
+## CellAddress And Ranges
 
 The Cols addressed starting from A to ZZ
 
@@ -284,11 +319,12 @@ To specify a range of cells use startCellAddress:endCellAddress like
 ## csv file format
 
 ### General Info
+
 The csv file used by this program uses semicolon [;] to seperate the fields within each row
 i.e within each line in the file.
 
-If any field contains this field seperator with in its content, then the content
-is embedded within ['] ie single quotes.
+If any field contains the field seperator with in its content, then the content is embedded
+within ['] ie single quotes.
 
 To avoid confusing the program, dont use ' char as part of the spreadsheet contents, other
 than for quoting text contents with field seperator in them.
@@ -296,7 +332,7 @@ than for quoting text contents with field seperator in them.
 Also if you want to have white space at the beginning and or end of the text contents of a cell,
 put the full cell text content within quotes.
 
-User can set a different field seperator or quote char from the commandline.
+NOTE: User can set a different field seperator or quote char from the commandline.
 
 ### Encryption support
 
@@ -342,6 +378,12 @@ level password of this program with others.
 A random salt is also used each time a file is saved. This inturn is embedded within
 the saved encrypted file.
 
+NOTE: If user enables the use of external i.e cryptography library's AE recipe, then
+the system date and time info of when the encryption was carried out, is stored as
+part of its aead logic, where the date time is stored in a unencrypted but base64
+encoded format, while at same time the same is accounted as part of the mac maintained
+for the encrypted message.
+
 
 ## Misc
 
@@ -352,7 +394,7 @@ the saved encrypted file.
 #### Esc, Esc, Essscccccccc
 
 If a explicit command seems to get stuck or not do anything, remember to try and
-press Esc 1 or more times and see if the program comes back to default command mode.
+press Esc one or more times and see if the program comes back to default command mode.
 
 You will know that you are in default command mode, when you see the program's name
 in the top left corner of the terminal (i.e 0,0 cell).
@@ -405,6 +447,18 @@ If the program is exited normally by the user, by ignoring the warning about uns
 changes, then it returns 1.
 
 
+#### Cell Addresses and Row(s)/Col(s) Insert/Delete operations
+
+When rows or cols are inserted or deleted, the program tries to adjust any =expressions,
+which reference rows or cols, as required.
+
+##### Err tag for cell address
+
+However If during a delete rows / cols operation, the cell address explicitly refered
+by =expression is deleted, then the cell address will be prefixed with a Err tag in
+the =expression.
+
+
 ### TODO/DONE
 
 [DONE] ncurses cursor is currently not updated/positioned beyond the current cells
@@ -417,10 +471,16 @@ delete the last char using backspace.
 	cursor around in the edit/insert mode so that one can modify any part of
 	the cell content.
 
-Allow Multi Row/Col delete.
+[DONE] Allow Multi Row/Col delete.
 
-If Row/Col is deleted, then corresponding cell address references should be flagged.
+[DONE] If Row/Col is deleted, then corresponding cell address references should be flagged.
 
+Refresh screen draw after a file load operation.
+
+Change delete default mode command from 'd' to 'D', so that user doesnt unknownling trigger it.
+
+Show overflowing content of cells beyond what is currently visible, by maintaining a larger
+content viewport than the display viewport.
 
 
 ## History
@@ -516,6 +576,8 @@ TODO: If such long lines wrap beyond the screen space vertically, then curses ad
 raise a exception. Need to handle this situation appropriately. NOTE that this creates a
 problem only in edit mode. In normal mode as line is not allowed to wrap into next line,
 this situation doesnt occur.
+
+UPDATE: These todos have been implemented, in a proper way.
 
 ### 20200828IST2057
 

@@ -50,7 +50,7 @@ def help_dlg(scr):
                 "|     and for entering other modes; Esc reverts to default |",
                 "| Cell Edit Mode - Entered by pressing 'i' or 'e'          |",
                 "|     Arrow keys to move cursor in edit buffer             |",
-                "|     Enter key to save edit till now                      |",
+                "|     Enter key to capture edit till now                   |",
                 "|     prefix = for numeric or calc expressions             |",
                 "|     without = prefix, content treated as text            |",
                 "| Explicit Command Mode - Entered by pressing ':'          |",
