@@ -9,9 +9,9 @@ It works with csv file. It allows the saved csv file to be optionally encrypted 
 encrypted csv files. If encrypted file is manipulated, the program will be able to notice the same,
 and inturn stop processing the same, because it uses authenticated encryption concept.
 
-Remember that numbers and expressions|forumulas should be prefixed with '=' ie equal, in the cell.
-Else it will be treated as text content cell. Text cell's contents are italicised and dim compared
-to =expression (which includes numeric also) cells.
+Remember that a cell containing a number or expression|forumula to be evaluated/calculated should
+prefix it's contents with '=' ie equal. Else it will be treated as text content cell. Text cell's
+contents are italicised and dim compared to =expression (which includes numeric also) cells.
 
 ## Usage
 
