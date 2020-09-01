@@ -18,6 +18,7 @@ import seckvc as sec
 import helpdlg
 import cuikvc as cui
 import parsekvc as parse
+import funcs
 
 
 bDebug = False
@@ -836,231 +837,6 @@ def explicit_commandmode(stdscr, cmdArgs):
         quit(stdscr)
 
 
-def _do_minmax(args, bIgnoreEmpty=True):
-    '''
-    Find the min and max from the matrix of cells.
-    '''
-    start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
-    if not bCellAddr:
-        return None, None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
-    if not bCellAddr:
-        return None, None, None
-    lItems = []
-    for r in range(sR, eR+1):
-        for c in range(sC, eC+1):
-            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
-                continue
-            lItems.append(nvalue((r,c)))
-    tMin = min(lItems)
-    tMax = max(lItems)
-    return tMin, tMax, len(lItems)
-
-
-def do_min(args):
-    tmin, tmax, tcnt = _do_minmax(args)
-    return tmin
-
-
-def do_max(args):
-    tmin, tmax, tcnt = _do_minmax(args)
-    return tmax
-
-
-def _do_sum(args, bIgnoreEmpty=True):
-    '''
-    sum up contents of a matrix of cells.
-    It also returns the number of cells involved.
-    '''
-    start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
-    if not bCellAddr:
-        return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
-    if not bCellAddr:
-        return None, None
-    total = 0
-    cnt = 0
-    for r in range(sR, eR+1):
-        for c in range(sC, eC+1):
-            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
-                continue
-            total += nvalue((r,c))
-            cnt += 1
-    return total, cnt
-
-
-def do_sum(args):
-    '''
-    Return the sum of specified range of cells.
-    It could be 1D vector or 2D vector.
-    '''
-    total, cnt = _do_sum(args)
-    return total
-
-
-def _do_stddev(args, bIgnoreEmpty=True):
-    '''
-    get variance/standard deviation wrt sample/population space,
-    for the contents of a matrix of cells.
-    It also returns the number of cells involved.
-    '''
-    start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
-    if not bCellAddr:
-        return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
-    if not bCellAddr:
-        return None, None
-    avg = do_avg(args)
-    total = 0
-    cnt = 0
-    for r in range(sR, eR+1):
-        for c in range(sC, eC+1):
-            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
-                continue
-            total += (nvalue((r,c)) - avg)**2
-            cnt += 1
-    varp = total/cnt
-    stdevp = sqrt(varp)
-    try:
-        var = total/(cnt-1)
-        stdev = sqrt(var)
-    except:
-        var = None
-        stdev = None
-    return varp, stdevp, var, stdev, cnt
-
-
-def do_stddev(sCmd, args):
-    '''
-    Return variance assuming the cell range represents a sample space
-    Return variance assuming the cell range represents a full population
-    Return stddev assuming the cell range represents a sample space
-    Return stddevp assuming the cell range represents a full population
-    '''
-    varp, stdevp, var, stdev, cnt = _do_stddev(args)
-    if (sCmd == "STDDEV") or (sCmd == "STDEV"):
-        return stdev
-    if (sCmd == "STDDEVP") or (sCmd == "STDEVP"):
-        return stdevp
-    if (sCmd == "VAR"):
-        return var
-    if (sCmd == "VARP"):
-        return varp
-
-
-def _do_prod(args, bIgnoreEmpty=True):
-    '''
-    Multiply the contents of a matrix of cells.
-    It also returns the number of cells involved.
-    '''
-    start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
-    if not bCellAddr:
-        return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
-    if not bCellAddr:
-        return None, None
-    prod = 1
-    cnt = 0
-    for r in range(sR, eR+1):
-        for c in range(sC, eC+1):
-            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
-                continue
-            prod *= nvalue((r,c))
-            cnt += 1
-    return prod, cnt
-
-
-def do_prod(args):
-    '''
-    Return the product of values in the specified range of cells.
-    It could be 1D vector or 2D vector of cells.
-    '''
-    prod, cnt = _do_prod(args)
-    return prod
-
-
-def do_cnt(args):
-    '''
-    Return the cnt of non-empty cells in the specified range of cells.
-    It could be 1D vector or 2D vector of cells.
-    '''
-    total, cnt = _do_sum(args)
-    return cnt
-
-
-def do_avg(args):
-    '''
-    Return the avg for specified range of cells.
-    It could be 1D vector or 2D vector of cells.
-    '''
-    total, cnt = _do_sum(args)
-    if (total == None):
-        return None
-    return total/cnt
-
-
-def do_pyfunc(sCmd, sArgs):
-    '''
-    Try evaluating the command and the arguments as a python function
-
-    In the process expand any cellAddress, to the numeric value corresponding
-    to the specified cell.
-
-    It also allows any argument which is a function call to be handled properly.
-
-    NOTE: If a cellAddressRange is specified, it wont be handled properly.
-    However maybe in future, I may expand a cell address range into a list
-    or so, time permitting.
-    '''
-    argsList = parse.get_funcargs(sArgs)
-    theArgs = ""
-    for curArg in argsList:
-        sValOrArg = _nvalue(curArg)
-        theArgs += ",{}".format(sValOrArg)
-    if theArgs[0] == ',':
-        theArgs = theArgs[1:]
-    sPyFunc = "{}({})".format(sCmd, theArgs)
-    print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
-    return eval(sPyFunc)
-
-
-def do_func(sCmdIn, sArgs):
-    '''
-    Demux the internally supported functions.
-    Next try and solve it has a python function.
-    Unknown and invalid/exception rising function will return None.
-    '''
-    sCmd = sCmdIn.upper()
-    try:
-        print("do_func:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
-        if sCmd == "SUM":
-            return do_sum(sArgs)
-        elif (sCmd == "AVG") or (sCmd == "AVERAGE"):
-            return do_avg(sArgs)
-        elif (sCmd == "CNT") or (sCmd == "COUNT"):
-            return do_cnt(sArgs)
-        elif sCmd == "MIN":
-            return do_min(sArgs)
-        elif sCmd == "MAX":
-            return do_max(sArgs)
-        elif sCmd == "PROD":
-            return do_prod(sArgs)
-        elif (sCmd.startswith("STDDEV") or sCmd.startswith("STDEV")):
-            return do_stddev(sCmd, sArgs)
-        elif sCmd.startswith("VAR"):
-            return do_stddev(sCmd, sArgs)
-        else:
-            return do_pyfunc(sCmdIn, sArgs)
-    except:
-        print("do_func:exception:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
-        traceback.print_exc(file=GERRFILE)
-    return None
-
-
 def _celladdr_valid(sAddr):
     '''
     Check if the given string is a cell address or not.
@@ -1128,7 +904,7 @@ def _nvalue(sData):
         if evalTypes[i] == parse.EvalPartType.Func: # Handle functions
             sCmd, sArgs = evalParts[i].split('(',1)
             sArgs = sArgs[:-1]
-            sVal = do_func(sCmd, sArgs)
+            sVal = funcs.do_func(sCmd, sArgs)
             sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
             sNew += _cellvalue_or_str(evalParts[i])
@@ -1353,6 +1129,15 @@ def setup_sighandlers():
     signal.signal(signal.SIGWINCH, cwinsize_change)
 
 
+def setup_funcs():
+    funcs.me = me
+    funcs._celladdr_valid = _celladdr_valid
+    funcs.nvalue = nvalue
+    funcs._nvalue = _nvalue
+    funcs.GLOGFILE = GLOGFILE
+    funcs.GERRFILE = GERRFILE
+
+
 def setup_logfile(logfile="/dev/null"):
     '''
     create a file handle for logging.
@@ -1425,6 +1210,7 @@ setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
 setup_sighandlers()
+setup_funcs()
 try:
     if gbStartHelp:
         helpdlg.help_dlg(stdscr)

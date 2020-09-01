@@ -603,6 +603,7 @@ This is a cleaner, simpler and at same time flexible logic.
 
 Base and Line key logic moved into sec module.
 
+Functions logic moved into funcs module.
 
 
 
