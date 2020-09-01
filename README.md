@@ -748,11 +748,12 @@ Also readonly commandline option.
 ### 20200902IST0147 - OnamRelease
 
 :help explicit command loads help.csv file in readonly mode. This uses the new load_help logic.
+Previously it was loading the helpdlg.
 
 Cell content delete command sets dirty flag, if there was content to delete.
 
-TODO: Currently once we load_help, we cant comeout, unless we load a existing file. If someone
-wants to work on a new file, there is no command for it, in such a situation.
+Added the explicit command new, to create a new spreadsheet in memory, this allows the user to
+come out of the help mode. A user could also load a existing file to come out of the help mode.
 
 
 
