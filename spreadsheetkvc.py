@@ -64,6 +64,7 @@ me = {
         'fixedCols': 1, 'fixedRows': 1,
         'state': 'C',
         'readOnly': False,
+        'helpSavedReadOnly': None,
         'data': dict(),
         'clipCell': False,
         'copyData': None,
@@ -771,12 +772,23 @@ def load_file(scr, sFile, filePass=None):
         scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
+        if me['helpSavedReadOnly'] != None:
+            me['readOnly'] = me['helpSavedReadOnly']
+            me['helpSavedReadOnly'] = None
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
     except:
         a,b,c = sys.exc_info()
         print("loadfile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
         dlg(scr, ["loadfile:exception:{}:{}".format((a,b), sFile), "Press any key to continue"])
+
+
+def load_help(scr):
+    if me['helpSavedReadOnly'] != None:
+        return
+    load_file(scr, "{}/help.csv".format(sys.path[0]))
+    me['helpSavedReadOnly'] = me['readOnly']
+    me['readOnly'] = True
 
 
 def quit(scr):
@@ -856,7 +868,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         if args != None:
             goto_cell(stdscr, args)
     elif cmd == 'help':
-        helpdlg.help_dlg(stdscr)
+        load_help(stdscr)
     elif (cmd == 'clear') and not me['readOnly']:
         if len(me['data']) > 0:
             me['data'] = dict()
