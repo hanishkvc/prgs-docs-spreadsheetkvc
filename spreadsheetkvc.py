@@ -806,7 +806,7 @@ def load_help(scr):
         me['helpModeSavedReadOnly'] = me['readOnly']
         me['readOnly'] = True
     else:
-        dlg(scr, ["loadhelp: save current spreadsheet or allow discarding of changes", "before loading the help file", "Press any key to continue"])
+        dlg(scr, ["loadhelp: save current spreadsheet or allow discarding of changes", "for loading the help file", "Press any key to continue"])
 
 
 
