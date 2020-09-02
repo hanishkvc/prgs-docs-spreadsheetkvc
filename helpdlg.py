@@ -11,9 +11,8 @@ def defaultmode_dlg(scr):
     helpMsgs = [
                 "          SpreadsheetKVC - Default Mode    ",
                 "",
-                "",
                 "  [arrow keys] Move around the cells",
-                "  [i] Insert new content  into current cell",
+                "  [i] Insert new content into current cell",
                 "  [e] Edit the existing content in the current cell",
                 "  [D] Delete the contents of the current cell",
                 "  [c] Copy the contents of the current cell",
@@ -23,6 +22,7 @@ def defaultmode_dlg(scr):
                 "  [:] Enter explicit commands mode",
                 "",
                 "",
+                "  Use :help to get more details, including supported funcs  ",
                 "******* Look at README.md and help.csv for more info *******",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
@@ -56,7 +56,7 @@ def help_dlg(scr):
                 "|     and for entering other modes; Esc reverts to default |",
                 "| Cell Edit Mode - Entered by pressing 'i' or 'e'          |",
                 "|     Arrow keys to move cursor in edit buffer             |",
-                "|     Enter key to capture edit till now                   |",
+                "|     Enter key saves edit to memory; Esc discards edit.   |",
                 "|     prefix = for numeric or calc expressions             |",
                 "|     without = prefix, content treated as text            |",
                 "| Explicit Command Mode - Entered by pressing ':'          |",
