@@ -6,7 +6,7 @@
 import enum
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
-def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
+def get_token(sIn, startPos=0, bANTokenHasDecimal=True):
     '''
     Get first valid token from the given string and its position.
 
@@ -46,7 +46,7 @@ def get_token(sIn, startPos=0, bGetTokenDecimalAlso=True):
                 return TokenType.AlphaNum, sOut, iPosStart
             i += 1
             continue
-        if sIn[i].isalnum() or (bGetTokenDecimalAlso and (sIn[i] == '.')):
+        if sIn[i].isalnum() or (bANTokenHasDecimal and (sIn[i] == '.')):
             if not bInToken:
                 bInToken = True
                 iPosStart = i
