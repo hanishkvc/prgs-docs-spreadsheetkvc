@@ -813,7 +813,7 @@ def new_file(scr):
     if that is the case.
     '''
     if me['dirty']:
-        got = dlg(scr, ["Spreadsheet not saved, discard and create new? [y/N]".format(sFile)])
+        got = dlg(scr, ["Spreadsheet not saved, discard and create new? [y/N]"])
         if chr(got).upper() == "Y":
             status(scr, ["Creating new spreadsheet in memory"])
         else:
