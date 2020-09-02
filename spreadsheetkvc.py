@@ -489,7 +489,7 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
     sOut = sIn
     while True:
         # Find token
-        bToken, sToken, iPos = get_token(sOut, iPos, TType.CellAddr)
+        bToken, sToken, iPos = parse.get_celladdr(sOut, iPos)
         if not bToken:
             #print("updateCellAddrs:Out:{}".format(sOut), file=GERRFILE)
             return sOut
