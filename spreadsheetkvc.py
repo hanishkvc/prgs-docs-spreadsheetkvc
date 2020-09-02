@@ -29,8 +29,9 @@ DONTEXIT = -9999
 bInternalEncDec = True
 gbStartHelp = True
 # How to differentiate text cells compared to =expression cells
-CATTR_TEXT = (curses.A_ITALIC)
-CATTR_TEXT = (curses.A_ITALIC | curses.A_DIM)
+CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
+CATTR_DATATEXT = (curses.A_ITALIC)
+CATTR_DATANUM = (curses.A_BOLD)
 # How many columns to left of current display viewport should one peek
 # to see, if there is any overflowing text that needs to be displayed.
 DATACOLSTART_OVERSCAN = 20
@@ -345,7 +346,6 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
-            ctype |= CATTR_TEXT
             sData = me['data'].get((r,c))
             print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
             if (sData == None) and bDebug:
@@ -353,16 +353,19 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             if (sData != None):
                 if sData.startswith("="):
                     sData = value((r,c))
-                    ctype &= (~CATTR_TEXT & 0xFFFF_FFFF)
+                    ctype |= CATTR_DATANUM
                     sRemaining = ""
                 else:
+                    ctype |= CATTR_DATATEXT
                     sRemaining = sData[me['cellWidth']:]
             elif (not me['clipCell']):
+                ctype |= CATTR_DATATEXT
                 sData = sRemaining[0:me['cellWidth']]
                 sRemaining = sRemaining[me['cellWidth']:]
                 if (sData != ""):
                     print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # sData == None AND clipCell
+                ctype |= CATTR_DATATEXT
                 sData = ""
             if (c < colStart):
                 continue
