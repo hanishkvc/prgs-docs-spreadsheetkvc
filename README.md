@@ -863,6 +863,12 @@ Pressing enter key in edit mode, saves edit buffer and returns to default comman
 
 Avoid stray/unwanted newline and fieldsep wrt load and save file logics.
 
+celladdr related get_token moved to parsekvc and updated to use its routines.
+
+Fix some oversights.
+
+TOdays updates done in between watching a bunch of good malayalam movies Savaari, Chalakkudykkaran Changathy
+and Ayalum Njanum Thammil, among others.
 
 
 
