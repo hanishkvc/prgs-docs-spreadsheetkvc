@@ -38,6 +38,13 @@ Some of its features are
 
 	* a predefined set of useful supported functions.
 
+	* builtin python functions
+
+		* The user could even specify a cell addresses as arguments to the
+		  function. In which case the program will convert the cell address
+		  to the value in the specified cell and inturn call the pythong
+		  function.
+
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
 
