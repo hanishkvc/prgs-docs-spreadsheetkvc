@@ -893,10 +893,9 @@ def explicit_commandmode(stdscr, cmdArgs):
     Explicit Command mode, which is entered by pressing ':' followed by
     one of the commands mentioned below.
 
-    w path/file_to_save
-    l path/file_to_open
-    dr delete row
-    dc delete column
+    w|s path/file_to_save;   l path/file_to_open
+    pw|ps path/file_to_save; pl path/file_to_open
+    dr delete row;           dc delete column
     irb num_of_rows
         insert n rows before current row
     ira num_of_rows
@@ -909,8 +908,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     clear to clear the current spreadsheet
     help - show the help.csv file in temporary-readonly help mode.
     new - create a new spreadsheet in memory.
-    ro | readonly - set readonly mode.
-    rw | readwrite - set readwrite mode.
+    ro|readonly - set readonly mode;  rw|readwrite - set readwrite mode.
     q to quit the program
 
     if program in readOnly mode, dont allow
@@ -922,9 +920,9 @@ def explicit_commandmode(stdscr, cmdArgs):
     else:
         cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=GLOGFILE)
-    if cmd == 'w':
+    if (cmd == 'w') or (cmd == 's'):
         save_file(stdscr, args)
-    elif cmd == 'pw':
+    elif (cmd == 'pw') or (cmd == 'ps'):
         filePass, args = args.split(' ',1)
         save_file(stdscr, args, filePass)
     elif cmd == 'l':
