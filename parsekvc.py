@@ -6,35 +6,39 @@
 import enum
 
 
-def alphanum_type(sIn):
+
+class AlphaNumType(enum.IntFlag):
+    NOMORE  = 0
+    NUMERIC = 1
+    ALPHA   = 2
+    SYMBOL  = 4
+    OTHER   = 8
+
+
+def alphanum_type(sIn, symbolList=None):
     '''
     Identify the type of alphanumeric token.
 
-    It could be Unknown, ANAlpha, ANNumeric, ANAlphaNum, ANAlphaNumPlus, ANOther
+    SymbolList gives a list of characters which will be treated as symbols.
+
+    It could be None (NOMORE)
+    OR IT COULD consist of Alpha, Numeric, Symbol and or Other
+    thus leading to different combinations of these like
+    Alpha, Numeric, AlphaNum, AlphaNumPlus, Other, ...
     '''
-    anType = TokenType.Unknown
+    anType = AlphaNumType.UNKNOWN
     i = 0
     while i < len(sIn):
         if sIn[i].isalpha():
-            if anType == TokenType.Unknown:
-                anType = TokenType.ANAlpha
-            elif anType == TokenType.ANNumeric:
-                anType = TokenType.ANAlphaNum
-            elif anType == TokenType.ANOther:
-                anType = TokenType.ANAlphaNumPlus
+            anType |= AlphaNumType.ALPHA
         elif sIn[i].isnumeric():
-            if anType == TokenType.Unknown:
-                anType = TokenType.ANNumeric
-            elif anType == TokenType.ANAlpha:
-                anType = TokenType.ANAlphaNum
-            elif anType == TokenType.ANOther:
-                anType = TokenType.ANAlphaNumPlus
+            anType |= AlphaNumType.NUMERIC
+        elif ((symbolList != None) and (sIn[i] in symbolList)):
+            anType |= AlphaNumType.SYMBOL
         else:
-            if anType == TokenType.Unknown:
-                anType = TokenType.ANNumeric
-            elif anType == TokenType.ANAlpha:
-                anType = TokenType.ANAlphaNum
-
+            anType |= AlphaNumType.OTHER
+        i += 1
+    return anType
 
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
