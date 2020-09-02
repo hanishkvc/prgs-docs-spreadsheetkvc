@@ -554,7 +554,7 @@ content viewport than the display viewport.
 
 [DONE] Add a View only mode.
 
-TOTHINK should I use help.csv in readonly mode as the buitin help and remove the helpdlgs???
+[DONE] :help loads help.csv in readonly mode.
 
 ## History
 
@@ -777,6 +777,8 @@ Added the explicit command new, to create a new spreadsheet in memory, this allo
 come out of the help mode. A user could also load a existing file to come out of the help mode.
 
 Adjust numeric and text cell attributes based on curses attributes available.
+
+Reposition to A1 cell, when file is loaded.
 
 
 

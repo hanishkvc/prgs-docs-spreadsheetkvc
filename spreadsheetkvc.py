@@ -794,6 +794,9 @@ def load_file(scr, sFile, filePass=None):
 
     As a user could come out of help mode by using load_file, so it reverts from help mode,
     if that is the case.
+
+    It clears the dirty flag.
+    It clears the screen as well as repositions to A1 cell, if _load_file succeeds.
     '''
     if me['dirty']:
         got = dlg(scr, ["Spreadsheet not saved, discard and load new file? [y/N]".format(sFile)])
@@ -807,6 +810,7 @@ def load_file(scr, sFile, filePass=None):
         _load_file(sFile, filePass)
         me['dirty'] = False
         revertfrom_help_ifneeded()
+        goto_cell(scr, "A1")
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
         return True
     except:
