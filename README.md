@@ -44,9 +44,9 @@ Next press 'i' key to enter insert cell content edit mode.
 
 	key in the required content into the cell.
 
-	press Enter key to lock in the changes in the edit buffer.
+	press Enter key to save the changes in the edit buffer into memory and return to default mode.
 
-	press Esc key to return back to the default mode.
+	press Esc key to discard changes in edit buffer and return back to the default mode.
 
 	NOTE: TO edit contents of a cell, follow a similar flow, the only change is to
 	press 'e' key instead of 'i' key in the above mentioned flow, to switch from
@@ -56,7 +56,7 @@ To save changes to the spreadsheet key in the following explicit command.
 
 	:w pathto/filename<ENTERKEY>
 
-Instead if you want to save the spreadsheet into a password protected file key in the following.
+Instead if you want to save the spreadsheet into a password protected file, key in the following.
 
 	:pw password pathto/filename<ENTERKEY>
 
@@ -232,8 +232,11 @@ The user can enter the command and its arguments and then press enter key to tri
 the command. The user can use backspace to delete the chars to correct mistakes when
 entering the command and the arguments.
 
-On pressing the enter key, the specified command will be run and the program reverts
+On pressing the enter key, the specified command will be run and the program will return
 back to default command mode.
+
+If Esc key is pressed, the program will discard any command in the edit buffer and then
+return back to default command mode.
 
 #### edit/insert mode
 
@@ -242,29 +245,41 @@ On pressing 'i', 'e' from the default command mode, the user can enter this mode
 In this mode the user either enters a new content for the cell and or edit the existing
 content of the cell.
 
-As and when the user presses the enter key, the data entered till that point gets saved
-into the cell. If one exits edit mode without pressing enter then any data entered after
-the last enter key press will be lost.
+As and when the user presses the Enter key, the cell data entered till that point gets
+saved into spreadsheet in memory and the program will return back to default command mode.
 
-User needs to press ESC key to exit from this mode and go back to default command mode.
-This also triggers the logic to remove any white space at the begining and end of the
-current edit buffer, as it gets saved into the cell. So use the currently configured
-quote char at the begining and end of the cell content being edited, if you have white
-space at the begin or end of the current cell content, which you want to save as part
-of the cell.
+	This also triggers the logic to remove any white space at the begining and end
+	of the current edit buffer, as it gets saved into the cell. So use the currently
+	configured quote char at the begining and end of the cell content being edited,
+	if you have white space at the begin or end of the current cell content, which
+	inturn you want to save as part of the cell.
+
+User can discard the changes in the edit buffer and return back to default command mode,
+by pressing the Esc key.
 
 NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
-mode, however when escaping back into the command mode, the cell content wont wrap into
-next line. The content will overflow into adjacent cells on the same line/row, if those
-adjacent cells dont have any content (even empty string is a content) of their own.
+mode, however once the program returns back to default command mode, the cell content wont
+wrap into next line. In default command mode the cell content will overflow into adjacent
+cells on the same line/row, only if those adjacent cells dont have any content (even empty
+string is a content) of their own.
 
-	If the cell containing the long text is scrolled beyond the screen, then the
-	overflowing text will not be visible. Contents of a cell including its overflowing
-	text will be visible only if that cell is currently in the screen.
+If one scrolls the cell containing a long text line too far beyond the currently visible
+screen viewport, then the overflowing text may not be visible, beyond a point.
+
+	[DevelNote] THis is to keep the screen refresh relatively fast. User can modify
+	the source, to change the amount of scroll allowed while still continuing to show
+	the overflowing text from a given cell. One needs to Modify DATACOLSTART_OVERSCAN
+	to control this.
 
 If you feel there is a empty string in any field and you want to remove it, use the 'D'
 command in the default command mode, which will delete any content from the current cell,
 including empty string.
+
+[DevelNote] If gbEnterExitsEditMode is set to False, then pressing enter key in edit mode,
+will only save the current edit buffer into a backup buffer. Also program will continue
+to remain in edit mode. The user will have to press the Esc key to save any backed-up
+edit buffer into spreadsheet in memory and return back to default mode. This was also the
+original behaviour of this program previously.
 
 
 ## Cell contents and =expressions
@@ -789,6 +804,9 @@ Adjust numeric and text cell attributes based on curses attributes available.
 Reposition to A1 cell, when file is loaded.
 
 s and ps as aliases to w and pw explicit commands.
+
+Pressing enter key in edit mode, saves edit buffer and returns to default command mode.
+
 
 
 
