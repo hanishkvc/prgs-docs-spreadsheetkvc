@@ -27,18 +27,37 @@ def alphanum_type(sIn, symbolList=None):
     Alpha, Numeric, AlphaNum, AlphaNumPlus, Other, ...
     '''
     anType = AlphaNumType.UNKNOWN
+    typeSeq = []
     i = 0
     while i < len(sIn):
         if sIn[i].isalpha():
             anType |= AlphaNumType.ALPHA
+            typeSeq.append(AlphaNumType.ALPHA)
         elif sIn[i].isnumeric():
             anType |= AlphaNumType.NUMERIC
+            typeSeq.append(AlphaNumType.NUMERIC)
         elif ((symbolList != None) and (sIn[i] in symbolList)):
             anType |= AlphaNumType.SYMBOL
+            typeSeq.append(AlphaNumType.SYMBOL)
         else:
             anType |= AlphaNumType.OTHER
+            typeSeq.append(AlphaNumType.OTHER)
         i += 1
-    return anType
+    return anType, typeSeq
+
+
+def collapse_sametype(typeSeqIn):
+    '''
+    Given a list of items, if adjacent items are the same,
+    then collapse/reduce such group of items into a single item.
+    '''
+    prevType = None
+    typeSeqOut = []
+    for t in typeSeqIn:
+        if (t != prevType):
+            typeSeqOut.append(t)
+        prevType = t
+    return typeSeqOut
 
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
@@ -278,8 +297,9 @@ def get_celladdr(sIn, startPos=0):
     Similarly if the token is a string in single quotes, it will
     be skipped.
 
-    TODO1: Need to check that the AlphaNum starts with Alpha.
-    TODO2: Need to allow $ to be part of alphanumeric.
+    Checks that AlphaNum starts with Alpha.
+
+    TODO1: Need to allow $ to be part of alphanumeric.
     '''
     iPos = startPos
     sOut = ""
@@ -289,9 +309,11 @@ def get_celladdr(sIn, startPos=0):
             break
         elif tokenType == TokenType.AlphaNum:
             if not ("'" in sOut):
-                anType = alphanum_type(sOut)
-                if (AlphaNumType.NUMERIC in anType) and (AlphaNumType.ALPHA in anType):
-                    return True, sOut, iPos
+                anType, typeSeq = alphanum_type(sOut)
+                typeSeq = collapse_sametype(typeSeq)
+                if (len(typeSeq) == 2) and (typeSeq[0] == AlphaNumType.ALPHA):
+                    if (AlphaNumType.NUMERIC in anType) and (AlphaNumType.ALPHA in anType):
+                        return True, sOut, iPos
         iPos += len(sOut)
     return False, sOut, iPos
 
@@ -325,7 +347,7 @@ def test_101():
     print(get_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2.234 3 "))
     print(get_evalparts("(=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c])"))
     print(get_evalparts("=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c]"))
-    print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55"))
+    print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55 - 99AA + AA99"))
 
 
 
