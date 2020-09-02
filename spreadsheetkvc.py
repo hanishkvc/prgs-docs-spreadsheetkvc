@@ -35,6 +35,8 @@ CATTR_DATANUM = (curses.A_NORMAL)
 # How many columns to left of current display viewport should one peek
 # to see, if there is any overflowing text that needs to be displayed.
 DATACOLSTART_OVERSCAN = 20
+# Exit EditMode on pressing Enter
+gbEnterExitsEditMode = True
 
 
 '''
@@ -1181,6 +1183,11 @@ def rl_editplusmode(stdscr, key):
     elif (key == curses.ascii.NL):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
+            if gbEnterExitsEditMode:
+                # Restore/set data to the latest backedup edit buffer
+                if me['backupEdit'] != None:
+                    me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+                me['state'] = 'C'
             me['dirty'] = True
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
