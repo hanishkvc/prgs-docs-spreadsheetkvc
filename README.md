@@ -807,6 +807,8 @@ s and ps as aliases to w and pw explicit commands.
 
 Pressing enter key in edit mode, saves edit buffer and returns to default command mode.
 
+Avoid stray/unwanted newline and fieldsep wrt load and save file logics.
+
 
 
 

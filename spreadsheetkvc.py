@@ -712,6 +712,7 @@ def _save_file(scr, sFile, filePass=None):
             else:
                 data = ""
             curRow += "{}{}".format(data,THEFIELDSEP)
+        curRow = curRow[:-1] # Remove the unwanted fieldsep at the end
         if filePass != None:
             lineKey = sec.get_linekey(r, userKey, fileKey)
             if bInternalEncDec:
@@ -761,7 +762,7 @@ def _load_file(sFile, filePass=None):
         i = 0
         sCur = ""
         bInQuote = False
-        while i < len(line):
+        while i < (len(line)-1): # Remove the newline at the end
             t = line[i]
             if t == THEQUOTE:
                 bInQuote = not bInQuote
