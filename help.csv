@@ -1,6 +1,6 @@
 SpreadsheetKVC Programs usage cheatsheet;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Cell Contents;;Text cell contents are italicised and dim, compared to Numeric/Expression cells;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Cell Contents;;Numeric/Expression cells will be more highlighted compared to Text cells, if possible.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Numeric Value or expression;;prefix with = symbol, when entering numeric value or expression in a cell;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Text Content;;enter text string/content as it is, however if you want whitespace;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;at the begin and or end of text content, put the full string in text quotes.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

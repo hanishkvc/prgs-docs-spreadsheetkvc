@@ -97,14 +97,18 @@ def cend(stdscr):
     cui.cend(stdscr)
 
 
-def cattr_textnum():
+def cattr_textnum(scr):
     '''
     Try and have Numeric cell brighter/standout compared to Text cell.
     '''
     global CATTR_DATATEXT, CATTR_DATANUM
     availAttrs = curses.termattrs()
     bItalic = ((availAttrs & curses.A_ITALIC) == curses.A_ITALIC)
+    if bItalic:
+        scr.attron(curses.A_ITALIC)
     bDim = ((availAttrs & curses.A_DIM) == curses.A_DIM)
+    if bDim:
+        scr.attron(curses.A_DIM)
     if bDim or bItalic:
         CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
         CATTR_DATANUM = (curses.A_NORMAL)
@@ -1332,7 +1336,7 @@ def process_cmdline(args):
 setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
-cattr_textnum()
+cattr_textnum(stdscr)
 setup_sighandlers()
 setup_funcs()
 try:

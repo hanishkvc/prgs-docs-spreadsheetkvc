@@ -10,8 +10,10 @@ encrypted csv files. If encrypted file is manipulated, the program will be able 
 and inturn stop processing the same, because it uses authenticated encryption concept.
 
 Remember that a cell containing a number or expression|forumula to be evaluated/calculated should
-prefix it's contents with '=' ie equal. Else it will be treated as text content cell. Text cell's
-contents are italicised and dim compared to =expression (which includes numeric also) cells.
+prefix it's contents with '=' ie equal. Else it will be treated as text content cell. The program
+will try to make the =expression (which includes numeric also) cells more highlighted compared to
+Text cell's to try and make it easy to distinguish between them.
+
 
 ## Sample usage session
 
@@ -773,6 +775,8 @@ Cell content delete command sets dirty flag, if there was content to delete.
 
 Added the explicit command new, to create a new spreadsheet in memory, this allows the user to
 come out of the help mode. A user could also load a existing file to come out of the help mode.
+
+Adjust numeric and text cell attributes based on curses attributes available.
 
 
 
