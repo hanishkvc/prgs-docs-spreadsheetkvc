@@ -5,6 +5,38 @@
 
 import enum
 
+
+def alphanum_type(sIn):
+    '''
+    Identify the type of alphanumeric token.
+
+    It could be Unknown, ANAlpha, ANNumeric, ANAlphaNum, ANAlphaNumPlus, ANOther
+    '''
+    anType = TokenType.Unknown
+    i = 0
+    while i < len(sIn):
+        if sIn[i].isalpha():
+            if anType == TokenType.Unknown:
+                anType = TokenType.ANAlpha
+            elif anType == TokenType.ANNumeric:
+                anType = TokenType.ANAlphaNum
+            elif anType == TokenType.ANOther:
+                anType = TokenType.ANAlphaNumPlus
+        elif sIn[i].isnumeric():
+            if anType == TokenType.Unknown:
+                anType = TokenType.ANNumeric
+            elif anType == TokenType.ANAlpha:
+                anType = TokenType.ANAlphaNum
+            elif anType == TokenType.ANOther:
+                anType = TokenType.ANAlphaNumPlus
+        else:
+            if anType == TokenType.Unknown:
+                anType = TokenType.ANNumeric
+            elif anType == TokenType.ANAlpha:
+                anType = TokenType.ANAlphaNum
+
+
+
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
 def get_token(sIn, startPos=0, bANTokenHasDecimal=True):
     '''
