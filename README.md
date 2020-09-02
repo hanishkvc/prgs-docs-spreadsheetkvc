@@ -146,9 +146,17 @@ In this explicit command mode, the user can enter one of the following commands
 	to save the contents of the current spreadsheet into specified file.
 	If the file already exists, it asks the user whether to overwrite or not.
 
+	One could also use
+
+		s file
+
 * pw passwd file
 
 	to encrypt and save the file.
+
+	One could also use
+
+		ps passwd file
 
 * l file
 
@@ -780,6 +788,7 @@ Adjust numeric and text cell attributes based on curses attributes available.
 
 Reposition to A1 cell, when file is loaded.
 
+s and ps as aliases to w and pw explicit commands.
 
 
 
