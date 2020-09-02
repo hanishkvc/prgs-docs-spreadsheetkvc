@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200901IST1450
+Version: v20200902IST1948
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -13,6 +13,53 @@ Remember that a cell containing a number or expression|forumula to be evaluated/
 prefix it's contents with '=' ie equal. Else it will be treated as text content cell. The program
 will try to make the =expression (which includes numeric also) cells more highlighted compared to
 Text cell's to try and make it easy to distinguish between them.
+
+Some of its features are
+
+* Uses curses to show a cell matrix/table in text terminal.
+
+* Loads and stores csv files. User can change the fieldsep and text quote used if required,
+  so that one can work with csv files, with different chars for these.
+
+	* the csv files can inturn be secured using authenticated encryption, if desired.
+
+* Allows inline editing of cell contents. If a text cell content occupies multiple lines,
+  program will autoscroll if required to allow user to continue editing/entering content,
+  within reasonable limits.
+
+	* Overflowing cell's content will be shown in place of adjacent cells, provided
+	  those adjacent cells are empty.
+
+* Support evaluation of mathematical expressions which inturn can refer to
+
+	* numeric values
+
+	* contents of other cells.
+
+	* a predefined set of useful supported functions.
+
+* Written in python, with source available on github, so that anyone can understand, modify
+  and or bugfix as required, to meet their needs ;)
+
+* insertion and deletion of rows or cols, auto adjust cell addresses refered in expressions,
+  where possible.
+
+	* If refered cell is deleted, then it tags the corresponding cell address reference
+	  in the expression.  However if user continues to insert or delete other rows/cols,
+	  then it will continue to adjust such tagged cell addresses, if possible. Do keep
+	  this in mind.
+
+	* Currently doesnt support
+
+		* $-prefixed fixed celladdress notation.
+
+		* adjusting of cell addresses in expressions, when pasting into other cells.
+
+* supports a readonly view mode, if required.
+
+* adjust to terminal window size changes.
+
+for more details refer to the documentation below.
 
 
 ## Sample usage session
@@ -813,4 +860,6 @@ Avoid stray/unwanted newline and fieldsep wrt load and save file logics.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
+
+If you find the program useful, and inturn if you can afford to donate, donating to a local good cause near you, would help those in need.
 
