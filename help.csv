@@ -1,4 +1,4 @@
-SpreadsheetKVC Programs usage cheatsheet;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SpreadsheetKVC Programs usage cheatsheet;;;;;;HanishKVC, India;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Cell Contents;;Numeric/=Expression cells will be more highlighted compared to Text cells, if possible.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Numeric Value or expression;;prefix with = symbol, when entering numeric value or expression in a cell;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -77,5 +77,5 @@ Some samples;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;=round(B76,int(2.6));;'=round(B76,int(2.6))';;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;= (B74/2.5)+(3*20) +pow(2,6);;'= (B74/2.5)+(3*20) +pow(2,6)';;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+A simple commandline curses based spreadsheet program in python. Supports csv files with optional authenticated encryption;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
