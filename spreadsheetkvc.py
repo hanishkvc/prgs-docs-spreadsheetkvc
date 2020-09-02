@@ -464,53 +464,6 @@ def cdraw(stdscr):
             traceback.print_exc(file=GERRFILE)
 
 
-TType = enum.Enum("TType", ["CellAddr", "Func"])
-def get_token(sIn, startPos=0, ttype=TType.CellAddr):
-    '''
-    Get first valid token from the given string and its position.
-
-    By using the startPos argument, one can get the tokens in a
-    given string one after the other by passing the last got
-    position from this function back to it in the next call as
-    its startPos argument.
-
-    One could either fetch a CellAddr or FuncName token.
-
-    NOTE: This is not a generic token parser. It mainly extracts
-    tokens which match the CellAddr kind or Func kind. Numbers
-    on their own will not be extracted, nor will operators or
-    Plus/Minus or so.
-
-    TODO: In future, if I support functions which take string
-    arguments, then I will have to look for strings and skip
-    their contents.
-    '''
-    i = startPos
-    sOut = ""
-    iPos = i
-    bInToken = False
-    while i < len(sIn):
-        if not bInToken:
-            if sIn[i].isalpha():
-                iPos = i
-                bInToken = True
-            elif (ttype == TType.CellAddr) and (sIn[i] == "$"):
-                iPos = i
-                bInToken = True
-        if bInToken:
-            if sIn[i].isalnum():
-                sOut += sIn[i]
-            elif (ttype == TType.CellAddr) and (sIn[i] == "$"):
-                sOut += sIn[i]
-            else:
-                if (sOut != ""):
-                    break
-        i += 1
-    if sOut == "$": # If nothing but $ only, then not valid
-        bInToken = False
-    return bInToken, sOut, iPos
-
-
 def update_celladdrs(sIn, afterR, incR, afterC, incC):
     '''
     Update any cell addresses found in given string,

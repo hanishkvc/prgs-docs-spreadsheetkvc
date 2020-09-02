@@ -8,7 +8,7 @@ import enum
 
 
 class AlphaNumType(enum.IntFlag):
-    NOMORE  = 0
+    UNKNOWN = 0
     NUMERIC = 1
     ALPHA   = 2
     SYMBOL  = 4
@@ -260,6 +260,62 @@ def get_evalparts(sIn):
     return lParts, lTypes
 
 
+def get_celladdr(sIn, startPos=0):
+    '''
+    Get first potentiall cell address token from the given string and its position.
+
+    By using the startPos argument, one can get the tokens in a
+    given string one after the other by passing the last got
+    position from this function back to it in the next call as
+    its startPos argument.
+
+    NOTE: This is not a generic token parser. It mainly extracts
+    tokens which match the CellAddr kind or FuncName kind. Numbers
+    on their own will not be extracted, nor will operators or
+    Plus/Minus or so.
+
+    If the token contains single quotes, then it will be skipped.
+    Similarly if the token is a string in single quotes, it will
+    be skipped.
+
+    TODO1: Need to check that the AlphaNum starts with Alpha.
+    TODO2: Need to allow $ to be part of alphanumeric.
+    '''
+    iPos = startPos
+    sOut = ""
+    while True:
+        tokenType, sOut, iPos = get_token(sIn, iPos)
+        if tokenType == TokenType.NoMore:
+            break
+        elif tokenType == TokenType.AlphaNum:
+            if not ("'" in sOut):
+                anType = alphanum_type(sOut)
+                if (AlphaNumType.NUMERIC in anType) and (AlphaNumType.ALPHA in anType):
+                    return True, sOut, iPos
+        iPos += len(sOut)
+    return False, sOut, iPos
+
+
+def get_celladdrs(sIn, startPos = 0):
+    '''
+    Return a list of celladdrs in the given string.
+
+    It also returns a list of positions which corresponds to
+    type of each cell address in the cellAddrList.
+    '''
+    iPos = startPos
+    cellAddrList = []
+    posList = []
+    while True:
+        bToken, sOut, iPos = get_celladdr(sIn, iPos)
+        if not bToken:
+            break
+        cellAddrList.append(sOut)
+        posList.append(iPos)
+        iPos += len(sOut)
+    return cellAddrList, posList
+
+
 
 
 def test_101():
@@ -269,6 +325,7 @@ def test_101():
     print(get_tokens("test 1, BA22:3 +123 test123 test(1,2 ,3, 4,5) 1-2 * / \ 'test what else' 123 1 2.234 3 "))
     print(get_evalparts("(=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c])"))
     print(get_evalparts("=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c]"))
+    print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55"))
 
 
 
