@@ -29,9 +29,9 @@ DONTEXIT = -9999
 bInternalEncDec = True
 gbStartHelp = True
 # How to differentiate text cells compared to =expression cells
+# This is the default, cattr_textnum will try and adjust at runtime.
 CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
-CATTR_DATATEXT = (curses.A_ITALIC)
-CATTR_DATANUM = (curses.A_BOLD)
+CATTR_DATANUM = (curses.A_NORMAL)
 # How many columns to left of current display viewport should one peek
 # to see, if there is any overflowing text that needs to be displayed.
 DATACOLSTART_OVERSCAN = 20
@@ -95,6 +95,22 @@ def cstart():
 
 def cend(stdscr):
     cui.cend(stdscr)
+
+
+def cattr_textnum():
+    '''
+    Try and have Numeric cell brighter/standout compared to Text cell.
+    '''
+    global CATTR_DATATEXT, CATTR_DATANUM
+    availAttrs = curses.termattrs()
+    bItalic = ((availAttrs & curses.A_ITALIC) == curses.A_ITALIC)
+    bDim = ((availAttrs & curses.A_DIM) == curses.A_DIM)
+    if bDim or bItalic:
+        CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
+        CATTR_DATANUM = (curses.A_NORMAL)
+    else:
+        CATTR_DATATEXT = (curses.A_NORMAL)
+        CATTR_DATANUM = (curses.A_BOLD)
 
 
 def cellpos(row, col):
@@ -1316,6 +1332,7 @@ def process_cmdline(args):
 setup_files()
 process_cmdline(sys.argv)
 stdscr=cstart()
+cattr_textnum()
 setup_sighandlers()
 setup_funcs()
 try:
