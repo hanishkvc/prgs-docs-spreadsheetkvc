@@ -8,7 +8,7 @@ import enum
 
 
 class AlphaNumType(enum.IntFlag):
-    UNKNOWN = 0
+    NOTHING = 0
     NUMERIC = 1
     ALPHA   = 2
     SYMSET1 = 4
@@ -26,12 +26,15 @@ def alphanum_type(sIn, symbolSet1=None, symbolSet2=None):
     can identify upto two independent set of chars/symbols, if any in
     the given string.
 
-    It could be None (NOMORE)
+    It could be Nothing
     OR IT COULD consist of Alpha, Numeric, Symbol and or Other
     thus leading to different combinations of these like
-    Alpha, Numeric, AlphaNum, AlphaNumPlus, Other, ...
+    Alpha, Numeric, AlphaNum, AlphaPlus, NumPlus, AlphaNumPlus, Other, ...
+
+    Characters which don't fit into alphabets, numeric, symbolsets get
+    marked as OTHER.
     '''
-    anType = AlphaNumType.UNKNOWN
+    anType = AlphaNumType.NOTHING
     typeSeq = []
     i = 0
     while i < len(sIn):
