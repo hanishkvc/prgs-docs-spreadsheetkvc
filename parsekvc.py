@@ -82,7 +82,7 @@ def collapse_sametype(typeSeqIn, typeIdDict=None):
 
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
-def get_token(sIn, startPos=0, bANTokenHasDecimal=True, ANAddOn=None):
+def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
     '''
     Get first valid token from the given string and its position.
 
@@ -125,7 +125,7 @@ def get_token(sIn, startPos=0, bANTokenHasDecimal=True, ANAddOn=None):
                 return TokenType.AlphaNum, sOut, iPosStart
             i += 1
             continue
-        if sIn[i].isalnum() or (bANTokenHasDecimal and (sIn[i] == '.')) or ((ANAddOn != None) and (sIn[i] in ANAddOn)):
+        if sIn[i].isalnum() or ((ANAddOnDefault != None) and (sIn[i] in ANAddOnDefault)) or ((ANAddOn != None) and (sIn[i] in ANAddOn)):
             if not bInToken:
                 bInToken = True
                 iPosStart = i
