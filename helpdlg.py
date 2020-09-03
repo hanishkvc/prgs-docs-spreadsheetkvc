@@ -40,7 +40,7 @@ def explicitcommandmode_dlg(scr):
                 "   [icb n] insert n cols before cur;  [ica n] ins after     ",
                 "   [g celladdr] goto given cell;      [clear] clear sheet   ",
                 "   [new] new spreadsheet in memory;   [help] show help.csv  ",
-                "   [q] Quits the Prg",
+                "   [!shellCmd args] run shell cmd;    [q] Quits the Prg",
                 "[arrow left|right] move cursor to edit inbetween",
                 "[Esc] to exit back to default mode",
                 "",

@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200902IST1948
+Version: v20200903IST2314
 
 spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -663,7 +663,7 @@ Simple print to text file logic
 
 =rows, =cols
 
-Allow paste to update cell addresses in the =expression.
+[DONE] Allow paste to update cell addresses in the =expression.
 
 
 ## History
