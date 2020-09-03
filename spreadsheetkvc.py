@@ -465,15 +465,23 @@ def cdraw(stdscr):
             traceback.print_exc(file=GERRFILE)
 
 
-def update_celladdrs(sIn, afterR, incR, afterC, incC):
+def update_celladdrs_all(sIn, afterR, incR, afterC, incC, bUpdateFixed=True):
     '''
     Update any cell addresses found in given string,
     by adjusting the address by given incR or incC amount, provided
     the address is beyond afterR or afterC.
 
-    However if user has requested to keep the row or col part of the
-    celladdress fixed by using $prefix, then dont modify it, other than
-    error tagging if any due to the row or col being deleted.
+    If the row or col address is part of the deleted row or col list,
+    then instead of ajdusting, error tag it.
+
+    If bUpdateFixed is False, then  dont change cell address parts
+    which have the $-prefix.
+
+    NOTE: THis is for use by insert or delete row/col logics.
+    They should set bUpdateFixed to True.
+
+    NOTE: User can request to keep the row or col part of the celladdress
+    to be fixed by using $-prefix.
     '''
     bDelRowMode = bDelColMode = False
     if (incR < 0):
@@ -513,6 +521,10 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
             sCFixed ="$"
         else:
             sCFixed = ""
+        # Handle bUpdateFixed flag
+        if bUpdateFixed:
+            rFixed = False
+            cFixed = False
         # A valid cell address, so update
         sErr = ""
         sBefore = sOut[0:iPos]
@@ -531,6 +543,67 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
                 sErr += "ErrC_"    # + not required bcas both row and col wont get deleted at same time, but for flexibility for future, just in case
             if (c > eDC) and not cFixed:
                 c += incC
+        sNewToken = "{}{}{}{}{}".format(sErr,sCFixed,coladdr_num2alpha(c),sRFixed,r)
+        sOut = sBefore + sNewToken
+        iPos = len(sOut)
+        sOut += sAfter
+
+
+def update_celladdrs_exceptfixed(sIn, afterR, incR, afterC, incC):
+    '''
+    Blindly update any cell addresses found in given string,
+    by adjusting the address by given incR or incC amount,
+    provided the address is beyond afterR or afterC.
+
+    NOTE: This is for use by paste or equivalent logic.
+    They should set afterR and afterC to 0.
+
+    However if user has requested to keep the row or col part of the
+    celladdress fixed by using $prefix, then dont modify it, other than
+    error tagging if any due to the row or col being beyond spreadsheet.
+
+    If ErrTagged, then set corresponding address part to original one.
+    '''
+    #print("updateCellAddrsExceptFixed:In:{}".format(sIn), file=GERRFILE)
+    iPos = 0
+    sOut = sIn
+    while True:
+        # Find token
+        bToken, sToken, iPos = parse.get_celladdr(sOut, iPos)
+        if not bToken:
+            #print("updateCellAddrsExceptFixed:Out:{}".format(sOut), file=GERRFILE)
+            return sOut
+        #print("updateCellAddrsExceptFixed:Btw:{}".format(sToken), file=GERRFILE)
+        bCellAddr, (r,c), (rFixed, cFixed) = _celladdr_valid_ex(sToken)
+        rOrig, cOrig = r, c
+        # If not valid cell addr, skip it
+        if not bCellAddr:
+            iPos += len(sToken)
+            continue
+        # prepare the fixed $ tag anchors
+        if rFixed:
+            sRFixed ="$"
+        else:
+            sRFixed = ""
+        if cFixed:
+            sCFixed ="$"
+        else:
+            sCFixed = ""
+        # A valid cell address, so update
+        sBefore = sOut[0:iPos]
+        sAfter = sOut[iPos+len(sToken):]
+        if (r > afterR) and not rFixed:
+            r += incR
+        if (c > afterC) and not cFixed:
+            c += incC
+        # Check for invalid row or col after update
+        sErr = ""
+        if (r <= 0):
+            sErr = "ErrR_"
+            r = rOrig
+        if (c <= 0):
+            sErr += "ErrC_"
+            c = cOrig
         sNewToken = "{}{}{}{}{}".format(sErr,sCFixed,coladdr_num2alpha(c),sRFixed,r)
         sOut = sBefore + sNewToken
         iPos = len(sOut)
@@ -582,7 +655,7 @@ def insert_rc_ab(cmd, args):
         newData = curData
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                newData = update_celladdrs(curData, cR, incR, cC, incC)
+                newData = update_celladdrs_all(curData, cR, incR, cC, incC, bUpdateFixed=True)
         newDict[(nR,nC)] = newData
     me['data'] = newDict
     if bRowMode:
@@ -622,7 +695,7 @@ def delete_rc(cmd, args):
         curData = me['data'][k]
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                curData = update_celladdrs(curData, sR-1, incR, sC-1, incC)
+                curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
         if bRowMode:
             if r < sR:
                 newDict[k] = curData

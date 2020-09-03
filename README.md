@@ -905,8 +905,10 @@ and Ayalum Njanum Thammil, among others.
 parsing helper routines made more powerful and flexible while still keeping it simpler. Inturn get_celladdr
 has been simplified while parallely being better at its job.
 
-Respect request from user to keep cell address parts fixed by using $ prefix for such parts. This is wrt
-row/col insertion/deletion operations and auto-adjusting of cell addresses in existing =expressions.
+Handle request from user to keep cell address parts fixed by using $ prefix for such parts.
+
+	While copy/pasting =expressions, the $-prefixed fixed address request is respected. [TODO]
+	However during row/col insertion/deletion operations, cell addresses are auto-adjusted in existing =expressions.
 
 Added a explicit command (:!) to execute shell commands.
 
