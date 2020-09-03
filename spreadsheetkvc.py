@@ -470,6 +470,10 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
     Update any cell addresses found in given string,
     by adjusting the address by given incR or incC amount, provided
     the address is beyond afterR or afterC.
+
+    However if user has requested to keep the row or col part of the
+    celladdress fixed by using $prefix, then dont modify it, other than
+    error tagging if any due to the row or col being deleted.
     '''
     bDelRowMode = bDelColMode = False
     if (incR < 0):
@@ -504,19 +508,19 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
         sErr = ""
         sBefore = sOut[0:iPos]
         sAfter = sOut[iPos+len(sToken):]
-        if (bInsRowMode and (r > afterR)):
+        if (bInsRowMode and (r > afterR)) and not rFixed:
             r += incR
-        if (bInsColMode and (c > afterC)):
+        if (bInsColMode and (c > afterC)) and not cFixed:
             c += incC
         if bDelRowMode:
             if (r >= sDR) and (r <= eDR):
                 sErr = "ErrR_"
-            if (r > eDR):
+            if (r > eDR) and not rFixed:
                 r += incR
         if bDelColMode:
             if (c >= sDC) and (c <= eDC):
-                sErr += "ErrC_"    # + not required but for flexibility for future, just in case
-            if (c > eDC):
+                sErr += "ErrC_"    # + not required bcas both row and col wont get deleted at same time, but for flexibility for future, just in case
+            if (c > eDC) and not cFixed:
                 c += incC
         sNewToken = "{}{}{}".format(sErr,coladdr_num2alpha(c),r)
         sOut = sBefore + sNewToken

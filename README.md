@@ -42,25 +42,21 @@ Some of its features are
 
 		* The user could even specify a cell addresses as arguments to the
 		  function. In which case the program will convert the cell address
-		  to the value in the specified cell and inturn call the pythong
+		  to the value in the specified cell and inturn call the python
 		  function.
 
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
 
 * insertion and deletion of rows or cols, auto adjust cell addresses refered in expressions,
-  where possible.
+  where possible. At same time it also respects $-prefixed fixed celladdress parts notation.
 
 	* If refered cell is deleted, then it tags the corresponding cell address reference
 	  in the expression.  However if user continues to insert or delete other rows/cols,
 	  then it will continue to adjust such tagged cell addresses, if possible. Do keep
 	  this in mind.
 
-	* Currently doesnt support
-
-		* $-prefixed fixed celladdress notation.
-
-		* adjusting of cell addresses in expressions, when pasting into other cells.
+	* It doesnt adjust cell addresses in expressions, when pasting between cells.
 
 * supports a readonly view mode, if required.
 
@@ -461,6 +457,11 @@ To specify a range of cells use startCellAddress:endCellAddress like
 	=sum(AB57:CD60)
 
 	= prod (HO99 : WO100 )
+
+One can prefix the row and or col address part with $. In which case during insertion
+and deletion of rows or cols, such addresses are not modified automatically.
+
+	= B12 * $DO34 + ( $A$10 - Z$99)
 
 
 ## csv file format
@@ -875,7 +876,7 @@ and Ayalum Njanum Thammil, among others.
 parsing helper routines made more powerful and flexible while still keeping it simpler. Inturn get_celladdr
 has been simplified while parallely being better at its job.
 
-On way to respecting fixed cell address parts $ prefix request.
+Respect request from user to keep cell address parts fixed by using $ prefix for such parts.
 
 
 
