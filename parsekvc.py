@@ -15,6 +15,9 @@ class AlphaNumType(enum.IntFlag):
     SYMSET2 = 8
     OTHER   = 16
 
+AlphaNumTypeId = { AlphaNumType.NUMERIC: 'N', AlphaNumType.ALPHA: 'A',
+                    AlphaNumType.SYMSET1: '1', AlphaNumType.SYMSET2: '2',
+                    AlphaNumType.OTHER: 'O' }
 
 def alphanum_type(sIn, symbolSet1=None, symbolSet2=None):
     '''
@@ -64,11 +67,13 @@ def collapse_sametype(typeSeqIn):
     '''
     prevType = None
     typeSeqOut = []
+    typeIds = ""
     for t in typeSeqIn:
         if (t != prevType):
             typeSeqOut.append(t)
+            typeIds += AlphaNumTypeId[t]
         prevType = t
-    return typeSeqOut
+    return typeSeqOut, typeIds
 
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
@@ -313,21 +318,20 @@ def get_celladdr(sIn, startPos=0):
 
     Checks that AlphaNum starts with Alpha.
 
-    TODO1: Need to allow $ to be part of alphanumeric.
+    Handle $ being part of CellAddr in a simple yet powerful way.
     '''
     iPos = startPos
     sOut = ""
     while True:
-        tokenType, sOut, iPos = get_token(sIn, iPos)
+        tokenType, sOut, iPos = get_token(sIn, iPos, ANAddOn=['$'])
         if tokenType == TokenType.NoMore:
             break
         elif tokenType == TokenType.AlphaNum:
             if not ("'" in sOut):
-                anType, typeSeq = alphanum_type(sOut)
-                typeSeq = collapse_sametype(typeSeq)
-                if (len(typeSeq) == 2) and (typeSeq[0] == AlphaNumType.ALPHA):
-                    if (AlphaNumType.NUMERIC in anType) and (AlphaNumType.ALPHA in anType):
-                        return True, sOut, iPos
+                anType, typeSeq = alphanum_type(sOut, symbolSet1=['$'])
+                typeSeq, typeIds = collapse_sametype(typeSeq)
+                if typeIds in [ 'AN', '1AN', 'A1N', '1A1N']:
+                    return True, sOut, iPos
         iPos += len(sOut)
     return False, sOut, iPos
 
