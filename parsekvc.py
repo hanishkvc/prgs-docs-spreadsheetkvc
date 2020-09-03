@@ -60,10 +60,14 @@ def alphanum_type(sIn, symbolSet1=None, symbolSet2=None):
     return anType, typeSeq
 
 
-def collapse_sametype(typeSeqIn):
+def collapse_sametype(typeSeqIn, typeIdDict=None):
     '''
     Given a list of items, if adjacent items are the same,
     then collapse/reduce such group of items into a single item.
+
+    If a dictionary which maps item to a string or rather char id
+    is provided, then it also returns a typeIdString. This can help
+    with easy pattern matching.
     '''
     prevType = None
     typeSeqOut = []
@@ -71,7 +75,8 @@ def collapse_sametype(typeSeqIn):
     for t in typeSeqIn:
         if (t != prevType):
             typeSeqOut.append(t)
-            typeIds += AlphaNumTypeId[t]
+            if typeIdDict != None:
+                typeIds += typeIdDict[t]
         prevType = t
     return typeSeqOut, typeIds
 
@@ -329,7 +334,7 @@ def get_celladdr(sIn, startPos=0):
         elif tokenType == TokenType.AlphaNum:
             if not ("'" in sOut):
                 anType, typeSeq = alphanum_type(sOut, symbolSet1=['$'])
-                typeSeq, typeIds = collapse_sametype(typeSeq)
+                typeSeq, typeIds = collapse_sametype(typeSeq, AlphaNumTypeId)
                 if typeIds in [ 'AN', '1AN', 'A1N', '1A1N']:
                     return True, sOut, iPos
         iPos += len(sOut)
