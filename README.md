@@ -48,15 +48,18 @@ Some of its features are
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
 
-* insertion and deletion of rows or cols, auto adjust cell addresses refered in expressions,
-  where possible. At same time it also respects $-prefixed fixed celladdress parts notation.
+* insertion and deletion of rows or cols, auto adjusts cell addresses refered in expressions,
+  where possible. THis includes all cell addresses, i.e including those which have the $-prefix.
 
 	* If refered cell is deleted, then it tags the corresponding cell address reference
-	  in the expression.  However if user continues to insert or delete other rows/cols,
-	  then it will continue to adjust such tagged cell addresses, if possible. Do keep
-	  this in mind.
+	  in the expression with a Err tag. However if user continues to insert or delete other
+	  rows/cols, then it will continue to adjust such Err tagged cell addresses, if possible.
+	  Do keep this in mind.
 
-	* It doesnt adjust cell addresses in expressions, when pasting between cells.
+* TODO: It adjusts cell addresses in =expressions, when pasting between cells.
+
+	However at same time it also respects $-prefixed fixed celladdress parts notation.
+	So such cell address parts which are $-prefixed will not be changed.
 
 * supports a readonly view mode, if required.
 
