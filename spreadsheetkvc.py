@@ -924,10 +924,17 @@ def _celladdr_valid(sAddr):
     Ignore $ prefix if any wrt col or row address.
     If there is garbage beyond numeric row address, then mark invalid
     '''
-    #m=re.match("[$]?([a-zA-Z]+)[$]?([0-9]+)", sAddr)
-    m=re.fullmatch("[$]?(?P<colAddr>[a-zA-Z]+)[$]?(?P<rowAddr>[0-9]+)", sAddr)
+    m=re.fullmatch("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)", sAddr)
     if m == None:
         return False, (None, None)
+    if m['colFixed'] == '$':
+        bColFixed = True
+    else:
+        bColFixed = False
+    if m['rowFixed'] == '$':
+        bRowFixed = True
+    else:
+        bRowFixed = False
     alphaAddr = m['colAddr']
     numAddr = m['rowAddr']
     # Get the data key for the cell
