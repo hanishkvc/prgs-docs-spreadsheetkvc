@@ -495,7 +495,7 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
             #print("updateCellAddrs:Out:{}".format(sOut), file=GERRFILE)
             return sOut
         #print("updateCellAddrs:Btw:{}".format(sToken), file=GERRFILE)
-        bCellAddr, (r,c) = _celladdr_valid(sToken)
+        bCellAddr, (r,c), (rFixed, cFixed) = _celladdr_valid_ex(sToken)
         # If not valid cell addr, skip it
         if not bCellAddr:
             iPos += len(sToken)
@@ -916,7 +916,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         quit(stdscr)
 
 
-def _celladdr_valid(sAddr):
+def _celladdr_valid_ex(sAddr):
     '''
     Check if the given string is a cell address or not.
 
@@ -926,7 +926,7 @@ def _celladdr_valid(sAddr):
     '''
     m=re.fullmatch("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)", sAddr)
     if m == None:
-        return False, (None, None)
+        return False, (None, None), (None, None)
     if m['colFixed'] == '$':
         bColFixed = True
     else:
@@ -945,7 +945,17 @@ def _celladdr_valid(sAddr):
         num = (ord(alphaAddr[i]) - ord('A'))+1
         numAlphaAddr = numAlphaAddr*26 + num
         i += 1
-    return True, (int(numAddr), int(numAlphaAddr))
+    return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
+
+
+def _celladdr_valid(sAddr):
+    '''
+    Check if given string is a valid cell address or not.
+
+    If valid return the row and col addresses in numeric format.
+    '''
+    bValid, key, fixed = _celladdr_valid_ex(sAddr)
+    return bValid, key
 
 
 def _cellvalue_or_str(sCheck):
