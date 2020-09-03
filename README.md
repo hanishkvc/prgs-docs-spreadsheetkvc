@@ -876,7 +876,8 @@ and Ayalum Njanum Thammil, among others.
 parsing helper routines made more powerful and flexible while still keeping it simpler. Inturn get_celladdr
 has been simplified while parallely being better at its job.
 
-Respect request from user to keep cell address parts fixed by using $ prefix for such parts.
+Respect request from user to keep cell address parts fixed by using $ prefix for such parts. This is wrt
+row/col insertion/deletion operations and auto-adjusting of cell addresses in existing =expressions.
 
 
 
