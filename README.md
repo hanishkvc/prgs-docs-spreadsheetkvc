@@ -908,6 +908,10 @@ row/col insertion/deletion operations and auto-adjusting of cell addresses in ex
 
 Added a explicit command (:!) to execute shell commands.
 
+So while entering text content to a cell, which needs to be protected with quotes (bcas whitespace at begin
+or end and or bcas there is fieldsep in the content), user can just add quote at the beginining, while program
+will automatically add it to the end.
+
 
 
 

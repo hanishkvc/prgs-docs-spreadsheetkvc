@@ -1144,6 +1144,31 @@ def rl_commandmode(stdscr, key):
     return True
 
 
+def setdata_from_savededitbuf(scr):
+    '''
+    This is used when returning from edit mode.
+
+    If there is a backed up edit buffer
+        either when user entered some content and pressed enter
+        or when the initial cell content was saved while entering edit mode
+    then save it to the cell.
+
+    If backedup edit buffer starts with quote, but doesnt end with the quote,
+    then add a quote to the end.
+
+    strip backedup edit buffer of any whitespace at begin and end of the buffer,
+    before saving to cell. However if the quote is there at begin and end, then
+    the spaces wont be removed.
+    '''
+    # Restore/set data to the latest backedup edit buffer
+    if me['backupEdit'] != None:
+        if me['backupEdit'][0] == THEQUOTE:
+            if me['backupEdit'][-1] != THEQUOTE:
+                me['backupEdit'] += THEQUOTE
+        me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+
+
+
 def rl_editplusmode(stdscr, key):
     '''
     Handle key presses in edit/insert/explicit command modes
@@ -1157,9 +1182,7 @@ def rl_editplusmode(stdscr, key):
     '''
     if (key == curses.ascii.ESC):
         if me['state'] == 'E':
-            # Restore/set data to the latest backedup edit buffer
-            if me['backupEdit'] != None:
-                me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+            setdata_from_savededitbuf(stdscr)
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
         if me['crsrOffset'] > 0:
@@ -1173,9 +1196,7 @@ def rl_editplusmode(stdscr, key):
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
             if gbEnterExitsEditMode:
-                # Restore/set data to the latest backedup edit buffer
-                if me['backupEdit'] != None:
-                    me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+                setdata_from_savededitbuf(stdscr)
                 me['state'] = 'C'
             me['dirty'] = True
         elif me['state'] == ':':
