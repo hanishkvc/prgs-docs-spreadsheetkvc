@@ -838,6 +838,16 @@ def new_file(scr):
     me['dirty'] = False
 
 
+def shell_cmd(scr, cmd, args):
+    curses.reset_shell_mode()
+    if args == None:
+        args = ""
+    cmd = cmd[1:]
+    os.system("{} {}".format(cmd, args))
+    input("Press any key to return to program...")
+    curses.reset_prog_mode()
+
+
 def quit(scr):
     '''
     Check that no unsaved changes exists, before gracefully quiting.
@@ -879,6 +889,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     help - show the help.csv file in temporary-readonly help mode.
     new - create a new spreadsheet in memory.
     ro|readonly - set readonly mode;  rw|readwrite - set readwrite mode.
+    !shell_command arguments
     q to quit the program
 
     if program in readOnly mode, dont allow
@@ -925,6 +936,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         me['readOnly'] = True
     elif (cmd == 'readwrite') or (cmd == 'rw'):
         me['readOnly'] = False
+    elif cmd.startswith("!"):
+        shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
         quit(stdscr)
 
