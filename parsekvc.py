@@ -11,15 +11,20 @@ class AlphaNumType(enum.IntFlag):
     UNKNOWN = 0
     NUMERIC = 1
     ALPHA   = 2
-    SYMSET1  = 4
-    OTHER   = 8
+    SYMSET1 = 4
+    SYMSET2 = 8
+    OTHER   = 16
 
 
-def alphanum_type(sIn, symbolSet1=None):
+def alphanum_type(sIn, symbolSet1=None, symbolSet2=None):
     '''
     Identify the type of alphanumeric token.
 
-    SymbolSet1 gives a list of characters which will be treated as symbols.
+    SymbolSets are independent list of characters. If characters in the
+    provided string belong to these sets, then they will be identified
+    as belonging to same in the anType and typeSeq list. Currently user
+    can identify upto two independent set of chars/symbols, if any in
+    the given string.
 
     It could be None (NOMORE)
     OR IT COULD consist of Alpha, Numeric, Symbol and or Other
@@ -39,6 +44,9 @@ def alphanum_type(sIn, symbolSet1=None):
         elif ((symbolSet1 != None) and (sIn[i] in symbolSet1)):
             anType |= AlphaNumType.SYMSET1
             typeSeq.append(AlphaNumType.SYMSET1)
+        elif ((symbolSet2 != None) and (sIn[i] in symbolSet2)):
+            anType |= AlphaNumType.SYMSET2
+            typeSeq.append(AlphaNumType.SYMSET2)
         else:
             anType |= AlphaNumType.OTHER
             typeSeq.append(AlphaNumType.OTHER)
