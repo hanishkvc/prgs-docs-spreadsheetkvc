@@ -18,6 +18,7 @@ import helpdlg
 import cuikvc as cui
 import parsekvc as parse
 import funcs
+import re
 
 
 bDebug = False
@@ -919,29 +920,11 @@ def _celladdr_valid(sAddr):
     '''
     Check if the given string is a cell address or not.
     '''
-    iChars = 0
-    i = 0
-    alphaAddr = ""
-    while i < len(sAddr):
-        if not sAddr[i].isalpha():
-            break
-        alphaAddr += sAddr[i]
-        iChars += 1
-        i += 1
-    if (iChars == 0) or (iChars > 2): # This limits number of cols
+    m=re.match("[$]?([a-zA-Z]+)[$]?([0-9]+)", sAddr)
+    if m == None:
         return False, (None, None)
-    iNums = 0
-    numAddr = ""
-    while i < len(sAddr):
-        if not sAddr[i].isnumeric():
-            break
-        numAddr += sAddr[i]
-        iNums += 1
-        i += 1
-    if (iNums == 0) or (iNums > 4): # This limits number of rows
-        return False, (None, None)
-    if i != len(sAddr):
-        return False, (None, None)
+    alphaAddr = m[1]
+    numAddr = m[2]
     # Get the data key for the cell
     i = 0
     alphaAddr = alphaAddr.upper()
