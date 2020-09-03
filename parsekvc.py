@@ -61,7 +61,7 @@ def collapse_sametype(typeSeqIn):
 
 
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
-def get_token(sIn, startPos=0, bANTokenHasDecimal=True):
+def get_token(sIn, startPos=0, bANTokenHasDecimal=True, ANAddOn=None):
     '''
     Get first valid token from the given string and its position.
 
@@ -81,6 +81,9 @@ def get_token(sIn, startPos=0, bANTokenHasDecimal=True):
 
     If it finds a string quoted using single quotes, then it
     will be extracted as a single string token.
+
+    If a list of chars is passed in ANAddon, then any character
+    in that list will be treated as part of AlphaNum token.
     '''
     if sIn == "":
         return TokenType.NoMore, "", -1
@@ -101,7 +104,7 @@ def get_token(sIn, startPos=0, bANTokenHasDecimal=True):
                 return TokenType.AlphaNum, sOut, iPosStart
             i += 1
             continue
-        if sIn[i].isalnum() or (bANTokenHasDecimal and (sIn[i] == '.')):
+        if sIn[i].isalnum() or (bANTokenHasDecimal and (sIn[i] == '.')) or ((ANAddOn != None) and (sIn[i] in ANAddOn)):
             if not bInToken:
                 bInToken = True
                 iPosStart = i
