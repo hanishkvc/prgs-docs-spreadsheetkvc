@@ -839,16 +839,18 @@ def new_file(scr):
 
 
 def shell_cmd(scr, cmd, args):
+    global stdscr
+
     scr.clear()
     scr.refresh()
-    curses.reset_shell_mode()
+    cend(stdscr)
     if args == None:
         args = ""
     cmd = cmd[1:]
     os.system("{} {}".format(cmd, args))
-    #input("\nPress any key to return to program...")
+    input("\nPress any key to return to program...")
+    stdscr = cstart()
     scr.getch()
-    curses.reset_prog_mode()
 
 
 def quit(scr):
