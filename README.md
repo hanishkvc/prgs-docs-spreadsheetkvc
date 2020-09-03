@@ -870,6 +870,14 @@ Fix some oversights.
 TOdays updates done in between watching a bunch of good malayalam movies Savaari, Chalakkudykkaran Changathy
 and Ayalum Njanum Thammil, among others.
 
+### 20200903IST1235 - OnamRelease
+
+parsing helper routines made more powerful and flexible while still keeping it simpler. Inturn get_celladdr
+has been simplified while parallely being better at its job.
+
+On way to respecting fixed cell address parts $ prefix request.
+
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
