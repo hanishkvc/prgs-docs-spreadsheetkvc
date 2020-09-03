@@ -1460,6 +1460,8 @@ except Exception as e:
     traceback.print_exc(file=GERRFILE)
     print("exception: done", file=GLOGFILE)
 finally:
+    stdscr.clear()
+    stdscr.refresh()
     cend(stdscr)
     GLOGFILE.close()
 exit(me['exit'])
