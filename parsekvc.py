@@ -11,15 +11,15 @@ class AlphaNumType(enum.IntFlag):
     UNKNOWN = 0
     NUMERIC = 1
     ALPHA   = 2
-    SYMBOL  = 4
+    SYMSET1  = 4
     OTHER   = 8
 
 
-def alphanum_type(sIn, symbolList=None):
+def alphanum_type(sIn, symbolSet1=None):
     '''
     Identify the type of alphanumeric token.
 
-    SymbolList gives a list of characters which will be treated as symbols.
+    SymbolSet1 gives a list of characters which will be treated as symbols.
 
     It could be None (NOMORE)
     OR IT COULD consist of Alpha, Numeric, Symbol and or Other
@@ -36,9 +36,9 @@ def alphanum_type(sIn, symbolList=None):
         elif sIn[i].isnumeric():
             anType |= AlphaNumType.NUMERIC
             typeSeq.append(AlphaNumType.NUMERIC)
-        elif ((symbolList != None) and (sIn[i] in symbolList)):
-            anType |= AlphaNumType.SYMBOL
-            typeSeq.append(AlphaNumType.SYMBOL)
+        elif ((symbolSet1 != None) and (sIn[i] in symbolSet1)):
+            anType |= AlphaNumType.SYMSET1
+            typeSeq.append(AlphaNumType.SYMSET1)
         else:
             anType |= AlphaNumType.OTHER
             typeSeq.append(AlphaNumType.OTHER)
