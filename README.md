@@ -634,6 +634,21 @@ content viewport than the display viewport.
 
 [DONE] :help loads help.csv in readonly mode.
 
+helper commands like
+
+	rcopy srcRange destRange
+
+	rgennums startCell endCell [startNum] [delta]
+
+	rclear
+
+Simple print to text file logic
+
+commandline shell
+
+=rows, =cols
+
+
 ## History
 
 ### 20200823IST1829
