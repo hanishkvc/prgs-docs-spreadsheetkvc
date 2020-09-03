@@ -265,6 +265,18 @@ In this explicit command mode, the user can enter one of the following commands
 
 	create a new spreadsheet in memory.
 
+* !shellCmd arguments
+
+	Execute shell command. When shell command finishes/exits, show a input prompt
+	so that the user has a chance to see the output of the shell command.
+
+	If the shell command you are running can generate multi page output, better pipe
+	it to more or less i.e for example like what is shown in brackets below.
+
+		[:!ps ax | less]
+
+	NOTE: There is no space between ! and the shell command to run.
+
 * help
 
 	show help.csv file. User can either create a new spreadsheet or load an
@@ -893,6 +905,8 @@ has been simplified while parallely being better at its job.
 
 Respect request from user to keep cell address parts fixed by using $ prefix for such parts. This is wrt
 row/col insertion/deletion operations and auto-adjusting of cell addresses in existing =expressions.
+
+Added a explicit command (:!) to execute shell commands.
 
 
 

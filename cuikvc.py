@@ -30,12 +30,10 @@ def cstart():
     Initialise the curses ui
     '''
     stdscr = curses.initscr()
-    curses.def_shell_mode()
     _screen_size(stdscr)
     curses.noecho()
     curses.cbreak()
     stdscr.keypad(True)
-    curses.def_prog_mode()
     stdscr.clear()
     dprint(me, file=GLOGFILE)
     return stdscr

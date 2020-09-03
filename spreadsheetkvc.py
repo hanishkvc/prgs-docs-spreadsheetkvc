@@ -846,9 +846,10 @@ def shell_cmd(scr, cmd, args):
         args = ""
     cmd = cmd[1:]
     os.system("{} {}".format(cmd, args))
-    #input("\nPress any key to return to program...")
-    scr.getch()
+    input("\nPress any key to return to program...")
     curses.reset_prog_mode()
+    scr.clear()
+    cdraw(scr)
 
 
 def quit(scr):
