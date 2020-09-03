@@ -371,6 +371,7 @@ def test_101():
     print(get_evalparts("(=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c])"))
     print(get_evalparts("=10 + 2.83 *sum(20:30, int(2)) -(AB20+2.9 / ([1,2,3])) + [a,b,c]"))
     print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55 - 99AA + AA99"))
+    print(get_celladdrs("what else CA$22:CB33 'Not $AA22' +25-$C33/(A20-30)*$DD$55 - 99AA + AA99"))
 
 
 
