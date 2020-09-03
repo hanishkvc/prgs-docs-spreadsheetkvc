@@ -504,6 +504,15 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
         if not bCellAddr:
             iPos += len(sToken)
             continue
+        # prepare the fixed $ tag anchors
+        if rFixed:
+            sRFixed ="$"
+        else:
+            sRFixed = ""
+        if cFixed:
+            sCFixed ="$"
+        else:
+            sCFixed = ""
         # A valid cell address, so update
         sErr = ""
         sBefore = sOut[0:iPos]
@@ -522,7 +531,7 @@ def update_celladdrs(sIn, afterR, incR, afterC, incC):
                 sErr += "ErrC_"    # + not required bcas both row and col wont get deleted at same time, but for flexibility for future, just in case
             if (c > eDC) and not cFixed:
                 c += incC
-        sNewToken = "{}{}{}".format(sErr,coladdr_num2alpha(c),r)
+        sNewToken = "{}{}{}{}{}".format(sErr,sCFixed,coladdr_num2alpha(c),sRFixed,r)
         sOut = sBefore + sNewToken
         iPos = len(sOut)
         sOut += sAfter
