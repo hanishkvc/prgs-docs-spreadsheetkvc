@@ -656,9 +656,11 @@ helper commands like
 
 Simple print to text file logic
 
-commandline shell
+[DONE] commandline shell
 
 =rows, =cols
+
+Allow paste to update cell addresses in the =expression.
 
 
 ## History
