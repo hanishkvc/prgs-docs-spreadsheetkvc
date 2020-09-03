@@ -72,6 +72,7 @@ me = {
         'data': dict(),
         'clipCell': False,
         'copyData': None,
+        'copySrcCell': None,
         'gotStr': "",
         'dirty': False,
         'exit': DONTEXIT
@@ -1152,6 +1153,18 @@ def value(addr):
     return _nvalue(val[1:])
 
 
+def copy_cell():
+    me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+    if me['copyData'] != None:
+        me['copySrcCell'] = (me['curRow'], me['curCol'])
+
+
+def paste_cell():
+    if me['copyData'] != None:
+        me['data'][(me['curRow'],me['curCol'])] = me['copyData']
+        me['dirty'] = True
+
+
 def rl_commandmode(stdscr, key):
     '''
     Handle keys wrt the implicit command mode.
@@ -1182,15 +1195,13 @@ def rl_commandmode(stdscr, key):
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
     elif (key == ord('c')):
-        me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+        copy_cell()
     elif (key == ord('C')) and not me['readOnly']:
-        me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+        copy_cell()
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
     elif (key == ord('p')) and not me['readOnly']:
-        if me['copyData'] != None:
-            me['data'][(me['curRow'],me['curCol'])] = me['copyData']
-            me['dirty'] = True
+        paste_cell()
     elif (key == ord('i')) and not me['readOnly']:
         me['state'] = 'E'
         me['gotStr'] = ""
