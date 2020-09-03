@@ -56,7 +56,7 @@ Some of its features are
 	  rows/cols, then it will continue to adjust such Err tagged cell addresses, if possible.
 	  Do keep this in mind.
 
-* TODO: It adjusts cell addresses in =expressions, when pasting between cells.
+* copy/cut-paste operation adjusts cell addresses in =expressions, when pasting into a cell.
 
 	However at same time it also respects $-prefixed fixed celladdress parts notation.
 	So such cell address parts which are $-prefixed will not be changed.
@@ -910,14 +910,16 @@ has been simplified while parallely being better at its job.
 
 Handle request from user to keep cell address parts fixed by using $ prefix for such parts.
 
-	While copy/pasting =expressions, the $-prefixed fixed address request is respected. [TODO]
-	However during row/col insertion/deletion operations, cell addresses are auto-adjusted in existing =expressions.
+	While copy/pasting =expressions, the $-prefixed fixed address request is respected.
+	However during row/col insertion/deletion operations, all cell addresses are auto-adjusted in existing =expressions.
 
 Added a explicit command (:!) to execute shell commands.
 
 So while entering text content to a cell, which needs to be protected with quotes (bcas whitespace at begin
 or end and or bcas there is fieldsep in the content), user can just add quote at the beginining, while program
 will automatically add it to the end.
+
+paste operation adjusts =expression cell addresses as required.
 
 
 

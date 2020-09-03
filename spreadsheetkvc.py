@@ -1161,7 +1161,15 @@ def copy_cell():
 
 def paste_cell():
     if me['copyData'] != None:
-        me['data'][(me['curRow'],me['curCol'])] = me['copyData']
+        theData = me['copyData']
+        # Calculate row and col adjustment required
+        incR = me['curRow'] - me['copySrcCell'][0]
+        incC = me['curCol'] - me['copySrcCell'][1]
+        # Adjust cell addresses if =expression
+        if theData[0] == '=':
+            theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
+        # Paste data
+        me['data'][(me['curRow'],me['curCol'])] = theData
         me['dirty'] = True
 
 
