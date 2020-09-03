@@ -919,12 +919,17 @@ def explicit_commandmode(stdscr, cmdArgs):
 def _celladdr_valid(sAddr):
     '''
     Check if the given string is a cell address or not.
+
+    Extract the alpha col address and numeric row address.
+    Ignore $ prefix if any wrt col or row address.
+    If there is garbage beyond numeric row address, then mark invalid
     '''
-    m=re.match("[$]?([a-zA-Z]+)[$]?([0-9]+)", sAddr)
+    #m=re.match("[$]?([a-zA-Z]+)[$]?([0-9]+)", sAddr)
+    m=re.fullmatch("[$]?(?P<colAddr>[a-zA-Z]+)[$]?(?P<rowAddr>[0-9]+)", sAddr)
     if m == None:
         return False, (None, None)
-    alphaAddr = m[1]
-    numAddr = m[2]
+    alphaAddr = m['colAddr']
+    numAddr = m['rowAddr']
     # Get the data key for the cell
     i = 0
     alphaAddr = alphaAddr.upper()
