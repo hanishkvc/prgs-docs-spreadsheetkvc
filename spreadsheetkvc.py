@@ -719,7 +719,7 @@ def delete_rc(cmd, args):
 
 
 
-def _do_rcopy(scr, cmd, args, bAdjustCellAddrs=True):
+def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     '''
     Copy a block of cells from src to dst.
 
@@ -732,22 +732,6 @@ def _do_rcopy(scr, cmd, args, bAdjustCellAddrs=True):
     If bAdjustCellAddrs is true, then cell addresses in the copied =expressions
     will be adjusted as required.
     '''
-    try:
-        (srcS, srcE, dstS, dstE), l = parse.get_celladdrs(args)
-    except:
-        return False
-    bCellAddr, srcSKey = _celladdr_valid(srcS)
-    if not bCellAddr:
-        return False
-    bCellAddr, srcEKey = _celladdr_valid(srcE)
-    if not bCellAddr:
-        return False
-    bCellAddr, dstSKey = _celladdr_valid(dstS)
-    if not bCellAddr:
-        return False
-    bCellAddr, dstEKey = _celladdr_valid(dstE)
-    if not bCellAddr:
-        return False
     print("{}{}".format(srcSKey,dstSKey), file=GERRFILE)
     srcRLen = srcEKey[0] - srcSKey[0] + 1
     srcCLen = srcEKey[1] - srcSKey[1] + 1
@@ -771,17 +755,27 @@ def _do_rcopy(scr, cmd, args, bAdjustCellAddrs=True):
     return True
 
 
-def do_rcopy(scr, cmd, args, updateAddresses=True):
-    bDone = _do_rcopy(scr, cmd, args, updateAddresses)
+def do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
+    bDone = _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs)
     if not bDone:
         dlg(scr, [ "Failed:{} {}", "Press any key to continue..." ])
 
 
 def do_rcmd(scr, cmd, args):
-    if cmd == "rcopy":
-        do_rcopy(scr, cmd, args)
-    elif cmd == "rcopyasis":
-        do_rcopy(scr, cmd, args, False)
+    try:
+        lCAddr, lPos = parse.get_celladdrs(args)
+        lKeys = []
+        for cAddr in lCAddr:
+            bCellAddr, key = _celladdr_valid(cAddr)
+            if not bCellAddr:
+                return False
+            lKeys.append(key)
+        if cmd == "rcopy":
+            do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
+        elif cmd == "rcopyasis":
+            do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
+    except:
+        return False
 
 
 
