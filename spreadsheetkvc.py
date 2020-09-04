@@ -787,6 +787,8 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
         elif cmd == "rclear":
             bDone = _do_rclear(scr, lKeys[0], lKeys[1])
+        if bDone:
+            me['dirty'] = True
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False
@@ -1096,7 +1098,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         me['readOnly'] = True
     elif (cmd == 'readwrite') or (cmd == 'rw'):
         me['readOnly'] = False
-    elif cmd.startswith("r"):
+    elif cmd.startswith("r") and not me['readOnly']:
         do_rcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
         shell_cmd(stdscr, cmd, args)

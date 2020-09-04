@@ -47,7 +47,7 @@ Explicit Command Mode;;ENTERED by pressing : in default mode;;;;;;;;;;;;;;;;;;;;
 ;rcopy;rcopy SrcSCA:SrcECA DstSCA:DstECA;;;cell addresses in copied =expressions will be adjusted;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Copy the srcBlock to dstBlock. srcBlock will be duplicated as reqd to fill dstBlock.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;rcopyasis;copies a block similar to rcopy, but doesnt adjust the cell addresses in copied =expressions.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;rclear SCA:ECA;clear the contents of the specified range of cells.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;left|right key;used to edit the current edit buffer by moving text cursor;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Esc Key;Return back to default mode;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Enter key;Used to execute the command and its arguments entered till that point;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
