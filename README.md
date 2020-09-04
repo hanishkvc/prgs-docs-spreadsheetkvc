@@ -679,7 +679,6 @@ Simple print to text file logic
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
-If :g celladdr has celladdr beyond spreadsheet, adjust to nearest valid cell.
 
 
 ## History
@@ -949,6 +948,9 @@ FIx a oversight with hardcoding of old text quote char in the save_file logic.
 'P' pastes data without adjusting cell addresses.
 
 :new resets display viewport to A1
+
+If :g celladdr has celladdr beyond spreadsheet, adjust to nearest valid cell.
+
 
 
 

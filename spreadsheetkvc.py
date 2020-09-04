@@ -255,6 +255,10 @@ def _goto_cell(stdscr, r, c):
 def goto_cell(stdscr, args):
     bCellAddr, (r,c) = _celladdr_valid(args)
     if bCellAddr:
+        if r > me['numRows']:
+            r = me['numRows']
+        if c > me['numCols']:
+            c = me['numCols']
         _goto_cell(stdscr, r, c)
 
 
