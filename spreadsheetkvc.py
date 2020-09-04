@@ -731,6 +731,9 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
 
     If bAdjustCellAddrs is true, then cell addresses in the copied =expressions
     will be adjusted as required.
+
+    NOTE: Doesnt alert if overwriting cells with data|content in them.
+    NOTE: Ensure that the source and dest blocks dont overlap. Else cell content may get corrupted.
     '''
     srcRLen = srcEKey[0] - srcSKey[0] + 1
     srcCLen = srcEKey[1] - srcSKey[1] + 1
@@ -754,6 +757,18 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     return True
 
 
+def _do_rclear(scr, dstSKey, dstEKey):
+    '''
+    Clear a block of cells at dst.
+
+    NOTE: Doesnt alert if clearing cells with data|content in them.
+    '''
+    for dR in range(dstSKey[0], dstEKey[0]+1):
+        for dC in range(dstSKey[1], dstEKey[1]+1):
+            me['data'].pop((dR,dC), None)
+    return True
+
+
 def do_rcmd(scr, cmd, args):
     bDone = False
     try:
@@ -770,6 +785,8 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
         elif cmd == "rcopyasis":
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
+        elif cmd == "rclear":
+            bDone = _do_rclear(scr, lKeys[0], lKeys[1])
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False

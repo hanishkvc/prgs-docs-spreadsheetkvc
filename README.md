@@ -293,7 +293,7 @@ In this explicit command mode, the user can enter one of the following commands
 	src|dstCellAddrRange consists of startAddress:endAddress
 
 
-* rclear cellAddrRange (TODO)
+* rclear cellAddrRange
 
 	Clear the cells in the given address range.
 
@@ -715,7 +715,7 @@ helper commands like
 
 	rgennums startCell endCell [startNum] [delta]
 
-	rclear
+	[DONE] rclear
 
 Simple print to text file logic
 
@@ -1004,6 +1004,8 @@ Fixed possible corner cases with empty/no arg for function and empty cell conten
 :rcopy which copies a block along with adjusting of the cell addresses in =expressions, if any, logic implemented.
 
 :rcopyasis which copies a block of cells as is, ie dont change cell addresses in =expressions, implemented.
+
+:rclear clears the contents of the cells specified.
 
 
 
