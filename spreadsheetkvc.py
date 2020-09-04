@@ -734,8 +734,6 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     '''
     srcRLen = srcEKey[0] - srcSKey[0] + 1
     srcCLen = srcEKey[1] - srcSKey[1] + 1
-    incR = dstSKey[0] - srcSKey[0]
-    incC = dstSKey[1] - srcSKey[1]
     baseSrcR = srcSKey[0]
     baseSrcC = srcSKey[1]
     r = 0
@@ -747,6 +745,8 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
             sData = me['data'].get((sR,sC))
             if (sData != None) and (sData != ""):
                 if sData.startswith("=") and bAdjustCellAddrs:
+                    incR = dR - sR
+                    incC = dC - sC
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
             me['data'][(dR,dC)] = sData
             c += 1
