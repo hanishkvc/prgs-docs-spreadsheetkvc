@@ -64,7 +64,8 @@ Some of its features are
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
 * Identify looping in =expression calculations and inturn error tag the related cells and stop
-  that specific looping in its tracks from occuring in future ;)
+  that specific looping in its tracks from occuring in future, for simple cases ;) Need to make
+  it more intelligent later.
 
 * supports a readonly view mode, if required.
 
@@ -746,7 +747,7 @@ Simple print to text file logic
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
-[DONE] Trap calc loops
+[PARTIAL] Trap calc loops. A simple minded logic added for now. Need to track actual multipath recursion and or calc indirection.
 
 Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
@@ -1035,7 +1036,7 @@ Fixed possible corner cases with empty/no arg for function and empty cell conten
 
 :rclear clears the contents of the cells specified.
 
-Any looping in the =expression calculations is now trapped, tagged and stopped.
+Any looping in the =expression calculations is now trapped, tagged and stopped for simple cases.
 
 Handle quote char if any inbetween (replace with placeholder), or any at the end.
 
