@@ -268,10 +268,29 @@ In this explicit command mode, the user can enter one of the following commands
 
 	Copy a block of cells starting from srcStartAddress to dstStartAddress
 
-	If dstCellAddrRange doesnt match srcCellAddrRange wrt size,
-	then srcCellAddrRange takes precedence in deciding the size.
+	If srcCellAddrRange doesnt match dstCellAddrRange wrt size,
+	then dstCellAddrRange takes precedence in deciding the size.
 
-	src/dstCellAddrRange consists of startAddress:endAddress
+	The srcBlock will be duplicated as required to fill dstBlock, if the
+	srcBlock is smaller than the dstBlock.
+
+		:rcopy A1:A1 A10:B19
+
+		The value in cell A1 will be duplicated across the 20 cells.
+
+		:rcopy A1:B2 A10:B19
+
+		The values in the square of cells at A1 will be duplicated across
+		the rectangular 20 cells starting at A10.
+
+		NOTE: Its not necessary that the dstBlockSize is a multiple of
+		the srcBlockSize. If not a multiple, then only a partial set of
+		values will be copied if that is the case based on the sizes.
+
+	If the srcBlock is larger than the dstBlock, then only that part of the
+	srcBlock which can fit in the dstBlock size specified, will be copied.
+
+	src|dstCellAddrRange consists of startAddress:endAddress
 
 
 * rclear cellAddrRange (TODO)

@@ -737,17 +737,25 @@ def _do_rcopy(scr, cmd, args):
     if not bCellAddr:
         return False
     print("{}{}".format(srcSKey,dstSKey), file=GERRFILE)
+    srcRLen = srcEKey[0] - srcSKey[0] + 1
+    srcCLen = srcEKey[1] - srcSKey[1] + 1
     incR = dstSKey[0] - srcSKey[0]
     incC = dstSKey[1] - srcSKey[1]
-    for r in range(srcSKey[0], srcEKey[0]+1):
-        for c in range(srcSKey[1], srcEKey[1]+1):
-            dR = dstSKey[0] + (r - srcSKey[0])
-            dC = dstSKey[1] + (c - srcSKey[1])
-            sData = me['data'].get((r,c))
+    baseSrcR = srcSKey[0]
+    baseSrcC = srcSKey[1]
+    r = 0
+    for dR in range(dstSKey[0], dstEKey[0]+1):
+        sR = baseSrcR + (r%srcRLen)
+        c = 0
+        for dC in range(dstSKey[1], dstEKey[1]+1):
+            sC = baseSrcC + (c%srcCLen)
+            sData = me['data'].get((sR,sC))
             if (sData != None) and (sData != ""):
                 if sData.startswith("="):
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
             me['data'][(dR,dC)] = sData
+            c += 1
+        r += 1
     return True
 
 
