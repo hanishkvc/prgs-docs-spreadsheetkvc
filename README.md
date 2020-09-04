@@ -711,7 +711,7 @@ content viewport than the display viewport.
 
 helper commands like
 
-	rcopy srcRange destRange
+	[DONE] rcopy srcRange destRange
 
 	rgennums startCell endCell [startNum] [delta]
 
@@ -1001,7 +1001,10 @@ Filter python functions by default, so only whitelisted functions can be used in
 
 Fixed possible corner cases with empty/no arg for function and empty cell content copy situations.
 
-:rcopy logic implemented.
+:rcopy which copies a block along with adjusting of the cell addresses in =expressions, if any, logic implemented.
+
+:rcopyasis which copies a block of cells as is, ie dont change cell addresses in =expressions, implemented.
+
 
 
 

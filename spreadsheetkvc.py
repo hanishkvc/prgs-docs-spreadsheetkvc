@@ -719,7 +719,19 @@ def delete_rc(cmd, args):
 
 
 
-def _do_rcopy(scr, cmd, args):
+def _do_rcopy(scr, cmd, args, bAdjustCellAddrs=True):
+    '''
+    Copy a block of cells from src to dst.
+
+    The Src and Dst blocks need not be same nor multiple of one another.
+    If the Src block is bigger, then only the part that fits in the dst
+    block will be copied.
+    If the Src block is smaller, then it will be duplicated as required
+    to fill the dst block.
+
+    If bAdjustCellAddrs is true, then cell addresses in the copied =expressions
+    will be adjusted as required.
+    '''
     try:
         (srcS, srcE, dstS, dstE), l = parse.get_celladdrs(args)
     except:
@@ -751,7 +763,7 @@ def _do_rcopy(scr, cmd, args):
             sC = baseSrcC + (c%srcCLen)
             sData = me['data'].get((sR,sC))
             if (sData != None) and (sData != ""):
-                if sData.startswith("="):
+                if sData.startswith("=") and bAdjustCellAddrs:
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
             me['data'][(dR,dC)] = sData
             c += 1
@@ -759,8 +771,8 @@ def _do_rcopy(scr, cmd, args):
     return True
 
 
-def do_rcopy(scr, cmd, args):
-    bDone = _do_rcopy(scr, cmd, args)
+def do_rcopy(scr, cmd, args, updateAddresses=True):
+    bDone = _do_rcopy(scr, cmd, args, updateAddresses)
     if not bDone:
         dlg(scr, [ "Failed:{} {}", "Press any key to continue..." ])
 
@@ -768,6 +780,8 @@ def do_rcopy(scr, cmd, args):
 def do_rcmd(scr, cmd, args):
     if cmd == "rcopy":
         do_rcopy(scr, cmd, args)
+    elif cmd == "rcopyasis":
+        do_rcopy(scr, cmd, args, False)
 
 
 
