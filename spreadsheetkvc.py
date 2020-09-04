@@ -908,6 +908,7 @@ def new_file(scr):
             status(scr, ["Canceled new spreadsheet creation"])
             return False
     revertfrom_help_ifneeded()
+    goto_cell(scr, "A1")
     me['data'] = dict()
     me['dirty'] = False
 
