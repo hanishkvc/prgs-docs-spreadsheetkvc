@@ -1156,10 +1156,14 @@ def trap_calclooping(cellKey):
         curCalcCnt = 0
     curCalcCnt += 1
     if curCalcCnt > (len(me['data'])*10):
-        sData = me['data'].get(cellKey)
-        if sData != None:
-            if sData.startswith('='):
-                me['data'][cellKey] = "ErrCalcLoop:{}".format(sData)
+        print("TrapCalcLoop:{}".format(me['calcCnt']), file=GERRFILE)
+        newCalcThreshold = curCalcCnt - 5
+        for key in me['calcCnt']:
+            if me['calcCnt'][key] > newCalcThreshold:
+                sData = me['data'].get(key)
+                if sData != None:
+                    if sData.startswith('='):
+                        me['data'][key] = "ErrCalcLoop:{}".format(sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, curCalcCnt))
     me['calcCnt'][cellKey] = curCalcCnt
 
