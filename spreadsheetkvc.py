@@ -24,6 +24,7 @@ import re
 bDebug = False
 THEQUOTE = "'"
 THEFIELDSEP = ';'
+THEALT2INBTWQUOTE = '_'
 DONTEXIT = -9999
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
 # Both use similar concepts, but bitstreams are not directly interchangable
@@ -1365,12 +1366,27 @@ def setdata_from_savededitbuf(scr):
     '''
     # Restore/set data to the latest backedup edit buffer
     if (me['backupEdit'] != None) and (me['backupEdit'] != ""):
+        # Handle quote at begining or only quote
         if me['backupEdit'][0] == THEQUOTE:
             if len(me['backupEdit']) == 1:
                 me['backupEdit'] += THEQUOTE
             if me['backupEdit'][-1] != THEQUOTE:
                 me['backupEdit'] += THEQUOTE
-        me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+        # Handle quote at end
+        if me['backupEdit'][-1] == THEQUOTE:
+            if me['backupEdit'][0] != THEQUOTE:
+                me['backupEdit'] = THEQUOTE + me['backupEdit']
+        sData = me['backupEdit'].strip()
+        # Handle any in between quote, rather replace with predefined placeholder
+        iPos = 0
+        while True:
+            iPos = sData.find(THEQUOTE, iPos+1)
+            if (iPos == -1) or (iPos == (len(sData)-1)):
+                break
+            sBefore = sData[:iPos]
+            sAfter = sData[iPos+1:]
+            sData = sBefore + THEALT2INBTWQUOTE + sAfter
+        me['data'][(me['curRow'],me['curCol'])] = sData
     else:
         me['data'].pop((me['curRow'],me['curCol']), None)
 

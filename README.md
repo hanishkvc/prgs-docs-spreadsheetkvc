@@ -70,6 +70,15 @@ Some of its features are
 
 * adjust to terminal window size changes.
 
+* Try be simple and sane wrt fieldsep and textquote.
+
+	If fieldsep in cell content, auto protect with text quoting of cell content.
+
+	If text quote at begin or end of cell content, auto insert at the other end, if missing.
+
+	If text quote some where in the middle of cell content, replace with a placeholder char.
+
+
 for more details refer to the documentation below.
 
 
@@ -366,8 +375,11 @@ saved into spreadsheet in memory and the program will return back to default com
 	if you have white space at the begin or end of the current cell content, which
 	inturn you want to save as part of the cell.
 
-	The program will auto add text quote character to the end of the cell content,
-	if it finds the text quote character at the begining of cell content.
+	The program will auto add text quote character to the begin or end of cell content,
+	if it finds the text quote character only at the other end of cell content.
+
+	If text quote found somewhere inbetween the cell content, it gets replaced with
+	a place holder.
 
 User can discard the changes in the edit buffer and return back to default command mode,
 by pressing the Esc key. The original content of the cell is retained in this case.
@@ -544,12 +556,18 @@ If any field contains the field seperator with in its content, then the field co
 embedded within ['] ie single quotes.
 
 To avoid confusing the program, dont use ' char as part of the spreadsheet contents, other
-than for quoting text contents with field seperator in them.
+than for
 
-Also if you want to have white space at the beginning and or end of the text contents of a cell,
-put the full cell text content within quotes.
+	quoting text contents with field seperator in them. AND OR
+
+	if you want to have white space at the beginning and or end of the text contents
+	of a cell, put the full cell text content within quotes.
+
+Text QUote char anywhere other than the either ends of cell text content, will get replaced
+by [\_] i.e underscore.
 
 NOTE: User can set a different field seperator or quote char from the commandline.
+
 
 ### Encryption support
 
@@ -729,6 +747,12 @@ Simple print to text file logic
 [DONE] Allow paste to update cell addresses in the =expression.
 
 [DONE] Trap calc loops
+
+Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
+
+Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
+
+ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
 
 
 ## History
@@ -1012,6 +1036,8 @@ Fixed possible corner cases with empty/no arg for function and empty cell conten
 :rclear clears the contents of the cells specified.
 
 Any looping in the =expression calculations is now trapped, tagged and stopped.
+
+Handle quote char if any inbetween (replace with placeholder), or any at the end.
 
 
 
