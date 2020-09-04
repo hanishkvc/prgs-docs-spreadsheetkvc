@@ -718,6 +718,44 @@ def delete_rc(cmd, args):
         me['numCols'] -= cnt
 
 
+
+def do_rcopy(scr, cmd, args):
+    src, dst = args.split(' ')
+    srcS, srcE = src.split(':')
+    dstS, dstE = dst.split(':')
+    print("{}{}".format(src,dst), file=GERRFILE)
+    bCellAddr, srcSKey = _celladdr_valid(srcS)
+    if not bCellAddr:
+        return False
+    bCellAddr, srcEKey = _celladdr_valid(srcE)
+    if not bCellAddr:
+        return False
+    bCellAddr, dstSKey = _celladdr_valid(dstS)
+    if not bCellAddr:
+        return False
+    bCellAddr, dstEKey = _celladdr_valid(dstE)
+    if not bCellAddr:
+        return False
+    print("{}{}".format(srcSKey,dstSKey), file=GERRFILE)
+    incR = dstSKey[0] - srcSKey[0]
+    incC = dstSKey[1] - srcSKey[1]
+    for r in range(srcSKey[0], srcEKey[0]+1):
+        for c in range(srcSKey[1], srcEKey[1]+1):
+            dR = dstSKey[0] + (r - srcSKey[0])
+            dC = dstSKey[1] + (c - srcSKey[1])
+            sData = me['data'].get((r,c))
+            if (sData != None) and (sData != ""):
+                if sData.startswith("="):
+                    sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
+            me['data'][(dR,dC)] = sData
+
+
+def do_rcmd(scr, cmd, args):
+    if cmd == "rcopy":
+        do_rcopy(scr, cmd, args)
+
+
+
 def _save_file(scr, sFile, filePass=None):
     '''
     Save file in a csv format.
@@ -1019,6 +1057,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         me['readOnly'] = True
     elif (cmd == 'readwrite') or (cmd == 'rw'):
         me['readOnly'] = False
+    elif cmd.startswith("r"):
+        do_rcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
         shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
