@@ -755,13 +755,8 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     return True
 
 
-def do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
-    bDone = _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs)
-    if not bDone:
-        dlg(scr, [ "Failed:{} {}", "Press any key to continue..." ])
-
-
 def do_rcmd(scr, cmd, args):
+    bDone = False
     try:
         lCAddr, lPos = parse.get_celladdrs(args)
         lKeys = []
@@ -771,11 +766,13 @@ def do_rcmd(scr, cmd, args):
                 return False
             lKeys.append(key)
         if cmd == "rcopy":
-            do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
+            bDone = do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
         elif cmd == "rcopyasis":
-            do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
+            bDone = do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
     except:
         return False
+    if not bDone:
+        dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
 
 
