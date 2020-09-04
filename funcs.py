@@ -4,10 +4,12 @@
 #
 
 import traceback
+import math
 from math import *
 import parsekvc as parse
 
 
+BFILTERPYFUNC = True
 me = None
 _celladdr_valid = None
 nvalue = None
@@ -183,6 +185,22 @@ def do_avg(args):
     return total/cnt
 
 
+pyFuncs = [ 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]
+def allowed_pyfunc(sCmd, sArgs):
+    '''
+    Check if the specified python function should be allowed or not.
+
+    If BFILTERPYFUNC is not true, then allow any python function to be called/evaluated.
+    '''
+    if not BFILTERPYFUNC:
+        return True
+    if sCmd in dir(math):
+        return True
+    if sCmd in pyFuncs:
+        return True
+    return False
+
+
 def do_pyfunc(sCmd, sArgs):
     '''
     Try evaluating the command and the arguments as a python function
@@ -196,6 +214,8 @@ def do_pyfunc(sCmd, sArgs):
     However maybe in future, I may expand a cell address range into a list
     or so, time permitting.
     '''
+    if not allowed_pyfunc(sCmd, sArgs):
+        return "Err"
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:

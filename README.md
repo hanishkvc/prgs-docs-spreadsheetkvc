@@ -458,6 +458,10 @@ float(numeric)
 	convert to float value
 
 
+NOTE: Most of the math functions in python math module are also supported. However to be
+useful, they should ideally take only scalar values and return scalar value.
+
+
 ## CellAddress And Ranges
 
 The Cols addressed starting from A to ZZ
@@ -950,6 +954,8 @@ FIx a oversight with hardcoding of old text quote char in the save_file logic.
 :new resets display viewport to A1
 
 If :g celladdr has celladdr beyond spreadsheet, adjust to nearest valid cell.
+
+Filter python functions by default, so only whitelisted functions can be used in =expressions.
 
 
 
