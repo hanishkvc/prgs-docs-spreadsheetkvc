@@ -924,6 +924,7 @@ paste operation adjusts =expression cell addresses as required.
 insert mode saves the original content if any into backupEdit, so if user doesnt commit his new cell content by pressing enter key,
 ie if the user presses Esc key to discard his new edit, the program will revert the cell to its original content.
 
+Handle exiting editMode with empty edit buffer and or edit buffer with a single single qoute.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)

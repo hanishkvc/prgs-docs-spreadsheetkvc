@@ -1255,6 +1255,8 @@ def setdata_from_savededitbuf(scr):
     # Restore/set data to the latest backedup edit buffer
     if (me['backupEdit'] != None) and (me['backupEdit'] != ""):
         if me['backupEdit'][0] == THEQUOTE:
+            if len(me['backupEdit']) == 1:
+                me['backupEdit'] += THEQUOTE
             if me['backupEdit'][-1] != THEQUOTE:
                 me['backupEdit'] += THEQUOTE
         me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
