@@ -61,6 +61,8 @@ Some of its features are
 	However at same time it also respects $-prefixed fixed celladdress parts notation.
 	So such cell address parts which are $-prefixed will not be changed.
 
+	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
+
 * supports a readonly view mode, if required.
 
 * adjust to terminal window size changes.
@@ -178,7 +180,9 @@ keys for achieving the specified operations.
 
 * C can be used to cut the current cell's content.
 
-* p can be used to paste a previously copied/cut cell content into current cell.
+* p can be used to paste a previously copied/cut cell content into current cell. This also adjusts the cell addresses as required.
+
+* P can be used to paste a previously copied/cut cell content into current cell. This pastes the content as is. NOTE: This is capital P.
 
 * D can be used to delete the contents of the current cell.
 
@@ -305,7 +309,7 @@ return back to default command mode.
 
 On pressing 'i', 'e' from the default command mode, the user can enter this mode.
 
-In this mode the user either enters a new content for the cell and or edit the existing
+In this mode the user either enters a new content for the cell and or edits the existing
 content of the cell.
 
 As and when the user presses the Enter key, the cell data entered till that point gets
@@ -316,6 +320,9 @@ saved into spreadsheet in memory and the program will return back to default com
 	configured quote char at the begining and end of the cell content being edited,
 	if you have white space at the begin or end of the current cell content, which
 	inturn you want to save as part of the cell.
+
+	The program will auto add text quote character to the end of the cell content,
+	if it finds the text quote character at the begining of cell content.
 
 User can discard the changes in the edit buffer and return back to default command mode,
 by pressing the Esc key. The original content of the cell is retained in this case.
@@ -484,8 +491,8 @@ and deletion of rows or cols, such addresses are not modified automatically.
 The csv file used by this program uses semicolon [;] to seperate the fields within each row
 i.e within each line in the file.
 
-If any field contains the field seperator with in its content, then the content is embedded
-within ['] ie single quotes.
+If any field contains the field seperator with in its content, then the field content is
+embedded within ['] ie single quotes.
 
 To avoid confusing the program, dont use ' char as part of the spreadsheet contents, other
 than for quoting text contents with field seperator in them.
@@ -608,16 +615,25 @@ If the program is exited normally by the user, by ignoring the warning about uns
 changes, then it returns 1.
 
 
-#### Cell Addresses and Row(s)/Col(s) Insert/Delete operations
+#### Cell Address adjustment and Operations
 
-When rows or cols are inserted or deleted, the program tries to adjust any =expressions,
-which reference rows or cols, as required.
+##### Row(s)/Col(s) Insert/Delete operations
 
-##### Err tag for cell address
+When rows or cols are inserted or deleted, the program tries to adjust cell addresses
+if any in =expressions, as required.
 
-However If during a delete rows / cols operation, the cell address explicitly refered
-by =expression is deleted, then the cell address will be prefixed with a Err tag in
-the =expression.
+NOTE: If the cell address that is explicitly referenced in the =expression, is deleted,
+then a Err tag is prefixed to that cell address.
+
+##### Paste operation
+
+If 'paste with cell address adjustment' is triggered (i.e small p), then cell addresses,
+if any in the =expression being pasted will be auto adjusted as required.
+
+However if the cell address parts are $-prefixed, then those parts wont be adjusted.
+
+During auto adjusting if the adjusted cell address refers to outside the spreadsheet,
+then it will be Err tagged.
 
 
 ### TODO/DONE
@@ -927,6 +943,8 @@ ie if the user presses Esc key to discard his new edit, the program will revert 
 Handle exiting editMode with empty edit buffer and or edit buffer with a single single qoute.
 
 FIx a oversight with hardcoding of old text quote char in the save_file logic.
+
+'P' pastes data without adjusting cell addresses.
 
 
 

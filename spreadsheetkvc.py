@@ -1159,15 +1159,16 @@ def copy_cell():
         me['copySrcCell'] = (me['curRow'], me['curCol'])
 
 
-def paste_cell():
+def paste_cell(bAdjustCellAddress=True):
     if me['copyData'] != None:
         theData = me['copyData']
-        # Calculate row and col adjustment required
-        incR = me['curRow'] - me['copySrcCell'][0]
-        incC = me['curCol'] - me['copySrcCell'][1]
-        # Adjust cell addresses if =expression
-        if theData[0] == '=':
-            theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
+        if bAdjustCellAddress:
+            # Calculate row and col adjustment required
+            incR = me['curRow'] - me['copySrcCell'][0]
+            incC = me['curCol'] - me['copySrcCell'][1]
+            # Adjust cell addresses if =expression
+            if theData[0] == '=':
+                theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
         # Paste data
         me['data'][(me['curRow'],me['curCol'])] = theData
         me['dirty'] = True
@@ -1185,7 +1186,8 @@ def rl_commandmode(stdscr, key):
         D one can delete current cell's content.
         c helps copy cell data.
         C helps Cut cell data.
-        p helps Paste cell data.
+        p Paste cell data with cell address adjustment.
+        P Paste cell data as it is.
         h|? show help dialog
 
     If program is in readOnly Mode, it wont allow
@@ -1209,7 +1211,9 @@ def rl_commandmode(stdscr, key):
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
     elif (key == ord('p')) and not me['readOnly']:
-        paste_cell()
+        paste_cell(True)
+    elif (key == ord('P')) and not me['readOnly']:
+        paste_cell(False)
     elif (key == ord('i')) and not me['readOnly']:
         me['state'] = 'E'
         me['gotStr'] = ""
