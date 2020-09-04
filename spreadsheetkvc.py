@@ -1212,7 +1212,7 @@ def paste_cell(bAdjustCellAddress=True):
             incR = me['curRow'] - me['copySrcCell'][0]
             incC = me['curCol'] - me['copySrcCell'][1]
             # Adjust cell addresses if =expression
-            if theData[0] == '=':
+            if theData.startswith('='):
                 theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
         # Paste data
         me['data'][(me['curRow'],me['curCol'])] = theData

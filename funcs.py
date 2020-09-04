@@ -221,7 +221,7 @@ def do_pyfunc(sCmd, sArgs):
     for curArg in argsList:
         sValOrArg = _nvalue(curArg)
         theArgs += ",{}".format(sValOrArg)
-    if theArgs[0] == ',':
+    if theArgs.startswith(','):
         theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd, theArgs)
     #print("do_pyfunc:{}".format(sPyFunc), file=GLOGFILE)

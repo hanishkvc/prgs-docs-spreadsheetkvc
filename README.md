@@ -957,6 +957,8 @@ If :g celladdr has celladdr beyond spreadsheet, adjust to nearest valid cell.
 
 Filter python functions by default, so only whitelisted functions can be used in =expressions.
 
+Fixed possible corner cases with empty/no arg for function and empty cell content copy situations.
+
 
 
 
