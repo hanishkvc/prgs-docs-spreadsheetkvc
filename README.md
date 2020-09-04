@@ -63,6 +63,9 @@ Some of its features are
 
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
+* Identify looping in =expression calculations and inturn error tag the related cells and stop
+  that specific looping in its tracks from occuring in future ;)
+
 * supports a readonly view mode, if required.
 
 * adjust to terminal window size changes.
@@ -713,7 +716,7 @@ helper commands like
 
 	[DONE] rcopy srcRange destRange
 
-	rgennums startCell endCell [startNum] [delta]
+	rgennums startCell:endCell [startNum] [delta]
 
 	[DONE] rclear
 
@@ -725,7 +728,7 @@ Simple print to text file logic
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
-Trap calc loops
+[DONE] Trap calc loops
 
 
 ## History
@@ -1007,6 +1010,8 @@ Fixed possible corner cases with empty/no arg for function and empty cell conten
 :rcopyasis which copies a block of cells as is, ie dont change cell addresses in =expressions, implemented.
 
 :rclear clears the contents of the cells specified.
+
+Any looping in the =expression calculations is now trapped, tagged and stopped.
 
 
 
