@@ -1253,11 +1253,13 @@ def setdata_from_savededitbuf(scr):
     the spaces wont be removed.
     '''
     # Restore/set data to the latest backedup edit buffer
-    if me['backupEdit'] != None:
+    if (me['backupEdit'] != None) and (me['backupEdit'] != ""):
         if me['backupEdit'][0] == THEQUOTE:
             if me['backupEdit'][-1] != THEQUOTE:
                 me['backupEdit'] += THEQUOTE
         me['data'][(me['curRow'],me['curCol'])] = me['backupEdit'].strip()
+    else:
+        me['data'].pop((me['curRow'],me['curCol']), None)
 
 
 
