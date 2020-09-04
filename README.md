@@ -92,8 +92,8 @@ Key in following command to load a file named filename from path pathto.
 
 Use arrow keys to move around the cells in the spreadsheet.
 
-To insert new content into a cell, use arrow keys to highlight the required cell.
-Next press 'i' key to enter insert cell content edit mode.
+To editExisting|insertNew content into a cell, use arrow keys to highlight the required cell.
+Press 'i' key to insert new cell content. OR else press 'e' key to edit existing cell content.
 
 	key in the required content into the cell.
 
@@ -101,9 +101,7 @@ Next press 'i' key to enter insert cell content edit mode.
 
 	press Esc key to discard changes in edit buffer and return back to the default mode.
 
-	NOTE: TO edit contents of a cell, follow a similar flow, the only change is to
-	press 'e' key instead of 'i' key in the above mentioned flow, to switch from
-	the default mode into edit mode.
+	NOTE: The editing occurs in the edit mode.
 
 To save changes to the spreadsheet key in the following explicit command.
 
@@ -320,7 +318,7 @@ saved into spreadsheet in memory and the program will return back to default com
 	inturn you want to save as part of the cell.
 
 User can discard the changes in the edit buffer and return back to default command mode,
-by pressing the Esc key.
+by pressing the Esc key. The original content of the cell is retained in this case.
 
 NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert
 mode, however once the program returns back to default command mode, the cell content wont
@@ -921,6 +919,10 @@ will automatically add it to the end.
 
 paste operation adjusts =expression cell addresses as required.
 
+### 20200904IST1018 - OnamRelease
+
+insert mode saves the original content if any into backupEdit, so if user doesnt commit his new cell content by pressing enter key,
+ie if the user presses Esc key to discard his new edit, the program will revert the cell to its original content.
 
 
 

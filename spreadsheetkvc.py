@@ -1214,8 +1214,8 @@ def rl_commandmode(stdscr, key):
         me['state'] = 'E'
         me['gotStr'] = ""
         me['crsrOffset'] = 0
-        me['backupEdit'] = None
         curData = me['data'].get((me['curRow'],me['curCol']))
+        me['backupEdit'] = curData
         if curData != None:
             me['dirty'] = True
             me['data'][(me['curRow'],me['curCol'])] = ""
