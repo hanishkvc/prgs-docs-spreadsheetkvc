@@ -75,6 +75,7 @@ me = {
         'copySrcCell': None,
         'gotStr': "",
         'dirty': False,
+        'calcCnt': dict(),
         'exit': DONTEXIT
         }
 
@@ -380,6 +381,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 sData = "{},{}".format(r,c)
             if (sData != None):
                 if sData.startswith("="):
+                    me['calcCnt'] = dict()
                     sData = value((r,c))
                     ctype |= CATTR_DATANUM
                     sRemaining = ""
@@ -1148,6 +1150,16 @@ def _celladdr_valid(sAddr):
     return bValid, key
 
 
+def trap_calclooping(cellKey):
+    curCalcCnt = me['calcCnt'].get(cellKey)
+    if curCalcCnt == None:
+        curCalcCnt = 0
+    curCalcCnt += 1
+    if curCalcCnt > (len(me['data'])*2):
+        raise RuntimeError("CalcLoop:{}".format(curCalcCnt))
+    me['calcCnt'][cellKey] = curCalcCnt
+
+
 def _cellvalue_or_str(sCheck):
     '''
     If passed a cell address, then return the corresponding cells numeric value
@@ -1155,6 +1167,7 @@ def _cellvalue_or_str(sCheck):
     '''
     bCellAddr, cellKey = _celladdr_valid(sCheck)
     if bCellAddr:
+        trap_calclooping(cellKey)
         val = nvalue(cellKey)
         print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=GLOGFILE)
         return str(val)

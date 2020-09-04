@@ -725,6 +725,7 @@ Simple print to text file logic
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
+Trap calc loops
 
 
 ## History
