@@ -926,6 +926,10 @@ ie if the user presses Esc key to discard his new edit, the program will revert 
 
 Handle exiting editMode with empty edit buffer and or edit buffer with a single single qoute.
 
+FIx a oversight with hardcoding of old text quote char in the save_file logic.
+
+
+
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
 

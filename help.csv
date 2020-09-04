@@ -47,7 +47,7 @@ Explicit Command Mode;;ENTERED by pressing : in default mode;;;;;;;;;;;;;;;;;;;;
 ;;The program returns to Default mode when the command returns;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 CSV file details;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;Field Sep;''Uses semicolon [;] by default. User can change from commandline'';;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Field Sep;'Uses semicolon [;] by default. User can change from commandline';;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Text quote;Uses single quote by default. user can change from commandline;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;If cell text content contains current fieldsep, then prg auto quotes the text.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

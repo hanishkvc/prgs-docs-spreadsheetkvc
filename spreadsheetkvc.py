@@ -746,9 +746,9 @@ def _save_file(scr, sFile, filePass=None):
             data = me['data'].get((r,c))
             if (data != None):
                 if data.find(THEFIELDSEP) != -1:
-                    if not data.startswith('`'):
+                    if not data.startswith(THEQUOTE):
                         data = "{}{}".format(THEQUOTE, data)
-                    if not data.endswith('`'):
+                    if not data.endswith(THEQUOTE):
                         data = "{}{}".format(data, THEQUOTE)
             else:
                 data = ""
