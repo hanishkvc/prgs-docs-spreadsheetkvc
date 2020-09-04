@@ -732,7 +732,6 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     If bAdjustCellAddrs is true, then cell addresses in the copied =expressions
     will be adjusted as required.
     '''
-    print("{}{}".format(srcSKey,dstSKey), file=GERRFILE)
     srcRLen = srcEKey[0] - srcSKey[0] + 1
     srcCLen = srcEKey[1] - srcSKey[1] + 1
     incR = dstSKey[0] - srcSKey[0]
@@ -758,6 +757,7 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
 def do_rcmd(scr, cmd, args):
     bDone = False
     try:
+        print("rcmd:{} {}".format(cmd, args), file=GERRFILE)
         lCAddr, lPos = parse.get_celladdrs(args)
         lKeys = []
         for cAddr in lCAddr:
@@ -765,12 +765,14 @@ def do_rcmd(scr, cmd, args):
             if not bCellAddr:
                 return False
             lKeys.append(key)
+            print("rcmd:btw:{} {}".format(cAddr, key), file=GERRFILE)
         if cmd == "rcopy":
-            bDone = do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
+            bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
         elif cmd == "rcopyasis":
-            bDone = do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
+            bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
     except:
-        return False
+        traceback.print_exc(file=GERRFILE)
+        bDone = False
     if not bDone:
         dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
