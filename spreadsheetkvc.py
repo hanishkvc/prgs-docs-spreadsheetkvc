@@ -1155,8 +1155,12 @@ def trap_calclooping(cellKey):
     if curCalcCnt == None:
         curCalcCnt = 0
     curCalcCnt += 1
-    if curCalcCnt > (len(me['data'])*2):
-        raise RuntimeError("CalcLoop:{}".format(curCalcCnt))
+    if curCalcCnt > (len(me['data'])*10):
+        sData = me['data'].get(cellKey)
+        if sData != None:
+            if sData.startswith('='):
+                me['data'][cellKey] = "ErrCalcLoop:{}".format(sData)
+        raise RuntimeError("CalcLoop:{}:{}".format(cellKey, curCalcCnt))
     me['calcCnt'][cellKey] = curCalcCnt
 
 
