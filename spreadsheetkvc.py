@@ -719,11 +719,11 @@ def delete_rc(cmd, args):
 
 
 
-def do_rcopy(scr, cmd, args):
-    src, dst = args.split(' ')
-    srcS, srcE = src.split(':')
-    dstS, dstE = dst.split(':')
-    print("{}{}".format(src,dst), file=GERRFILE)
+def _do_rcopy(scr, cmd, args):
+    try:
+        (srcS, srcE, dstS, dstE), l = parse.get_celladdrs(args)
+    except:
+        return False
     bCellAddr, srcSKey = _celladdr_valid(srcS)
     if not bCellAddr:
         return False
@@ -748,6 +748,13 @@ def do_rcopy(scr, cmd, args):
                 if sData.startswith("="):
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
             me['data'][(dR,dC)] = sData
+    return True
+
+
+def do_rcopy(scr, cmd, args):
+    bDone = _do_rcopy(scr, cmd, args)
+    if not bDone:
+        dlg(scr, [ "Failed:{} {}", "Press any key to continue..." ])
 
 
 def do_rcmd(scr, cmd, args):

@@ -196,6 +196,8 @@ keys for achieving the specified operations.
 This mode is entered by pressing : when in the default command mode.
 In this explicit command mode, the user can enter one of the following commands
 
+##### File operations
+
 * w file
 
 	to save the contents of the current spreadsheet into specified file.
@@ -223,6 +225,12 @@ In this explicit command mode, the user can enter one of the following commands
 * pl passwd file
 
 	to decrypt a previously encrypted file and load it.
+
+* new
+
+	create a new spreadsheet in memory.
+
+##### Insert/Delete operations
 
 * dr [numOfRows]
 
@@ -254,6 +262,25 @@ In this explicit command mode, the user can enter one of the following commands
 	insert n columns after current column.
 	If numOfCols not specified, it defaults to 1.
 
+##### range operations
+
+* rcopy srcCellAddrRange dstCellAddrRange
+
+	Copy a block of cells starting from srcStartAddress to dstStartAddress
+
+	If dstCellAddrRange doesnt match srcCellAddrRange wrt size,
+	then srcCellAddrRange takes precedence in deciding the size.
+
+	src/dstCellAddrRange consists of startAddress:endAddress
+
+
+* rclear cellAddrRange (TODO)
+
+	Clear the cells in the given address range.
+
+
+##### Other operations
+
 * e file (in future)
 
 	to export the current spreadsheet into a file.
@@ -265,10 +292,6 @@ In this explicit command mode, the user can enter one of the following commands
 * clear
 
 	clear the contents of the current spreadsheet.
-
-* new
-
-	create a new spreadsheet in memory.
 
 * !shellCmd arguments
 
@@ -959,6 +982,7 @@ Filter python functions by default, so only whitelisted functions can be used in
 
 Fixed possible corner cases with empty/no arg for function and empty cell content copy situations.
 
+:rcopy logic implemented.
 
 
 
