@@ -1151,14 +1151,16 @@ def _celladdr_valid(sAddr):
     return bValid, key
 
 
+TRAPCALCLOOP_DATALENMULT = 4
 def trap_calclooping(cellKey):
     curCalcCnt = me['calcCnt'].get(cellKey)
     if curCalcCnt == None:
         curCalcCnt = 0
     curCalcCnt += 1
-    if curCalcCnt > (len(me['data'])*10):
-        print("TrapCalcLoop:{}".format(me['calcCnt']), file=GERRFILE)
-        newCalcThreshold = curCalcCnt - 5
+    print("TrapCalcLoop:BTW:{}".format(me['calcCnt']), file=GERRFILE)
+    if curCalcCnt > (len(me['data'])*TRAPCALCLOOP_DATALENMULT):
+        print("TrapCalcLoop:NoNo:{}".format(me['calcCnt']), file=GERRFILE)
+        newCalcThreshold = curCalcCnt - 2
         for key in me['calcCnt']:
             if me['calcCnt'][key] > newCalcThreshold:
                 sData = me['data'].get(key)
