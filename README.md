@@ -749,11 +749,14 @@ Simple print to text file logic
 
 [PARTIAL] Trap calc loops. A simple minded logic added for now. Need to track actual multipath recursion and or calc indirection.
 
+	Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
+
+	ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
+
+	Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.
+
 Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
-Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
-
-ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
 
 
 ## History
