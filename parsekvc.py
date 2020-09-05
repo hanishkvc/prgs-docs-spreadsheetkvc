@@ -215,18 +215,24 @@ def get_funcargs(sIn):
     return sArgs
 
 
-def get_tokens(sIn):
+def get_tokens(sIn, startPos=0, ANAddOn=None):
     '''
     Return a list of tokens in the given string.
 
     It also returns a list of token types which corresponds to
     type of each token in the tokenList.
+
+    startPos specifies the position in the input string from which to
+    start parsing. Defaults to 0.
+
+    If one wants the AlphaNumeric tokens to contain some additional symbols
+    one can pass those in ANAddOn list. Defaults to empty list.
     '''
-    iPos = 0
+    iPos = startPos
     tokenList = []
     typeList = []
     while True:
-        tokenType, sOut, iPos = get_token(sIn, iPos)
+        tokenType, sOut, iPos = get_token(sIn, iPos, ANAddOn=ANAddOn)
         if tokenType == TokenType.NoMore:
             break
         tokenList.append(sOut)
