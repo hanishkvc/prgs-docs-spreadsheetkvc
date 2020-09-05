@@ -64,8 +64,7 @@ Some of its features are
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
 * Identify looping in =expression calculations and inturn error tag the related cells and stop
-  that specific looping in its tracks from occuring in future, for simple cases ;) Need to make
-  it more intelligent later.
+  that specific looping in its tracks from occuring in future, potentially for most cases ;).
 
 * supports a readonly view mode, if required.
 
@@ -443,10 +442,31 @@ Example
 
 	=cnt(B10:C99)
 
+One can refer to values in other cells directly by specifying the corresponding cell's address.
+
+	= 99/(100 + Zz99) * sum(A1:B10)
+
 NOTE that the =expressions are evaluated using pythons eval function. So basic python
 expressions can be evaluated as part of =expressions.
 
 NOTE: =expressions should only refer to other =expression cells and not text cells.
+
+### Looping
+
+If =expressions contain looping, i.e the =expression refering back to itself either directly
+and or through another cell in the chain of calculations required to find the cell's value.
+
+Then the program will trap such looping and Err tag the contents of all cells involved in the
+calculation.
+
+Currently THe program is coded to stop spreadsheet drawing when it traps a loop. So the screen
+wont refresh beyond the cell which triggered the looping. However as the cells involved in
+looping get error tagged, so when user interacts with the spreadsheet by say navigating around
+the cells or so, the screen will automatically refresh and all cells will be displayed, including
+the error tags. If there are more loops, then even they will get trapped and error tagged, and
+the above concept applies to them also.
+
+	However once all loops have been error tagged, the screen will again start showing all cells.
 
 
 ## Supported functions for =expressions
@@ -758,11 +778,11 @@ Simple print to text file logic
 
 [PARTIAL] Trap calc loops. A simple minded logic added for now. Need to track actual multipath recursion and or calc indirection.
 
-	Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
+	[BYPASSED] Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
 
 	ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
 
-	Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.
+	[DONE] Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.
 
 Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
@@ -1051,6 +1071,13 @@ Fixed possible corner cases with empty/no arg for function and empty cell conten
 Any looping in the =expression calculations is now trapped, tagged and stopped for simple cases.
 
 Handle quote char if any inbetween (replace with placeholder), or any at the end.
+
+
+### 20200905IST1212 - OnamPlusRelease
+
+Use a more specific callDepth based calc looping trapping logic. The previous logic would have triggered the maybe calc loop flag even for cells,
+which are lets say referenced from a very very huge number of other cells all of which are inturn used or referenced from a single cell using
+a cell range in its =expression. This should avoid such false positives.
 
 
 
