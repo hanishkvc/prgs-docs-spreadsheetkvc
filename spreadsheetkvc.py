@@ -407,7 +407,8 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 if sData.startswith("="):
                     me['calcCnt'] = dict()
                     me['callDepth'] = 0
-                    sData = value((r,c))
+                    #sData = value((r,c))
+                    sData = me['cdata'].get((r,c))
                     ctype |= CATTR_DATANUM
                     sRemaining = ""
                 else:
@@ -1242,6 +1243,7 @@ def trap_calclooping(cellKey):
                     me['data'][key] = "ErrCalcLoop:{}".format(sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, me['callDepth']))
     me['calcCnt'][cellKey] = curCalcCnt
+    me['cdataUpdate'] = True
 
 
 def _cellvalue_or_str(sCheck):
