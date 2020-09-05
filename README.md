@@ -46,8 +46,11 @@ Some of its features are
 		  function.
 
 * cell contents are evaluated and cached when user updates/modifies any cell content.
-  This ensures that spreadsheets with heavy calculations can still be displayed
-  quickly without any calculation overhead, in general.
+  This ensures that spreadsheets with heavy calculations can be displayed quickly without
+  any calculation overhead, in general.
+
+  Also during evaluation of cells, done in a row major fashion, the calculated results are
+  cached and reused, when calculating other cells.
 
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
@@ -1139,6 +1142,10 @@ Cells accessed through the supported functions (by being part of their arguments
 the callDepth as well as cell calcCnt.
 
 :rcopy[asis] and :rgennums now increase the spreadsheet size, if required.
+
+When retrieving numeric value of cells, if their value is already calculated and cached, the same will be reused. At same time, as was already implemented,
+any modification to cell content will also clear the cache, ensuring that all cell values will get recalculated.
+
 
 
 

@@ -1323,6 +1323,7 @@ def _nvalue(sData):
     return val
 
 
+bUseCachedData = True
 def nvalue(addr):
     '''
     Return the numeric value associated with the given cell.
@@ -1333,6 +1334,10 @@ def nvalue(addr):
     If the cell doesnt contain any data, it will return 0.
     This is unity operation for add++ but not for mult++.
     '''
+    if bUseCachedData:
+        val = me['cdata'].get(addr)
+        if val != None:
+            return val
     val = me['data'].get(addr)
     #print("nvalue:{}:{}".format(addr,val), file=GERRFILE)
     if val == None:
@@ -1340,7 +1345,8 @@ def nvalue(addr):
     if not val.startswith("="):
         return None
     trap_calclooping(addr)
-    return _nvalue(val[1:])
+    nval = _nvalue(val[1:])
+    return nval
 
 
 def nvalue_saddr(saddr):
