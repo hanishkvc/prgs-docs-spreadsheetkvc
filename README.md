@@ -160,12 +160,12 @@ The program supports the following commandline arguments
 
 		To avoid showing the help dialog on program start.
 
-	--readonly
+	--mreadonly
 
 		The program starts in readonly mode, where user cant modify the loaded spreadsheets.
 		That is one cant insert or delete rows/cols. Nor can one edit/insert/cut/delete/paste cells.
 
-		However user can switch to readwrite mode by giving :readwrite explicit command.
+		However user can switch to readwrite mode by giving :mreadwrite explicit command.
 
 
 
@@ -312,6 +312,15 @@ In this explicit command mode, the user can enter one of the following commands
 
 
 ##### Other operations
+
+* mro|mreadonly
+
+	switch program to readonly mode, so that user cant modify the contents of the spreadsheet.
+
+* mrw|mreadwrite
+
+	switch program to readwrite mode, so that user can modify the spreadsheet. This is the default mode.
+
 
 * e file (in future)
 
