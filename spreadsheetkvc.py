@@ -377,7 +377,12 @@ def cdata_update():
             sData = me['data'].get((r,c))
             if sData != None:
                 if sData.startswith('='):
-                    val = value((r,c))
+                    try:
+                        val = value((r,c))
+                    except:
+                        print("cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
+                        traceback.print_exc(file=GERRFILE)
+                        val = 'None'
                 else:
                     val = sData
                 me['cdata'][r,c] = val
