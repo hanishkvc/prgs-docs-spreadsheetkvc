@@ -775,6 +775,27 @@ def _do_rclear(scr, dstSKey, dstEKey):
     return True
 
 
+def _do_rgennums(scr, startKey, endKey, tokens):
+    '''
+    Add numeric content to cells starting from startKey to endKey
+    with values from start with delta increments.
+    '''
+    if len(tokens) > 0:
+        start = int(tokens[0])
+    else:
+        start = 1
+    if len(tokens) > 1:
+        delta = int(tokens[1])
+    else:
+        delta = 1
+    curValue = start
+    for r in range(startKey[0], endKey[0]+1):
+        for c in range(startKey[1], endKey[1]+1):
+            me['data'][(r,c)] = "={}".format(curValue)
+            curValue += delta
+    return True
+
+
 def do_rcmd(scr, cmd, args):
     bDone = False
     try:
@@ -793,6 +814,9 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
         elif cmd == "rclear":
             bDone = _do_rclear(scr, lKeys[0], lKeys[1])
+        elif cmd == "rgennums":
+            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
+            bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
     except:
