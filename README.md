@@ -45,6 +45,10 @@ Some of its features are
 		  to the value in the specified cell and inturn call the python
 		  function.
 
+	* cell contents are evaluated and cached when user updates/modifies any cell content.
+	  This ensures that spreadsheets with heavy calculations can still be displayed
+	  quickly without any calculation overhead, in general.
+
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
 
@@ -1131,6 +1135,8 @@ renamed :readonly and :readwrite to :mreadonly :mreadwrite so that only range ba
 :rgennums number sequence generator.
 
 Comment out some prints in main display path.
+
+Display cached cell data. Cell data recalculations occur only when some cell content changes due to user triggered actions.
 
 
 
