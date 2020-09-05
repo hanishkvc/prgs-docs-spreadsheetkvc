@@ -805,11 +805,11 @@ content viewport than the display viewport.
 
 [DONE] :help loads help.csv in readonly mode.
 
-helper commands like
+[DONE] helper commands which work on a range of cells like
 
 	[DONE] rcopy srcRange destRange
 
-	rgennums startCell:endCell [startNum] [delta]
+	[DONE] rgennums startCell:endCell [startNum] [delta]
 
 	[DONE] rclear
 
