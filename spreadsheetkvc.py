@@ -71,6 +71,8 @@ me = {
         'readOnly': False,
         'helpModeSavedReadOnly': None,
         'data': dict(),
+        'cdata': dict(),
+        'cdataUpdate': True,
         'clipCell': False,
         'copyData': None,
         'copySrcCell': None,
@@ -363,10 +365,29 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
 
 
+def cdata_update():
+    '''
+    Cache data calculation results.
+    '''
+    me['cdata'] = dict()
+    for r in range(1, me['numRows']+1):
+        for c in range(1, me['numCols']+1):
+            sData = me['data'].get((r,c))
+            if sData != None:
+                if sData.startswith('='):
+                    val = value((r,c))
+                else:
+                    val = sData
+                me['cdata'] = val
+
+
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
+    if me['cdataUpdate']:
+        cdata_update()
+        me['cdataUpdate'] = False
     #print("cdrawdata:Starting", file=GERRFILE)
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
