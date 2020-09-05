@@ -367,7 +367,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
-    print("cdrawdata:Starting", file=GERRFILE)
+    #print("cdrawdata:Starting", file=GERRFILE)
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
         dataColStart = 1
@@ -379,7 +379,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             else:
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
-            print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
+            #print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
             if (sData == None) and bDebug:
                 sData = "{},{}".format(r,c)
             if (sData != None):
@@ -396,8 +396,8 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 ctype |= CATTR_DATATEXT
                 sData = sRemaining[0:me['cellWidth']]
                 sRemaining = sRemaining[me['cellWidth']:]
-                if (sData != ""):
-                    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
+                #if (sData != ""):
+                #    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # sData == None AND clipCell
                 ctype |= CATTR_DATATEXT
                 sData = ""
@@ -1205,7 +1205,7 @@ def trap_calclooping(cellKey):
     if curCalcCnt == None:
         curCalcCnt = 0
     curCalcCnt += 1
-    print("TrapCalcLoop:IN:{}:{}:{}".format(cellKey, me['callDepth'], curCalcCnt), file=GERRFILE)
+    #print("TrapCalcLoop:IN:{}:{}:{}".format(cellKey, me['callDepth'], curCalcCnt), file=GERRFILE)
     if me['callDepth'] > CALLDEPTHMAX:
         print("TrapCalcLoop:NoNo:{}:{}".format(me['callDepth'], me['calcCnt']), file=GERRFILE)
         for key in me['calcCnt']:
