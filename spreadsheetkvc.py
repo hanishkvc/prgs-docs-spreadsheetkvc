@@ -1281,7 +1281,20 @@ def _nvalue(sData):
         if evalTypes[i] == parse.EvalPartType.Func: # Handle functions
             sCmd, sArgs = evalParts[i].split('(',1)
             sArgs = sArgs[:-1]
+            # Handle celladdress callDepth here, so that do_func and partners dont have to worry about same
+            bHasCellAddr = False
+            tlArgs, tlArgTypes = parse.get_evalparts(sArgs)
+            for ti in range(len(tlArgTypes)):
+                if tlArgTypes[ti] == parse.EvalPartType.AlphaNum:
+                    tbCellAddr, tsCellAddr, tPos = parse.get_celladdr(tlArgs[ti])
+                    if tbCellAddr and (tPos == 0):
+                        bHasCellAddr = True
+            # Evaluate the function
+            if bHasCellAddr:
+                me['callDepth'] += 1
             sVal = funcs.do_func(sCmd, sArgs)
+            if bHasCellAddr:
+                me['callDepth'] -= 1
             sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
             me['callDepth'] += 1
@@ -1294,6 +1307,7 @@ def _nvalue(sData):
             sNew += evalParts[i]
     # Evaluate
     try:
+        print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
@@ -1313,6 +1327,7 @@ def nvalue(addr):
     This is unity operation for add++ but not for mult++.
     '''
     val = me['data'].get(addr)
+    print("nvalue:{}:{}".format(addr,val), file=GERRFILE)
     if val == None:
         return 0
     if not val.startswith("="):
