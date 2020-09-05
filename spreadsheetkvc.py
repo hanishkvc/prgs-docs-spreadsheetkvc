@@ -1562,14 +1562,15 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp mreadonly")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp mreadonly calldepth")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
     print('    --{} "{}"  Specify the csv field seperator to use'.format(CmdArgs.fieldsep.name, THEFIELDSEP))
     print('    --{} "{}"     Specify the csv field text quote to use'.format(CmdArgs.quote.name, THEQUOTE))
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
-    print("    --{}      run in readonly|view mode".format(CmdArgs.mreadonly.name))
+    print("    --{}     run in readonly|view mode".format(CmdArgs.mreadonly.name))
+    print("    --{} <depth>    specify the maximum call depth | cell chaining allowed".format(CmdArgs.calldepth.name))
     exit(0)
 
 
@@ -1580,6 +1581,7 @@ def process_cmdline(args):
     global THEFIELDSEP
     global THEQUOTE
     global gbStartHelp
+    global CALLDEPTHMAX
     i = 1
     while i < len(args):
         cmd = args[i][2:]
@@ -1595,6 +1597,9 @@ def process_cmdline(args):
             gbStartHelp = False
         elif cmd == CmdArgs.mreadonly.name:
             me['readOnly'] = True
+        elif cmd == CmdArgs.calldepth.name:
+            i += 1
+            CALLDEPTHMAX = int(args[i])
         i += 1
 
 

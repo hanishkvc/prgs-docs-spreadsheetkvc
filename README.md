@@ -168,6 +168,11 @@ The program supports the following commandline arguments
 
 		However user can switch to readwrite mode by giving :mreadwrite explicit command.
 
+	--calldepth <depth>
+
+		Set the maximum call depth | cell chaining allowed by program to <depth>.
+
+		Default value is 100.
 
 
 ### program modes
@@ -1099,6 +1104,10 @@ Handle quote char if any inbetween (replace with placeholder), or any at the end
 Use a more specific callDepth based calc looping trapping logic. The previous logic would have triggered the maybe calc loop flag even for cells,
 which are lets say referenced from a very very huge number of other cells all of which are inturn used or referenced from a single cell using
 a cell range in its =expression. This should avoid such false positives.
+
+renamed :readonly and :readwrite to :mreadonly :mreadwrite so that only range based commands start with r for now. And m cleanly maps to mode.
+
+--calldepth cmdline argument.
 
 
 
