@@ -1177,14 +1177,20 @@ def trap_calclooping_old(cellKey):
 
 CALLDEPTHMAX = 10
 def trap_calclooping(cellKey):
-    print("TrapCalcLoop:IN:{}:{}".format(cellKey, me['callDepth']), file=GERRFILE)
+    curCalcCnt = me['calcCnt'].get(cellKey)
+    if curCalcCnt == None:
+        curCalcCnt = 0
+    curCalcCnt += 1
+    print("TrapCalcLoop:IN:{}:{}:{}".format(cellKey, me['callDepth'], curCalcCnt), file=GERRFILE)
     if me['callDepth'] > CALLDEPTHMAX:
-        print("TrapCalcLoop:NoNo:{}:{}".format(cellKey, me['callDepth']), file=GERRFILE)
-        sData = me['data'].get(cellKey)
-        if sData != None:
-            if sData.startswith('='):
-                me['data'][cellKey] = "ErrCalcLoop:{}".format(sData)
+        print("TrapCalcLoop:NoNo:{}:{}".format(me['callDepth'], me['calcCnt']), file=GERRFILE)
+        for key in me['calcCnt']:
+            sData = me['data'].get(key)
+            if sData != None:
+                if sData.startswith('='):
+                    me['data'][key] = "ErrCalcLoop:{}".format(sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, me['callDepth']))
+    me['calcCnt'][cellKey] = curCalcCnt
 
 
 def _cellvalue_or_str(sCheck):
