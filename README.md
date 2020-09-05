@@ -316,6 +316,25 @@ In this explicit command mode, the user can enter one of the following commands
 
 	Clear the cells in the given address range.
 
+* rgennums cellAddrRange [start] [delta]
+
+	Generate numbers starting from start (default 1) and incrementing|decrementing (default 1)
+	with delta and use it to fill the cells specified in the cellAddrRange.
+
+	Ex: Mutliplication table for 11
+
+		:rgennums A1:A10 11 11
+
+	Ex: Multiplication table of 11, in reverse
+
+		:rgennums B1:B10 110 -11
+
+	Ex: Generate table id starting from 1
+
+		:rgennums C1:C10
+
+	NOTE: Delta can be either positive or negative.
+
 
 ##### Other operations
 
@@ -1108,6 +1127,8 @@ a cell range in its =expression. This should avoid such false positives.
 renamed :readonly and :readwrite to :mreadonly :mreadwrite so that only range based commands start with r for now. And m cleanly maps to mode.
 
 --calldepth cmdline argument.
+
+:rgennums number sequence generator.
 
 
 

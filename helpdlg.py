@@ -32,8 +32,7 @@ def explicitcommandmode_dlg(scr):
     helpMsgs = [
                 "        SpreadsheetKVC - ExplicitCommand Mode        ",
                 "Pressing ':' in defaultMode enters this ExplicitCommand Mode",
-                "   [pw passwd file] write encrypted file",
-                "   [pl passwd file] load encrypted file",
+                "   [pw passwd file] write encrypted file; use pl to load",
                 "   [w file] write to file;            [l file] load file",
                 "   [dr n] delNRows startFrom curRow;  [dc n] del n cols     ",
                 "   [irb n] insert n rows before cur;  [ira n] ins after     ",
@@ -41,9 +40,10 @@ def explicitcommandmode_dlg(scr):
                 "   [g celladdr] goto given cell;      [clear] clear sheet   ",
                 "   [new] new spreadsheet in memory;   [help] show help.csv  ",
                 "   [!shellCmd args] run shell cmd;    [q] Quits the Prg",
-                "[arrow left|right] move cursor to edit inbetween",
-                "[Esc] to exit back to default mode",
-                "",
+                "   [rcopy srcAddrRange dstAddrRange] copy block of cells",
+                "   [rclear addrRange] [rgennums addrRange startNum delta]",
+                "  [left|right] move cursor to edit inbtwn [Esc] to discard  ",
+                "  Use :help to get more details, including supported funcs  ",
                 "******* Look at README.md and help.csv for more info *******",
                 ]
     cui.dlg(scr, helpMsgs, 1, 2, border=True)
