@@ -1314,7 +1314,7 @@ def _nvalue(sData):
             sNew += evalParts[i]
     # Evaluate
     try:
-        print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
+        #print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
@@ -1334,7 +1334,7 @@ def nvalue(addr):
     This is unity operation for add++ but not for mult++.
     '''
     val = me['data'].get(addr)
-    print("nvalue:{}:{}".format(addr,val), file=GERRFILE)
+    #print("nvalue:{}:{}".format(addr,val), file=GERRFILE)
     if val == None:
         return 0
     if not val.startswith("="):
