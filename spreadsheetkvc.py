@@ -1258,7 +1258,6 @@ def _cellvalue_or_str(sCheck):
     '''
     bCellAddr, cellKey = _celladdr_valid(sCheck)
     if bCellAddr:
-        trap_calclooping(cellKey)
         val = nvalue(cellKey)
         print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=GLOGFILE)
         return str(val)
@@ -1332,6 +1331,7 @@ def nvalue(addr):
         return 0
     if not val.startswith("="):
         return None
+    trap_calclooping(addr)
     return _nvalue(val[1:])
 
 
