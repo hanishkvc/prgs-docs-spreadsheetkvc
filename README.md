@@ -1138,6 +1138,7 @@ Cells with no data in them maps to 0 for numeric evaluations.
 Cells accessed through the supported functions (by being part of their arguments) are now accounted by the CalcLooping trapping logic both wrt
 the callDepth as well as cell calcCnt.
 
+:rcopy[asis] and :rgennums now increase the spreadsheet size, if required.
 
 
 

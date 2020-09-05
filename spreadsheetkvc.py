@@ -787,6 +787,10 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
             me['data'][(dR,dC)] = sData
             c += 1
         r += 1
+    if dstEKey[0] > me['numRows']:
+        me['numRows'] = dstEKey[0]
+    if dstEKey[1] > me['numCols']:
+        me['numCols'] = dstEKey[1]
     return True
 
 
@@ -820,6 +824,10 @@ def _do_rgennums(scr, startKey, endKey, tokens):
         for c in range(startKey[1], endKey[1]+1):
             me['data'][(r,c)] = "={}".format(curValue)
             curValue += delta
+    if endKey[0] > me['numRows']:
+        me['numRows'] = endKey[0]
+    if endKey[1] > me['numCols']:
+        me['numCols'] = endKey[1]
     return True
 
 
