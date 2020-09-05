@@ -367,6 +367,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
+    print("cdrawdata:Starting", file=GERRFILE)
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
         dataColStart = 1
@@ -384,6 +385,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
             if (sData != None):
                 if sData.startswith("="):
                     me['calcCnt'] = dict()
+                    me['callDepth'] = 0
                     sData = value((r,c))
                     ctype |= CATTR_DATANUM
                     sRemaining = ""
