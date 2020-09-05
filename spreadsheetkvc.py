@@ -378,7 +378,7 @@ def cdata_update():
                     val = value((r,c))
                 else:
                     val = sData
-                me['cdata'] = val
+                me['cdata'][r,c] = val
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
