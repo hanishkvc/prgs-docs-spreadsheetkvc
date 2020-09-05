@@ -372,6 +372,8 @@ def cdata_update():
     me['cdata'] = dict()
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
+            me['calcCnt'] = dict()
+            me['callDepth'] = 0
             sData = me['data'].get((r,c))
             if sData != None:
                 if sData.startswith('='):
@@ -405,8 +407,6 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
                 sData = "{},{}".format(r,c)
             if (sData != None):
                 if sData.startswith("="):
-                    me['calcCnt'] = dict()
-                    me['callDepth'] = 0
                     #sData = value((r,c))
                     sData = me['cdata'].get((r,c))
                     ctype |= CATTR_DATANUM
