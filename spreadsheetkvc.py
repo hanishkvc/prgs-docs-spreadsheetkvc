@@ -378,7 +378,7 @@ def cdata_update():
             if sData != None:
                 if sData.startswith('='):
                     try:
-                        val = value((r,c))
+                        val = nvalue((r,c))
                     except:
                         print("cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
@@ -1308,10 +1308,13 @@ def nvalue(addr):
     It will either return None (if not numeric or error in expression)
     or else will return the numeric value associated with the cell.
     If the cell contains a =expression, it will be evaluated.
+
+    If the cell doesnt contain any data, it will return 0.
+    This is unity operation for add++ but not for mult++.
     '''
     val = me['data'].get(addr)
     if val == None:
-        return val
+        return 0
     if not val.startswith("="):
         return None
     return _nvalue(val[1:])

@@ -45,9 +45,9 @@ Some of its features are
 		  to the value in the specified cell and inturn call the python
 		  function.
 
-	* cell contents are evaluated and cached when user updates/modifies any cell content.
-	  This ensures that spreadsheets with heavy calculations can still be displayed
-	  quickly without any calculation overhead, in general.
+* cell contents are evaluated and cached when user updates/modifies any cell content.
+  This ensures that spreadsheets with heavy calculations can still be displayed
+  quickly without any calculation overhead, in general.
 
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
@@ -486,17 +486,9 @@ NOTE: =expressions should only refer to other =expression cells and not text cel
 If =expressions contain looping, i.e the =expression refering back to itself either directly
 and or through another cell in the chain of calculations required to find the cell's value.
 
-Then the program will trap such looping and Err tag the contents of all cells involved in the
-calculation.
-
-Currently THe program is coded to stop spreadsheet drawing when it traps a loop. So the screen
-wont refresh beyond the cell which triggered the looping. However as the cells involved in
-looping get error tagged, so when user interacts with the spreadsheet by say navigating around
-the cells or so, the screen will automatically refresh and all cells will be displayed, including
-the error tags. If there are more loops, then even they will get trapped and error tagged, and
-the above concept applies to them also.
-
-	However once all loops have been error tagged, the screen will again start showing all cells.
+Then the program will trap such invalid looping and Err tag the contents of all cells involved in the
+calculation. This allows user to see what and all cells where involved in that looping. It also allows
+the program to continue with evaluation of the other cells.
 
 NOTE: The program will flag as calc loop error tag, if a call depth of CALLDEPTHMAX (100 by default)
 is reached currently. So if a calculation chains through a series of cells involving a chain of
@@ -1122,7 +1114,7 @@ Any looping in the =expression calculations is now trapped, tagged and stopped f
 Handle quote char if any inbetween (replace with placeholder), or any at the end.
 
 
-### 20200905IST1212 - OnamPlusRelease
+### 20200905IST1212 - OnamPlusTeachersDayRelease
 
 Use a more specific callDepth based calc looping trapping logic. The previous logic would have triggered the maybe calc loop flag even for cells,
 which are lets say referenced from a very very huge number of other cells all of which are inturn used or referenced from a single cell using
@@ -1136,7 +1128,13 @@ renamed :readonly and :readwrite to :mreadonly :mreadwrite so that only range ba
 
 Comment out some prints in main display path.
 
-Display cached cell data. Cell data recalculations occur only when some cell content changes due to user triggered actions.
+Display cached cell eval data, to make the spreadsheet displaying fast in general, irrespective of the amount of calculations involved in the spreadsheet.
+Cell data recalculations occur only when some cell content changes due to user triggered actions like editing/inserting/deleting cells etc.
+
+Trap exception during cell =expression evaluation, so that all cells get evaluated and cache gets updated on a call to cdata_update.
+
+Cells with no data in them maps to 0 for numeric evaluations.
+
 
 
 
