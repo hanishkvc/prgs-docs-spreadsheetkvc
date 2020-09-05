@@ -840,6 +840,7 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
+        me['cdataUpdate'] = True
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False
@@ -984,6 +985,7 @@ def load_file(scr, sFile, filePass=None):
             status(scr, ["Canceled loading of {}".format(sFile)])
             return False
     try:
+        me['cdataUpdate'] = True
         scr.clear()
         _load_file(sFile, filePass)
         me['dirty'] = False
@@ -1045,6 +1047,7 @@ def new_file(scr):
     goto_cell(scr, "A1")
     me['data'] = dict()
     me['dirty'] = False
+    me['cdataUpdate'] = True
 
 
 def shell_cmd(scr, cmd, args):
@@ -1130,11 +1133,13 @@ def explicit_commandmode(stdscr, cmdArgs):
             args = "1"
         insert_rc_ab(cmd, args)
         me['dirty'] = True
+        me['cdataUpdate'] = True
     elif cmd.startswith('d') and not me['readOnly']:
         if args == None:
             args = "1"
         delete_rc(cmd, args)
         me['dirty'] = True
+        me['cdataUpdate'] = True
     elif cmd.startswith('g'):
         if args != None:
             goto_cell(stdscr, args)
@@ -1144,6 +1149,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         if len(me['data']) > 0:
             me['data'] = dict()
             me['dirty'] = True
+            me['cdataUpdate'] = True
     elif (cmd == 'new'):
         new_file(stdscr)
     elif (cmd == 'mreadonly') or (cmd == 'mro'):
@@ -1351,6 +1357,7 @@ def paste_cell(bAdjustCellAddress=True):
         # Paste data
         me['data'][(me['curRow'],me['curCol'])] = theData
         me['dirty'] = True
+        me['cdataUpdate'] = True
 
 
 def rl_commandmode(stdscr, key):
@@ -1383,12 +1390,14 @@ def rl_commandmode(stdscr, key):
     elif (key == ord('D')) and not me['readOnly']:
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
+            me['cdataUpdate'] = True
     elif (key == ord('c')):
         copy_cell()
     elif (key == ord('C')) and not me['readOnly']:
         copy_cell()
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
+            me['cdataUpdate'] = True
     elif (key == ord('p')) and not me['readOnly']:
         paste_cell(True)
     elif (key == ord('P')) and not me['readOnly']:
@@ -1493,6 +1502,7 @@ def rl_editplusmode(stdscr, key):
                 setdata_from_savededitbuf(stdscr)
                 me['state'] = 'C'
             me['dirty'] = True
+            me['cdataUpdate'] = True
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
