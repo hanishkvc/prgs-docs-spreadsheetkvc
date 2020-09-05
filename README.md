@@ -66,6 +66,8 @@ Some of its features are
 * Identify looping in =expression calculations and inturn error tag the related cells and stop
   that specific looping in its tracks from occuring in future, potentially for most cases ;).
 
+	Cell-to-cell-to-cell-... chaining upto a depth of 100 allowed by default.
+
 * supports a readonly view mode, if required.
 
 * adjust to terminal window size changes.
@@ -467,6 +469,25 @@ the error tags. If there are more loops, then even they will get trapped and err
 the above concept applies to them also.
 
 	However once all loops have been error tagged, the screen will again start showing all cells.
+
+NOTE: The program will flag as calc loop error tag, if a call depth of CALLDEPTHMAX (100 by default)
+is reached currently. So if a calculation chains through a series of cells involving a chain of
+CALLDEPTHMAX number of cells or more, where one cell, refers to the other, the other refers to another
+and so on, then it will flag it has a error.
+
+	TODO: In future, use a heuristic involving both callDepth as well as callCnt of cells involved.
+
+	NOTE: A cell directly refering to say 100 or even 500 cells for that matter is not a issue.
+	Only if cells chain from one cell to other cell and that other cell to another cell and so on
+	to the depth threshold set, only then this triggers.
+
+	i.e CellB4[=B1+B2+B3]
+
+		is a call depth of only 1
+
+	while CellB4[=B3] CellB3[=B2] CellB2[=B1] CellB1[=10]
+
+		leads to a call depth of 3 as far as CellB4 is concerned.
 
 
 ## Supported functions for =expressions

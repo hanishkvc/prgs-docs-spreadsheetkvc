@@ -1175,7 +1175,7 @@ def trap_calclooping_old(cellKey):
     me['calcCnt'][cellKey] = curCalcCnt
 
 
-CALLDEPTHMAX = 10
+CALLDEPTHMAX = 100
 def trap_calclooping(cellKey):
     curCalcCnt = me['calcCnt'].get(cellKey)
     if curCalcCnt == None:
