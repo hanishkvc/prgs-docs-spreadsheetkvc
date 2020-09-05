@@ -968,7 +968,6 @@ def _load_file(sFile, filePass=None):
             else:
                 sCur += t
             i += 1
-        sCur = sCur[:-1]
         if sCur != "":
             me['data'][(r,c)] = sCur
             sCur = ""
