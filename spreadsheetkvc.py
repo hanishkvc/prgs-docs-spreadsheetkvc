@@ -77,6 +77,7 @@ me = {
         'gotStr': "",
         'dirty': False,
         'calcCnt': dict(),
+        'callDepth': 0,
         'exit': DONTEXIT
         }
 
@@ -1153,7 +1154,7 @@ def _celladdr_valid(sAddr):
 
 
 TRAPCALCLOOP_DATALENMULT = 4
-def trap_calclooping(cellKey):
+def trap_calclooping_old(cellKey):
     curCalcCnt = me['calcCnt'].get(cellKey)
     if curCalcCnt == None:
         curCalcCnt = 0
@@ -1170,6 +1171,14 @@ def trap_calclooping(cellKey):
                         me['data'][key] = "ErrCalcLoop:{}".format(sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, curCalcCnt))
     me['calcCnt'][cellKey] = curCalcCnt
+
+
+CALLDEPTHMAX = 10
+def trap_calclooping(cellKey):
+    print("TrapCalcLoop:IN:{}:{}".format(cellKey, me['callDepth']), file=GERRFILE)
+    if me['callDepth'] > CALLDEPTHMAX:
+        print("TrapCalcLoop:NoNo:{}:{}".format(cellKey, me['callDepth']), file=GERRFILE)
+        raise RuntimeError("CalcLoop:{}:{}".format(cellKey, me['callDepth']))
 
 
 def _cellvalue_or_str(sCheck):
@@ -1205,7 +1214,9 @@ def _nvalue(sData):
             sVal = funcs.do_func(sCmd, sArgs)
             sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
+            me['callDepth'] += 1
             sNew += _cellvalue_or_str(evalParts[i])
+            me['callDepth'] -= 1
         elif evalTypes[i] == parse.EvalPartType.Group: # Bracket grouped subexpression
             sVal = _nvalue(evalParts[i][1:-1])
             sNew += "({})".format(sVal)
