@@ -368,8 +368,12 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
 def _cdata_update(rStart=1, cStart=1):
     '''
     Cache data calculation results.
+    If exception, then dont store anything. Just in case if the exception
+    is due to a long chain of cells in calc, then retrying it will help build
+    the solution part by part.
     '''
     bNoError = True
+    lErrCells = []
     for r in range(rStart, me['numRows']+1):
         for c in range(cStart, me['numCols']+1):
             data = me['cdata'].get((r,c))
@@ -384,22 +388,25 @@ def _cdata_update(rStart=1, cStart=1):
                         val = nvalue((r,c))
                         me['cdata'][r,c] = val
                     except:
+                        lErrCells.append((r,c))
                         print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
                         bNoError = False
                 else:
                     val = sData
                     me['cdata'][r,c] = val
-    return bNoError
+    return bNoError, lErrCells
 
 
 def cdata_update():
     me['cdata'] = dict()
     for i in range(4):
-        bDone = _cdata_update()
+        bDone, lErrCells = _cdata_update()
         if bDone:
             break
         print("cdata_update:{}:recover".format(i), file=GERRFILE)
+    for eCell in lErrCells:
+        me['data'][eCell] = "Err:"+me['data'][eCell]
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
