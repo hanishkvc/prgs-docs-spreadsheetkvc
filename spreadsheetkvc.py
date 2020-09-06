@@ -369,6 +369,7 @@ def _cdata_update(rStart=1, cStart=1):
     '''
     Cache data calculation results.
     '''
+    bNoError = True
     for r in range(rStart, me['numRows']+1):
         for c in range(cStart, me['numCols']+1):
             data = me['cdata'].get((r,c))
@@ -381,27 +382,23 @@ def _cdata_update(rStart=1, cStart=1):
                 if sData.startswith('='):
                     try:
                         val = nvalue((r,c))
+                        me['cdata'][r,c] = val
                     except:
                         print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
-                        return False, (r,c)
+                        bNoError = False
                 else:
                     val = sData
-                me['cdata'][r,c] = val
-    return True, (0,0)
+                    me['cdata'][r,c] = val
+    return bNoError
 
 
 def cdata_update():
     me['cdata'] = dict()
-    lastErrorCell = (-1, -1)
-    for i in range(1024):
-        bDone, errorCell = _cdata_update()
+    for i in range(16):
+        bDone = _cdata_update()
         if bDone:
             break
-        if errorCell == lastErrorCell:
-            print("cdata_update:{}:cantRecover:bailingout:{}".format(i,errorCell), file=GERRFILE)
-            break
-        lastErrorCell = errorCell
         print("cdata_update:{}:recover".format(i), file=GERRFILE)
 
 
@@ -1256,7 +1253,7 @@ def trap_calclooping_old(cellKey):
     me['calcCnt'][cellKey] = curCalcCnt
 
 
-CALLDEPTHMAX = 100
+CALLDEPTHMAX = 400
 def trap_calclooping(cellKey):
     curCalcCnt = me['calcCnt'].get(cellKey)
     if curCalcCnt == None:

@@ -1158,6 +1158,8 @@ Done while viewing few good movies including Joseph among others.
 
 NValue also updates the cell calculation cache, so that a cell is not recalculated more than once irrespective of in which way the cell dependencies flow.
 
+cdata_update modified to allow long chain(s) of cells based calcs to be handled in a part by part basis over multiple steps/loops.
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
