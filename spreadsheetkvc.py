@@ -1336,6 +1336,7 @@ def _nvalue(sData):
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
         val = None
+        raise
     return val
 
 
