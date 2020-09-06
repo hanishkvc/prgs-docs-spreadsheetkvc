@@ -839,7 +839,7 @@ Simple print to text file logic
 
 	[DONE] Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.
 
-Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
+[DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
 
 
@@ -1165,6 +1165,7 @@ Done while viewing few good movies including Joseph among others.
 NValue also updates the cell calculation cache, so that a cell is not recalculated more than once irrespective of in which way the cell dependencies flow.
 
 cdata_update modified to allow long chain(s) of cells based calcs to be handled in a part by part basis over multiple steps/loops.
+cdata_update sets error tag on cells which raised exception.
 
 
 
