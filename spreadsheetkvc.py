@@ -365,12 +365,12 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
 
 
-def _cdata_update():
+def _cdata_update(rStart=1, cStart=1):
     '''
     Cache data calculation results.
     '''
-    for r in range(1, me['numRows']+1):
-        for c in range(1, me['numCols']+1):
+    for r in range(rStart, me['numRows']+1):
+        for c in range(cStart, me['numCols']+1):
             data = me['cdata'].get((r,c))
             if data != None:
                 continue
