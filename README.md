@@ -75,11 +75,6 @@ Some of its features are
 
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
-* Identify looping in =expression calculations and inturn error tag the related cells and stop
-  that specific looping in its tracks from occuring in future, potentially for most cases ;).
-
-	Cell-to-cell-to-cell-... chaining upto a depth of 100 allowed by default.
-
 * supports a readonly view mode, if required.
 
 * adjust to terminal window size changes.
@@ -91,6 +86,17 @@ Some of its features are
 	If text quote at begin or end of cell content, auto insert at the other end, if missing.
 
 	If text quote some where in the middle of cell content, replace with a placeholder char.
+
+* Any looping in =expression calculations and or very very long (2000+) cell-to-cell dependency
+  chaining will be identified and result in None result. However if such entries are there,
+  editing of spreadsheet will take few seconds after each edit.
+
+  [DevelNote]
+
+  * If CALCLOOPMAX is reduced to 200, then looping in =expressions and or very long cell-to-cell
+    dependency chaining will be identified and all related cells will be error tagged.
+
+    This also ensures that those cells will no longer be considered in future =expression calculations.
 
 
 for more details refer to the documentation below.
