@@ -395,7 +395,7 @@ def _cdata_update(rStart=1, cStart=1):
 
 def cdata_update():
     me['cdata'] = dict()
-    for i in range(16):
+    for i in range(4):
         bDone = _cdata_update()
         if bDone:
             break
