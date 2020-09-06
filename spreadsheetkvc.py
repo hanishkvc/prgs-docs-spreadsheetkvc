@@ -371,6 +371,9 @@ def _cdata_update():
     '''
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
+            data = me['cdata'].get((r,c))
+            if data != None:
+                continue
             me['calcCnt'] = dict()
             me['callDepth'] = 0
             sData = me['data'].get((r,c))
