@@ -378,25 +378,28 @@ def _cdata_update():
                 if sData.startswith('='):
                     try:
                         val = nvalue((r,c))
-                    except RecursionError:
-                        print("_cdata_update:RecursionError:{}:{}".format((r,c),sData), file=GERRFILE)
-                        return False
                     except:
                         print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
-                        val = 'None'
+                        return False, (r,c)
                 else:
                     val = sData
                 me['cdata'][r,c] = val
-    return True
+    return True, (0,0)
 
 
 def cdata_update():
     me['cdata'] = dict()
+    lastErrorCell = (-1, -1)
     for i in range(1024):
-        print("cdata_update:recover:{}".format(i), file=GERRFILE)
-        if _cdata_update() == True:
+        bDone, errorCell = _cdata_update()
+        if bDone:
             break
+        if errorCell == lastErrorCell:
+            print("cdata_update:{}:cantRecover:bailingout:{}".format(i,errorCell), file=GERRFILE)
+            break
+        lastErrorCell = errorCell
+        print("cdata_update:{}:recover".format(i), file=GERRFILE)
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
@@ -1326,9 +1329,9 @@ def _nvalue(sData):
     try:
         #print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
-    except RuntimeError as re:
-        print("_nvalue:RuntimeError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
-        raise
+    #except RuntimeError as re:
+    #    print("_nvalue:RuntimeError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
+    #    raise
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
