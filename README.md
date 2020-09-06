@@ -52,6 +52,11 @@ Some of its features are
   Also during evaluation of cells, done in a row major fashion, the calculated results are
   cached and reused, when calculating other cells.
 
+  For optimal performance, especially for =expressions which have deep cell chaining dependencies
+  ideally have cell dependencies such that they depend on
+
+	* cells to their left on the same row and or any cell in the rows to its top.
+
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
 
@@ -1151,6 +1156,7 @@ char of the last field's value, in each row, getting eaten up.
 
 Done while viewing few good movies including Joseph among others.
 
+NValue also updates the cell calculation cache, so that a cell is not recalculated more than once irrespective of in which way the cell dependencies flow.
 
 
 

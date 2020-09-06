@@ -1345,6 +1345,8 @@ def nvalue(addr):
         return None
     trap_calclooping(addr)
     nval = _nvalue(val[1:])
+    if bUseCachedData:
+        me['cdata'][addr] = nval
     return nval
 
 
