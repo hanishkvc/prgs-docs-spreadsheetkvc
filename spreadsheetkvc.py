@@ -365,11 +365,10 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
 
 
-def cdata_update():
+def _cdata_update():
     '''
     Cache data calculation results.
     '''
-    me['cdata'] = dict()
     for r in range(1, me['numRows']+1):
         for c in range(1, me['numCols']+1):
             me['calcCnt'] = dict()
@@ -379,13 +378,25 @@ def cdata_update():
                 if sData.startswith('='):
                     try:
                         val = nvalue((r,c))
+                    except RecursionError:
+                        print("_cdata_update:RecursionError:{}:{}".format((r,c),sData), file=GERRFILE)
+                        return False
                     except:
-                        print("cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
+                        print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
                         val = 'None'
                 else:
                     val = sData
                 me['cdata'][r,c] = val
+    return True
+
+
+def cdata_update():
+    me['cdata'] = dict()
+    for i in range(1024):
+        print("cdata_update:recover:{}".format(i), file=GERRFILE)
+        if _cdata_update() == True:
+            break
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
