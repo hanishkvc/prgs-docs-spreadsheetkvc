@@ -390,7 +390,7 @@ explicitly specify the file to write to.
 	NOTE: Delta can be either positive or negative.
 
 
-##### Other operations
+##### Config commands
 
 * cro|creadonly
 
@@ -400,6 +400,20 @@ explicitly specify the file to write to.
 
 	switch program to readwrite mode, so that user can modify the spreadsheet. This is the default mode.
 
+* cfs|cfieldsep theFieldSepChar
+
+	set the fieldsep for the csv file.
+
+	Ex: cfs ' (for setting single quote as fieldsep)
+
+	Ex: cfs ; (for setting semicolon as fieldsep)
+
+* ctq|ctextquote theTextQuoteChar
+
+	set the text quote for the csv file.
+
+
+##### Other operations
 
 * e file (in future)
 
@@ -736,6 +750,28 @@ the system date and time info of when the encryption was carried out, is stored 
 part of its aead logic, where the date time is stored in a unencrypted but base64
 encoded format, while at same time the same is accounted as part of the mac maintained
 for the encrypted message.
+
+
+### Converting CSV files
+
+TO convert a csv file from using one fieldsep character to another.
+
+First set the fieldsep to that used by the csv file currently.
+
+	Ex: :cfieldsep theFieldSepChar
+
+Next load the file
+
+	Ex: :l pathto/file
+
+Set the fieldsep you want to use while saving
+
+	Ex: :cfieldsep theNewFieldSepChar
+
+Next write the file with the new fiedlsep
+
+	Ex: :w pathto/file
+
 
 
 ## Misc
@@ -1240,6 +1276,11 @@ Rename mreadonly and mreadwrite to creadonly (cro) and creadwrite (crw). This ma
 and ctextquote commands in future.
 
 To avoid confusion and to have consistancy and semantic match, have renamed arguments of functions which took cell's row and col info from y,x to r,c.
+
+Added statusbar helper, use for processing status.
+
+Add cfieldsep and ctextquote commands to set fieldsep and textquote from within the program. This will allow one to convert a csv file from using 1 fieldsep
+and quote to a different one. TODO: WHile saving, will have to check for and handle quotes appropriately. Currently only field sep handled during saving.
 
 
 

@@ -1155,6 +1155,25 @@ def shell_cmd(scr, cmd, args):
     cdraw(scr)
 
 
+def do_ccmd(scr, cmd, args):
+    '''
+    The Config commands handling
+
+    cro, crw
+    cfs, ctq
+    '''
+    global THEFIELDSEP, THEQUOTE
+
+    if (cmd == 'creadonly') or (cmd == 'cro'):
+        me['readOnly'] = True
+    elif (cmd == 'creadwrite') or (cmd == 'crw'):
+        me['readOnly'] = False
+    elif (cmd == 'cfieldsep') or (cmd == 'cfs'):
+        THEFIELDSEP = args[0]
+    elif (cmd == 'ctextquote') or (cmd == 'ctq'):
+        THEQUOTE = args[0]
+
+
 def quit(scr):
     '''
     Check that no unsaved changes exists, before gracefully quiting.
@@ -1243,10 +1262,8 @@ def explicit_commandmode(stdscr, cmdArgs):
             me['cdataUpdate'] = True
     elif (cmd == 'new'):
         new_file(stdscr)
-    elif (cmd == 'creadonly') or (cmd == 'cro'):
-        me['readOnly'] = True
-    elif (cmd == 'creadwrite') or (cmd == 'crw'):
-        me['readOnly'] = False
+    elif (cmd[0] == 'c'):
+        do_ccmd(stdscr, cmd, args)
     elif cmd.startswith("r") and not me['readOnly']:
         do_rcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
