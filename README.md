@@ -27,7 +27,7 @@ Some of its features are
   program will autoscroll if required to allow user to continue editing/entering content,
   within reasonable limits.
 
-	* [Outside cell editing] Overflowing cell's content will be shown in place of adjacent cells,
+	* [Outside of cell editing] Overflowing cell's content will be shown in place of adjacent cells,
 	  provided those adjacent cells are empty.
 
 * Support evaluation of mathematical expressions which inturn can refer to

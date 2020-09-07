@@ -1277,28 +1277,24 @@ def _celladdr_valid(sAddr):
     return bValid, key
 
 
-TRAPCALCLOOP_DATALENMULT = 4
-def trap_calclooping_old(cellKey):
-    curCalcCnt = me['calcCnt'].get(cellKey)
-    if curCalcCnt == None:
-        curCalcCnt = 0
-    curCalcCnt += 1
-    print("TrapCalcLoop:BTW:{}".format(me['calcCnt']), file=GERRFILE)
-    if curCalcCnt > (len(me['data'])*TRAPCALCLOOP_DATALENMULT):
-        print("TrapCalcLoop:NoNo:{}".format(me['calcCnt']), file=GERRFILE)
-        newCalcThreshold = curCalcCnt - 2
-        for key in me['calcCnt']:
-            if me['calcCnt'][key] > newCalcThreshold:
-                sData = me['data'].get(key)
-                if sData != None:
-                    if sData.startswith('='):
-                        me['data'][key] = "{}:{}".format(ERRLOOP, sData)
-        raise RuntimeError("CalcLoop:{}:{}".format(cellKey, curCalcCnt))
-    me['calcCnt'][cellKey] = curCalcCnt
-
-
-CALLDEPTHMAX = 400
+CALLDEPTHMAX = 1000
 def trap_calclooping(cellKey):
+    '''
+    If callDepth crosses the set threshold, then raise a CalcLoop exception and
+    Err tag all involved cells.
+
+    This is currently set to a very high value of 1000, so that python system recursion
+    limit will kick in and [_]cdata_update will do its magic of evaluating long chains
+    by sliding over the long chain in parts over a configured number of calc runs.
+
+        Inturn any cells still left hanging after [_]cdata_update is done is what gets
+        ErrTagged by it.
+
+        _cdata_update also resets callDepth counter, as it starts fresh recalculations.
+
+    NOTE: Put differently this also has the side-effect of keeping this logic on hold in the back,
+    indirectly, currently.
+    '''
     curCalcCnt = me['calcCnt'].get(cellKey)
     if curCalcCnt == None:
         curCalcCnt = 0
