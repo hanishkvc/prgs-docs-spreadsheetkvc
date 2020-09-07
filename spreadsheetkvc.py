@@ -327,22 +327,11 @@ def cellcur_down():
         print("cellcur_down:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
-def coladdr_num2alpha_old(iAddr):
-    iChr = iAddr-1
-    iMajor = int(iChr/26)
-    if (iMajor < 1):
-        sMajor = ""
-    elif (iMajor > 26):
-        print("ERROR: More than {} cols not supported".format(26*26))
-        exit()
-    else:
-        sMajor=chr(ord('A')-1+iMajor)
-    sMinor = chr(ord('A')+iChr%26)
-    sColAddr = sMajor+sMinor
-    return sColAddr
-
-
 def coladdr_num2alpha(iAddr):
+    '''
+    Generate alphabetic col address given the column number.
+    The column number starts from 1 internally (and not 0).
+    '''
     curAddr = iAddr - 1
     sAddr = ""
     while True:

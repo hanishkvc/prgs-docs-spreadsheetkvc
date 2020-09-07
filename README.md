@@ -109,10 +109,21 @@ Some of its features are
   other cells for their calculations and those other cells dependent on even more cells for their value,
   that is when a cell calculation chaining occurs.
 
-  [DevelNote]
+	[DevelNote]
 
-  * If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell
-    dependency chaining will be identified and all cells involved in the chain will also get error tagged.
+	* If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell
+	  dependency chaining will be identified and all cells involved in the chain will also get error tagged.
+
+* Uses the sparse dictionary data structure to store the cells in memory. So irrespective of the size of the
+  spreadsheet, in memory it occupies only as much space as required for cells with contents in them.
+
+	* so one could theoretically have a huge number of rows and columns.
+
+		* use :irb [numOfRows] or :ira [numOfRows] to add rows before or after current row
+
+		* use :icb [numOfCols] or :ica [numOfCols] to add cols before or after current col
+
+		* Look further down for details. [numOfCols] indicates that numOfCols is optional.
 
 
 for more details refer to the documentation below.
@@ -869,7 +880,7 @@ Maintain reverse list of cell depedencies (i.e each cell maintains a list of cel
 Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by
 the program.
 
-Allow cols beyond ZZ.
+[DONE] Allow cols beyond ZZ.
 
 Tab completion of dir|filenames?
 
@@ -1207,6 +1218,9 @@ Spead up usage for general case, with partial Cell ReCalculation by default, wit
 
 Show a processing status message from \_cdraw\_data before _cdata_update is called. This ensures that if cdata_update is forced to trigger time consuming
 calculations, then user sees the processing status message.
+
+Added support for arbitrary number of cols, similar to rows. While trying to test this, noticed that gnumeric and libreoffice potentially seem to have a limit
+on the number of columsn allowed (need to verify libreoffice/gnumeric bit more later).
 
 
 
