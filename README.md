@@ -1176,6 +1176,7 @@ is pushed up the logic chain. Inturn cdata_update tags Recursion and Exception e
 
 Standardised ErrTag pattern. Added :rclearerr command.
 
+Spead up usage for general case, with partial Cell ReCalculation by default, with full recalculation triggered only if cells in view trigger a recursion error.
 
 
 

@@ -412,11 +412,17 @@ def cdata_update(bClearCache=True, rStart=1, cStart=1, rEnd=-1, cEnd=-1):
         rEnd = me['numRows']
     if cEnd == -1:
         cEnd = me['numCols']
-    for i in range(4):
-        bRecErr, lRecCells, bExc, lExcCells = _cdata_update(rStart, cStart, rEnd, cEnd)
+    for j in range(2):
+        for i in range(4):
+            bRecErr, lRecCells, bExc, lExcCells = _cdata_update(rStart, cStart, rEnd, cEnd)
+            if not bRecErr:
+                break
+            print("cdata_update:{},{}-{},{}:{}:recover".format(rStart, cStart, rEnd, cEnd, j*10+i), file=GERRFILE)
         if not bRecErr:
             break
-        print("cdata_update:{}:recover".format(i), file=GERRFILE)
+        print("cdata_update:{},{}-{},{}:fullcalc".format(rStart, cStart, rEnd, cEnd), file=GERRFILE)
+        rStart, cStart = 1, 1
+        rEnd, cEnd = me['numRows'], me['numCols']
     for eCell in lExcCells:
         me['data'][eCell] = ERREXCEPTION+me['data'][eCell]
     for eCell in lRecCells:
