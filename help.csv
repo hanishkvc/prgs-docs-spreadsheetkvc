@@ -94,7 +94,7 @@ Some samples;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Implemented in Python with source on github;;;;Sparse datastructure for arbitrary size spreadsheet;;;;;;;;;;;;;;;;;;;;;;;;;;;
 CSV files, optional Authenticated Enryption;;;;'Use Curses for Table/Matrix view; Allow inline Cell editing';;;;;;;;;;;;;;;;;;;;;;;;;;;
 '=expressions interpreted as python evals';;;;Lazy Cached Cell evaluation, triggered on view of self or dependents;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Insert/Delete/Paste adjust CellAddresses as required;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Insert/Delete/Paste adjust CellAddresses inc$ as required;;;;Helper commands and Builtin Funcs + Python Math funcs;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Trap looping, while allowing deep cell-to-cell deps with multipass oppurtinistic calcs;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 *** A simple commandline curses based spreadsheet program in python. Supports csv files with optional authenticated encryption ***;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
