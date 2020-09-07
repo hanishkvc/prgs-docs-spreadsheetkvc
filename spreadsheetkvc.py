@@ -365,7 +365,7 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
         cellstr(stdscr, i, 0, "{}".format(i), ctype)
 
 
-def _cdata_update(rStart=1, cStart=1):
+def _cdata_update(rStart, cStart, rEnd, cEnd):
     '''
     Cache data calculation results.
     If exception, then dont store anything. Just in case if the exception
@@ -376,8 +376,8 @@ def _cdata_update(rStart=1, cStart=1):
     bException = False
     lExcCells = []
     lRecCells = []
-    for r in range(rStart, me['numRows']+1):
-        for c in range(cStart, me['numCols']+1):
+    for r in range(rStart, rEnd+1):
+        for c in range(cStart, cEnd+1):
             data = me['cdata'].get((r,c))
             if data != None:
                 continue
@@ -405,10 +405,15 @@ def _cdata_update(rStart=1, cStart=1):
 
 ERREXCEPTION = "#ErrExc#"
 ERRLOOP = "#ErrLop#"
-def cdata_update():
-    me['cdata'] = dict()
+def cdata_update(bClearCache=True, rStart=1, cStart=1, rEnd=-1, cEnd=-1):
+    if bClearCache:
+        me['cdata'] = dict()
+    if rEnd == -1:
+        rEnd = me['numRows']
+    if cEnd == -1:
+        cEnd = me['numCols']
     for i in range(4):
-        bRecErr, lRecCells, bExc, lExcCells = _cdata_update()
+        bRecErr, lRecCells, bExc, lExcCells = _cdata_update(rStart, cStart, rEnd, cEnd)
         if not bRecErr:
             break
         print("cdata_update:{}:recover".format(i), file=GERRFILE)
