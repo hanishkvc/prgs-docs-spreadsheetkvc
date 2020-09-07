@@ -1564,26 +1564,33 @@ def rl_commandmode(stdscr, key):
 
 
 def text_textquote_safe(sIn):
-        # Handle quote at begining or only quote
-        if me['backupEdit'][0] == THEQUOTE:
-            if len(me['backupEdit']) == 1:
-                me['backupEdit'] += THEQUOTE
-            if me['backupEdit'][-1] != THEQUOTE:
-                me['backupEdit'] += THEQUOTE
-        # Handle quote at end
-        if me['backupEdit'][-1] == THEQUOTE:
-            if me['backupEdit'][0] != THEQUOTE:
-                me['backupEdit'] = THEQUOTE + me['backupEdit']
-        sData = me['backupEdit'].strip()
-        # Handle any in between quote, rather replace with predefined placeholder
-        iPos = 0
-        while True:
-            iPos = sData.find(THEQUOTE, iPos+1)
-            if (iPos == -1) or (iPos == (len(sData)-1)):
-                break
-            sBefore = sData[:iPos]
-            sAfter = sData[iPos+1:]
-            sData = sBefore + THEALT2INBTWQUOTE + sAfter
+    '''
+    Make text string textquote safe
+
+    If textquote is there only at the begin or end of string, add to other end.
+    If textquote somewhere inbetween in the string, replace it with predefined placeholder.
+    '''
+    # Handle quote at begining or only quote
+    if sIn[0] == THEQUOTE:
+        if len(sIn) == 1:
+            sIn += THEQUOTE
+        if sIn[-1] != THEQUOTE:
+            sIn += THEQUOTE
+    # Handle quote at end
+    if sIn[-1] == THEQUOTE:
+        if sIn[0] != THEQUOTE:
+            sIn = THEQUOTE + sIn
+    sData = sIn.strip()
+    # Handle any in between quote, rather replace with predefined placeholder
+    iPos = 0
+    while True:
+        iPos = sData.find(THEQUOTE, iPos+1)
+        if (iPos == -1) or (iPos == (len(sData)-1)):
+            break
+        sBefore = sData[:iPos]
+        sAfter = sData[iPos+1:]
+        sData = sBefore + THEALT2INBTWQUOTE + sAfter
+    return sData
 
 
 def setdata_from_savededitbuf(scr):
