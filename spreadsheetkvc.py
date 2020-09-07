@@ -351,7 +351,7 @@ def coladdr_num2alpha(iAddr):
         up = int(curAddr/26)
         if up == 0:
             break
-        curAddr = up
+        curAddr = (up - 1)
     return sAddr
 
 
