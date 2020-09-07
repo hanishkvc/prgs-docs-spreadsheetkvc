@@ -27,8 +27,8 @@ Some of its features are
   program will autoscroll if required to allow user to continue editing/entering content,
   within reasonable limits.
 
-	* Overflowing cell's content will be shown in place of adjacent cells, provided
-	  those adjacent cells are empty.
+	* [Outside cell editing] Overflowing cell's content will be shown in place of adjacent cells,
+	  provided those adjacent cells are empty.
 
 * Support evaluation of mathematical expressions which inturn can refer to
 
@@ -56,6 +56,12 @@ Some of its features are
   ideally have cell dependencies such that they depend on
 
 	* cells to their left on the same row and or any cell in the rows to its top.
+
+  Prg defers cell reevaluation, till the cell becomes visible or some other cell which depends on it
+  either directly or indirectly becomes visible. THis ensures that even spreadsheets with calculations
+  involving very very long chaining across cells load and can be edited normally in most cases.
+  Only when cells with heavy chaining become visible, the program will pause to do the calculations
+  required and inturn show its results.
 
 * Written in python, with source available on github, so that anyone can understand, modify
   and or bugfix as required, to meet their needs ;)
@@ -87,16 +93,26 @@ Some of its features are
 
 	If text quote some where in the middle of cell content, replace with a placeholder char.
 
-* Any looping in =expression calculations and or very very long (2000+) cell-to-cell dependency
-  chaining will be identified and result in None result. However if such entries are there,
-  editing of spreadsheet will take few seconds after each edit.
+* Any Cells having looping in =expression calculations (within itself or through a chain of cells)
+  and or very very long (2000+) cell-to-cell dependency depth chaining will be identified and result
+  in None result or ErrTagging. ErrTagging ensures that those cells dont get accounted in subsequent
+  recalculations and thus dont bog down the program.
+
+  Once user has fixed the looping in calculation and or better organised things. User can run
+  :rclearerr cellAddrRange to clear err tags from the cells in the specified range. So that the
+  program will start accounting those cells again.
+
+  User will be able to see if a cell is error tagged, because same is shown as part of cell content.
+
+  NOTE: Using a cellAddressRange like say sum(A1:ZZ1024) in itself is not a deep cell chaining.
+  Rather it corresponds to a cell chaining depth of only 1. If any of those cells inturn depend on
+  other cells for their calculations and those other cells dependent on even more cells for their value,
+  that is when a cell calculation chaining occurs.
 
   [DevelNote]
 
-  * If CALCLOOPMAX is reduced to 200, then looping in =expressions and or very long cell-to-cell
-    dependency chaining will be identified and all related cells will be error tagged.
-
-    This also ensures that those cells will no longer be considered in future =expression calculations.
+  * If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell
+    dependency chaining will be identified and all cells involved in the chain will also get error tagged.
 
 
 for more details refer to the documentation below.
@@ -501,23 +517,20 @@ NOTE: =expressions should only refer to other =expression cells and not text cel
 
 ### Looping
 
-If =expressions contain looping, i.e the =expression refering back to itself either directly
+If =expressions contain looping, i.e the =expression refers back to itself either directly
 and or through another cell in the chain of calculations required to find the cell's value.
 
 Then the program will trap such invalid looping and Err tag the contents of all cells involved in the
-calculation. This allows user to see what and all cells where involved in that looping. It also allows
-the program to continue with evaluation of the other cells.
+calculation, whose value is impacted by looping. This allows the user to see what and all cells where
+involved in that looping. It also allows the program to continue with evaluation of the other cells.
 
-NOTE: The program will flag as calc loop error tag, if a call depth of CALLDEPTHMAX (100 by default)
-is reached currently. So if a calculation chains through a series of cells involving a chain of
-CALLDEPTHMAX number of cells or more, where one cell, refers to the other, the other refers to another
-and so on, then it will flag it has a error.
-
-	TODO: In future, use a heuristic involving both callDepth as well as callCnt of cells involved.
+[DevelNOTE] Program will flag a calc loop error tag, even for cells whose =expression involves chaining
+of cells which refer to one another such that the chain length extends to thousands of cells. IE where
+one cell refers to another cell, and that another cell refers to some other cell and so on.
 
 	NOTE: A cell directly refering to say 100 or even 500 cells for that matter is not a issue.
 	Only if cells chain from one cell to other cell and that other cell to another cell and so on
-	to the depth threshold set, only then this triggers.
+	to the depth threshold + few other factors, only then this triggers.
 
 	i.e CellB4[=B1+B2+B3]
 
@@ -1177,6 +1190,7 @@ is pushed up the logic chain. Inturn cdata_update tags Recursion and Exception e
 Standardised ErrTag pattern. Added :rclearerr command.
 
 Spead up usage for general case, with partial Cell ReCalculation by default, with full recalculation triggered only if cells in view trigger a recursion error.
+
 
 
 
