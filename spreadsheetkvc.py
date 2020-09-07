@@ -439,7 +439,8 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
         dataColStart = 1
-    cui.status(scr, ['[status: processing ...]'], y=me['scrRows']-1,x=me['scrCols']-32)
+    if me['state'] != 'E':
+        cui.status(scr, ['[status: processing ...]'], y=me['scrRows']-1,x=me['scrCols']-32)
     cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
     me['cdataUpdate'] = False
     for r in range(rowStart, rowEnd+1):

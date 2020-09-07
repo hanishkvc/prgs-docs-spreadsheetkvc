@@ -1232,6 +1232,7 @@ calculations, then user sees the processing status message.
 Added support for arbitrary number of cols, similar to rows. While trying to test this, noticed that gnumeric and libreoffice potentially seem to have a limit
 on the number of columsn allowed (need to verify libreoffice/gnumeric bit more later).
 
+Show processing status message in Non edit modes only.
 
 
 
