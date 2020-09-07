@@ -1563,24 +1563,7 @@ def rl_commandmode(stdscr, key):
     return True
 
 
-def setdata_from_savededitbuf(scr):
-    '''
-    This is used when returning from edit mode.
-
-    If there is a backed up edit buffer
-        either when user entered some content and pressed enter
-        or when the initial cell content was saved while entering edit mode
-    then save it to the cell.
-
-    If backedup edit buffer starts with quote, but doesnt end with the quote,
-    then add a quote to the end.
-
-    strip backedup edit buffer of any whitespace at begin and end of the buffer,
-    before saving to cell. However if the quote is there at begin and end, then
-    the spaces wont be removed.
-    '''
-    # Restore/set data to the latest backedup edit buffer
-    if (me['backupEdit'] != None) and (me['backupEdit'] != ""):
+def text_textquote_safe(sIn):
         # Handle quote at begining or only quote
         if me['backupEdit'][0] == THEQUOTE:
             if len(me['backupEdit']) == 1:
@@ -1601,6 +1584,27 @@ def setdata_from_savededitbuf(scr):
             sBefore = sData[:iPos]
             sAfter = sData[iPos+1:]
             sData = sBefore + THEALT2INBTWQUOTE + sAfter
+
+
+def setdata_from_savededitbuf(scr):
+    '''
+    This is used when returning from edit mode.
+
+    If there is a backed up edit buffer
+        either when user entered some content and pressed enter
+        or when the initial cell content was saved while entering edit mode
+    then save it to the cell.
+
+    If backedup edit buffer starts with quote, but doesnt end with the quote,
+    then add a quote to the end.
+
+    strip backedup edit buffer of any whitespace at begin and end of the buffer,
+    before saving to cell. However if the quote is there at begin and end, then
+    the spaces wont be removed.
+    '''
+    # Restore/set data to the latest backedup edit buffer
+    if (me['backupEdit'] != None) and (me['backupEdit'] != ""):
+        sData = text_textquote_safe(me['backupEdit'])
         me['data'][(me['curRow'],me['curCol'])] = sData
     else:
         me['data'].pop((me['curRow'],me['curCol']), None)
