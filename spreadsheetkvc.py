@@ -154,7 +154,7 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, y, x, msg, attr, clipToCell=True, clipToScreen=True):
+def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True):
     '''
     Display contents of the cell, only if it is in the current display viewport
     as well as if the cell (not its contents) can be fully shown on the screen.
@@ -170,39 +170,41 @@ def cellstr(stdscr, y, x, msg, attr, clipToCell=True, clipToScreen=True):
     if mlen < cellWidth:
         for i in range(cellWidth-mlen):
             tmsg += " "
-    ty,tx = cellpos(y,x)
+    ty,tx = cellpos(r,c)
     cellWidth=0
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
-    #print("cellstr:{},{}:{},{}:{}".format(y, x, ty, tx, tmsg), file=GERRFILE)
+    #print("cellstr:{},{}:{},{}:{}".format(r, c, ty, tx, tmsg), file=GERRFILE)
     cui.cellstr(stdscr, ty, tx, tmsg, attr, clipToScreen)
 
 
-def dlg(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
+def dlg(scr, msgs, r=0, c=0, attr=curses.A_NORMAL):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
 
-    y,x are specified interms of matrix of cells and not screen y,x.
+    r,c are specified interms of matrix of cells and not screen y,x.
+    i.e the row and col of the cell in the matrix/table of cells.
     '''
     for i in range(len(msgs)):
-        cellstr(scr, y+i, x, msgs[i], attr, clipToCell=False)
+        cellstr(scr, r+i, c, msgs[i], attr, clipToCell=False)
     return scr.getch()
 
 
-def status(scr, msgs, y=0, x=0, attr=curses.A_NORMAL):
+def status(scr, msgs, r=0, c=0, attr=curses.A_NORMAL):
     '''
     Display the messages passed to it at a given location.
     If location not given, then show at top left corner.
 
-    y,x are specified interms of matrix of cells and not screen y,x.
+    r,c are specified interms of matrix of cells and not screen y,x.
+    i.e the row and col of the cell in the matrix/table of cells.
     '''
     for i in range(len(msgs)):
-        cellstr(scr, y+i, x, msgs[i], attr, clipToCell=False)
+        cellstr(scr, r+i, c, msgs[i], attr, clipToCell=False)
     scr.refresh()
 
 
-def cellcur(stdscr, y, x):
+def cellcur(stdscr, r, c):
     '''
     Set the displayed cursor to the specified cell's start location, if the cell
     is in the viewport and if its (i.e cell's) clipped content can be shown fully.
@@ -219,7 +221,7 @@ def cellcur(stdscr, y, x):
     etc required, or put differently both match to 1.
     '''
     cellWidth = me['cellWidth']
-    ty,tx = cellpos(y,x)
+    ty,tx = cellpos(r,c)
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
         return
     if me['state'] == "E":

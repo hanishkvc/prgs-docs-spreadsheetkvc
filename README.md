@@ -1239,6 +1239,8 @@ Show processing status message in Non edit modes only.
 Rename mreadonly and mreadwrite to creadonly (cro) and creadwrite (crw). This makes way for m based marker commands in future. As also c based cfieldsep
 and ctextquote commands in future.
 
+To avoid confusion and to have consistancy and semantic match, have renamed arguments of functions which took cell's row and col info from y,x to r,c.
+
 
 
 
