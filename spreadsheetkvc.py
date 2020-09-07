@@ -347,7 +347,7 @@ def coladdr_num2alpha(iAddr):
     sAddr = ""
     while True:
         low = curAddr%26
-        sAddr += chr(ord('A')+low)
+        sAddr = (chr(ord('A')+low) + sAddr)
         up = int(curAddr/26)
         if up == 0:
             break
