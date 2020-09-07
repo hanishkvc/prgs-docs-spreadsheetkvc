@@ -1167,6 +1167,10 @@ NValue also updates the cell calculation cache, so that a cell is not recalculat
 cdata_update modified to allow long chain(s) of cells based calcs to be handled in a part by part basis over multiple steps/loops.
 cdata_update sets error tag on cells which raised exception.
 
+That bit odd missing recursion errors has been identified, I had a try-except in do_func but not logging into ErrFile, but LogFile. So now recrusion error
+is pushed up the logic chain.
+
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)

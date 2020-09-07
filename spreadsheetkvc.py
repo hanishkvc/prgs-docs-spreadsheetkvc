@@ -1336,9 +1336,9 @@ def _nvalue(sData):
     try:
         #print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
-    #except RuntimeError as re:
-    #    print("_nvalue:RuntimeError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
-    #    raise
+    except RecursionError as re:
+        print("_nvalue:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
+        raise
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)

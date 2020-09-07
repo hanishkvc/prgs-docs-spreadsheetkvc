@@ -255,6 +255,9 @@ def do_func(sCmdIn, sArgs):
             return do_stddev(sCmd, sArgs)
         else:
             return do_pyfunc(sCmdIn, sArgs)
+    except RecursionError:
+        print("do_func:recursionErr:{}:{}".format(sCmdIn, sArgs), file=GERRFILE)
+        raise
     except:
         print("do_func:exception:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
         traceback.print_exc(file=GERRFILE)
