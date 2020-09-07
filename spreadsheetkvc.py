@@ -951,16 +951,7 @@ def _save_file(scr, sFile, filePass=None):
     If successfully saved, then Clear the dirty bit.
 
     If filePass is provided then encrypt the file.
-
-    If the file already exists, then alert the user about same.
     '''
-    if (os.path.exists(sFile)):
-        got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
-        if chr(got).upper() == "N":
-            status(scr, ["Saving is aborted"])
-            return
-        else:
-            status(scr, ["Overwriting {}".format(sFile)])
     f = open(sFile,"w+")
     if filePass != None:
         salt = secrets.token_bytes(16)
@@ -996,7 +987,20 @@ def _save_file(scr, sFile, filePass=None):
 
 
 def save_file(scr, sFile, filePass=None):
+    '''
+    save current spreadsheet in memory into specified file.
+
+    If the file already exists, then alert the user about same.
+    '''
+    if (os.path.exists(sFile)):
+        got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
+        if chr(got).upper() == "N":
+            status(scr, ["Saving is aborted"])
+            return
+        else:
+            status(scr, ["Overwriting {}".format(sFile)])
     try:
+        cstatusbar(scr, ['Saving file...'])
         _save_file(scr, sFile, filePass)
     except:
         a,b,c = sys.exc_info()
@@ -1076,6 +1080,7 @@ def load_file(scr, sFile, filePass=None):
             status(scr, ["Canceled loading of {}".format(sFile)])
             return False
     try:
+        cstatusbar(scr, ['Loading file...'])
         me['cdataUpdate'] = True
         scr.clear()
         _load_file(sFile, filePass)
