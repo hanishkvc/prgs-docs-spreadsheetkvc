@@ -334,6 +334,10 @@ In this explicit command mode, the user can enter one of the following commands
 
 	Clear the cells in the given address range.
 
+* rclearerr cellAddrRange
+
+	Clear Error tag prefix in the cells in the given address range.
+
 * rgennums cellAddrRange [start] [delta]
 
 	Generate numbers starting from start (default 1) and incrementing|decrementing (default 1)
@@ -1170,7 +1174,8 @@ cdata_update sets error tag on cells which raised exception.
 That bit odd missing recursion errors has been identified, I had a try-except in do_func but not logging into ErrFile, but LogFile. So now recrusion error
 is pushed up the logic chain. Inturn cdata_update tags Recursion and Exception err cells.
 
-Standardised ErrTag pattern.
+Standardised ErrTag pattern. Added :rclearerr command.
+
 
 
 

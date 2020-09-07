@@ -838,6 +838,20 @@ def _do_rclear(scr, dstSKey, dstEKey):
     return True
 
 
+def _do_rclear_err(scr, dstSKey, dstEKey):
+    '''
+    Clear error tags in the specified block of cells at dst.
+    '''
+    for dR in range(dstSKey[0], dstEKey[0]+1):
+        for dC in range(dstSKey[1], dstEKey[1]+1):
+            sData = me['data'].get((dR,dC), None)
+            if sData != None:
+                if sData.startswith("#Err") and (sData[7] == '#'):
+                    sData = sData[8:]
+                    me['data'][(dR,dC)] = sData
+    return True
+
+
 def _do_rgennums(scr, startKey, endKey, tokens):
     '''
     Add numeric content to cells starting from startKey to endKey
@@ -881,6 +895,8 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3], False)
         elif cmd == "rclear":
             bDone = _do_rclear(scr, lKeys[0], lKeys[1])
+        elif cmd == "rclearerr":
+            bDone = _do_rclear_err(scr, lKeys[0], lKeys[1])
         elif cmd == "rgennums":
             tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
