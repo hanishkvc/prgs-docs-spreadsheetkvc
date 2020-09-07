@@ -884,6 +884,16 @@ the program.
 
 Tab completion of dir|filenames?
 
+Change fieldsep and quote from within the program (i.e while it is running).
+
+MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.
+
+	Maybe each cell contains either a Int, Float or String data type.
+
+	Maybe Retain = prefix to trigger eval, while without = interpret as one of the basic data types.
+
+Move file related stuff to fileio module.
+
 
 ## History
 
