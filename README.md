@@ -942,7 +942,7 @@ Move file related stuff to fileio module.
 
 Markers so that it is easier to use rcommands.
 
-Dont clip numeric values.
+[DONE] Dont clip numeric values.
 
 CLear statusbar if screen doesnt fill horizontally.
 
