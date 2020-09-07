@@ -942,6 +942,10 @@ Move file related stuff to fileio module.
 
 Markers so that it is easier to use rcommands.
 
+Dont clip numeric values.
+
+CLear statusbar if screen doesnt fill horizontally.
+
 
 ## History
 
@@ -1300,6 +1304,7 @@ So also while saving if textquote is not explicitly checked for safe use, things
 While setting textquote using ctextquote, if the new textquote is already part of any cell text contents, then it will get replaced by the alt2inbtwquote char.
 This ensures that contents of the csv file wont get misinterpreted later.
 
+Load/Save show statusbar update.
 
 
 
