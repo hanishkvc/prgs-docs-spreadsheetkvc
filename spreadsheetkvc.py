@@ -427,13 +427,12 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
-    if me['cdataUpdate']:
-        cdata_update()
-        me['cdataUpdate'] = False
     #print("cdrawdata:Starting", file=GERRFILE)
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
         dataColStart = 1
+    cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
+    me['cdataUpdate'] = False
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
         for c in range(dataColStart, colEnd+1):
