@@ -1,9 +1,9 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200903IST2314
+Version: v20200907IST1755
 
-spreadsheetkvc is a simple spreadsheet program which runs on the commandline using ncurses and python.
+spreadsheetkvc is a spreadsheet program which runs on the commandline using ncurses and python.
 
 It works with csv file. It allows the saved csv file to be optionally encrypted and inturn load such
 encrypted csv files. If encrypted file is manipulated, the program will be able to notice the same,
@@ -11,8 +11,8 @@ and inturn stop processing the same, because it uses authenticated encryption co
 
 Remember that a cell containing a number or expression|forumula to be evaluated/calculated should
 prefix it's contents with '=' ie equal. Else it will be treated as text content cell. The program
-will try to make the =expression (which includes numeric also) cells more highlighted compared to
-Text cell's to try and make it easy to distinguish between them.
+will try to make the =expression (which includes numeric also) cells highlighted compared to Text
+cell's to try and make it easy to distinguish between them.
 
 Some of its features are
 
@@ -52,7 +52,7 @@ Some of its features are
   Also during evaluation of cells, done in a row major fashion, the calculated results are
   cached and reused, when calculating other cells.
 
-  For optimal performance, especially for =expressions which have deep cell chaining dependencies
+  For optimal performance, especially for =expressions which have DEEP cell chaining dependencies
   ideally have cell dependencies such that they depend on
 
 	* cells to their left on the same row and or any cell in the rows to its top.
@@ -63,7 +63,7 @@ Some of its features are
   Only when cells with heavy chaining become visible, the program will pause to do the calculations
   required and inturn show its results.
 
-* Written in python, with source available on github, so that anyone can understand, modify
+* Written in python, with source available on github, so that anyone can understand, modify|extend
   and or bugfix as required, to meet their needs ;)
 
 * insertion and deletion of rows or cols, auto adjusts cell addresses refered in expressions,
@@ -83,7 +83,7 @@ Some of its features are
 
 * supports a readonly view mode, if required.
 
-* adjust to terminal window size changes.
+* auto-adjust to terminal window size changes.
 
 * Try be simple and sane wrt fieldsep and textquote.
 
@@ -282,6 +282,11 @@ In this explicit command mode, the user can enter one of the following commands
 * new
 
 	create a new spreadsheet in memory.
+
+
+NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user to
+explicitly specify the file to write to.
+
 
 ##### Insert/Delete operations
 
@@ -848,16 +853,25 @@ Simple print to text file logic
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
-[PARTIAL] Trap calc loops. A simple minded logic added for now. Need to track actual multipath recursion and or calc indirection.
+[DONE] Trap calc loops. Tracks (uni/)multipath calc indirection and crossing of predefined callDepth and or exhausting of sliding recursion limit based block
+level windowing logic to flag loops or overly long cell-to-cell chaining.
 
 	[BYPASSED] Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
 
-	ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
+	[DONE] ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
+	Using multipass evaluation logic with valid result caching and error list helps achieve this.
 
 	[DONE] Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.
 
 [DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
+Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells, when a given cell is edited.
+Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by
+the program.
+
+Allow cols beyond ZZ.
+
+Tab completion of dir|filenames?
 
 
 ## History
