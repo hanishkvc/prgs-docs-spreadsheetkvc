@@ -1191,6 +1191,9 @@ Standardised ErrTag pattern. Added :rclearerr command.
 
 Spead up usage for general case, with partial Cell ReCalculation by default, with full recalculation triggered only if cells in view trigger a recursion error.
 
+Show a processing status message from \_cdraw\_data before _cdata_update is called. This ensures that if cdata_update is forced to trigger time consuming
+calculations, then user sees the processing status message.
+
 
 
 

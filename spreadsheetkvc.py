@@ -429,7 +429,7 @@ def cdata_update(bClearCache=True, rStart=1, cStart=1, rEnd=-1, cEnd=-1):
         me['data'][eCell] = ERRLOOP+me['data'][eCell]
 
 
-def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
+def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
     '''
@@ -437,6 +437,7 @@ def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
     dataColStart = colStart - DATACOLSTART_OVERSCAN
     if dataColStart < 1:
         dataColStart = 1
+    cui.status(scr, ['[status: processing ...]'], y=me['scrRows']-1,x=me['scrCols']-32)
     cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
     me['cdataUpdate'] = False
     for r in range(rowStart, rowEnd+1):
@@ -516,7 +517,7 @@ def _cdraw(stdscr):
     _cdraw_coladdrs(colStart, colEnd)
     _cdraw_rowaddrs(rowStart, rowEnd)
     try:
-        _cdraw_data(rowStart, rowEnd, colStart, colEnd)
+        _cdraw_data(stdscr, rowStart, rowEnd, colStart, colEnd)
     finally:
         _cdraw_editbuffer(stdscr)
         _cdraw_showcursor(stdscr)
