@@ -1179,7 +1179,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     clear to clear the current spreadsheet
     help - show the help.csv file in temporary-readonly help mode.
     new - create a new spreadsheet in memory.
-    mro|mreadonly - set readonly mode;  mrw|mreadwrite - set readwrite mode.
+    cro|creadonly - set readonly mode;  crw|creadwrite - set readwrite mode.
     rcopy, rclear
     !shell_command arguments
     q to quit the program
@@ -1227,9 +1227,9 @@ def explicit_commandmode(stdscr, cmdArgs):
             me['cdataUpdate'] = True
     elif (cmd == 'new'):
         new_file(stdscr)
-    elif (cmd == 'mreadonly') or (cmd == 'mro'):
+    elif (cmd == 'creadonly') or (cmd == 'cro'):
         me['readOnly'] = True
-    elif (cmd == 'mreadwrite') or (cmd == 'mrw'):
+    elif (cmd == 'creadwrite') or (cmd == 'crw'):
         me['readOnly'] = False
     elif cmd.startswith("r") and not me['readOnly']:
         do_rcmd(stdscr, cmd, args)
@@ -1719,14 +1719,14 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp mreadonly calldepth")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp creadonly calldepth")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
     print('    --{} "{}"  Specify the csv field seperator to use'.format(CmdArgs.fieldsep.name, THEFIELDSEP))
     print('    --{} "{}"     Specify the csv field text quote to use'.format(CmdArgs.quote.name, THEQUOTE))
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
-    print("    --{}     run in readonly|view mode".format(CmdArgs.mreadonly.name))
+    print("    --{}     run in readonly|view mode".format(CmdArgs.creadonly.name))
     print("    --{} <depth>    specify the maximum call depth | cell chaining allowed".format(CmdArgs.calldepth.name))
     exit(0)
 
@@ -1752,7 +1752,7 @@ def process_cmdline(args):
             print_usage()
         elif cmd == CmdArgs.startnohelp.name:
             gbStartHelp = False
-        elif cmd == CmdArgs.mreadonly.name:
+        elif cmd == CmdArgs.creadonly.name:
             me['readOnly'] = True
         elif cmd == CmdArgs.calldepth.name:
             i += 1

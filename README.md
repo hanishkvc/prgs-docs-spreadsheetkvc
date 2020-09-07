@@ -206,12 +206,12 @@ The program supports the following commandline arguments
 
 		To avoid showing the help dialog on program start.
 
-	--mreadonly
+	--creadonly
 
 		The program starts in readonly mode, where user cant modify the loaded spreadsheets.
 		That is one cant insert or delete rows/cols. Nor can one edit/insert/cut/delete/paste cells.
 
-		However user can switch to readwrite mode by giving :mreadwrite explicit command.
+		However user can switch to readwrite mode by giving :creadwrite explicit command.
 
 	--calldepth <depth>
 
@@ -392,11 +392,11 @@ explicitly specify the file to write to.
 
 ##### Other operations
 
-* mro|mreadonly
+* cro|creadonly
 
 	switch program to readonly mode, so that user cant modify the contents of the spreadsheet.
 
-* mrw|mreadwrite
+* crw|creadwrite
 
 	switch program to readwrite mode, so that user can modify the spreadsheet. This is the default mode.
 
@@ -1235,6 +1235,10 @@ Added support for arbitrary number of cols, similar to rows. While trying to tes
 on the number of columsn allowed (need to verify libreoffice/gnumeric bit more later).
 
 Show processing status message in Non edit modes only.
+
+Rename mreadonly and mreadwrite to creadonly (cro) and creadwrite (crw). This makes way for m based marker commands in future. As also c based cfieldsep
+and ctextquote commands in future.
+
 
 
 
