@@ -372,8 +372,10 @@ def _cdata_update(rStart=1, cStart=1):
     is due to a long chain of cells in calc, then retrying it will help build
     the solution part by part.
     '''
-    bNoError = True
-    lErrCells = []
+    bRecursionError = False
+    bException = False
+    lExcCells = []
+    lRecCells = []
     for r in range(rStart, me['numRows']+1):
         for c in range(cStart, me['numCols']+1):
             data = me['cdata'].get((r,c))
@@ -387,26 +389,32 @@ def _cdata_update(rStart=1, cStart=1):
                     try:
                         val = nvalue((r,c))
                         me['cdata'][r,c] = val
+                    except RecursionError:
+                        bRecursionError = True
+                        lRecCells.append((r,c))
                     except:
-                        lErrCells.append((r,c))
+                        bException = True
+                        lExcCells.append((r,c))
                         print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
                         traceback.print_exc(file=GERRFILE)
-                        bNoError = False
                 else:
                     val = sData
                     me['cdata'][r,c] = val
-    return bNoError, lErrCells
+    return bRecursionError, lRecCells, bException, lExcCells
+
 
 
 def cdata_update():
     me['cdata'] = dict()
     for i in range(4):
-        bDone, lErrCells = _cdata_update()
-        if bDone:
+        bRecErr, lRecCells, bExc, lExcCells = _cdata_update()
+        if not bRecErr:
             break
         print("cdata_update:{}:recover".format(i), file=GERRFILE)
-    for eCell in lErrCells:
-        me['data'][eCell] = "Err:"+me['data'][eCell]
+    for eCell in lExcCells:
+        me['data'][eCell] = "ErrExc:"+me['data'][eCell]
+    for eCell in lRecCells:
+        me['data'][eCell] = "ErrRec:"+me['data'][eCell]
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):

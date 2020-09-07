@@ -1168,7 +1168,7 @@ cdata_update modified to allow long chain(s) of cells based calcs to be handled 
 cdata_update sets error tag on cells which raised exception.
 
 That bit odd missing recursion errors has been identified, I had a try-except in do_func but not logging into ErrFile, but LogFile. So now recrusion error
-is pushed up the logic chain.
+is pushed up the logic chain. Inturn cdata_update tags Recursion and Exception err cells.
 
 
 
