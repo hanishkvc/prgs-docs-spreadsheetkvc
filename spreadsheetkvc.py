@@ -1155,6 +1155,29 @@ def shell_cmd(scr, cmd, args):
     cdraw(scr)
 
 
+bConvertTextOnly = True
+def replace_incontent(cOld, cNew):
+    '''
+    Convert given old char in cell contents with the new replacement char.
+
+    If bConvertTextOnly is True, then it doesnt touch cells whose contents start with
+    '=' character.
+
+    [ForFuture:TODO: If we make cells store basic python types int,float,text as strings
+    with no special prefix to identify non text values]
+    Ensure that the old char specified is not part of valid integer or float values,
+    else it may get replaced from integer and float values also.
+    '''
+    for r in range(1, me['numRows']+1):
+        for c in range(1, me['numCols']+1):
+            sData = me['data'].get((r,c))
+            if (sData != None):
+                if bConvertTextOnly and (sData[0] == '='):
+                    continue
+                sData = sData.replace(cOld, cNew)
+                me['data'][(r,c)] = sData
+
+
 def do_ccmd(scr, cmd, args):
     '''
     The Config commands handling
@@ -1169,8 +1192,12 @@ def do_ccmd(scr, cmd, args):
     elif (cmd == 'creadwrite') or (cmd == 'crw'):
         me['readOnly'] = False
     elif (cmd == 'cfieldsep') or (cmd == 'cfs'):
+        cstatusbar(scr, ['update fieldsep'])
+        replace_incontent(THEFIELDSEP, args[0])
         THEFIELDSEP = args[0]
     elif (cmd == 'ctextquote') or (cmd == 'ctq'):
+        cstatusbar(scr, ['update textquote'])
+        replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
 
 
