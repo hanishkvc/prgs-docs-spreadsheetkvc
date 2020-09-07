@@ -894,6 +894,8 @@ MAYBE treat each cell like a python variable or statement or expression. So also
 
 Move file related stuff to fileio module.
 
+Markers so that it is easier to use rcommands.
+
 
 ## History
 
