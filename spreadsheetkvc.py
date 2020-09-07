@@ -1590,28 +1590,30 @@ def rl_commandmode(stdscr, key):
     return True
 
 
-def text_textquote_safe(sIn):
+def text_textquote_safe(sIn, theQuote=None):
     '''
     Make text string textquote safe
 
     If textquote is there only at the begin or end of string, add to other end.
     If textquote somewhere inbetween in the string, replace it with predefined placeholder.
     '''
+    if theQuote == None:
+        theQuote = THEQUOTE
     # Handle quote at begining or only quote
-    if sIn[0] == THEQUOTE:
+    if sIn[0] == theQuote:
         if len(sIn) == 1:
-            sIn += THEQUOTE
-        if sIn[-1] != THEQUOTE:
-            sIn += THEQUOTE
+            sIn += theQuote
+        if sIn[-1] != theQuote:
+            sIn += theQuote
     # Handle quote at end
-    if sIn[-1] == THEQUOTE:
-        if sIn[0] != THEQUOTE:
-            sIn = THEQUOTE + sIn
+    if sIn[-1] == theQuote:
+        if sIn[0] != theQuote:
+            sIn = theQuote + sIn
     sData = sIn.strip()
     # Handle any in between quote, rather replace with predefined placeholder
     iPos = 0
     while True:
-        iPos = sData.find(THEQUOTE, iPos+1)
+        iPos = sData.find(theQuote, iPos+1)
         if (iPos == -1) or (iPos == (len(sData)-1)):
             break
         sBefore = sData[:iPos]
