@@ -447,6 +447,7 @@ def cdata_update(bClearCache=True, rStart=1, cStart=1, rEnd=-1, cEnd=-1):
         me['data'][eCell] = ERRLOOP+me['data'][eCell]
 
 
+bNumericDisplayOverflow=True
 def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     '''
     Display the cells which are currently visible on the screen.
@@ -475,7 +476,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     #sData = value((r,c))
                     sData = me['cdata'].get((r,c))
                     ctype |= CATTR_DATANUM
-                    sRemaining = ""
+                    if bNumericDisplayOverflow:
+                        sRemaining = str(sData)[me['cellWidth']:]
+                    else:
+                        sRemaining = ""
                 else:
                     ctype |= CATTR_DATATEXT
                     sRemaining = sData[me['cellWidth']:]
