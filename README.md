@@ -408,9 +408,13 @@ explicitly specify the file to write to.
 
 	Ex: cfs ; (for setting semicolon as fieldsep)
 
+	NOTE: If it so happens that the newly defined fieldsep is part of some cell content, then the program
+	will autoquote the corresponding content, if it is not already quoted, when saving to file.
+
 * ctq|ctextquote theTextQuoteChar
 
-	set the text quote for the csv file.
+	set the text quote for the csv file. All instances of old textquote char in text cells, will get
+	replaced by the new textquote.
 
 
 ##### Other operations
@@ -698,7 +702,8 @@ than for
 Text QUote char anywhere other than the either ends of cell text content, will get replaced
 by [\_] i.e underscore.
 
-NOTE: User can set a different field seperator or quote char from the commandline.
+NOTE: User can set a different field seperator or quote char from the commandline and or by
+using the cfieldsep and ctextquote commands.
 
 
 ### Encryption support
@@ -764,7 +769,7 @@ Next load the file
 
 	Ex: :l pathto/file
 
-Set the fieldsep you want to use while saving
+Set the new fieldsep you want to use while saving
 
 	Ex: :cfieldsep theNewFieldSepChar
 
@@ -896,7 +901,7 @@ Simple print to text file logic
 
 [DONE] commandline shell
 
-=rows, =cols
+[LATER] =rows, =cols
 
 [DONE] Allow paste to update cell addresses in the =expression.
 
@@ -912,15 +917,15 @@ level windowing logic to flag loops or overly long cell-to-cell chaining.
 
 [DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
-Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells, when a given cell is edited.
-Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by
-the program.
+[LATER] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells,
+when a given cell is edited. Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite
+to the one used for cell calculation by the program.
 
 [DONE] Allow cols beyond ZZ.
 
-Tab completion of dir|filenames?
+[LATER] Tab completion of dir|filenames?
 
-Change fieldsep and quote from within the program (i.e while it is running).
+[DONE] Change fieldsep and quote from within the program (i.e while it is running).
 
 MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.
 
