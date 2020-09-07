@@ -1278,6 +1278,9 @@ Standardised ErrTag pattern. Added :rclearerr command.
 
 Spead up usage for general case, with partial Cell ReCalculation by default, with full recalculation triggered only if cells in view trigger a recursion error.
 
+
+### 20200907IST1212 - GauriGaneshaToOnamToTeachersDayRelease
+
 Show a processing status message from \_cdraw\_data before _cdata_update is called. This ensures that if cdata_update is forced to trigger time consuming
 calculations, then user sees the processing status message.
 
@@ -1305,6 +1308,9 @@ While setting textquote using ctextquote, if the new textquote is already part o
 This ensures that contents of the csv file wont get misinterpreted later.
 
 Load/Save show statusbar update.
+
+Allow Numeric values to overflow into adjacent empty cells.
+
 
 
 

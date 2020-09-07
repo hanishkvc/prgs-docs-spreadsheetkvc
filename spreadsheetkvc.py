@@ -460,6 +460,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         cstatusbar(scr, ['[status: processing ...]'], 1, 32)
     cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
     me['cdataUpdate'] = False
+    rtype = CATTR_DATATEXT
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
         for c in range(dataColStart, colEnd+1):
@@ -480,11 +481,13 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                         sRemaining = str(sData)[me['cellWidth']:]
                     else:
                         sRemaining = ""
+                    rtype = CATTR_DATANUM
                 else:
                     ctype |= CATTR_DATATEXT
                     sRemaining = sData[me['cellWidth']:]
+                    rtype = CATTR_DATATEXT
             elif (not me['clipCell']):
-                ctype |= CATTR_DATATEXT
+                ctype |= rtype
                 sData = sRemaining[0:me['cellWidth']]
                 sRemaining = sRemaining[me['cellWidth']:]
                 #if (sData != ""):
