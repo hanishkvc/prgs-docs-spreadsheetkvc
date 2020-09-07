@@ -204,6 +204,20 @@ def status(scr, msgs, r=0, c=0, attr=curses.A_NORMAL):
     scr.refresh()
 
 
+def cstatusbar(scr, msg, height=-1, width=-1):
+    '''
+    Used to show a status bar for the program, at the bottom right corner.
+    '''
+    if height == -1:
+        height = len(msg)
+    if width == -1:
+        for l in msg:
+            if width < len(l):
+                width = len(l)
+        width += 6
+    cui.status(scr, msg, y=me['scrRows']-height,x=me['scrCols']-width)
+
+
 def cellcur(stdscr, r, c):
     '''
     Set the displayed cursor to the specified cell's start location, if the cell
@@ -442,7 +456,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     if dataColStart < 1:
         dataColStart = 1
     if me['state'] != 'E':
-        cui.status(scr, ['[status: processing ...]'], y=me['scrRows']-1,x=me['scrCols']-32)
+        cstatusbar(scr, ['[status: processing ...]'], 1, 32)
     cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
     me['cdataUpdate'] = False
     for r in range(rowStart, rowEnd+1):
