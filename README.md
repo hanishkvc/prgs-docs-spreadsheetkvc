@@ -217,7 +217,7 @@ The program supports the following commandline arguments
 
 		Set the maximum call depth | cell chaining allowed by program to <depth>.
 
-		Default value is 100.
+		Default value is 1000.
 
 
 ### program modes
