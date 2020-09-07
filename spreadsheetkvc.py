@@ -403,7 +403,8 @@ def _cdata_update(rStart=1, cStart=1):
     return bRecursionError, lRecCells, bException, lExcCells
 
 
-
+ERREXCEPTION = "#ErrExc#"
+ERRLOOP = "#ErrLop#"
 def cdata_update():
     me['cdata'] = dict()
     for i in range(4):
@@ -412,9 +413,9 @@ def cdata_update():
             break
         print("cdata_update:{}:recover".format(i), file=GERRFILE)
     for eCell in lExcCells:
-        me['data'][eCell] = "ErrExc:"+me['data'][eCell]
+        me['data'][eCell] = ERREXCEPTION+me['data'][eCell]
     for eCell in lRecCells:
-        me['data'][eCell] = "ErrRec:"+me['data'][eCell]
+        me['data'][eCell] = ERRLOOP+me['data'][eCell]
 
 
 def _cdraw_data(rowStart, rowEnd, colStart, colEnd):
@@ -602,12 +603,12 @@ def update_celladdrs_all(sIn, afterR, incR, afterC, incC, bUpdateFixed=True):
             c += incC
         if bDelRowMode:
             if (r >= sDR) and (r <= eDR):
-                sErr = "ErrR_"
+                sErr = ERRROW
             if (r > eDR) and not rFixed:
                 r += incR
         if bDelColMode:
             if (c >= sDC) and (c <= eDC):
-                sErr += "ErrC_"    # + not required bcas both row and col wont get deleted at same time, but for flexibility for future, just in case
+                sErr += ERRCOL    # + not required bcas both row and col wont get deleted at same time, but for flexibility for future, just in case
             if (c > eDC) and not cFixed:
                 c += incC
         sNewToken = "{}{}{}{}{}".format(sErr,sCFixed,coladdr_num2alpha(c),sRFixed,r)
@@ -616,6 +617,8 @@ def update_celladdrs_all(sIn, afterR, incR, afterC, incC, bUpdateFixed=True):
         sOut += sAfter
 
 
+ERRROW = "#ErrRow#"
+ERRCOL = "#ErrCol#"
 def update_celladdrs_exceptfixed(sIn, afterR, incR, afterC, incC):
     '''
     Blindly update any cell addresses found in given string,
@@ -666,10 +669,10 @@ def update_celladdrs_exceptfixed(sIn, afterR, incR, afterC, incC):
         # Check for invalid row or col after update
         sErr = ""
         if (r <= 0):
-            sErr = "ErrR_"
+            sErr = ERRROW
             r = rOrig
         if (c <= 0):
-            sErr += "ErrC_"
+            sErr += ERRCOL
             c = cOrig
         sNewToken = "{}{}{}{}{}".format(sErr,sCFixed,coladdr_num2alpha(c),sRFixed,r)
         sOut = sBefore + sNewToken
@@ -1263,7 +1266,7 @@ def trap_calclooping_old(cellKey):
                 sData = me['data'].get(key)
                 if sData != None:
                     if sData.startswith('='):
-                        me['data'][key] = "ErrCalcLoop:{}".format(sData)
+                        me['data'][key] = "{}:{}".format(ERRLOOP, sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, curCalcCnt))
     me['calcCnt'][cellKey] = curCalcCnt
 
@@ -1281,7 +1284,7 @@ def trap_calclooping(cellKey):
             sData = me['data'].get(key)
             if sData != None:
                 if sData.startswith('='):
-                    me['data'][key] = "ErrCalcLoop:{}".format(sData)
+                    me['data'][key] = "{}:{}".format(ERRLOOP, sData)
         raise RuntimeError("CalcLoop:{}:{}".format(cellKey, me['callDepth']))
     me['calcCnt'][cellKey] = curCalcCnt
     me['cdataUpdate'] = True
