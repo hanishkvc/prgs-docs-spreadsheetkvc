@@ -81,7 +81,7 @@ Supported functions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;ECA;Ending Cell Address;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;VFCA;Value or Function or Cell Address (but not CellAddressRange);;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 -----------------------------------------------------------------------------------------------------------------;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Some samples;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Some samples;;;=1947**26;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;a text cell;;'a text cell';This is a text cell;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;1234567890;;'1234567890';a text cell with Number;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;=1234567890;;'=1234567890';a numeric cell, it has = prefix in it;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -95,6 +95,6 @@ CSV files, optional Authenticated Enryption;;;;Sparse datastructure for arbitrar
 Implemented in Python with source on github;;;;'Use Curses for Table/Matrix view; Allow inline Cell editing';;;;;;;;;;;;;;;;;;;;;;;;;;;
 '=expressions interpreted as python evals';;;;Lazy Cached Cell evaluation, triggered on view of self or dependents;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Insert/Delete/Paste adjust CellAddresses inc$ as required;;;;Helper commands and Builtin Funcs + Python Math funcs;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Trap looping, while allowing deep cell-to-cell deps with multipass oppurtinistic calcs;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Trap looping, while allowing deep cell-to-cell deps with multipass oppurtinistic calcs;;;;;;Arbitrary Precision Integers;;;;;;;;;;;;;;;;;;;;;;;;;
 *** A simple commandline curses based spreadsheet program in python. Supports csv files with optional authenticated encryption ***;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
