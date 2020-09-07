@@ -1197,6 +1197,7 @@ def do_ccmd(scr, cmd, args):
         THEFIELDSEP = args[0]
     elif (cmd == 'ctextquote') or (cmd == 'ctq'):
         cstatusbar(scr, ['update textquote'])
+        replace_incontent(args[0], THEALT2INBTWQUOTE)
         replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
 

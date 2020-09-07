@@ -413,8 +413,13 @@ explicitly specify the file to write to.
 
 * ctq|ctextquote theTextQuoteChar
 
-	set the text quote for the csv file. All instances of old textquote char in text cells, will get
-	replaced by the new textquote.
+	set the text quote for the csv file.
+
+	All instance of the new textquote char already in text cells, will get replaced by alt2inbtwquote char [i.e _].
+
+	All instances of old textquote char in text cells, will get replaced by the new textquote.
+
+NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to one another.
 
 
 ##### Other operations
@@ -1291,6 +1296,9 @@ if it was a ctextquote command. cfieldsep doesnt update text contents, bcas old 
 TODO:THINK WHile saving, will have to check for and handle quotes appropriately. Currently only field sep handled during saving. Note: If loaded csv file
 was proper, then when user edits things, program tries to ensure that textquote is handled properly. And also if user changes textquote at runtime.
 So also while saving if textquote is not explicitly checked for safe use, things should be fine at one level, in most cases.
+
+While setting textquote using ctextquote, if the new textquote is already part of any cell text contents, then it will get replaced by the alt2inbtwquote char.
+This ensures that contents of the csv file wont get misinterpreted later.
 
 
 
