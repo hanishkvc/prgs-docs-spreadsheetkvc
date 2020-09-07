@@ -327,7 +327,7 @@ def cellcur_down():
         print("cellcur_down:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
-def coladdr_num2alpha(iAddr):
+def coladdr_num2alpha_old(iAddr):
     iChr = iAddr-1
     iMajor = int(iChr/26)
     if (iMajor < 1):
@@ -340,6 +340,19 @@ def coladdr_num2alpha(iAddr):
     sMinor = chr(ord('A')+iChr%26)
     sColAddr = sMajor+sMinor
     return sColAddr
+
+
+def coladdr_num2alpha(iAddr):
+    curAddr = iAddr - 1
+    sAddr = ""
+    while True:
+        low = curAddr%26
+        sAddr += chr(ord('A')+low)
+        up = int(curAddr/26)
+        if up == 0:
+            break
+        curAddr = up
+    return sAddr
 
 
 def _cdraw_coladdrs(colStart, colEnd):
