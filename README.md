@@ -1280,9 +1280,11 @@ To avoid confusion and to have consistancy and semantic match, have renamed argu
 Added statusbar helper, use for processing status.
 
 Add cfieldsep and ctextquote commands to set fieldsep and textquote from within the program. This will allow one to convert a csv file from using 1 fieldsep
-and quote to a different one. When user requests this change, all existing text cell contents also get the corresponding char in them updated.
+and or quote to a different one. When user requests this change, all existing text cell contents also get the corresponding textquote char in them updated,
+if it was a ctextquote command. cfieldsep doesnt update text contents, bcas old fieldsep if any in a text field, has nothing to do with the csv fieldsep.
+
 TODO:THINK WHile saving, will have to check for and handle quotes appropriately. Currently only field sep handled during saving. Note: If loaded csv file
-was proper, then when user edits things, program tries to ensure that textquote is handled properly. And also if user changes textquote/fieldsep at runtime.
+was proper, then when user edits things, program tries to ensure that textquote is handled properly. And also if user changes textquote at runtime.
 So also while saving if textquote is not explicitly checked for safe use, things should be fine at one level, in most cases.
 
 

@@ -1193,7 +1193,7 @@ def do_ccmd(scr, cmd, args):
         me['readOnly'] = False
     elif (cmd == 'cfieldsep') or (cmd == 'cfs'):
         cstatusbar(scr, ['update fieldsep'])
-        replace_incontent(THEFIELDSEP, args[0])
+        #replace_incontent(THEFIELDSEP, args[0])
         THEFIELDSEP = args[0]
     elif (cmd == 'ctextquote') or (cmd == 'ctq'):
         cstatusbar(scr, ['update textquote'])
