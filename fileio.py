@@ -80,10 +80,8 @@ def save_file(me, scr, sFile, filePass=None):
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
         if chr(got).upper() == "N":
-            status(scr, ["Saving is aborted"])
+            cstatusbar(scr, ["Saving is aborted"])
             return
-        else:
-            status(scr, ["Overwriting {}".format(sFile)])
     try:
         cstatusbar(scr, ['Saving file...'])
         _save_file(me, scr, sFile, filePass)
@@ -159,10 +157,8 @@ def load_file(me, scr, sFile, filePass=None):
     '''
     if me['dirty']:
         got = dlg(scr, ["Spreadsheet not saved, discard and load new file? [y/N]".format(sFile)])
-        if chr(got).upper() == "Y":
-            status(scr, ["Loading file {}".format(sFile)])
-        else:
-            status(scr, ["Canceled loading of {}".format(sFile)])
+        if chr(got).upper() != "Y":
+            cstatusbar(scr, ["Canceled loading of {}".format(sFile)])
             return False
     try:
         cstatusbar(scr, ['Loading file...'])
