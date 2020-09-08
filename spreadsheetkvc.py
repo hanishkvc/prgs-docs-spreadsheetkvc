@@ -929,7 +929,18 @@ def do_rcmd(scr, cmd, args):
     bDone = False
     try:
         print("rcmd:{} {}".format(cmd, args), file=GERRFILE)
-        lCAddr, lPos = parse.get_celladdrs(args)
+        # Handle Markers
+        lTokens, lTTypes = parse.get_tokens(args,0,['@'])
+        sAdjustedArgs = ""
+        for i in range(len(lTTypes)):
+            if (lTTypes[i] == parse.TokenType.AlphaNum) and (lTokens[i][0] == '@'):
+                key = me['markers'].get(lTokens[i][2:])
+                sAdjustedArgs += "{} ".format(cell_key2addr(key))
+            else:
+                sAdjustedArgs += "{} ".format(lTokens[i])
+        dlg(scr, [args, sAdjustedArgs])
+        # Handle cell addresses
+        lCAddr, lPos = parse.get_celladdrs(sAdjustedArgs)
         lKeys = []
         for cAddr in lCAddr:
             bCellAddr, key = _celladdr_valid(cAddr)
@@ -937,6 +948,7 @@ def do_rcmd(scr, cmd, args):
                 return False
             lKeys.append(key)
             print("rcmd:btw:{} {}".format(cAddr, key), file=GERRFILE)
+        # Execute the commands
         if cmd == "rcopy":
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
         elif cmd == "rcopyasis":
@@ -978,7 +990,7 @@ def do_mcmd(scr, cmd, args):
             lMarkers.append("None")
         for m in me['markers']:
             k = me['markers'][m]
-            lMarkers.append("{:4} : {:10} i.e {}".format(m, cell_key2addr(k), k))
+            lMarkers.append("m{:4} : {:10} i.e {}".format(m, cell_key2addr(k), k))
         lMarkers.append("Press any key...")
         dlg(scr, lMarkers)
         return True
