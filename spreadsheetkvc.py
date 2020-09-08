@@ -829,17 +829,18 @@ def trap_calclooping(cellKey):
     me['cdataUpdate'] = True
 
 
-def _cellvalue_or_str(sCheck):
+def _nvalue_saddr_or_str(sAddrOr):
     '''
-    If passed a cell address, then return the corresponding cells numeric value
+    If passed a cell address in AlphaNum notation,
+        Return the corresponding cells numeric value
     Else return the passed string back again.
     '''
-    bCellAddr, cellKey = _celladdr_valid(sCheck)
+    bCellAddr, cellKey = _celladdr_valid(sAddrOr)
     if bCellAddr:
         val = nvalue(cellKey)
-        print("_cellvalue_or_str:{}:{}:{}".format(sCheck, cellKey, val), file=GLOGFILE)
-        return str(val)
-    return sCheck
+        #print("_nvalue_saddr_or_str:{}:{}:{}".format(sAddrOr, cellKey, val), file=GLOGFILE)
+        return val
+    return sAddrOr
 
 
 def _nvalue(sData):
@@ -875,7 +876,7 @@ def _nvalue(sData):
             sNew += str(sVal)
         elif evalTypes[i] == parse.EvalPartType.AlphaNum: # Handle cell addresses
             me['callDepth'] += 1
-            sNew += _cellvalue_or_str(evalParts[i])
+            sNew += str(_nvalue_saddr_or_str(evalParts[i]))
             me['callDepth'] -= 1
         elif evalTypes[i] == parse.EvalPartType.Group: # Bracket grouped subexpression
             sVal = _nvalue(evalParts[i][1:-1])
@@ -923,19 +924,6 @@ def nvalue(addr):
     if bUseCachedData:
         me['cdata'][addr] = nval
     return nval
-
-
-def nvalue_saddr(saddr):
-    '''
-    Given the cell address in string notation, return the numeric
-    value corresponding to that cell.
-    If the address is invalid, then None is returned.
-    '''
-    bCellAddr, cellKey = _celladdr_valid(saddr)
-    if bCellAddr:
-        val = nvalue(cellKey)
-        return val
-    return None
 
 
 def value(addr):
