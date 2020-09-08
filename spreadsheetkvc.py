@@ -1203,6 +1203,8 @@ def setup_fileio():
 
 
 def setup_edit():
+    edit.GLOGFILE = GLOGFILE
+    edit.GERRFILE = GERRFILE
     edit.me = me
     edit.dlg = dlg
     edit._celladdr_valid = _celladdr_valid

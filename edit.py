@@ -4,6 +4,13 @@
 #
 
 
+import traceback
+import parsekvc as parse
+
+
+
+GLOGFILE = None
+GERRFILE = None
 me = None
 dlg = None
 _celladdr_valid = None
