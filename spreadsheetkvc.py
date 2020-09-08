@@ -18,6 +18,7 @@ import parsekvc as parse
 import funcs
 import re
 import fileio
+import edit
 
 
 bDebug = False
@@ -1201,6 +1202,21 @@ def setup_fileio():
     fileio.goto_cell = goto_cell
 
 
+def setup_edit():
+    edit.me = me
+    edit.dlg = dlg
+    edit._celladdr_valid = _celladdr_valid
+    edit._celladdr_valid_ex = _celladdr_valid_ex
+    edit.cell_key2addr = cell_key2addr
+    edit.coladdr_num2alpha = coladdr_num2alpha
+
+
+def setup_helpermodules():
+    setup_funcs()
+    setup_fileio()
+    setup_edit()
+
+
 def setup_logfile(logfile="/dev/null"):
     '''
     create a file handle for logging.
@@ -1282,8 +1298,7 @@ process_cmdline(sys.argv)
 stdscr=cstart()
 cattr_textnum(stdscr)
 setup_sighandlers()
-setup_funcs()
-setup_fileio()
+setup_helpermodules()
 try:
     if gbStartHelp:
         helpdlg.help_dlg(stdscr)
