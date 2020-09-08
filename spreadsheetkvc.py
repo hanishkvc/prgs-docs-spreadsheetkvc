@@ -21,7 +21,6 @@ import fileio
 import edit
 
 
-bDebug = False
 THEQUOTE = "'"
 THEFIELDSEP = ';'
 THEALT2INBTWQUOTE = '_'
@@ -484,8 +483,6 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_NORMAL
             sData = me['data'].get((r,c))
             #print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
-            if (sData == None) and bDebug:
-                sData = "{},{}".format(r,c)
             if (sData != None):
                 if sData.startswith("="):
                     #sData = value((r,c))
