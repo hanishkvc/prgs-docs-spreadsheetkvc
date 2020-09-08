@@ -984,9 +984,7 @@ def rl_commandmode(stdscr, key):
     elif (key == curses.KEY_RIGHT):
         cellcur_right()
     elif (key == ord('D')) and not me['readOnly']:
-        if me['data'].pop((me['curRow'],me['curCol']), None) != None:
-            me['dirty'] = True
-            me['cdataUpdate'] = True
+        edit.del_cell()
     elif (key == ord('c')):
         edit.copy_cell()
     elif (key == ord('C')) and not me['readOnly']:

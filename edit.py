@@ -279,6 +279,17 @@ def copy_cell():
         me['copySrcCell'] = (me['curRow'], me['curCol'])
 
 
+def del_cell():
+    '''
+    Delete current cell's content, if available.
+
+    If there was content to del, then set dirty and cdataupdate flags.
+    '''
+    if me['data'].pop((me['curRow'],me['curCol']), None) != None:
+        me['dirty'] = True
+        me['cdataUpdate'] = True
+
+
 def cut_cell():
     '''
     Cut the current cell content.
@@ -286,9 +297,7 @@ def cut_cell():
     If there was content to cut, then set dirty and cdataupdate flags.
     '''
     copy_cell()
-    if me['data'].pop((me['curRow'],me['curCol']), None) != None:
-        me['dirty'] = True
-        me['cdataUpdate'] = True
+    del_cell()
 
 
 def paste_cell(bAdjustCellAddress=True):
@@ -408,6 +417,12 @@ def _do_rgennums(scr, startKey, endKey, tokens):
 
 
 def do_rcmd(scr, cmd, args):
+    '''
+    RCommands demuxer.
+
+    It converts cell markers, if any, to cell addresses.
+    Gets the cell keys for the given cell addresses.
+    '''
     bDone = False
     try:
         print("rcmd:{} {}".format(cmd, args), file=GERRFILE)
