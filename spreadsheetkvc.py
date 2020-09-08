@@ -989,10 +989,7 @@ def rl_commandmode(stdscr, key):
     elif (key == ord('c')):
         edit.copy_cell()
     elif (key == ord('C')) and not me['readOnly']:
-        copy_cell()
-        if me['data'].pop((me['curRow'],me['curCol']), None) != None:
-            me['dirty'] = True
-            me['cdataUpdate'] = True
+        edit.cut_cell()
     elif (key == ord('p')) and not me['readOnly']:
         edit.paste_cell(True)
     elif (key == ord('P')) and not me['readOnly']:

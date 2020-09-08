@@ -272,6 +272,18 @@ def copy_cell():
         me['copySrcCell'] = (me['curRow'], me['curCol'])
 
 
+def cut_cell():
+    '''
+    Cut the current cell content.
+
+    If there was content to cut, then set dirty and cdataupdate flags.
+    '''
+    copy_cell()
+    if me['data'].pop((me['curRow'],me['curCol']), None) != None:
+        me['dirty'] = True
+        me['cdataUpdate'] = True
+
+
 def paste_cell(bAdjustCellAddress=True):
     '''
     Paste into current cell.
