@@ -321,7 +321,6 @@ def cellcur_right():
     diff = me['curCol'] - me['viewColStart'] + 1
     if (diff > me['dispCols']):
         me['viewColStart'] = me['curCol'] - me['dispCols'] + 1
-        print("cellcur_right:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
 def cellcur_up():
@@ -351,7 +350,6 @@ def cellcur_down():
     diff = me['curRow'] - me['viewRowStart'] + 1
     if (diff > me['dispRows']):
         me['viewRowStart'] = me['curRow'] - me['dispRows'] + 1
-        print("cellcur_down:adjust viewport:{}".format(me), file=GLOGFILE)
 
 
 def coladdr_num2alpha(iAddr):
