@@ -938,7 +938,6 @@ def do_rcmd(scr, cmd, args):
                 sAdjustedArgs += "{} ".format(cell_key2addr(key))
             else:
                 sAdjustedArgs += "{} ".format(lTokens[i])
-        dlg(scr, [args, sAdjustedArgs])
         # Handle cell addresses
         lCAddr, lPos = parse.get_celladdrs(sAdjustedArgs)
         lKeys = []
@@ -987,11 +986,11 @@ def do_mcmd(scr, cmd, args):
     if cmd == 'mshow':
         lMarkers = ['********       Markers       ********']
         if len(me['markers']) <= 0:
-            lMarkers.append("None")
+            lMarkers.append("{:40}".format("None"))
         for m in me['markers']:
             k = me['markers'][m]
-            lMarkers.append("m{:4} : {:10} i.e {}".format(m, cell_key2addr(k), k))
-        lMarkers.append("Press any key...")
+            lMarkers.append("m{:4} : {:10} i.e {:20}".format(m, cell_key2addr(k), str(k)))
+        lMarkers.append("{:40}".format("Press any key..."))
         dlg(scr, lMarkers)
         return True
     markerId = cmd[1:]
