@@ -974,8 +974,11 @@ def do_mcmd(scr, cmd, args):
         return True
     if cmd == 'mshow':
         lMarkers = ['Markers']
+        if len(me['markers']) <= 0:
+            lMarkers.append("None")
         for m in me['markers']:
-            lMarkers.append("{} : {}".format(m, me['markers'][m]))
+            k = me['markers'][m]
+            lMarkers.append("{} : {} i.e {}".format(m, cell_key2addr(k), k))
         dlg(scr, lMarkers)
         return True
     markerId = cmd[1:]
@@ -1144,6 +1147,14 @@ def explicit_commandmode(stdscr, cmdArgs):
         shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
         quit(stdscr)
+
+
+def cell_key2addr(key):
+    '''
+    Convert the cells dictionary key to alphanumeric cell addr
+    '''
+    r,c = key
+    return "{}{}".format(coladdr_num2alpha(c),r)
 
 
 def _celladdr_valid_ex(sAddr):
