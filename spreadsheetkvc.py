@@ -1206,28 +1206,6 @@ def value(addr):
     return _nvalue(val[1:])
 
 
-def copy_cell():
-    me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
-    if me['copyData'] != None:
-        me['copySrcCell'] = (me['curRow'], me['curCol'])
-
-
-def paste_cell(bAdjustCellAddress=True):
-    if me['copyData'] != None:
-        theData = me['copyData']
-        if bAdjustCellAddress:
-            # Calculate row and col adjustment required
-            incR = me['curRow'] - me['copySrcCell'][0]
-            incC = me['curCol'] - me['copySrcCell'][1]
-            # Adjust cell addresses if =expression
-            if theData.startswith('='):
-                theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
-        # Paste data
-        me['data'][(me['curRow'],me['curCol'])] = theData
-        me['dirty'] = True
-        me['cdataUpdate'] = True
-
-
 def rl_commandmode(stdscr, key):
     '''
     Handle keys wrt the implicit command mode.

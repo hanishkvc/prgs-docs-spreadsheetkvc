@@ -10,6 +10,39 @@ _celladdr_valid = None
 cell_key2addr = None
 
 
+
+def copy_cell():
+    '''
+    Copy the current cell
+    '''
+    me['copyData'] = me['data'].get((me['curRow'],me['curCol']))
+    if me['copyData'] != None:
+        me['copySrcCell'] = (me['curRow'], me['curCol'])
+
+
+def paste_cell(bAdjustCellAddress=True):
+    '''
+    Paste into current cell.
+
+    Adjust the cell addresses if any in the =expression, during paste, if requested.
+
+    Also set dirty and cdataupate flags.
+    '''
+    if me['copyData'] != None:
+        theData = me['copyData']
+        if bAdjustCellAddress:
+            # Calculate row and col adjustment required
+            incR = me['curRow'] - me['copySrcCell'][0]
+            incC = me['curCol'] - me['copySrcCell'][1]
+            # Adjust cell addresses if =expression
+            if theData.startswith('='):
+                theData = update_celladdrs_exceptfixed(theData, 0, incR, 0, incC)
+        # Paste data
+        me['data'][(me['curRow'],me['curCol'])] = theData
+        me['dirty'] = True
+        me['cdataUpdate'] = True
+
+
 def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     '''
     Copy a block of cells from src to dst.
