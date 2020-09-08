@@ -78,6 +78,7 @@ me = {
         'dirty': False,
         'calcCnt': dict(),
         'callDepth': 0,
+        'markers': dict(),
         'exit': DONTEXIT
         }
 
@@ -957,6 +958,30 @@ def do_rcmd(scr, cmd, args):
         dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
 
+def do_mcmd(scr, cmd, args):
+    '''
+    Handle marker commands
+
+    mclear to clear current markers
+    mshow to show current markers
+    mMarkerId assign current cell (i.e row/col) to specified marker id.
+    '''
+    if cmd[0] != 'm':
+        dlg(scr, ['DBUG {} {}'.format(cmd, args)])
+        return False
+    if cmd == 'mclear':
+        me['markers'] = dict()
+        return True
+    if cmd == 'mshow':
+        lMarkers = ['Markers']
+        for m in me['markers']:
+            lMarkers.append("{} : {}".format(m, me['markers'][m]))
+        dlg(scr, lMarkers)
+        return True
+    markerId = cmd[1:]
+    me['markers'][markerId] = (me['curRow'], me['curCol'])
+    return True
+
 
 def shell_cmd(scr, cmd, args):
     scr.clear()
@@ -1061,7 +1086,8 @@ def explicit_commandmode(stdscr, cmdArgs):
     help - show the help.csv file in temporary-readonly help mode.
     new - create a new spreadsheet in memory.
     cro|creadonly - set readonly mode;  crw|creadwrite - set readwrite mode.
-    rcopy, rclear
+    rcopy[asis], rclear[err]
+    mcmds (mclear, mshow, mmarkerid)
     !shell_command arguments
     q to quit the program
 
@@ -1112,6 +1138,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         do_ccmd(stdscr, cmd, args)
     elif cmd.startswith("r") and not me['readOnly']:
         do_rcmd(stdscr, cmd, args)
+    elif cmd[0] == 'm':
+        do_mcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
         shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
