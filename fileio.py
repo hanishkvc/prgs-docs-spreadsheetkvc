@@ -139,7 +139,6 @@ def _load_file(me, sFile, filePass=None):
     f.close()
     me['numRows'] = r
     me['numCols'] = c
-    print("loadfile:done:{}".format(me), file=GLOGFILE)
 
 
 def load_file(me, scr, sFile, filePass=None):

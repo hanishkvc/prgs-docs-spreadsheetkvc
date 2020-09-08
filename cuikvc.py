@@ -35,7 +35,7 @@ def cstart():
     curses.cbreak()
     stdscr.keypad(True)
     stdscr.clear()
-    dprint(me, file=GLOGFILE)
+    #dprint(me, file=GLOGFILE)
     return stdscr
 
 

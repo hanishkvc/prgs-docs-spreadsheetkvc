@@ -97,7 +97,7 @@ def cstart():
     cui.GLOGFILE=GLOGFILE
     stdscr = cui.cstart()
     cscreenadapt(stdscr)
-    print(me, file=GLOGFILE)
+    #print(me, file=GLOGFILE)
     return stdscr
 
 
@@ -1095,7 +1095,7 @@ def rl_editplusmode(stdscr, key):
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
-        print("runLogic:{}".format(me), file=GLOGFILE)
+        #print("runLogic:{}".format(me), file=GLOGFILE)
     elif key == curses.KEY_LEFT:
         me['crsrOffset'] -= 1
         if me['crsrOffset'] < 0:
