@@ -12,7 +12,7 @@ import parsekvc as parse
 BFILTERPYFUNC = True
 me = None
 _celladdr_valid = None
-nvalue = None
+nvalue_key = None
 _nvalue = None
 GLOGFILE = None
 GERRFILE = None
@@ -34,7 +34,7 @@ def _do_minmax(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            lItems.append(nvalue((r,c)))
+            lItems.append(nvalue_key((r,c)))
     tMin = min(lItems)
     tMax = max(lItems)
     return tMin, tMax, len(lItems)
@@ -68,7 +68,7 @@ def _do_sum(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            total += nvalue((r,c))
+            total += nvalue_key((r,c))
             cnt += 1
     return total, cnt
 
@@ -102,7 +102,7 @@ def _do_stddev(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            total += (nvalue((r,c)) - avg)**2
+            total += (nvalue_key((r,c)) - avg)**2
             cnt += 1
     varp = total/cnt
     stdevp = sqrt(varp)
@@ -151,7 +151,7 @@ def _do_prod(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            prod *= nvalue((r,c))
+            prod *= nvalue_key((r,c))
             cnt += 1
     return prod, cnt
 

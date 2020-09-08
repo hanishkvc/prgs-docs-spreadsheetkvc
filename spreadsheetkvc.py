@@ -1170,7 +1170,7 @@ def setup_sighandlers():
 def setup_funcs():
     funcs.me = me
     funcs._celladdr_valid = _celladdr_valid
-    funcs.nvalue = nvalue
+    funcs.nvalue_key = nvalue_key
     funcs._nvalue = _nvalue
     funcs.GLOGFILE = GLOGFILE
     funcs.GERRFILE = GERRFILE
