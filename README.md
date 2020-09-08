@@ -180,6 +180,10 @@ Inturn to load a password protected file key in the following.
 
 ## Usage
 
+### Requirements
+
+The program requires python3, ncurses or equivalent and python-cryptography.
+
 ### command line arguments
 
 The program supports the following commandline arguments

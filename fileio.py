@@ -182,9 +182,10 @@ def load_help(me, scr):
     '''
     load help.csv file in readonly mode.
 
-    If already in help mode, dont do anything.
+    If already in help mode, dont do anything other than repositioning to A1 cell.
     '''
     if me['helpModeSavedReadOnly'] != None:
+        goto_cell(scr, "A1")
         return
     if load_file(me, scr, "{}/help.csv".format(sys.path[0])):
         me['helpModeSavedReadOnly'] = me['readOnly']
@@ -227,3 +228,5 @@ def new_file(me, scr):
     me['cdataUpdate'] = True
 
 
+
+# vim: set sts=4 expandtab: #
