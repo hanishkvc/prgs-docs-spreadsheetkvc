@@ -64,7 +64,8 @@ Some of its features are
   required and inturn show its results.
 
 * Written in python, with source available on github, so that anyone can understand, modify|extend
-  and or bugfix as required, to meet their needs ;)
+  and or bugfix as required, to meet their needs ;) This also allows arbitrary precision integer
+  operations.
 
 * insertion and deletion of rows or cols, auto adjusts cell addresses refered in expressions,
   where possible. THis includes all cell addresses, i.e including those which have the $-prefix.
@@ -125,6 +126,10 @@ Some of its features are
 
 		* Look further down for details. [numOfCols] indicates that numOfCols is optional.
 
+* support range operations (rcmds) which allow manipulating multiple cells easily using simple commands.
+
+	One can even mark cells as well as program supports infering destination cell address range
+	from source address range.
 
 for more details refer to the documentation below.
 
@@ -337,12 +342,17 @@ explicitly specify the file to write to.
 
 ##### range operations (rcmds)
 
-* rcopy srcCellAddrRange dstCellAddrRange
+* rcopy srcCellAddrRange dstCellAddrRange or rcopy srcCellAddrRange dstCellStartAddr
 
-	Copy a block of cells starting from srcStartAddress to dstStartAddress
+	Copy a block of cells starting from srcStartAddress to dstStartAddress.
+	In the process convert any cell addresses in the copied =expressions,
+	as required.
 
 	If srcCellAddrRange doesnt match dstCellAddrRange wrt size,
 	then dstCellAddrRange takes precedence in deciding the size.
+
+	If only destination start cell address is given and not the destination end
+	cell address, then end cell address will be infered from the source addr range.
 
 	The srcBlock will be duplicated as required to fill dstBlock, if the
 	srcBlock is smaller than the dstBlock.
@@ -365,6 +375,11 @@ explicitly specify the file to write to.
 
 	src|dstCellAddrRange consists of startAddress:endAddress
 
+* rcopyasis srcCellAddrRange dstCellAddrRange or rcopyasis srcCellAddrRange dstCellStartAddr
+
+	This is similar to :rcopy command mentioned above. The main difference is that
+	this doesnt modify the cell addresses in the =expressions that are copied.
+
 
 * rclear cellAddrRange
 
@@ -372,7 +387,8 @@ explicitly specify the file to write to.
 
 * rclearerr cellAddrRange
 
-	Clear Error tag prefix in the cells in the given address range.
+	Clear Error tag prefix in the cells in the given address range. This allows such cells
+	to be evaluated again.
 
 * rgennums cellAddrRange [start] [delta]
 
@@ -394,11 +410,11 @@ explicitly specify the file to write to.
 	NOTE: Delta can be either positive or negative.
 
 
-NOTE: In the range operations, one can use markers in place of cell addresses, if required.
+NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.
 
 The marker is specified using the syntax @mMarkerId
 
-	Ex: If marker m1 corresponds to B10 then instead of say
+	Ex: If marker m1 corresponds to B10 then instead of typing
 
 		:rgennums B10:D20
 
@@ -1365,6 +1381,9 @@ Cleaned up few of the messages. Clear cdata_update processing message.
 
 Moved the edit related logics into edit module (i.e copy/cut/paste/del cell, insert/delete row/col, rcopy/rclear). Even rgennums which edits contents of the cells
 also moved into edit module.
+
+For rcmds which require source and destination cell ranges (i.e commands like rcopy and rcopyasis), if user gives only the source cell range and then only the
+start cell address wrt the destination, then infer the destination end cell address from the source cell range.
 
 
 
