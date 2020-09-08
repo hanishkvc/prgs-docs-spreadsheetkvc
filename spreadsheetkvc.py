@@ -713,13 +713,13 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif cmd.startswith('i') and not me['readOnly']:
         if args == None:
             args = "1"
-        insert_rc_ab(cmd, args)
+        edit.insert_rc_ab(cmd, args)
         me['dirty'] = True
         me['cdataUpdate'] = True
     elif cmd.startswith('d') and not me['readOnly']:
         if args == None:
             args = "1"
-        delete_rc(cmd, args)
+        edit.delete_rc(cmd, args)
         me['dirty'] = True
         me['cdataUpdate'] = True
     elif cmd.startswith('g'):
@@ -737,9 +737,9 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif (cmd[0] == 'c'):
         do_ccmd(stdscr, cmd, args)
     elif cmd.startswith("r") and not me['readOnly']:
-        do_rcmd(stdscr, cmd, args)
+        edit.do_rcmd(stdscr, cmd, args)
     elif cmd[0] == 'm':
-        do_mcmd(stdscr, cmd, args)
+        edit.do_mcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
         shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
@@ -987,16 +987,16 @@ def rl_commandmode(stdscr, key):
             me['dirty'] = True
             me['cdataUpdate'] = True
     elif (key == ord('c')):
-        copy_cell()
+        edit.copy_cell()
     elif (key == ord('C')) and not me['readOnly']:
         copy_cell()
         if me['data'].pop((me['curRow'],me['curCol']), None) != None:
             me['dirty'] = True
             me['cdataUpdate'] = True
     elif (key == ord('p')) and not me['readOnly']:
-        paste_cell(True)
+        edit.paste_cell(True)
     elif (key == ord('P')) and not me['readOnly']:
-        paste_cell(False)
+        edit.paste_cell(False)
     elif (key == ord('i')) and not me['readOnly']:
         me['state'] = 'E'
         me['gotStr'] = ""
