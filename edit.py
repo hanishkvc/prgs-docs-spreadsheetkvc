@@ -445,6 +445,9 @@ def do_rcmd(scr, cmd, args):
             lKeys.append(key)
             print("rcmd:btw:{} {}".format(cAddr, key), file=GERRFILE)
         # Execute the commands
+        numKeys = len(lKeys)
+        if numKeys == 3:
+            lKeys.append((lKeys[2][0] + (lKeys[1][0] - lKeys[0][0]), lKeys[2][1] + (lKeys[1][1] - lKeys[0][1])))
         if cmd == "rcopy":
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
         elif cmd == "rcopyasis":
