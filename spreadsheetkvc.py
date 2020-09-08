@@ -416,7 +416,7 @@ def _cdata_update(rStart, cStart, rEnd, cEnd):
             if sData != None:
                 if sData.startswith('='):
                     try:
-                        val = nvalue((r,c))
+                        val = nvalue_key((r,c))
                         me['cdata'][r,c] = val
                     except RecursionError:
                         bRecursionError = True
@@ -837,7 +837,7 @@ def _nvalue_saddr_or_str(sAddrOr):
     '''
     bCellAddr, cellKey = _celladdr_valid(sAddrOr)
     if bCellAddr:
-        val = nvalue(cellKey)
+        val = nvalue_key(cellKey)
         #print("_nvalue_saddr_or_str:{}:{}:{}".format(sAddrOr, cellKey, val), file=GLOGFILE)
         return val
     return sAddrOr
@@ -899,7 +899,7 @@ def _nvalue(sData):
 
 
 bUseCachedData = True
-def nvalue(addr):
+def nvalue_key(key):
     '''
     Return the numeric value associated with the given cell.
     It will either return None (if not numeric or error in expression)
@@ -908,21 +908,23 @@ def nvalue(addr):
 
     If the cell doesnt contain any data, it will return 0.
     This is unity operation for add++ but not for mult++.
+
+    The cell is specified using its corresponding key.
     '''
     if bUseCachedData:
-        val = me['cdata'].get(addr)
+        val = me['cdata'].get(key)
         if val != None:
             return val
-    val = me['data'].get(addr)
-    #print("nvalue:{}:{}".format(addr,val), file=GERRFILE)
+    val = me['data'].get(key)
+    #print("nvalue_key:{}:{}".format(key,val), file=GERRFILE)
     if val == None:
         return 0
     if not val.startswith("="):
         return None
-    trap_calclooping(addr)
+    trap_calclooping(key)
     nval = _nvalue(val[1:])
     if bUseCachedData:
-        me['cdata'][addr] = nval
+        me['cdata'][key] = nval
     return nval
 
 
