@@ -1363,6 +1363,9 @@ Added marker commands. Rcmds can now use markers in place of cell addresses.
 
 Cleaned up few of the messages. Clear cdata_update processing message.
 
+Moved the edit related logics into edit module (i.e copy/cut/paste/del cell, insert/delete row/col, rcopy/rclear). Even rgennums which edits contents of the cells
+also moved into edit module.
+
 
 
 
