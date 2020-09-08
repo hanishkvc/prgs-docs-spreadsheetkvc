@@ -181,11 +181,17 @@ def dlg(scr, msgs, r=0, c=0, attr=curses.A_NORMAL):
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
 
-    r,c are specified interms of matrix of cells and not screen y,x.
-    i.e the row and col of the cell in the matrix/table of cells.
+    r,c are specified interms of matrix of data cells (except 0,
+    which is always the top most row on screen) and not screen y,x
+    and neither screen row,col.
+
+    i.e the row and col of the cell in the matrix/table of data cells.
+    So if the specified starting row/col relates to a data cell that
+    is not visible, then the dlg wont be seen by user.
     '''
+    ty,tx = cellpos(r,c)
     for i in range(len(msgs)):
-        cellstr(scr, r+i, c, msgs[i], attr, clipToCell=False)
+        cui.cellstr(scr, ty+i, tx, msgs[i], attr)
     return scr.getch()
 
 
@@ -194,11 +200,17 @@ def status(scr, msgs, r=0, c=0, attr=curses.A_NORMAL):
     Display the messages passed to it at a given location.
     If location not given, then show at top left corner.
 
-    r,c are specified interms of matrix of cells and not screen y,x.
-    i.e the row and col of the cell in the matrix/table of cells.
+    r,c are specified interms of matrix of data cells (except 0,
+    which is always the top most row on screen) and not screen y,x
+    and neither screen row,col.
+
+    i.e the row and col of the cell in the matrix/table of data cells.
+    So if the specified starting row/col relates to a data cell that
+    is not visible, then the status wont be seen by user.
     '''
+    ty,tx = cellpos(r,c)
     for i in range(len(msgs)):
-        cellstr(scr, r+i, c, msgs[i], attr, clipToCell=False)
+        cui.cellstr(scr, ty+i, tx, msgs[i], attr)
     scr.refresh()
 
 
