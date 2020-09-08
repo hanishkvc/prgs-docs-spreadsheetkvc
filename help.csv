@@ -63,7 +63,7 @@ Explicit Command Mode;;ENTERED by pressing : in default mode;;;;;;;;;;;;;;;;;;;;
 ;** Markers **;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;mshow;show the currently set markers;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;mclear;clear currently set markers;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;mMarkerId;set the marker id mMarkerId to the current cell;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;mMarkerId;set marker id mMarkerId to the current cell (NOTE: m prefix used to set markerId, is also used while refering);;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;** Notes **;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;left|right key;used to edit the current edit buffer by moving text cursor;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Esc Key;Return back to default mode;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
