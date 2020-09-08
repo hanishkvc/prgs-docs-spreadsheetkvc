@@ -390,6 +390,42 @@ explicitly specify the file to write to.
 	NOTE: Delta can be either positive or negative.
 
 
+NOTE: In the range operations, one can use markers in place of cell addresses, if required.
+
+The marker is specified using the syntax @mMarkerId
+
+	Ex: If marker m1 corresponds to B10 then instead of say
+
+		:rgennums B10:D20
+
+		one could use
+
+		:rgennums @m1:D20
+
+##### Markers
+
+Markers allow one to identify cell address by using marker ids. THis allows one to work with :r range operations
+in a easy | user freindly way.
+
+* mshow
+
+	Show the currently set markers
+
+* mclear
+
+	Clear the current set of markers
+
+* mMarkerId
+
+	Set the marker mMarkerId to point to current cell. MarkerIds can be AlphaNumeric.
+
+	The AlphaNumeric should ideally only include the characters in a-z, A-Z and 0-9
+
+		Example :m1 :ma :mZZ :mstart and so on
+
+NOTE: markers have m prefix in their name.
+
+
 ##### Config commands
 
 * cro|creadonly
