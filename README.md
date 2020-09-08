@@ -1386,6 +1386,7 @@ For rcmds which require source and destination cell ranges (i.e commands like rc
 start cell address wrt the destination, then infer the destination end cell address from the source cell range.
 
 Fixed the odd slow navigation towards right or down direction of very large spreadsheets. This was due to me dumping in those two direction navigation logics.
+ALso commented/removed full me print in general.
 
 
 

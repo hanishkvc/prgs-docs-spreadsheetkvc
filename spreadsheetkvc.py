@@ -886,7 +886,7 @@ def _nvalue(sData):
         #print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
     except RecursionError as re:
-        print("_nvalue:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
+        ##DBUG##print("_nvalue:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
         raise
     except:
         print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
