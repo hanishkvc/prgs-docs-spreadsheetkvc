@@ -1317,6 +1317,8 @@ Moved file io logic to fileio module. Need to test it bitmore.
 
 Fix main's dlg/status for multi line messages, which start at 0th row. Note that dlg/status row/col corresponds to data cells and not screen row/cols or screen y/x.
 
+Added marker commands.
+
 
 
 

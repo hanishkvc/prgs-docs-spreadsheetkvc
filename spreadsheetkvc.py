@@ -973,12 +973,13 @@ def do_mcmd(scr, cmd, args):
         me['markers'] = dict()
         return True
     if cmd == 'mshow':
-        lMarkers = ['Markers']
+        lMarkers = ['********       Markers       ********']
         if len(me['markers']) <= 0:
             lMarkers.append("None")
         for m in me['markers']:
             k = me['markers'][m]
-            lMarkers.append("{} : {} i.e {}".format(m, cell_key2addr(k), k))
+            lMarkers.append("{:4} : {:10} i.e {}".format(m, cell_key2addr(k), k))
+        lMarkers.append("Press any key...")
         dlg(scr, lMarkers)
         return True
     markerId = cmd[1:]
