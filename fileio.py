@@ -80,10 +80,10 @@ def save_file(me, scr, sFile, filePass=None):
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
         if chr(got).upper() == "N":
-            cstatusbar(scr, ["Saving is aborted"])
+            cstatusbar(scr, ["[Saving is aborted]"])
             return
     try:
-        cstatusbar(scr, ['Saving file...'])
+        cstatusbar(scr, ['[Saving file...]'])
         _save_file(me, scr, sFile, filePass)
     except:
         a,b,c = sys.exc_info()
@@ -161,7 +161,7 @@ def load_file(me, scr, sFile, filePass=None):
             cstatusbar(scr, ["Canceled loading of {}".format(sFile)])
             return False
     try:
-        cstatusbar(scr, ['Loading file...'])
+        cstatusbar(scr, ['[Loading file...]'])
         me['cdataUpdate'] = True
         scr.clear()
         _load_file(me, sFile, filePass)
@@ -191,7 +191,9 @@ def load_help(me, scr):
         me['helpModeSavedReadOnly'] = me['readOnly']
         me['readOnly'] = True
     else:
-        dlg(scr, ["loadhelp: save current spreadsheet or allow discarding of changes", "for loading the help file", "Press any key to continue"])
+        dlg(scr, ["loadhelp: save current spreadsheet or allow discarding of changes",
+                  "for loading the help file                                        ",
+                  "Press any key to continue...                                     "])
 
 
 

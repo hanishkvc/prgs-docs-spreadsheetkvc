@@ -471,6 +471,8 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         cstatusbar(scr, ['[status: processing ...]'], 1, 32)
     cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
     me['cdataUpdate'] = False
+    if me['state'] != 'E':
+        cstatusbar(scr, ['                        '], 1, 32)
     rtype = CATTR_DATATEXT
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""

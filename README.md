@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200907IST1755
+Version: v20200908IST1510
 
 spreadsheetkvc is a spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -984,7 +984,9 @@ MAYBE treat each cell like a python variable or statement or expression. So also
 
 [DONE] Dont clip numeric values.
 
-CLear statusbar if screen doesnt fill horizontally.
+[PARTIAL] CLear statusbar if screen doesnt fill horizontally.
+
+	Done wrt cdata_update processing in a simple and dumb way for now.
 
 
 ## History
@@ -1358,6 +1360,8 @@ Moved file io logic to fileio module. Need to test it bitmore.
 Fix main's dlg/status for multi line messages, which start at 0th row. Note that dlg/status row/col corresponds to data cells and not screen row/cols or screen y/x.
 
 Added marker commands. Rcmds can now use markers in place of cell addresses.
+
+Cleaned up few of the messages. Clear cdata_update processing message.
 
 
 
