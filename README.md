@@ -938,7 +938,7 @@ MAYBE treat each cell like a python variable or statement or expression. So also
 
 	Maybe Retain = prefix to trigger eval, while without = interpret as one of the basic data types.
 
-Move file related stuff to fileio module.
+[DONE] Move file related stuff to fileio module.
 
 Markers so that it is easier to use rcommands.
 
@@ -1310,6 +1310,10 @@ This ensures that contents of the csv file wont get misinterpreted later.
 Load/Save show statusbar update.
 
 Allow Numeric values to overflow into adjacent empty cells.
+
+### 20200908IST1037 - GauriGaneshaToOnamToTeachersDayRelease
+
+Moved file io logic to fileio module. Need to test it bitmore.
 
 
 

@@ -9,9 +9,7 @@ import curses
 import curses.ascii
 from math import *
 import tempfile
-import cryptography.fernet
 import base64
-import secrets
 import enum
 import seckvc as sec
 import helpdlg
@@ -19,6 +17,7 @@ import cuikvc as cui
 import parsekvc as parse
 import funcs
 import re
+import fileio
 
 
 bDebug = False
@@ -26,10 +25,9 @@ THEQUOTE = "'"
 THEFIELDSEP = ';'
 THEALT2INBTWQUOTE = '_'
 DONTEXIT = -9999
-# Whether to use internal or cryptography libraries AuthenticatedEncryption
-# Both use similar concepts, but bitstreams are not directly interchangable
-bInternalEncDec = True
+
 gbStartHelp = True
+
 # How to differentiate text cells compared to =expression cells
 # This is the default, cattr_textnum will try and adjust at runtime.
 CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
@@ -1007,6 +1005,7 @@ def do_ccmd(scr, cmd, args):
         replace_incontent(args[0], THEALT2INBTWQUOTE)
         replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
+    setup_fileio()
 
 
 def quit(scr):
@@ -1064,15 +1063,15 @@ def explicit_commandmode(stdscr, cmdArgs):
         cmd,args = cmdArgs.split(' ',1)
     print("cmd:{}, args:{}".format(cmd,args), file=GLOGFILE)
     if (cmd == 'w') or (cmd == 's'):
-        save_file(stdscr, args)
+        fileio.save_file(me, stdscr, args)
     elif (cmd == 'pw') or (cmd == 'ps'):
         filePass, args = args.split(' ',1)
-        save_file(stdscr, args, filePass)
+        fileio.save_file(me, stdscr, args, filePass)
     elif cmd == 'l':
-        load_file(stdscr, args)
+        fileio.load_file(me, stdscr, args)
     elif cmd == 'pl':
         filePass, args = args.split(' ',1)
-        load_file(stdscr, args, filePass)
+        fileio.load_file(me, stdscr, args, filePass)
     elif cmd.startswith('i') and not me['readOnly']:
         if args == None:
             args = "1"
@@ -1089,14 +1088,14 @@ def explicit_commandmode(stdscr, cmdArgs):
         if args != None:
             goto_cell(stdscr, args)
     elif cmd == 'help':
-        load_help(stdscr)
+        fileio.load_help(me, stdscr)
     elif (cmd == 'clear') and not me['readOnly']:
         if len(me['data']) > 0:
             me['data'] = dict()
             me['dirty'] = True
             me['cdataUpdate'] = True
     elif (cmd == 'new'):
-        new_file(stdscr)
+        fileio.new_file(me, stdscr)
     elif (cmd[0] == 'c'):
         do_ccmd(stdscr, cmd, args)
     elif cmd.startswith("r") and not me['readOnly']:
@@ -1568,6 +1567,17 @@ def setup_funcs():
     funcs.GERRFILE = GERRFILE
 
 
+def setup_fileio():
+    fileio.GLOGFILE = GLOGFILE
+    fileio.GERRFILE = GERRFILE
+    fileio.THEQUOTE = THEQUOTE
+    fileio.THEFIELDSEP = THEFIELDSEP
+    fileio.dlg = dlg
+    fileio.status = status
+    fileio.cstatusbar = cstatusbar
+    fileio.goto_cell = goto_cell
+
+
 def setup_logfile(logfile="/dev/null"):
     '''
     create a file handle for logging.
@@ -1650,6 +1660,7 @@ stdscr=cstart()
 cattr_textnum(stdscr)
 setup_sighandlers()
 setup_funcs()
+setup_fileio()
 try:
     if gbStartHelp:
         helpdlg.help_dlg(stdscr)

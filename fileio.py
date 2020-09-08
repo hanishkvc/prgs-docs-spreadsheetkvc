@@ -10,12 +10,20 @@ import cryptography, secrets
 import seckvc as sec
 
 
+# Entities from main logic
 GLOGFILE = None
 GERRFILE = None
 dlg = None
 status = None
 cstatusbar = None
 goto_cell = None
+THEQUOTE = None
+THEFIELDSEP = None
+
+
+# Whether to use internal or cryptography libraries AuthenticatedEncryption
+# Both use similar concepts, but bitstreams are not directly interchangable
+bInternalEncDec = True
 
 
 def _save_file(me, scr, sFile, filePass=None):
@@ -78,7 +86,7 @@ def save_file(me, scr, sFile, filePass=None):
             status(scr, ["Overwriting {}".format(sFile)])
     try:
         cstatusbar(scr, ['Saving file...'])
-        _save_file(scr, sFile, filePass)
+        _save_file(me, scr, sFile, filePass)
     except:
         a,b,c = sys.exc_info()
         print("savefile:exception:{}:{}".format((a,b,c), sFile), file=GLOGFILE)
@@ -160,9 +168,9 @@ def load_file(me, scr, sFile, filePass=None):
         cstatusbar(scr, ['Loading file...'])
         me['cdataUpdate'] = True
         scr.clear()
-        _load_file(sFile, filePass)
+        _load_file(me, sFile, filePass)
         me['dirty'] = False
-        revertfrom_help_ifneeded()
+        revertfrom_help_ifneeded(me)
         goto_cell(scr, "A1")
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
         return True
@@ -182,7 +190,7 @@ def load_help(me, scr):
     '''
     if me['helpModeSavedReadOnly'] != None:
         return
-    if load_file(scr, "{}/help.csv".format(sys.path[0])):
+    if load_file(me, scr, "{}/help.csv".format(sys.path[0])):
         me['helpModeSavedReadOnly'] = me['readOnly']
         me['readOnly'] = True
     else:
@@ -216,7 +224,7 @@ def new_file(me, scr):
         else:
             status(scr, ["Canceled new spreadsheet creation"])
             return False
-    revertfrom_help_ifneeded()
+    revertfrom_help_ifneeded(me)
     goto_cell(scr, "A1")
     me['data'] = dict()
     me['dirty'] = False
