@@ -331,7 +331,7 @@ explicitly specify the file to write to.
 	insert n columns after current column.
 	If numOfCols not specified, it defaults to 1.
 
-##### range operations
+##### range operations (rcmds)
 
 * rcopy srcCellAddrRange dstCellAddrRange
 
@@ -976,7 +976,7 @@ MAYBE treat each cell like a python variable or statement or expression. So also
 
 [DONE] Move file related stuff to fileio module.
 
-Markers so that it is easier to use rcommands.
+[DONE] Markers so that it is easier to use rcommands.
 
 [DONE] Dont clip numeric values.
 
