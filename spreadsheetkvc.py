@@ -929,7 +929,10 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
         val = nvalue_expr(sVal[1:])
     elif (sVal[0] in [ '+', '-']) or sVal[0].isnumeric():
         try:
-            val = eval(sVal)
+            if GBFLYPYTHON:
+                val = eval(sVal)
+            else:
+                val = eval(sVal, {}, {})
         except:
             val = '{}{}'.format(ERRNUM, sVal)
     else:
