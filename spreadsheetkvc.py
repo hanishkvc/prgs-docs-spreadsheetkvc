@@ -903,8 +903,9 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
         This will be None, if error while evaluating.
     If it starts with +/- or numeric,
         return eval(data), ERROR tag if exception
-    Else return data
+    Else (return data if bText2Zero is False; otherwise return 0)
 
+    Dont cache empty shells. Also by default dont cache text cells.
     '''
     # use cached data if available
     if bUseCachedData:
@@ -914,8 +915,10 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
     # find the value
     sVal = me['data'].get(key)
     if sVal == None:
+        bUseCachedData = False
         val = 0
     elif len(sVal) == 0:
+        bUseCachedData = False
         val = 0
     elif sVal.startswith("="):
         trap_calclooping(key)
