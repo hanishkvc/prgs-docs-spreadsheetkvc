@@ -898,58 +898,63 @@ def _nvalue(sData):
 bUseCachedData = True
 def nvalue_key(key):
     '''
-    Return the numeric value associated with the given cell.
-    It will either return None (if not numeric or error in expression)
-    or else will return the numeric value associated with the cell.
-    If the cell contains a =expression, it will be evaluated.
+    Return the value associated with the given cell, preferably numeric.
+    The cell is specified using its corresponding key.
 
     If the cell doesnt contain any data, it will return 0.
     This is unity operation for add++ but not for mult++.
 
-    The cell is specified using its corresponding key.
+    If it starts with =, (interpret as =expression)
+        return _nvalue(data) ie its internal evaluation
+        This will be None, if error while evaluating.
+    If it starts with +/- or numeric,
+        return eval(data), ERROR tag if exception
+    Else return data
+
     '''
+    # use cached data if available
     if bUseCachedData:
         val = me['cdata'].get(key)
         if val != None:
             return val
-    val = me['data'].get(key)
-    #print("nvalue_key:{}:{}".format(key,val), file=GERRFILE)
-    if val == None:
-        return 0
-    if not val.startswith("="):
-        return None
-    trap_calclooping(key)
-    nval = _nvalue(val[1:])
+    # find the value
+    sVal = me['data'].get(key)
+    if sVal == None:
+        val = 0
+    elif len(sVal) == 0:
+        val = 0
+    elif sVal.startswith("="):
+        trap_calclooping(key)
+        val = _nvalue(sVal[1:])
+    elif (sVal[0] in [ '+', '-']) or sVal[0].isnumeric():
+        try:
+            val = eval(sVal)
+        except:
+            val = 'ERROR_{}'.format(sVal)
+    else:
+        val = sVal
+    # update cache
     if bUseCachedData:
-        me['cdata'][key] = nval
-    return nval
+        me['cdata'][key] = val
+    return val
 
 
 def value_key(key):
     '''
     Return the value associated with the given cell.
+    The cell is specified using its corresponding key.
 
     Mainly for use by display logic.
 
     If no data in the cell, return empty string.
-    If it starts with =, return _nvalue(data)
-    If it starts with +/- or numeric then return eval(data)
-    Else return data
+    Else return nvalue of cell
     '''
     sVal = me['data'].get(key)
     if sVal == None:
         return ""
-    if sVal.startswith("="):
-        return _nvalue(sVal[1:])
     if len(sVal) == 0:
         return ""
-    if (sVal[0] in [ '+', '-']) or sVal[0].isnumeric():
-        try:
-            val = eval(sVal)
-        except:
-            val = 'ERROR_{}'.format(sVal)
-        return val
-    return sVal
+    return nvalue_key(key)
 
 
 def rl_commandmode(stdscr, key):
