@@ -99,11 +99,14 @@ Some of its features are
   while still allowing looping to be trapped.
 
 * Uses the sparse dictionary data structure to store the cells in memory. So irrespective of the
-  size of the spreadsheet, in memory it occupies only as much space as required for cells with
-  contents in them.
+  size (in terms of number of rows and cols) of the spreadsheet, in memory it occupies only as much
+  space as required for cells with contents in them.
 
 	From within the program one could use one of the :irb or :ira or :icb or :ica commands
 	to increase the size of the spreadsheet, as needed. Look further down for details.
+
+	NOTE: sparse data structure is useful for having huge spreadsheets with good number of empty
+	cells inbetween and not necessarily huge spreadsheets with most of the cells filled up ;)
 
 * support range operations (rcmds) which allow manipulating multiple cells easily using simple commands.
 
@@ -1480,12 +1483,16 @@ now implemented in nvalue_key.
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
 Stop python snippets from running in uncontrolled way, if desired. Its also the default.
+[TODO] Add a cmdline arg to open up python eval.
 
 Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.
 
 [TODO] Expand ~ at begin of path (os.path.expanduser)
 
 [TODO] Move eval/value logics to a seperate file and or similarly move navigation related stuff to a seperate file.
+
+[TODO] Maybe use numpy array for calculated cache.
+
 
 
 
