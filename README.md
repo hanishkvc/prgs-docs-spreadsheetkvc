@@ -1410,6 +1410,8 @@ now implemented in nvalue_key.
 
 		Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
 
+	With this also allow some python snippets to be run.
+
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
 
