@@ -834,7 +834,7 @@ def _nvalue_saddr_or_str(sAddrOr):
     return sAddrOr
 
 
-def _nvalue(sData):
+def nvalue_expr(sData):
     '''
     Evaluate the given expression.
 
@@ -870,19 +870,19 @@ def _nvalue(sData):
             sNew += str(_nvalue_saddr_or_str(evalParts[i]))
             me['callDepth'] -= 1
         elif evalTypes[i] == parse.EvalPartType.Group: # Bracket grouped subexpression
-            sVal = _nvalue(evalParts[i][1:-1])
+            sVal = nvalue_expr(evalParts[i][1:-1])
             sNew += "({})".format(sVal)
         else:
             sNew += evalParts[i]
     # Evaluate
     try:
-        #print("_nvalue:eval:{}:{}".format(sData, sNew), file=GERRFILE)
+        #print("nvalue_expr:eval:{}:{}".format(sData, sNew), file=GERRFILE)
         val = eval(sNew)
     except RecursionError as re:
-        ##DBUG##print("_nvalue:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
+        ##DBUG##print("nvalue_expr:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
         raise
     except:
-        print("_nvalue:exception:{}:{}".format(sData, sNew), file=GERRFILE)
+        print("nvalue_expr:exception:{}:{}".format(sData, sNew), file=GERRFILE)
         traceback.print_exc(file=GERRFILE)
         val = None
         raise
@@ -900,7 +900,7 @@ def nvalue_key(key):
     This is unity operation for add++ but not for mult++.
 
     If it starts with =, (interpret as =expression)
-        return _nvalue(data) ie its internal evaluation
+        return nvalue_expr(data) ie its internal evaluation
         This will be None, if error while evaluating.
     If it starts with +/- or numeric,
         return eval(data), ERROR tag if exception
@@ -920,7 +920,7 @@ def nvalue_key(key):
         val = 0
     elif sVal.startswith("="):
         trap_calclooping(key)
-        val = _nvalue(sVal[1:])
+        val = nvalue_expr(sVal[1:])
     elif (sVal[0] in [ '+', '-']) or sVal[0].isnumeric():
         try:
             val = eval(sVal)
@@ -1180,7 +1180,7 @@ def setup_funcs():
     funcs.me = me
     funcs._celladdr_valid = _celladdr_valid
     funcs.nvalue_key = nvalue_key
-    funcs._nvalue = _nvalue
+    funcs.nvalue_expr = nvalue_expr
     funcs.GLOGFILE = GLOGFILE
     funcs.GERRFILE = GERRFILE
 

@@ -13,7 +13,7 @@ BFILTERPYFUNC = True
 me = None
 _celladdr_valid = None
 nvalue_key = None
-_nvalue = None
+nvalue_expr = None
 GLOGFILE = None
 GERRFILE = None
 
@@ -219,7 +219,7 @@ def do_pyfunc(sCmd, sArgs):
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
-        sValOrArg = _nvalue(curArg)
+        sValOrArg = nvalue_expr(curArg)
         theArgs += ",{}".format(sValOrArg)
     if theArgs.startswith(','):
         theArgs = theArgs[1:]
