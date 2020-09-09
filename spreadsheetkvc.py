@@ -905,7 +905,7 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
         return eval(data), ERROR tag if exception
     Else (return data if bText2Zero is False; otherwise return 0)
 
-    Dont cache empty shells. Also by default dont cache text cells.
+    Dont cache None or empty cells. Also by default dont cache text cells.
     '''
     # use cached data if available
     if bUseCachedData:
