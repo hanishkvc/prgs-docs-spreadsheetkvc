@@ -410,23 +410,16 @@ def _cdata_update(rStart, cStart, rEnd, cEnd):
                 continue
             me['calcCnt'] = dict()
             me['callDepth'] = 0
-            sData = me['data'].get((r,c))
-            if sData != None:
-                if sData.startswith('='):
-                    try:
-                        val = nvalue_key((r,c))
-                        me['cdata'][r,c] = val
-                    except RecursionError:
-                        bRecursionError = True
-                        lRecCells.append((r,c))
-                    except:
-                        bException = True
-                        lExcCells.append((r,c))
-                        print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
-                        traceback.print_exc(file=GERRFILE)
-                else:
-                    val = sData
-                    me['cdata'][r,c] = val
+            try:
+                val = nvalue_key((r,c))
+            except RecursionError:
+                bRecursionError = True
+                lRecCells.append((r,c))
+            except:
+                bException = True
+                lExcCells.append((r,c))
+                print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
+                traceback.print_exc(file=GERRFILE)
     return bRecursionError, lRecCells, bException, lExcCells
 
 
