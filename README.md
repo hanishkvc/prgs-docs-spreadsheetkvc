@@ -1,7 +1,7 @@
 # SpreadSheetKVC
 
 Author: HanishKVC, 2020
-Version: v20200908IST1510
+Version: v20200909IST1947
 
 spreadsheetkvc is a spreadsheet program which runs on the commandline using ncurses and python.
 
@@ -9,14 +9,21 @@ It works with csv file. It allows the saved csv file to be optionally encrypted 
 encrypted csv files. If encrypted file is manipulated, the program will be able to notice the same,
 and inturn stop processing the same, because it uses authenticated encryption concept.
 
-Remember that a cell containing a number or expression|forumula to be evaluated/calculated should
-prefix it's contents with '=' ie equal. Else it will be treated as text content cell. The program
-will try to make the =expression (which includes numeric also) cells highlighted compared to Text
-cell's to try and make it easy to distinguish between them.
+Text and Numeric values can be entered into cells as is, unless one wants a numeric value to be
+treated as a text, in which case quote it. [One needs to be in edit mode by pressing i or e to
+add or edit cell contents].
+
+While expressions/formulas to be evaluated using a combination of values, contents of other cells
+and or supported functions, need to be prefixed with = symbol. These are called =expression.
+
+The program will try to make the =expression and numeric cells highlighted compared to Text cell's
+to try and make it easy to distinguish between them.
+
+## Features
 
 Some of its features are
 
-* Uses curses to show a cell matrix/table in text terminal.
+* Uses curses to show a visual matrix/table of cells in text terminal.
 
 * Loads and stores csv files. User can change the fieldsep and text quote used if required,
   so that one can work with csv files, with different chars for these.
@@ -27,8 +34,8 @@ Some of its features are
   program will autoscroll if required to allow user to continue editing/entering content,
   within reasonable limits.
 
-	* [Outside of cell editing] Overflowing cell's content will be shown in place of adjacent cells,
-	  provided those adjacent cells are empty.
+	* [Outside of cell editing] Overflowing cell's content will be shown in place of
+	  adjacent cells, provided those adjacent cells are empty.
 
 * Support evaluation of mathematical expressions which inturn can refer to
 
@@ -40,10 +47,9 @@ Some of its features are
 
 	* builtin python functions
 
-		* The user could even specify a cell addresses as arguments to the
-		  function. In which case the program will convert the cell address
-		  to the value in the specified cell and inturn call the python
-		  function.
+		* The user can specify cell addresses as arguments to the function.
+		  In which case the program will convert the cell address to the
+		  value in the specified cell and inturn call the python function.
 
 * cell contents are evaluated and cached when user updates/modifies any cell content.
   This ensures that spreadsheets with heavy calculations can be displayed quickly without
@@ -579,12 +585,17 @@ original behaviour of this program previously.
 
 ## Cell contents and =expressions
 
-In the edit/insert mode one can enter textual data / string directly into the cell.
+In the edit/insert mode one can enter textual or numeric value directly into the cell.
 
-However if one wants to enter numeric values or expressions, one requires to prefix them
-with = symbol.
+While entering expressions to be evaluated, one requires to prefix them with = symbol.
 
 Example
+
+	A text
+
+	' Another text with space in front'
+
+	123456
 
 	=2
 
@@ -608,7 +619,24 @@ One can refer to values in other cells directly by specifying the corresponding 
 NOTE that the =expressions are evaluated using pythons eval function. So basic python
 expressions can be evaluated as part of =expressions.
 
-NOTE: =expressions should only refer to other =expression cells and not text cells.
+=expressions should only refer to other =expression cells and not text cells. If a text cell
+is referenced where numeric value is required, it will be treated as containing the value 0.
+
+### Interpretation of cell contents
+
+If no data (inc empty string) then return 0 (where numeric value expected, else return "" i.e empty string).
+
+If starts with =,  then do the internal =expression evaluation of same.
+
+if starts with numeric or starts with + or - then python eval it for a numeric.
+
+	If user wants to treat it has text, then they need to add textquote.
+
+	No need to prefix numbers with =. (applies for some simple expressions also)
+
+If none of above, return 0 where numeric value expected, else return as is as a string.
+
+	Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
 
 ### Looping
 
@@ -1396,21 +1424,6 @@ Consolidate all cell content evaluations to depend on nvalue_key for the core/hi
 i.e be it cdraw_data->value_Key, or be it cdata_update or anywhere else. Inturn a new and potentially simplified from user perspective cell content interpretation
 now implemented in nvalue_key.
 
-	If no data (inc empty string) then return 0 (where numeric value expected, else return "" string).
-
-	If starts with =,  then do the internal =expression evaluation of same.
-
-	if starts with numeric or starts with + or - then python eval it for a numeric.
-
-		If user wants to treat it has text, then they need to add textquote.
-
-		No need to prefix numbers with = now. (applies for some simple expressions also)
-
-	Else return as is as a string.
-
-		Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
-
-		This can also allow some python snippets to be run.
 
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
