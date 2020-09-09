@@ -896,6 +896,7 @@ def _nvalue(sData):
     return val
 
 
+ERRNUM = "#ErrNum#"
 bUseCachedData = True
 def nvalue_key(key):
     '''
@@ -931,7 +932,7 @@ def nvalue_key(key):
         try:
             val = eval(sVal)
         except:
-            val = 'ERROR_{}'.format(sVal)
+            val = '{}{}'.format(ERRNUM, sVal)
     else:
         val = sVal
     # update cache
