@@ -936,15 +936,19 @@ def value_key(key):
     If it starts with Quote, return data
     Else return eval(data)
     '''
-    val = me['data'].get(key)
-    if val == None:
+    sVal = me['data'].get(key)
+    if sVal == None:
         return ""
-    if not val.startswith("="):
-        if val[0] == THEQUOTE:
-            return val
+    if not sVal.startswith("="):
+        if sVal[0] == THEQUOTE:
+            return sVal
         else:
-            return eval(val)
-    return _nvalue(val[1:])
+            try:
+                val = eval(sVal)
+            except:
+                val = 'ERROR'
+            return val
+    return _nvalue(sVal[1:])
 
 
 def rl_commandmode(stdscr, key):
