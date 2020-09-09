@@ -26,6 +26,7 @@ THEFIELDSEP = ';'
 THEALT2INBTWQUOTE = '_'
 DONTEXIT = -9999
 
+GBFLYPYTHON = False
 gbStartHelp = True
 
 # How to differentiate text cells compared to =expression cells
@@ -877,7 +878,10 @@ def nvalue_expr(sData):
     # Evaluate
     try:
         #print("nvalue_expr:eval:{}:{}".format(sData, sNew), file=GERRFILE)
-        val = eval(sNew)
+        if GBFLYPYTHON:
+            val = eval(sNew)
+        else:
+            val = eval(sNew, {}, {})
     except RecursionError as re:
         ##DBUG##print("nvalue_expr:RecursionError:{}:{}:{}".format(sData, sNew, re), file=GERRFILE)
         raise

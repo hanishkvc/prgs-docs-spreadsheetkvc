@@ -1402,18 +1402,21 @@ now implemented in nvalue_key.
 
 	if starts with numeric or starts with + or - then python eval it for a numeric.
 
-		If user wants to treat as it has text, then they need to add textquote.
+		If user wants to treat it has text, then they need to add textquote.
 
-		No need to prefix numbers with =.
+		No need to prefix numbers with = now. (applies for some simple expressions also)
 
 	Else return as is as a string.
 
 		Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
 
-	With this also allow some python snippets to be run.
+		This can also allow some python snippets to be run.
 
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
+Stop python snippets from running in uncontrolled way, if desired.
+
+Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.
 
 [TODO] Expand ~ at begin of path (os.path.expanduser)
 
