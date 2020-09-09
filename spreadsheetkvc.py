@@ -926,18 +926,23 @@ def nvalue_key(key):
     return nval
 
 
-def value(addr):
+def value_key(key):
     '''
     Return the value associated with the given cell.
-    It will be a empty string if no data in the cell.
-    It will be the numeric value if the cell has a =expression.
-    Else it will return the textual data in the cell.
+
+    If no data in the cell, return empty string.
+    If it starts with =, return _nvalue(data)
+    If it starts with Quote, return data
+    Else return eval(data)
     '''
-    val = me['data'].get(addr)
+    val = me['data'].get(key)
     if val == None:
         return ""
     if not val.startswith("="):
-        return val
+        if val[0] == THEQUOTE:
+            return val
+        else:
+            return eval(val)
     return _nvalue(val[1:])
 
 
