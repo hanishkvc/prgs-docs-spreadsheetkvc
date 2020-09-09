@@ -1388,6 +1388,24 @@ start cell address wrt the destination, then infer the destination end cell addr
 Fixed the odd slow navigation towards right or down direction of very large spreadsheets. This was due to me dumping in those two direction navigation logics.
 ALso commented/removed full me print in general.
 
+### 20200909IST0955 - GauriGaneshaToOnamToTeachersDayRelease
+
+[TODO] New Cell Content Interpretation Logic
+
+	If entered cell content starts with
+
+	a alphabet or space or textquote then treat it has a text and put full within textquotes, if not already in place.
+
+	a + or - sign or number, then treat it has a numeric.
+
+		If user wants to treat as it has text, then they need to add textquote
+
+	a = symbol, then treat as a expression to be evaluated.
+
+	Text field shown will not have quote unless its required like the 1st char is not a alphabet.
+
+[TODO] Expand ~ at begin of path (os.path.expanduser)
+
 
 
 
