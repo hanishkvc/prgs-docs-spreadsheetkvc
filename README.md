@@ -51,23 +51,9 @@ Some of its features are
 		  In which case the program will convert the cell address to the
 		  value in the specified cell and inturn call the python function.
 
-* cell contents are evaluated and cached when user updates/modifies any cell content.
-  This ensures that spreadsheets with heavy calculations can be displayed quickly without
-  any calculation overhead, in general.
-
-  Also during evaluation of cells, done in a row major fashion, the calculated results are
-  cached and reused, when calculating other cells.
-
-  For optimal performance, especially for =expressions which have DEEP cell chaining dependencies
-  ideally have cell dependencies such that they depend on
-
-	* cells to their left on the same row and or any cell in the rows to its top.
-
-  Prg defers cell reevaluation, till the cell becomes visible or some other cell which depends on it
-  either directly or indirectly becomes visible. THis ensures that even spreadsheets with calculations
-  involving very very long chaining across cells load and can be edited normally in most cases.
-  Only when cells with heavy chaining become visible, the program will pause to do the calculations
-  required and inturn show its results.
+* The program follows a windowed lazy/defered evaluation with caching strategy for the cells.
+  This ensures that large spreadsheets with heavy calculations can be displayed relatively
+  quickly without much calculation overhead, in general.
 
 * Written in python, with source available on github, so that anyone can understand, modify|extend
   and or bugfix as required, to meet their needs ;) This also allows arbitrary precision integer
@@ -603,24 +589,9 @@ Example
 
 	= (5+3)/(6.8*2)**32
 
-The program also allows few predefined functions to be used to operate on the data in the
-cells, as mentioned below. These functions needs to be used as part of the =expressions.
-
-Example
-
 	=10-5+sum(B10:C99)
 
-	=cnt(B10:C99)
 
-One can refer to values in other cells directly by specifying the corresponding cell's address.
-
-	= 99/(100 + Zz99) * sum(A1:B10)
-
-NOTE that the =expressions are evaluated using pythons eval function. So basic python
-expressions can be evaluated as part of =expressions.
-
-=expressions should only refer to other =expression cells and not text cells. If a text cell
-is referenced where numeric value is required, it will be treated as containing the value 0.
 
 ### Interpretation of cell contents
 
@@ -638,7 +609,63 @@ If none of above, return 0 where numeric value expected, else return as is as a 
 
 	Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
 
-### Looping
+
+### =expressions
+
+These are expressions/formulas which allows one to operate on existing data in the cells
+and inturn infer and or generate new data from it.
+
+The =expressions are evaluated using pythons eval function. So basic python arithematic
+expressions can be evaluated as part of =expressions.
+
+The program also allows few predefined functions to be used as part of the =expressions.
+This allows the user to operate on the data in the cells suitably. The supported functions
+are mentioned later in this document.
+
+Example
+
+	=10-5+sum(B10:C99)
+
+	=cnt(B10:C99)
+
+	= 99/(100 + Zz99) * sum(A1:B10)
+
+As can be noticed in the above examples, one can refer to values in other cells directly
+by specifying the corresponding cell's address.
+
+=expressions should only refer to other =expression or numeric cells and not text cells.
+If a text cell is referenced where numeric value is required, it will be treated as
+containing the value 0.
+
+#### evaluation
+
+The program follows a windowed lazy/defered evaluation with caching strategy for the cells.
+Prg defers cell [re]evaluation, till the cell becomes visible or some other cell which depends
+on it either directly or indirectly becomes visible. This ensures that large spreadsheets
+with heavy calculations involving very very long chaining across cells load relatively fast
+and can be edited normally in most cases.
+
+Only when cells with heavy chaining become visible, the program will pause to do the calculations
+required and inturn show its results.
+
+THe cell evaluation with in the display window, is done in a row major fashion. The calculated
+results are cached and reused, when calculating other cells. For optimal performance, especially
+for =expressions which have DEEP cell chaining dependencies ideally have cell dependencies such
+that they depend on
+
+	cells to their left on the same row and or any cell in the rows to its top.
+
+	This suggestion is mainly for calculations involving very very long chaining of cells.
+	FOr normal calculations, the cells could be anywhere in the spreadsheet.
+
+When cell contents are updated/modified by the user, the program clears the cache, and repeats
+the windowed defered evaluation with caching as explained above again.
+
+TODO: May add a reverse dependency list for the cells, so that when user edits any cells, only
+related cell caches are cleared and thus need reevaluation.
+
+
+#### Looping
 
 If =expressions contain looping, i.e the =expression refers back to itself either directly
 and or through another cell in the chain of calculations required to find the cell's value.
