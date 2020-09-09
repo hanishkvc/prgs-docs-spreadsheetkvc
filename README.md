@@ -102,13 +102,8 @@ Some of its features are
   size of the spreadsheet, in memory it occupies only as much space as required for cells with
   contents in them.
 
-	* so one could theoretically have a huge number of rows and columns.
-
-		* use :irb [numOfRows] or :ira [numOfRows] to add rows before or after current row
-
-		* use :icb [numOfCols] or :ica [numOfCols] to add cols before or after current col
-
-		* Look further down for details. [numOfCols] indicates that numOfCols is optional.
+	From within the program one could use one of the :irb or :ira or :icb or :ica commands
+	to increase the size of the spreadsheet, as needed. Look further down for details.
 
 * support range operations (rcmds) which allow manipulating multiple cells easily using simple commands.
 
@@ -210,7 +205,8 @@ The program supports the following commandline arguments
 
 		Set the maximum call depth | cell chaining allowed by program to <depth>.
 
-		Default value is 1000.
+		Default value is 1000. This is not a end user option. It is more for some one developing and
+		or debugging the program to trigger and or manipulate things.
 
 
 ### program modes
@@ -1481,15 +1477,15 @@ Consolidate all cell content evaluations to depend on nvalue_key for the core/hi
 i.e be it cdraw_data->value_Key, or be it cdata_update or anywhere else. Inturn a new and potentially simplified from user perspective cell content interpretation
 now implemented in nvalue_key.
 
-
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
-Stop python snippets from running in uncontrolled way, if desired.
+Stop python snippets from running in uncontrolled way, if desired. Its also the default.
 
 Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.
 
 [TODO] Expand ~ at begin of path (os.path.expanduser)
 
+[TODO] Move eval/value logics to a seperate file and or similarly move navigation related stuff to a seperate file.
 
 
 
