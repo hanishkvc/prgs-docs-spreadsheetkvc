@@ -933,22 +933,23 @@ def value_key(key):
 
     If no data in the cell, return empty string.
     If it starts with =, return _nvalue(data)
-    If it starts with Quote, return data
-    Else return eval(data)
+    If it starts with +/- or numeric then return eval(data)
+    Else return data
     '''
     sVal = me['data'].get(key)
     if sVal == None:
         return ""
-    if not sVal.startswith("="):
-        if sVal[0] == THEQUOTE:
-            return sVal
-        else:
-            try:
-                val = eval(sVal)
-            except:
-                val = 'ERROR'
-            return val
-    return _nvalue(sVal[1:])
+    if sVal.startswith("="):
+        return _nvalue(sVal[1:])
+    if len(sVal) == 0:
+        return ""
+    if (sVal[0] in [ '+', '-']) or sVal[0].isnumeric():
+        try:
+            val = eval(sVal)
+        except:
+            val = 'ERROR_{}'.format(sVal)
+        return val
+    return sVal
 
 
 def rl_commandmode(stdscr, key):
