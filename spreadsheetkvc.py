@@ -1196,6 +1196,10 @@ def setup_sighandlers():
 
 
 def setup_funcs():
+    if GBFLYPYTHON:
+        funcs.BFILTERPYFUNC = False
+    else:
+        funcs.BFILTERPYFUNC = True
     funcs.me = me
     funcs._celladdr_valid = _celladdr_valid
     funcs.nvalue_key = nvalue_key
