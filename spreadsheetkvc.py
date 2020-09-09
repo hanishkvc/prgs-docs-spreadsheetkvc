@@ -894,7 +894,12 @@ def nvalue_expr(sData):
 
 
 ERRNUM = "#ErrNum#"
-def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
+# Ugly me
+if GBFLYPYTHON:
+    GBTEXT2ZERO = False
+else:
+    GBTEXT2ZERO = True
+def nvalue_key(key, bUseCachedData=True, bText2Zero=GBTEXT2ZERO, bDontCacheText=True):
     '''
     Return the value associated with the given cell, preferably numeric.
     The cell is specified using its corresponding key.
