@@ -418,7 +418,7 @@ def _cdata_update(rStart, cStart, rEnd, cEnd):
             except:
                 bException = True
                 lExcCells.append((r,c))
-                print("_cdata_update:exception:{}:{}".format((r,c),sData), file=GERRFILE)
+                print("_cdata_update:exception:{}".format((r,c)), file=GERRFILE)
                 traceback.print_exc(file=GERRFILE)
     return bRecursionError, lRecCells, bException, lExcCells
 
