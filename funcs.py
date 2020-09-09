@@ -201,6 +201,7 @@ def allowed_pyfunc(sCmd, sArgs):
     return False
 
 
+ERRPFN = "#ErrPFn#"
 def do_pyfunc(sCmd, sArgs):
     '''
     Try evaluating the command and the arguments as a python function
@@ -215,7 +216,7 @@ def do_pyfunc(sCmd, sArgs):
     or so, time permitting.
     '''
     if not allowed_pyfunc(sCmd, sArgs):
-        return "Err"
+        return ERRPFN
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
