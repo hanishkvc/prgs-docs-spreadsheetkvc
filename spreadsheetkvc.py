@@ -890,8 +890,7 @@ def nvalue_expr(sData):
 
 
 ERRNUM = "#ErrNum#"
-bUseCachedData = True
-def nvalue_key(key, bText2Zero=True):
+def nvalue_key(key, bUseCachedData=True, bText2Zero=True, bDontCacheText=True):
     '''
     Return the value associated with the given cell, preferably numeric.
     The cell is specified using its corresponding key.
@@ -927,6 +926,8 @@ def nvalue_key(key, bText2Zero=True):
         except:
             val = '{}{}'.format(ERRNUM, sVal)
     else:
+        if bDontCacheText:
+            bUseCachedData = False
         if bText2Zero:
             val = 0
         else:
