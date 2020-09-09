@@ -479,18 +479,19 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
-            sData = value_key((r,c))
-            #print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
-            if (sData != ""):
-                if type(sData) != str:
+            data = value_key((r,c))
+            #print("cdrawdata: {},{}={}".format(r,c,data), file=GLOGFILE)
+            if (data != ""):
+                if type(data) != str:
                     ctype |= CATTR_DATANUM
-                    sData = str(sData)
+                    sData = str(data)
                     if bNumericDisplayOverflow:
                         sRemaining = sData[me['cellWidth']:]
                     else:
                         sRemaining = ""
                     rtype = CATTR_DATANUM
                 else:
+                    sData = data
                     ctype |= CATTR_DATATEXT
                     sRemaining = sData[me['cellWidth']:]
                     rtype = CATTR_DATATEXT
@@ -500,7 +501,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 sRemaining = sRemaining[me['cellWidth']:]
                 #if (sData != ""):
                 #    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
-            else: # sData == None AND clipCell
+            else: # data == "" AND clipCell
                 ctype |= CATTR_DATATEXT
                 sData = ""
             if (c < colStart):
