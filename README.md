@@ -19,6 +19,7 @@ and or supported functions, need to be prefixed with = symbol. These are called 
 The program will try to make the =expression and numeric cells highlighted compared to Text cell's
 to try and make it easy to distinguish between them.
 
+
 ## Features
 
 Some of its features are
@@ -86,29 +87,20 @@ Some of its features are
 
 	If text quote some where in the middle of cell content, replace with a placeholder char.
 
-* Any Cells having looping in =expression calculations (within itself or through a chain of cells)
-  and or very very long (2000+) cell-to-cell dependency depth chaining will be identified and result
-  in None result or ErrTagging. ErrTagging ensures that those cells dont get accounted in subsequent
-  recalculations and thus dont bog down the program.
-
-  Once user has fixed the looping in calculation and or better organised things. User can run
-  :rclearerr cellAddrRange to clear err tags from the cells in the specified range. So that the
-  program will start accounting those cells again.
+* Any Cells having looping in their =expression calculations (within themselves and or through a
+  chain of cells) and or involve very very long (1000s) cell-to-cell dependency depth chaining
+  will be identified and result in None result or ErrTagging. ErrTagging ensures that those cells
+  dont get accounted in subsequent recalculations and thus dont bog down the program.
 
   User will be able to see if a cell is error tagged, because same is shown as part of cell content.
 
-  NOTE: Using a cellAddressRange like say sum(A1:ZZ1024) in itself is not a deep cell chaining.
-  Rather it corresponds to a cell chaining depth of only 1. If any of those cells inturn depend on
-  other cells for their calculations and those other cells dependent on even more cells for their value,
-  that is when a cell calculation chaining occurs.
+  Program uses a decent enough effort optimistic multipass evaluation logic with valid result caching
+  to try and handle very very deep calc chaining in managable parts in a discrete sliding manner,
+  while still allowing looping to be trapped.
 
-	[DevelNote]
-
-	* If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell
-	  dependency chaining will be identified and all cells involved in the chain will also get error tagged.
-
-* Uses the sparse dictionary data structure to store the cells in memory. So irrespective of the size of the
-  spreadsheet, in memory it occupies only as much space as required for cells with contents in them.
+* Uses the sparse dictionary data structure to store the cells in memory. So irrespective of the
+  size of the spreadsheet, in memory it occupies only as much space as required for cells with
+  contents in them.
 
 	* so one could theoretically have a huge number of rows and columns.
 
@@ -665,30 +657,68 @@ TODO: May add a reverse dependency list for the cells, so that when user edits a
 related cell caches are cleared and thus need reevaluation.
 
 
-#### Looping
+#### Looping and Deep chaining.
 
-If =expressions contain looping, i.e the =expression refers back to itself either directly
-and or through another cell in the chain of calculations required to find the cell's value.
+If =expression in a cell refers back to itself either directly and or through another cell(s) in
+the chain of calculations required to find the cell's value, then it is considered to be looped.
 
-Then the program will trap such invalid looping and Err tag the contents of all cells involved in the
-calculation, whose value is impacted by looping. This allows the user to see what and all cells where
-involved in that looping. It also allows the program to continue with evaluation of the other cells.
+The program will trap such invalid looping and Err tag the contents of all cells involved in the
+calculation, whose value is impacted by looping. This allows the user to see what and all cells
+where involved in that looping. It also allows the program to continue with evaluation of the
+other cells.
 
-[DevelNOTE] Program will flag a calc loop error tag, even for cells whose =expression involves chaining
-of cells which refer to one another such that the chain length extends to thousands of cells. IE where
-one cell refers to another cell, and that another cell refers to some other cell and so on.
+The program will also flag the calc loop error tag, for cells whose =expression involves chaining
+of cells which refer to one another such that the chain length extends to thousands of cells. IE
+where one cell refers to another cell, and that another cell refers to some other cell and so on.
 
 	NOTE: A cell directly refering to say 100 or even 500 cells for that matter is not a issue.
-	Only if cells chain from one cell to other cell and that other cell to another cell and so on
-	to the depth threshold + few other factors, only then this triggers.
+	Similarly using Cell Address Ranges like say sum(A1:ZZ1024) in itself is also not deep cell
+	chaining, rather it corresponds to a cell chaining depth of only 1. If any of those cells
+	inturn depend on other cells for their calculations, and those other cells inturn dependent
+	on even more cells for their value and so on and on and on to a very very deep extent, that
+	is when a very very deep cell calculation chaining occurs and only then will this trigger.
 
-	i.e CellB4[=B1+B2+B3]
+	IE cells chain from one cell to another cell and from that another cell to some other cell
+	and so on to very very deep extents.
+
+	i.e CellB4[=B1+B2+B3] or CellB4[=sum(B1:ZZ1024]
 
 		is a call depth of only 1
 
 	while CellB4[=B3] CellB3[=B2] CellB2[=B1] CellB1[=10]
 
 		leads to a call depth of 3 as far as CellB4 is concerned.
+
+User will be able to see if a cell is error tagged, because same is shown as part of cell content.
+Once user has fixed the looping in calculation and or better organised things. User can run
+
+	:rclearerr cellAddrRange
+
+to clear err tags from the cells in the specified range. So that the program will start accounting
+those cells again.
+
+Prg uses a decent enough effort multipass evaluation logic with valid result caching to try and handle
+very very deep calc chaining, where the solution is built part by part in small managable chunks, over
+multiple passes.
+
+[DevelNote]
+
+If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell
+dependency chaining will be identified (in this case if the depth crosses 200 or so) and all cells
+involved in the chain will also get error tagged.
+
+However by default program is setup to not trigger this in the normal case (by setting CALCLOOPMAX
+to a very high value of 1000). Instead the program allows python recursion error to trigger and break
+the calculation if it is sufficiently deep to trigger the same. In this case chances are few of the
+involved cells' values would have got calculated. Even otherwise, it will continue with calculating
+the remaining cells. THis ensures that over a series of passes, the cells starting from the origin of
+the calc chain and slowly building up towards the end of the calc chain get calculated and cached.
+At each pass all cells with in the recursion limit depth to the last set of calculated cells in the
+chain, get calculated. Thus the chain gets resolved automatically through managable parts / blocks,
+in a discrete sliding manner from the start to the end of the chain, over a series of passes.
+
+THis allows very deep chains (well most of them any way, in a reasonable time and definitely all,
+if one is willing to wait for sufficient time) to be calculated while still trapping loops.
 
 
 ## Supported functions for =expressions
