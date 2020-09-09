@@ -479,15 +479,14 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
-            sData = me['data'].get((r,c))
+            sData = value_key((r,c))
             #print("cdrawdata: {},{}={}".format(r,c,sData), file=GLOGFILE)
-            if (sData != None):
-                if sData.startswith("="):
-                    #sData = value((r,c))
-                    sData = me['cdata'].get((r,c))
+            if (sData != ""):
+                if type(sData) != str:
                     ctype |= CATTR_DATANUM
+                    sData = str(sData)
                     if bNumericDisplayOverflow:
-                        sRemaining = str(sData)[me['cellWidth']:]
+                        sRemaining = sData[me['cellWidth']:]
                     else:
                         sRemaining = ""
                     rtype = CATTR_DATANUM
@@ -929,6 +928,8 @@ def nvalue_key(key):
 def value_key(key):
     '''
     Return the value associated with the given cell.
+
+    Mainly for use by display logic.
 
     If no data in the cell, return empty string.
     If it starts with =, return _nvalue(data)
