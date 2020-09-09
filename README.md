@@ -1388,21 +1388,30 @@ start cell address wrt the destination, then infer the destination end cell addr
 Fixed the odd slow navigation towards right or down direction of very large spreadsheets. This was due to me dumping in those two direction navigation logics.
 ALso commented/removed full me print in general.
 
+
 ### 20200909IST0955 - GauriGaneshaToOnamToTeachersDayRelease
 
-[TODO] New Cell Content Interpretation Logic
 
-	If entered cell content starts with
+Consolidate all cell content evaluations to depend on nvalue_key for the core/highlevel interpretation irrespective of from where cell content needs to be used
+i.e be it cdraw_data->value_Key, or be it cdata_update or anywhere else. Inturn a new and potentially simplified from user perspective cell content interpretation
+now implemented in nvalue_key.
 
-	a alphabet or space or textquote then treat it has a text and put full within textquotes, if not already in place.
+	If no data (inc empty string) then return 0 (where numeric value expected, else return "" string).
 
-	a + or - sign or number, then treat it has a numeric.
+	If starts with =,  then do the internal =expression evaluation of same.
 
-		If user wants to treat as it has text, then they need to add textquote
+	if starts with numeric or starts with + or - then python eval it for a numeric.
 
-	a = symbol, then treat as a expression to be evaluated.
+		If user wants to treat as it has text, then they need to add textquote.
 
-	Text field shown will not have quote unless its required like the 1st char is not a alphabet.
+		No need to prefix numbers with =.
+
+	Else return as is as a string.
+
+		Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
+
+Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
+
 
 [TODO] Expand ~ at begin of path (os.path.expanduser)
 
