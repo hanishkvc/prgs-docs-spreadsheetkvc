@@ -8,6 +8,7 @@ import traceback
 import base64
 import cryptography, secrets
 import seckvc as sec
+import nav
 
 
 # Entities from main logic
@@ -16,7 +17,6 @@ GERRFILE = None
 dlg = None
 status = None
 cstatusbar = None
-goto_cell = None
 THEQUOTE = None
 THEFIELDSEP = None
 
@@ -166,7 +166,7 @@ def load_file(me, scr, sFile, filePass=None):
         _load_file(me, sFile, filePass)
         me['dirty'] = False
         revertfrom_help_ifneeded(me)
-        goto_cell(scr, "A1")
+        nav.goto_cell(scr, "A1")
         print("\033]2; {} [{}] \007".format("SpreadsheetKVC", sFile), file=sys.stdout)
         return True
     except:
@@ -184,7 +184,7 @@ def load_help(me, scr):
     If already in help mode, dont do anything other than repositioning to A1 cell.
     '''
     if me['helpModeSavedReadOnly'] != None:
-        goto_cell(scr, "A1")
+        nav.goto_cell(scr, "A1")
         return
     if load_file(me, scr, "{}/help.csv".format(sys.path[0])):
         me['helpModeSavedReadOnly'] = me['readOnly']
@@ -223,7 +223,7 @@ def new_file(me, scr):
             status(scr, ["Canceled new spreadsheet creation"])
             return False
     revertfrom_help_ifneeded(me)
-    goto_cell(scr, "A1")
+    nav.goto_cell(scr, "A1")
     me['data'] = dict()
     me['dirty'] = False
     me['cdataUpdate'] = True

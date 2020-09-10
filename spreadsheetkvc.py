@@ -18,7 +18,7 @@ import parsekvc as parse
 import funcs
 import re
 import fileio
-import edit
+import edit, nav
 
 
 THEQUOTE = "'"
@@ -262,95 +262,6 @@ def cellcur(stdscr, r, c):
         stdscr.move(ty,tx)
     except:
         print("cellcur:exception:move:ignoring:{}".format(sys.exc_info()), file=GERRFILE)
-
-
-def _goto_cell(stdscr, r, c):
-    '''
-    Center the specified cell on the screen. It also sets
-        the program's current cell info variables as well as
-        the cursor libraries cursor position to this cell.
-    '''
-    tr = r - int(me['dispRows']/2)
-    if tr < 1:
-        tr = 1
-    me['viewRowStart'] = tr
-    tc = c - int(me['dispCols']/2)
-    if tc < 1:
-        tc = 1
-    me['viewColStart'] = tc
-    me['curRow'] = r
-    me['curCol'] = c
-    stdscr.clear()
-    cdraw(stdscr)
-    cellcur(stdscr, r, c)
-
-
-def goto_cell(stdscr, args):
-    bCellAddr, (r,c) = _celladdr_valid(args)
-    if bCellAddr:
-        if r > me['numRows']:
-            r = me['numRows']
-        if c > me['numCols']:
-            c = me['numCols']
-        _goto_cell(stdscr, r, c)
-
-
-def cellcur_left():
-    '''
-    Move the current cell cursor to the left, if possible.
-
-    It also ensures that the cursor position is 1 or greater.
-    It also adjusts the viewport if required.
-    '''
-    me['curCol'] -= 1
-    if (me['curCol'] <= 0):
-        me['curCol'] = 1
-    if (me['viewColStart'] > me['curCol']):
-        me['viewColStart'] = me['curCol']
-
-
-def cellcur_right():
-    '''
-    Move the current cell cursor to the right, if possible.
-
-    It also ensures that the cursor position is within the available data cells.
-    It also adjusts the viewport as required.
-    '''
-    me['curCol'] += 1
-    if (me['curCol'] > me['numCols']):
-        me['curCol'] = me['numCols']
-    diff = me['curCol'] - me['viewColStart'] + 1
-    if (diff > me['dispCols']):
-        me['viewColStart'] = me['curCol'] - me['dispCols'] + 1
-
-
-def cellcur_up():
-    '''
-    Move the current cell cursor up, if possible.
-
-    It also ensures that the cursor position is 1 or greater.
-    It also adjusts the viewport if required.
-    '''
-    me['curRow'] -= 1
-    if (me['curRow'] < 1):
-        me['curRow'] = 1
-    if (me['viewRowStart'] > me['curRow']):
-        me['viewRowStart'] = me['curRow']
-
-
-def cellcur_down():
-    '''
-    Move the current cell cursor down, if possible.
-
-    It also ensures that the cursor position is within the available data cells.
-    It also adjusts the viewport as required.
-    '''
-    me['curRow'] += 1
-    if (me['curRow'] > me['numRows']):
-        me['curRow'] = me['numRows']
-    diff = me['curRow'] - me['viewRowStart'] + 1
-    if (diff > me['dispRows']):
-        me['viewRowStart'] = me['curRow'] - me['dispRows'] + 1
 
 
 def coladdr_num2alpha(iAddr):
@@ -714,7 +625,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         me['cdataUpdate'] = True
     elif cmd.startswith('g'):
         if args != None:
-            goto_cell(stdscr, args)
+            nav.goto_cell(stdscr, args)
     elif cmd == 'help':
         fileio.load_help(me, stdscr)
     elif (cmd == 'clear') and not me['readOnly']:
@@ -991,13 +902,13 @@ def rl_commandmode(stdscr, key):
         edit, insert, cut, paste and delete operations.
     '''
     if (key == curses.KEY_UP):
-        cellcur_up()
+        nav.cellcur_up()
     elif (key == curses.KEY_DOWN):
-        cellcur_down()
+        nav.cellcur_down()
     elif (key == curses.KEY_LEFT):
-        cellcur_left()
+        nav.cellcur_left()
     elif (key == curses.KEY_RIGHT):
-        cellcur_right()
+        nav.cellcur_right()
     elif (key == ord('D')) and not me['readOnly']:
         edit.del_cell()
     elif (key == ord('c')):
@@ -1216,7 +1127,6 @@ def setup_fileio():
     fileio.dlg = dlg
     fileio.status = status
     fileio.cstatusbar = cstatusbar
-    fileio.goto_cell = goto_cell
 
 
 def setup_edit():
@@ -1230,8 +1140,16 @@ def setup_edit():
     edit.coladdr_num2alpha = coladdr_num2alpha
 
 
+def setup_nav():
+    nav.me = me
+    nav.cdraw = cdraw
+    nav.cellcur = cellcur
+    nav._celladdr_valid = _celladdr_valid
+
+
 def setup_helpermodules():
     setup_funcs()
+    setup_nav()
     setup_fileio()
     setup_edit()
 
