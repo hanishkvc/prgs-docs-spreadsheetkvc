@@ -1558,6 +1558,12 @@ recalculation of cells, rather than all cells with =expressions.
 
 [DONE] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.
 
+By default avoid overwriting existing file during saves.
+
+Added a basic tab completion of file paths support for file load/save operations including password based ones.
+Currently it ignores the basename and loops through all possible basenames for the given dirname.
+
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)

@@ -1092,8 +1092,7 @@ def rl_editplusmode(stdscr, key):
         if me['state'] == ':':
             sNew = path_completion(me['fpc'], me['gotStr'])
             me['gotStr'] = sNew
-            if me['crsrOffset'] > len(me['gotStr']):
-                me['crsrOffset'] = len(me['gotStr'])
+            me['crsrOffset'] = len(me['gotStr'])
     elif not key in CursesKeys: # chr(key).isprintable() wont do
         sBefore = me['gotStr'][0:me['crsrOffset']]
         sAfter = me['gotStr'][me['crsrOffset']:]
