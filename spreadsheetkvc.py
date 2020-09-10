@@ -42,6 +42,8 @@ gbEnterExitsEditMode = True
 
 '''
 Notes:
+    State can be one of C, E or :
+
     0th row or 0th col corresponds to spreadsheets address info
     1 to numRows and 1 to numCols corresponds to actual data.
 
@@ -444,7 +446,8 @@ def _cdraw(stdscr):
     is shown, even if printing data raises any exception.
     '''
     #stdscr.clear()
-    cellstr(stdscr, 0, 0, "SpreadSheetKVC", curses.A_NORMAL)
+    if me['state'] == 'C':
+        cellstr(stdscr, 0, 0, "SpreadSheetKVC", curses.A_NORMAL)
     colStart = me['viewColStart']
     colEnd = colStart + me['dispCols']
     if (colEnd > me['numCols']):
