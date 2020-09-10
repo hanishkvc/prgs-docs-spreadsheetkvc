@@ -27,6 +27,7 @@ THEALT2INBTWQUOTE = '_'
 DONTEXIT = -9999
 
 GBFLYPYTHON = False
+GBTEXT2ZERO = True
 gbStartHelp = True
 
 # How to differentiate text cells compared to =expression cells
@@ -807,12 +808,15 @@ def nvalue_expr(sData):
     return val
 
 
+def gbflypython_local():
+    global GBTEXT2ZERO
+    if GBFLYPYTHON:
+        GBTEXT2ZERO = False
+    else:
+        GBTEXT2ZERO = True
+
+
 ERRNUM = "#ErrNum#"
-# Ugly me
-if GBFLYPYTHON:
-    GBTEXT2ZERO = False
-else:
-    GBTEXT2ZERO = True
 def nvalue_key(key, bUseCachedData=True, bText2Zero=GBTEXT2ZERO, bDontCacheText=True):
     '''
     Return the value associated with the given cell, preferably numeric.
@@ -1189,7 +1193,7 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp creadonly calldepth")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp creadonly calldepth flypython")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
@@ -1198,6 +1202,7 @@ def print_usage():
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
     print("    --{}     run in readonly|view mode".format(CmdArgs.creadonly.name))
     print("    --{} <depth>    specify the maximum call depth | cell chaining allowed".format(CmdArgs.calldepth.name))
+    print("    --{}     allow python snippets in cells".format(CmdArgs.flypython.name))
     exit(0)
 
 
@@ -1208,7 +1213,7 @@ def process_cmdline(args):
     global THEFIELDSEP
     global THEQUOTE
     global gbStartHelp
-    global CALLDEPTHMAX
+    global CALLDEPTHMAX, GBFLYPYTHON
     i = 1
     while i < len(args):
         cmd = args[i][2:]
@@ -1227,6 +1232,8 @@ def process_cmdline(args):
         elif cmd == CmdArgs.calldepth.name:
             i += 1
             CALLDEPTHMAX = int(args[i])
+        elif cmd == CmdArgs.flypython.name:
+            GBFLYPYTHON = True
         i += 1
 
 
@@ -1235,6 +1242,7 @@ def process_cmdline(args):
 
 setup_files()
 process_cmdline(sys.argv)
+gbflypython_local()
 stdscr=cstart()
 cattr_textnum(stdscr)
 setup_sighandlers()
