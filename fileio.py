@@ -80,8 +80,8 @@ def save_file(me, scr, sFile, filePass=None):
     '''
     sFile = os.path.expanduser(sFile)
     if (os.path.exists(sFile)):
-        got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
-        if chr(got).upper() == "N":
+        got = dlg(scr, ["File:{}:exists overwrite? [y/N]".format(sFile)])
+        if chr(got).upper() != "Y":
             cstatusbar(scr, ["[Saving is aborted]"])
             return
     if not verify_pass(scr, filePass):
