@@ -134,13 +134,13 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
         got = scr.getch()
         if not getString:
             break
-        if got == curses.KEY_ENTER:
+        if got == ord('\n'):
             got = gotStr
             break
         elif got == curses.KEY_BACKSPACE:
             gotStr = gotStr[:-1]
         else:
-            gotStr += got
+            gotStr += chr(got)
     if clear:
         scr.clear()
     return got
