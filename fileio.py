@@ -259,11 +259,21 @@ def path_completion(fpc, sCur):
     sDirName = os.path.dirname(sCur)
     sBaseName = os.path.basename(sCur)
     if (len(fpc) > 0) and (fpc['prev'] == sDirName) and (len(fpc['list']) > 0):
+        if (sBaseName == fpc['prevBaseName']) and (len(fpc['listSub']) > 0):
+            fpc['posSub'] += 1
+            fpc['posSub'] = fpc['posSub']%len(fpc['listSub'])
+            return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
+        fpc['listSub'] = list(filter(lambda x: x.startswith(sBaseName), fpc['list']))
+        fpc['prevBaseName'] = sBaseName
+        if (len(fpc['listSub']) > 0):
+            fpc['posSub'] = 0
+            return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
         fpc['pos'] += 1
         fpc['pos'] = fpc['pos']%len(fpc['list'])
         return os.path.join(sDirName, fpc['list'][fpc['pos']])
     fpc['pos'] = 0
     fpc['prev'] = sDirName
+    fpc['prevBaseName'] = ""
     try:
         fpc['list'] = os.listdir(sDirName)
         return os.path.join(sDirName, fpc['list'][fpc['pos']])
