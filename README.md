@@ -159,6 +159,8 @@ Instead if you want to save the spreadsheet into a password protected file, key 
 
 	:pw password pathto/filename<ENTERKEY>
 
+	NOTE: program will prompt for user file password once again, to ensure that user doesnt use/key-in a wrong password by mistake.
+
 Inturn to load a password protected file key in the following.
 
 	:pl password pathto/filename<ENTERKEY>
@@ -275,6 +277,8 @@ In this explicit command mode, the user can enter one of the following commands
 	One could also use
 
 		ps passwd file
+
+	NOTE: program will prompt for user file password once again, to ensure that user doesnt use/key-in a wrong password by mistake.
 
 * l file
 
@@ -1543,7 +1547,7 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 [DONE] move navigation related stuff to a seperate file.
 
-[LATER] Maybe use numpy array for calculated cache.
+[LATER] Maybe use numpy array for calculated cache. (There are equal or more fundamental changes that can help, so so so).
 
 Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.
 
@@ -1552,7 +1556,7 @@ recalculation of cells, rather than all cells with =expressions.
 
 [DONE] Progress status for insert/delete
 
-[TODO] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.
+[DONE] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.
 
 
 

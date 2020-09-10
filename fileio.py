@@ -163,8 +163,8 @@ def load_file(me, scr, sFile, filePass=None):
         if chr(got).upper() != "Y":
             cstatusbar(scr, ["Canceled loading of {}".format(sFile)])
             return False
-    if not verify_pass(scr, filePass):
-        return
+    #if not verify_pass(scr, filePass):
+    #    return
     try:
         sFile = os.path.expanduser(sFile)
         cstatusbar(scr, ['[Loading file...]'])
