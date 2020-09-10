@@ -1120,11 +1120,13 @@ to the one used for cell calculation by the program.
 
 [DONE] Change fieldsep and quote from within the program (i.e while it is running).
 
-MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.
+[PARTIAL] MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.
 
-	Maybe each cell contains either a Int, Float or String data type.
+	[DONE] Maybe each cell contains either a Int, Float or String data type.
 
-	Maybe Retain = prefix to trigger eval, while without = interpret as one of the basic data types.
+		Each cell contains either Nothing or =expression or Numeric or Text
+
+	[DONE] Maybe Retain = prefix to trigger eval, while without = interpret as one of the basic data types.
 
 [DONE] Move file related stuff to fileio module.
 
@@ -1537,11 +1539,16 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 [DONE] Expand ~ at begin of path (os.path.expanduser)
 
-[TODO] Move eval/value logics to a seperate file
+[LATER] Move eval/value logics to a seperate file
 
 [DONE] move navigation related stuff to a seperate file.
 
-[TODO] Maybe use numpy array for calculated cache.
+[LATER] Maybe use numpy array for calculated cache.
+
+Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.
+
+[TODO] [opti] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during
+recalculation of cells, rather than all cells with =expressions.
 
 
 

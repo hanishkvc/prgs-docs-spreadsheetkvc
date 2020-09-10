@@ -407,7 +407,7 @@ def _do_rgennums(scr, startKey, endKey, tokens):
     curValue = start
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
-            me['data'][(r,c)] = "={}".format(curValue)
+            me['data'][(r,c)] = "{}".format(curValue)
             curValue += delta
     if endKey[0] > me['numRows']:
         me['numRows'] = endKey[0]
