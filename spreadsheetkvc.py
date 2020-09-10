@@ -581,16 +581,22 @@ def path_completion(fpc, cmdArgs):
     # Check if its a valid command
     if (cmd in ['w', 's', 'l']):
         theArg = args
+        theBase = cmd
     elif (cmd in ['pw', 'ps', 'pl']):
-        lArgs = args.split(' ',1)
-        try:
-            theArg = lArgs[1]
-        except:
+        if args == "":
+            return cmd + " "
+        if args.find(' ') == -1:
+            theBase =  "{} {}".format(cmd, args)
             theArg = ""
+        else:
+            lArgs = args.split(' ',1)
+            theBase =  "{} {}".format(cmd, lArgs[0])
+            theArg = lArgs[1]
     else:
-        return ""
+        return cmdArgs
     # Try find a path
-    return fileio.path_completion(fpc, theArg)
+    sNew = fileio.path_completion(fpc, theArg)
+    return "{} {}".format(theBase, sNew)
 
 
 def explicit_commandmode(stdscr, cmdArgs):
@@ -1084,8 +1090,10 @@ def rl_editplusmode(stdscr, key):
             me['crsrOffset'] = len(me['gotStr'])
     elif key == curses.ascii.TAB:
         if me['state'] == ':':
-            sPath = path_completion(me['fpc'], me['gotStr'])
-            me['gotStr'] += sPath
+            sNew = path_completion(me['fpc'], me['gotStr'])
+            me['gotStr'] = sNew
+            if me['crsrOffset'] > len(me['gotStr']):
+                me['crsrOffset'] = len(me['gotStr'])
     elif not key in CursesKeys: # chr(key).isprintable() wont do
         sBefore = me['gotStr'][0:me['crsrOffset']]
         sAfter = me['gotStr'][me['crsrOffset']:]
