@@ -1487,7 +1487,7 @@ Stop python snippets from running in uncontrolled way, if desired. Its also the 
 
 Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.
 
-[TODO] Expand ~ at begin of path (os.path.expanduser)
+[DONE] Expand ~ at begin of path (os.path.expanduser)
 
 [TODO] Move eval/value logics to a seperate file
 

@@ -77,6 +77,7 @@ def save_file(me, scr, sFile, filePass=None):
 
     If the file already exists, then alert the user about same.
     '''
+    sFile = os.path.expanduser(sFile)
     if (os.path.exists(sFile)):
         got = dlg(scr, ["File:{}:exists overwrite? [Y/n]".format(sFile)])
         if chr(got).upper() == "N":
@@ -160,6 +161,7 @@ def load_file(me, scr, sFile, filePass=None):
             cstatusbar(scr, ["Canceled loading of {}".format(sFile)])
             return False
     try:
+        sFile = os.path.expanduser(sFile)
         cstatusbar(scr, ['[Loading file...]'])
         me['cdataUpdate'] = True
         scr.clear()
