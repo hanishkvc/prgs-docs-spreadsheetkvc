@@ -1550,6 +1550,9 @@ Make rgennums generate direct numbers now instead of =number. Speeds up operatio
 [TODO] [opti] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during
 recalculation of cells, rather than all cells with =expressions.
 
+[DONE] Progress status for insert/delete
+
+[TODO] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.
 
 
 
