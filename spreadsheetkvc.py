@@ -83,6 +83,7 @@ me = {
         'calcCnt': dict(),
         'callDepth': 0,
         'markers': dict(),
+        'fpc': dict(),
         'exit': DONTEXIT
         }
 
@@ -570,6 +571,28 @@ def quit(scr):
         me['exit'] = 0
 
 
+def path_completion(fpc, cmdArgs):
+    # Extract the args
+    if cmdArgs.find(' ') == -1:
+        cmd = cmdArgs
+        args = ""
+    else:
+        cmd, args = cmdArgs.split(' ',1)
+    # Check if its a valid command
+    if (cmd in ['w', 's', 'l']):
+        theArg = args
+    elif (cmd in ['pw', 'ps', 'pl']):
+        lArgs = args.split(' ',1)
+        try:
+            theArg = lArgs[1]
+        except:
+            theArg = ""
+    else:
+        return ""
+    # Try find a path
+    return fileio.path_completion(fpc, theArg)
+
+
 def explicit_commandmode(stdscr, cmdArgs):
     '''
     Explicit Command mode, which is entered by pressing ':' followed by
@@ -1049,6 +1072,7 @@ def rl_editplusmode(stdscr, key):
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
+            me['fpc'] = dict()
         #print("runLogic:{}".format(me), file=GLOGFILE)
     elif key == curses.KEY_LEFT:
         me['crsrOffset'] -= 1
@@ -1058,6 +1082,10 @@ def rl_editplusmode(stdscr, key):
         me['crsrOffset'] += 1
         if me['crsrOffset'] > len(me['gotStr']):
             me['crsrOffset'] = len(me['gotStr'])
+    elif key == curses.ascii.TAB:
+        if me['state'] == ':':
+            sPath = path_completion(me['fpc'], me['gotStr'])
+            me['gotStr'] += sPath
     elif not key in CursesKeys: # chr(key).isprintable() wont do
         sBefore = me['gotStr'][0:me['crsrOffset']]
         sAfter = me['gotStr'][me['crsrOffset']:]
