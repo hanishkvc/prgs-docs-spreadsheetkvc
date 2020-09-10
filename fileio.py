@@ -238,7 +238,7 @@ def new_file(me, scr):
 
 def verify_pass(scr, thePass):
     if (thePass != None):
-        got = cui.dlg(scr, ["Reenter file password:"], getString=True)
+        got = cui.dlg(scr, ["*** Verfiy file password ***"], getString="Enter passwd:", clearInput="                    ")
         if got != thePass:
             dlg(scr, ["File pass not matching, aborting..."])
             return False

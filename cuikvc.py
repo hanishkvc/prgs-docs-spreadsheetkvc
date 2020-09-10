@@ -82,7 +82,7 @@ def _extend_str(strIn, length, filler=' '):
     return strOut
 
 
-def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True, getString=False):
+def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True, getString=None, clearInput=None):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
@@ -91,7 +91,13 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
     If border, then show a border covering full width above and below 0th message.
     If clear, clear the screen after getting input from user.
         also clear the screen till borderWidth for each line printed.
-    borderWidth is the length of the longest message+2.
+    borderWidth is the length of the longest message.
+    getString if not None, then wait for user to enter a string (terminated by enter key)
+        rather than just a single key.
+        User can use backspace to edit the prev entered key.
+        And getString is inturn the prompt for the line where key entered is shown
+            And the getString will be shown after all the other messages.
+    clearInput if provided is used to clear the area where string input by user will be shown.
     '''
     if border or newwin or clear:
         borderWidth = 0
@@ -127,12 +133,21 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
         tX = x
     for i in range(1, len(msgs)):
         cellstr(scr, tY+i, tX, msgs[i], attr)
-    bY, bX = curses.getsyx()
+    bY = tY+i+1
+    bX = tX
+    if getString:
+        promptString = getString
+    else:
+        promptString = ""
     gotStr = ""
     while True:
-        cellstr(scr, bY, bX, gotStr, attr)
+        if clearInput != None:
+            dispStr = promptString + gotStr + clearInput[len(gotStr):]
+        else:
+            dispStr = promptString + gotStr
+        cellstr(scr, bY, bX, dispStr, attr)
         got = scr.getch()
-        if not getString:
+        if getString == None:
             break
         if got == ord('\n'):
             got = gotStr
