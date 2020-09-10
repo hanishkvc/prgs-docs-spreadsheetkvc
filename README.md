@@ -1489,7 +1489,9 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 [TODO] Expand ~ at begin of path (os.path.expanduser)
 
-[TODO] Move eval/value logics to a seperate file and or similarly move navigation related stuff to a seperate file.
+[TODO] Move eval/value logics to a seperate file
+
+[DONE] move navigation related stuff to a seperate file.
 
 [TODO] Maybe use numpy array for calculated cache.
 
