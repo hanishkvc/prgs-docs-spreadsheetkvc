@@ -237,12 +237,39 @@ def new_file(me, scr):
 
 
 def verify_pass(scr, thePass):
+    '''
+    If thePass is not None, then check if user enters the same once again or not.
+    '''
     if (thePass != None):
         got = cui.dlg(scr, ["*** Verfiy file password ***"], getString="Enter passwd:", clearInput="                    ")
         if got != thePass:
             dlg(scr, ["File pass not matching, aborting..."])
             return False
     return True
+
+
+def path_completion(fpc, sCur):
+    '''
+    Handle file system path completion.
+
+    fpc maintains the context wrt path completion.
+
+    sCur is the current path, which needs to be completed.
+    '''
+    sDirName = os.path.dirname(sCur)
+    sBaseName = os.path.basename(sCur)
+    if (fpc['prev'] == sDirName) and (len(fpc['list']) > 0) and (len(fpc) > 0):
+        fpc['pos'] += 1
+        fpc['pos'] = fpc['pos']%len(fpc['list'])
+        return fpc['list'][fpc['pos']]
+    fpc['pos'] = 0
+    fpc['prev'] = sDirName
+    try:
+        fpc['list'] = os.listdir(sDirName)
+        return fpc['list'][fpc['pos']]
+    except:
+        fpc['list'] = []
+    return ""
 
 
 
