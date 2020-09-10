@@ -141,11 +141,12 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
         promptString = ""
     gotStr = ""
     while True:
+        dispStr = promptString + gotStr
+        textCursorX = bX + len(dispStr)
         if clearInput != None:
-            dispStr = promptString + gotStr + clearInput[len(gotStr):]
-        else:
-            dispStr = promptString + gotStr
+            dispStr += clearInput[len(gotStr):]
         cellstr(scr, bY, bX, dispStr, attr)
+        scr.move(bY, textCursorX)
         got = scr.getch()
         if getString == None:
             break
