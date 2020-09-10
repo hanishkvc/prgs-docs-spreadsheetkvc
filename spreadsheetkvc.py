@@ -595,6 +595,9 @@ def path_completion(fpc, cmdArgs):
     else:
         return cmdArgs
     # Try find a path
+    if theArg == "":
+        theArg = "~"
+    theArg = os.path.expanduser(theArg)
     sNew = fileio.path_completion(fpc, theArg)
     return "{} {}".format(theBase, sNew)
 
