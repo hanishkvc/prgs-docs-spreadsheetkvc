@@ -9,6 +9,7 @@ import base64
 import cryptography, secrets
 import seckvc as sec
 import nav
+import cuikvc as cui
 
 
 # Entities from main logic
@@ -83,6 +84,8 @@ def save_file(me, scr, sFile, filePass=None):
         if chr(got).upper() == "N":
             cstatusbar(scr, ["[Saving is aborted]"])
             return
+    if not verify_pass(scr, filePass):
+        return
     try:
         cstatusbar(scr, ['[Saving file...]'])
         _save_file(me, scr, sFile, filePass)
@@ -160,6 +163,8 @@ def load_file(me, scr, sFile, filePass=None):
         if chr(got).upper() != "Y":
             cstatusbar(scr, ["Canceled loading of {}".format(sFile)])
             return False
+    if not verify_pass(scr, filePass):
+        return
     try:
         sFile = os.path.expanduser(sFile)
         cstatusbar(scr, ['[Loading file...]'])
@@ -229,6 +234,15 @@ def new_file(me, scr):
     me['data'] = dict()
     me['dirty'] = False
     me['cdataUpdate'] = True
+
+
+def verify_pass(scr, thePass):
+    if (thePass != None):
+        got = cui.dlg(scr, ["Reenter file password:"], getString=True)
+        if got != thePass:
+            dlg(scr, ["File pass not matching, aborting..."])
+            return False
+    return True
 
 
 

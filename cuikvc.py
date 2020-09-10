@@ -82,7 +82,7 @@ def _extend_str(strIn, length, filler=' '):
     return strOut
 
 
-def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True):
+def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False, clear=True, getString=False):
     '''
     Show a simple dialog, with the messages passed to it.
     And return a keypress from the user.
@@ -127,7 +127,20 @@ def dlg(scr, msgsIn, y=0, x=0, attr=curses.A_NORMAL, border=False, newwin=False,
         tX = x
     for i in range(1, len(msgs)):
         cellstr(scr, tY+i, tX, msgs[i], attr)
-    got = scr.getch()
+    bY, bX = curses.getsyx()
+    gotStr = ""
+    while True:
+        cellstr(scr, bY, bX, gotStr, attr)
+        got = scr.getch()
+        if not getString:
+            break
+        if got == curses.KEY_ENTER:
+            got = gotStr
+            break
+        elif got == curses.KEY_BACKSPACE:
+            gotStr = gotStr[:-1]
+        else:
+            gotStr += got
     if clear:
         scr.clear()
     return got
