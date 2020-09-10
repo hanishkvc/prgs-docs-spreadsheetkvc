@@ -817,7 +817,7 @@ def gbflypython_local():
 
 
 ERRNUM = "#ErrNum#"
-def nvalue_key(key, bUseCachedData=True, bText2Zero=GBTEXT2ZERO, bDontCacheText=True):
+def nvalue_key(key, bUseCachedData=True, bText2Zero=None, bDontCacheText=True):
     '''
     Return the value associated with the given cell, preferably numeric.
     The cell is specified using its corresponding key.
@@ -834,6 +834,8 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=GBTEXT2ZERO, bDontCacheText=
 
     Dont cache None or empty cells. Also by default dont cache text cells.
     '''
+    if bText2Zero == None:
+        bText2Zero = GBTEXT2ZERO
     # use cached data if available
     if bUseCachedData:
         val = me['cdata'].get(key)
@@ -1202,7 +1204,7 @@ def print_usage():
     print("    --{}   Dont show the help dialog at the start".format(CmdArgs.startnohelp.name))
     print("    --{}     run in readonly|view mode".format(CmdArgs.creadonly.name))
     print("    --{} <depth>    specify the maximum call depth | cell chaining allowed".format(CmdArgs.calldepth.name))
-    print("    --{}     allow python snippets in cells".format(CmdArgs.flypython.name))
+    print("    --{}     allow more varied python expressions in cells".format(CmdArgs.flypython.name))
     exit(0)
 
 
