@@ -261,12 +261,12 @@ def path_completion(fpc, sCur):
     if (len(fpc) > 0) and (fpc['prev'] == sDirName) and (len(fpc['list']) > 0):
         fpc['pos'] += 1
         fpc['pos'] = fpc['pos']%len(fpc['list'])
-        return fpc['list'][fpc['pos']]
+        return os.path.join(sDirName, fpc['list'][fpc['pos']])
     fpc['pos'] = 0
     fpc['prev'] = sDirName
     try:
         fpc['list'] = os.listdir(sDirName)
-        return fpc['list'][fpc['pos']]
+        return os.path.join(sDirName, fpc['list'][fpc['pos']])
     except:
         fpc['list'] = []
     return ""
