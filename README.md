@@ -211,6 +211,11 @@ The program supports the following commandline arguments
 		Default value is 1000. This is not a end user option. It is more for some one developing and
 		or debugging the program to trigger and or manipulate things.
 
+	--flypython
+
+		Allow bit more varied set of python expressions to be stored in cells and inturn
+		run those python expressions by refering to those cells from other cells
+
 
 ### program modes
 
@@ -939,17 +944,60 @@ You will know that you are in default command mode, when you see the program's n
 in the top left corner of the terminal (i.e 0,0 cell).
 
 
-#### =expressions and None
+#### FlyPython
+
+If flypython mode is enabled by passing --flypython in the command line to the program,
+then a text cell's content can be interpreted as a python expression when that text cell
+is refered by a =expression in another cell.
+
+	However there are limits to this like
+
+	a =expression cant directly include module-submodule chaining or module/class functions
+	like say os.path.abspath or list.reverse or so. Because =expression evaluation logic
+	splits this up thus ending up with only the last part being evaluated as a independent
+	function and not the associated class or module name which contains it.
+
+	while having a text cell with the required python expression (which can include calls
+	to module, submodule and or class and its functions) and then running it by using
+	=TextCellAddress expression in some other cell has the limitation that the cell addresses
+	if any in the python expression of the text cell dont get expanded into cell values.
+
+	May unlock these later, not sure for now.
+
+
+In normal mode
+
+	a text cell, if refered from =expression will be valued as containing
+	the numeric value 0.
+
+	while numeric and =expression cells can contain basic python expressions,
+	which refer to and operate on basic data type values directly or by fetching
+	from cells that contain them directly or through other =expressions, which
+	can also use the allowed set of functions by the program.
+
+		But they cant refer to any python variables or modules in general,
+		because globals and locals will be empty.
+
+
+#### =expressions
+
+##### text cell value is 0
 
 Do keep in mind that =expressions which allow numeric evaluation of the specified
 expression in a given cell, expects any cell references|addresses used in them to
-inturn (i.e those referenced cells) also contain =expressions and not plain text
-data (even if they are numbers). If not the result will be a None.
+inturn (i.e those referenced cells) also contain =expressions and or numbers and
+not plain text data (numbers in quotes are text).
+
+Any text cell will be treated as containing 0, if refered in a =expression.
+
+If flypython mode is enabled, then things are interpreted differently.
+
+##### None
 
 So if you get a None instead of a numeric value which you were expecting, then
 cross check that all cells refered by that cell or any other cell indirectly
-referenced through a chain of =expressions, all contain =expressions, even for
-simple numeric values like say a number i.e represent it has =number (ex =10).
+referenced through a chain of =expressions, all contain valid expressions and
+or valid values.
 
 
 #### log files, stderr, ...
@@ -1483,7 +1531,7 @@ now implemented in nvalue_key.
 Also the internal/program evaluation of =expression remains in the nvalue_expr (previous \_nvalue)
 
 Stop python snippets from running in uncontrolled way, if desired. Its also the default.
-[DONE] Add a cmdline arg to open up python eval.
+[DONE] Add a cmdline arg to open up python eval so that bit more varied set of python expressions can be run from a cell.
 
 Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.
 
