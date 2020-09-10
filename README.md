@@ -1561,7 +1561,8 @@ recalculation of cells, rather than all cells with =expressions.
 By default avoid overwriting existing file during saves.
 
 Added a basic tab completion of file paths support for file load/save operations including password based ones.
-Currently it ignores the basename and loops through all possible basenames for the given dirname.
+If a partial path name is given, and if basenames within current dirname match it, it will loop thro that list first for n times, before returning to
+the generic list for that dirname. [TODO] Need to relook at the code once and reflow things, where possible and or simplify it.
 
 
 
