@@ -257,6 +257,9 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
         fpc['listSub'] = []
         fpc['prevBaseName'] = ""
     if (fpc['prev'] != sDirName):
+        fpc['posSub'] = 0
+        fpc['listSub'] = []
+        fpc['prevBaseName'] = ""
         fpc['pos'] = 0
         try:
             fpc['list'] = sorted(os.listdir(sDirName))
@@ -264,9 +267,7 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
         except:
             fpc['list'] = []
             fpc['prev'] = ""
-        fpc['posSub'] = 0
-        fpc['listSub'] = []
-        fpc['prevBaseName'] = ""
+            return os.path.join(sDirName, sBaseName)
     if (fpc['prevBaseName'] != sBaseName):
         fpc['posSub'] = 0
         if (len(fpc['list']) > 0) and (sBaseName != ""):
