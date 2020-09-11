@@ -396,25 +396,30 @@ def get_celladdrs_incranges(sIn, startPos=0):
     for i in range(len(typeList)):
         if typeList[i] == TokenType.AlphaNum:
             if ("'" in tokenList[i]):
+                rangeState = RangeState.NoThing
                 continue
             if ((i+2) <= (len(tokenList)-1)):
                 if (tokenList[i+1][0] == ':') and  (typeList[i+2] == TokenType.AlphaNum):
                     if rangeState == RangeState.NoThing:
                         rangeState = RangeState.CanEnter
                     else:
-                        print("getCellAddrsIncRanges:WARN:{}:{}".format(sIn, 
-            anType, typeSeq = alphanum_type(sOut, symbolSet1=['$'])
+                        rangeState = RangeState.NoThing
+                        print("getCellAddrsIncRanges:WARN:{}:{}".format(sIn, (tokenList[i], typeList[i])))
+            anType, typeSeq = alphanum_type(tokenList[i], symbolSet1=['$'])
             typeSeq, typeIds = collapse_sametype(typeSeq, AlphaNumTypeId)
             if typeIds in [ 'AN', '1AN', 'A1N', '1A1N']:
                 if rangeState == RangeState.CanEnter:
                     rangeState = RangeState.Entered
                 elif rangeState == RangeState.Entered:
                     rangeState = RangeState.Done
+                if rangeState == RangeState.NoThing:
+                    lCellAddrs.append([tokenList[i]])
+                elif rangeState == RangeState.Done:
+                    lCellAddrs.append([tokenList[i-2], tokenList[i]])
+                    rangeState = RangeState.NoThing
         else:
             continue
-
-        iPos += len(sOut)
-    return False, sOut, iPos
+    return lCellAddrs
 
 
 
@@ -429,6 +434,8 @@ def test_101():
     print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55 - 99AA + AA99"))
     print(get_celladdrs("what else CA$22:CB33 'Not $AA22' +25-$C33/(A20-30)*$DD$55 - 99AA + AA99"))
     print(get_tokens("rgennums A1:B10 10 -5 +60 8.5 det", 12, ['-','+']))
+    print(parse.get_celladdrs_incranges("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+
 
 
 
