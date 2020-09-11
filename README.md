@@ -1577,6 +1577,8 @@ and making its end use more natural. Error tag missing and or non accessible pat
 
 Cant forget the interesting docufilms from DW, among others. They were the companions while thinking and coding some of these ;-)
 
+Be discrete with chopping of the last char.
+
 
 
 

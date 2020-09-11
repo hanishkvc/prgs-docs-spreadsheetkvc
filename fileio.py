@@ -121,7 +121,11 @@ def _load_file(me, sFile, filePass=None):
         i = 0
         sCur = ""
         bInQuote = False
-        while i < (len(line)-1): # Remove the newline at the end
+        lineLen = len(line)
+        # Remove the newline at the end
+        if line.endswith('\n'):
+            lineLen -= 1
+        while i < lineLen:
             t = line[i]
             if t == THEQUOTE:
                 bInQuote = not bInQuote
