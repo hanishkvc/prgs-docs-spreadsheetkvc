@@ -20,6 +20,14 @@ def init():
     me['revLinks'] = dict()
 
 
+def cell_update_revlink(cell, revLink):
+    cellRevLink = me['revLinks'].get(cell)
+    if cellRevLink == None:
+        cellRevLink = []
+        me['revLinks'][cell] = cellRevLink
+    cellRevLink.append(revLink)
+
+
 def cell_updated(cellKey, sContent):
     '''
     Update the fw and reverse links associated with each cell
@@ -30,6 +38,7 @@ def cell_updated(cellKey, sContent):
     cellFwdLink = me['fwdLinks'].get(cellKey)
     if cellFwdLink == None:
         cellFwdLink = []
+        me['fwdLink'][cellKey] = cellFwdLink
     lCellAddrs = parse.get_celladdrs_incranges(sContent)
     for cellAddrPlus in lCellAddrs:
         if (len(cellAddrPlus) == 1):
@@ -38,6 +47,7 @@ def cell_updated(cellKey, sContent):
                 print("sync.cellUpdated:WARN:{}:{}".format(sContent, key))
                 continue
             cellFwdLink.append(key)
+            cell_update_revlink(key, cellKey)
         elif (len(cellAddrPlus) == 2):
             bCellAddr, key1 = _celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
@@ -50,6 +60,7 @@ def cell_updated(cellKey, sContent):
             for r in range(key1[0], key2[0]+1):
                 for c in range(key1[1], key2[1]+1):
                     cellFwdLink.append((r,c))
+                    cell_update_revlink((r,c), cellKey)
 
 
 
