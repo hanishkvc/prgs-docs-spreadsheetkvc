@@ -1573,7 +1573,9 @@ the generic list for that dirname. [DONE] Need to relook at the code once and re
 ### 20200911IST1120 - GauriGaneshaToOnamToTeachersDayRelease
 
 Made the tab based path completion logic more user-controlled and inturn more constrained and less over-intelligent. In the process also simplifying it
-and making its end use more natural.
+and making its end use more natural. Error tag missing and or non accessible path entries.
+
+Cant forget the interesting docufilms from DW, among others. They were the companions while thinking and coding some of these ;-)
 
 
 

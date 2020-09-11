@@ -248,7 +248,16 @@ def verify_pass(scr, thePass):
     return True
 
 
+ERRDIR = "#ErrDir#"
+ERRFILE = "#ErrFile#"
 def _path_completion_update_lists(fpc, sDirName, sBaseName):
+    '''
+    Initialise and update the fpc structure members as and when required.
+
+    Also return a valid possible path after loading lists.
+
+    Suffix a ErrorTag, if the passed DIr or basename is not valid/present.
+    '''
     if (len(fpc) == 0):
         fpc['pos'] = 0
         fpc['list'] = []
@@ -267,7 +276,7 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
         except:
             fpc['list'] = []
             fpc['prev'] = ""
-            return os.path.join(sDirName, sBaseName)
+            return os.path.join(sDirName+ERRDIR, sBaseName)
     if (fpc['prevBaseName'] != sBaseName):
         fpc['posSub'] = 0
         if (len(fpc['list']) > 0) and (sBaseName != ""):
@@ -277,7 +286,7 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
                     fpc['prevBaseName'] = sBaseName
                     return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
                 else:
-                    return os.path.join(sDirName, sBaseName)
+                    return os.path.join(sDirName, sBaseName+ERRFILE)
             except:
                 fpc['listSub'] = []
                 fpc['prevBaseName'] = ""
@@ -286,6 +295,8 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
             fpc['prevBaseName'] = ""
     if (len(fpc['list']) > 0):
         return os.path.join(sDirName, fpc['list'][fpc['pos']])
+    if sBaseName != "":
+        sBaseName += ERRFILE
     return os.path.join(sDirName, sBaseName)
 
 
