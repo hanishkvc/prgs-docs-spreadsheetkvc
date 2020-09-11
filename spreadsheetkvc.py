@@ -1046,6 +1046,20 @@ def setdata_from_savededitbuf(scr):
         me['data'].pop((me['curRow'],me['curCol']), None)
 
 
+def tabcomplete_clear():
+    me['gotStrUpdated'] = False
+    me['gotStrBase'] = ""
+
+
+def tabcomplete_baseupdate():
+    me['gotStrUpdated'] = True
+
+
+def tabcomplete_usebase():
+    if me['gotStrUpdated']:
+        me['gotStrBase'] = me['gotStr']
+        me['gotStrUpdated'] = False
+
 
 def rl_editplusmode(stdscr, key):
     '''
@@ -1059,11 +1073,13 @@ def rl_editplusmode(stdscr, key):
         explicit command mode.
     '''
     if (key == curses.ascii.ESC):
+        tabcomplete_clear()
         if me['state'] == 'E':
             setdata_from_savededitbuf(stdscr)
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
         if me['crsrOffset'] > 0:
+            tabcomplete_baseupdate()
             sBefore = me['gotStr'][0:me['crsrOffset']-1]
             sAfter = me['gotStr'][me['crsrOffset']:]
             me['gotStr'] = sBefore+sAfter
@@ -1071,6 +1087,7 @@ def rl_editplusmode(stdscr, key):
             if me['crsrOffset'] < 0:
                 me['crsrOffset'] = 0
     elif (key == curses.ascii.NL):
+        tabcomplete_clear()
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
             if gbEnterExitsEditMode:
@@ -1093,7 +1110,8 @@ def rl_editplusmode(stdscr, key):
             me['crsrOffset'] = len(me['gotStr'])
     elif key == curses.ascii.TAB:
         if me['state'] == ':':
-            sNew = path_completion(me['fpc'], me['gotStr'])
+            tabcomplete_usebase()
+            sNew = path_completion(me['fpc'], me['gotStrBase'])
             me['gotStr'] = sNew
             me['crsrOffset'] = len(me['gotStr'])
     elif not key in CursesKeys: # chr(key).isprintable() wont do
@@ -1101,6 +1119,7 @@ def rl_editplusmode(stdscr, key):
         sAfter = me['gotStr'][me['crsrOffset']:]
         me['gotStr'] = "{}{}{}".format(sBefore, chr(key), sAfter)
         me['crsrOffset'] += 1
+        tabcomplete_baseupdate()
 
 
 def runlogic(stdscr):
@@ -1203,6 +1222,7 @@ def setup_helpermodules():
     setup_nav()
     setup_fileio()
     setup_edit()
+    tabcomplete_clear()
 
 
 def setup_logfile(logfile="/dev/null"):
