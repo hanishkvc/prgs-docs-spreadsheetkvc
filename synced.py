@@ -16,6 +16,10 @@ Sync module maintains a list of both forward and reverse links.
 Forward links can be used during insert and delete of rows/cols
 to decide whether the =expressions in cells require updating.
 
+    Any cells removed from the forward link of a given cell,
+    should inturn have their revlinks updated such that the
+    given cell is no longer part of it.
+
 Reverse links tell as to which and all cells require their calcs
 to be updated because a given cell has been updated.
 
@@ -27,6 +31,9 @@ to be updated because a given cell has been updated.
     Without revLinks, one will have to go through the forward links
     of all the cells, to see if they are dependent on the cell being
     updated/modified/edited/...
+
+NOTE: Clearing the cached data of a cell, will automatically force
+it to get recalculated.
 '''
 
 
@@ -35,7 +42,10 @@ def init():
     me['revLinks'] = dict()
 
 
-def cell_update_revlink(cell, revLink):
+def cell_revlink_add(cell, revLink):
+    '''
+    Update the revLinks of a cell, to include the cell named by revLink.
+    '''
     cellRevLink = me['revLinks'].get(cell)
     if cellRevLink == None:
         cellRevLink = []
@@ -62,7 +72,7 @@ def cell_updated(cellKey, sContent):
                 print("sync.cellUpdated:WARN:{}:{}".format(sContent, key))
                 continue
             cellFwdLink.append(key)
-            cell_update_revlink(key, cellKey)
+            cell_revlink_add(key, cellKey)
         elif (len(cellAddrPlus) == 2):
             bCellAddr, key1 = _celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
@@ -75,7 +85,7 @@ def cell_updated(cellKey, sContent):
             for r in range(key1[0], key2[0]+1):
                 for c in range(key1[1], key2[1]+1):
                     cellFwdLink.append((r,c))
-                    cell_update_revlink((r,c), cellKey)
+                    cell_revlink_add((r,c), cellKey)
 
 
 
