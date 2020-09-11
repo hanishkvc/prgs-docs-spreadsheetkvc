@@ -1562,7 +1562,13 @@ By default avoid overwriting existing file during saves.
 
 Added a basic tab completion of file paths support for file load/save operations including password based ones.
 If a partial path name is given, and if basenames within current dirname match it, it will loop thro that list first for n times, before returning to
-the generic list for that dirname. [TODO] Need to relook at the code once and reflow things, where possible and or simplify it.
+the generic list for that dirname. [DONE] Need to relook at the code once and reflow things, where possible and or simplify it.
+
+
+### 20200911IST1120 - GauriGaneshaToOnamToTeachersDayRelease
+
+Made the tab based path completion logic more user-controlled and inturn more constrained and less over-intelligent. In the process also simplifying it
+and making its end use more natural.
 
 
 
