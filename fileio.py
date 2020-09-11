@@ -260,27 +260,17 @@ def path_completion(fpc, sCur):
     sBaseName = os.path.basename(sCur)
     if (len(fpc) > 0) and (fpc['prev'] == sDirName) and (len(fpc['list']) > 0):
         if (sBaseName != ""):
-            if  sBaseName.startswith(fpc['prevBaseName']) and (len(fpc['listSub']) > 1):
+            if  sBaseName.startswith(fpc['prevBaseName']) and (len(fpc['listSub']) > 0):
                 fpc['posSub'] += 1
                 fpc['posSub'] = fpc['posSub']%len(fpc['listSub'])
-                if fpc['posSub'] == 0:
-                    fpc['subRep'] += 1
-                if fpc['subRep'] < 2:
-                    return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
-                fpc['pos'] += len(fpc['listSub'])
+                return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
             else:
                 fpc['listSub'] = sorted(filter(lambda x: x.startswith(sBaseName), fpc['list']))
-                fpc['subRep'] = 0
                 fpc['prevBaseName'] = sBaseName
                 listSubLen = len(fpc['listSub'])
-                if (listSubLen > 1):
+                if (listSubLen > 0):
                     fpc['posSub'] = 0
                     return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
-                elif (listSubLen == 1):
-                    if sBaseName != fpc['listSub'][0]:
-                        fpc['pos'] = fpc['list'].index(fpc['listSub'][0])
-                    else:
-                        fpc['pos'] += 1
                 else:
                     fpc['pos'] += 1
         else:
