@@ -12,6 +12,21 @@ me = None
 
 '''
 Sync module maintains a list of both forward and reverse links.
+
+Forward links can be used during insert and delete of rows/cols
+to decide whether the =expressions in cells require updating.
+
+Reverse links tell as to which and all cells require their calcs
+to be updated because a given cell has been updated.
+
+    In turn each of those cells' revlink lists need to be checked
+    as to which other cells inturn require their calcs also to be
+    redone. Walk this revlink path, till there is no more revlinks
+    to work on in the chain.
+
+    Without revLinks, one will have to go through the forward links
+    of all the cells, to see if they are dependent on the cell being
+    updated/modified/edited/...
 '''
 
 

@@ -1579,6 +1579,7 @@ Cant forget the interesting docufilms from DW, among others. They were the compa
 
 Be discrete with chopping of the last char.
 
+[WIP] Make cell edits/modifications and resultant recalc propogation bit intelligent, rather than the brute force clearing of cache of all cells.
 
 
 
