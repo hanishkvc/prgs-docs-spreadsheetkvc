@@ -248,6 +248,46 @@ def verify_pass(scr, thePass):
     return True
 
 
+def _path_completion_update_lists(fpc, sDirName, sBaseName):
+    if (len(fpc) == 0):
+        fpc['pos'] = 0
+        fpc['list'] = []
+        fpc['prev'] = ""
+        fpc['posSub'] = 0
+        fpc['listSub'] = []
+        fpc['prevBaseName'] = ""
+    if (fpc['prev'] != sDirName):
+        fpc['pos'] = 0
+        try:
+            fpc['list'] = sorted(os.listdir(sDirName))
+            fpc['prev'] = sDirName
+        except:
+            fpc['list'] = []
+            fpc['prev'] = ""
+        fpc['posSub'] = 0
+        fpc['listSub'] = []
+        fpc['prevBaseName'] = ""
+    if (fpc['prevBaseName'] != sBaseName):
+        fpc['posSub'] = 0
+        if (len(fpc['list']) > 0) and (sBaseName != ""):
+            try:
+                fpc['listSub'] = sorted(filter(lambda x: x.startswith(sBaseName), fpc['list']))
+                fpc['prevBaseName'] = sBaseName
+                if (len(fpc['listSub']) > 0):
+                    return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
+                else:
+                    return os.path.join(sDirName, sBaseName)
+            except:
+                fpc['listSub'] = []
+                fpc['prevBaseName'] = ""
+        else:
+            fpc['listSub'] = []
+            fpc['prevBaseName'] = ""
+    if (len(fpc['list']) > 0):
+        return os.path.join(sDirName, fpc['list'][fpc['pos']])
+    return os.path.join(sDirName, sBaseName)
+
+
 def path_completion(fpc, sCur):
     '''
     Handle file system path completion.
@@ -265,28 +305,11 @@ def path_completion(fpc, sCur):
                 fpc['posSub'] = fpc['posSub']%len(fpc['listSub'])
                 return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
             else:
-                fpc['listSub'] = sorted(filter(lambda x: x.startswith(sBaseName), fpc['list']))
-                fpc['prevBaseName'] = sBaseName
-                listSubLen = len(fpc['listSub'])
-                if (listSubLen > 0):
-                    fpc['posSub'] = 0
-                    return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
-                else:
-                    fpc['pos'] += 1
-        else:
-            fpc['pos'] += 1
+                return _path_completion_update_lists(fpc, sDirName, sBaseName)
+        fpc['pos'] += 1
         fpc['pos'] = fpc['pos']%len(fpc['list'])
         return os.path.join(sDirName, fpc['list'][fpc['pos']])
-    fpc['pos'] = 0
-    fpc['prev'] = sDirName
-    fpc['prevBaseName'] = ""
-    fpc['listSub'] = []
-    try:
-        fpc['list'] = sorted(os.listdir(sDirName))
-        return os.path.join(sDirName, fpc['list'][fpc['pos']])
-    except:
-        fpc['list'] = []
-    return ""
+    return _path_completion_update_lists(fpc, sDirName, sBaseName)
 
 
 
