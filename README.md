@@ -75,10 +75,6 @@ Some of its features are
 
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
-* supports a readonly view mode, if required.
-
-* auto-adjust to terminal window size changes.
-
 * Try be simple and sane wrt fieldsep and textquote.
 
 	If fieldsep in cell content, auto protect with text quoting of cell content.
@@ -112,6 +108,15 @@ Some of its features are
 
 	One can even mark cells as well as program supports infering destination cell address range
 	from source address range.
+
+* Some additional features like
+
+	* supports a readonly view mode, if required.
+
+	* auto-adjust to terminal window size changes.
+
+	* tab-completion of file path names for load and save operations.
+
 
 for more details refer to the documentation below.
 
