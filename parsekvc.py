@@ -319,15 +319,16 @@ def get_celladdr(sIn, startPos=0):
     its startPos argument.
 
     NOTE: This is not a generic token parser. It mainly extracts
-    tokens which match the CellAddr kind or FuncName kind. Numbers
-    on their own will not be extracted, nor will operators or
-    Plus/Minus or so.
+    tokens which match the CellAddr kind (or FuncName kind which
+    follow cell address pattern). Numbers on their own will not be
+    extracted, nor will operators or Plus/Minus or so.
 
     If the token contains single quotes, then it will be skipped.
     Similarly if the token is a string in single quotes, it will
     be skipped.
 
-    Checks that AlphaNum starts with Alpha.
+    Checks that AlphaNum tokens match valid cell address patterns,
+    including $ in them.
 
     Handle $ being part of CellAddr in a simple yet powerful way.
     '''
@@ -365,6 +366,55 @@ def get_celladdrs(sIn, startPos = 0):
         posList.append(iPos)
         iPos += len(sOut)
     return cellAddrList, posList
+
+
+RangeState = enum.Enum("RangeState", "NoThing CanEnter Entered Done")
+def get_celladdrs_incranges(sIn, startPos=0):
+    '''
+    Get list of cell address tokens and or cell address ranges.
+
+    By using the startPos argument, one can start from anywhere
+    in the string.
+
+    NOTE: This is not a generic token parser. It mainly extracts
+    tokens which match the CellAddr kind (and also potentially
+    FuncName kind). Numbers on their own will not be extracted,
+    nor will operators or Plus/Minus or so.
+
+    If the token contains single quotes, then it will be skipped.
+    Similarly if the token is a string in single quotes, it will
+    be skipped.
+
+    Checks that AlphaNum tokens match valid cell address patterns,
+    including $ in them.
+
+    Handle $ being part of CellAddr in a simple yet powerful way.
+    '''
+    lCellAddrs = []
+    rangeState = RangeState.NoThing
+    tokenList, typeList = get_tokens(sIn, startPos)
+    for i in range(len(typeList)):
+        if typeList[i] == TokenType.AlphaNum:
+            if ("'" in tokenList[i]):
+                continue
+            if ((i+2) <= (len(tokenList)-1)):
+                if (tokenList[i+1][0] == ':') and  (typeList[i+2] == TokenType.AlphaNum):
+                    if rangeState == RangeState.NoThing:
+                        rangeState = RangeState.CanEnter
+                    else:
+                        print("getCellAddrsIncRanges:WARN:{}:{}".format(sIn, 
+            anType, typeSeq = alphanum_type(sOut, symbolSet1=['$'])
+            typeSeq, typeIds = collapse_sametype(typeSeq, AlphaNumTypeId)
+            if typeIds in [ 'AN', '1AN', 'A1N', '1A1N']:
+                if rangeState == RangeState.CanEnter:
+                    rangeState = RangeState.Entered
+                elif rangeState == RangeState.Entered:
+                    rangeState = RangeState.Done
+        else:
+            continue
+
+        iPos += len(sOut)
+    return False, sOut, iPos
 
 
 
