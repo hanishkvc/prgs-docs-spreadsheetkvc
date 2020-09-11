@@ -273,8 +273,8 @@ def _path_completion_update_lists(fpc, sDirName, sBaseName):
         if (len(fpc['list']) > 0) and (sBaseName != ""):
             try:
                 fpc['listSub'] = sorted(filter(lambda x: x.startswith(sBaseName), fpc['list']))
-                fpc['prevBaseName'] = sBaseName
                 if (len(fpc['listSub']) > 0):
+                    fpc['prevBaseName'] = sBaseName
                     return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
                 else:
                     return os.path.join(sDirName, sBaseName)
