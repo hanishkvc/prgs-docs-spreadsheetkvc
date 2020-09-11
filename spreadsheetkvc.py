@@ -579,7 +579,7 @@ def path_completion(fpc, cmdArgs):
     else:
         cmd, args = cmdArgs.split(' ',1)
     # Check if its a valid command
-    if (cmd in ['w', 's', 'l']):
+    if (cmd in ['w', 's', 'l', '!ls']):
         theArg = args
         theBase = cmd
     elif (cmd in ['pw', 'ps', 'pl']):

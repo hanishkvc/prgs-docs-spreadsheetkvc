@@ -260,7 +260,7 @@ def path_completion(fpc, sCur):
     sBaseName = os.path.basename(sCur)
     if (len(fpc) > 0) and (fpc['prev'] == sDirName) and (len(fpc['list']) > 0):
         if (sBaseName != ""):
-            if  sBaseName.startswith(fpc['prevBaseName']) and (len(fpc['listSub']) > 0):
+            if  (sBaseName == fpc['prevBaseName']) and (len(fpc['listSub']) > 0):
                 fpc['posSub'] += 1
                 fpc['posSub'] = fpc['posSub']%len(fpc['listSub'])
                 return os.path.join(sDirName, fpc['listSub'][fpc['posSub']])
