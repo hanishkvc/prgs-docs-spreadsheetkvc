@@ -266,9 +266,15 @@ def delete_rc(cmd, args):
         curCData = None
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
-                if curData.find('#Err') == -1:
+                tmpData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
+                # This in itself is not sufficient. Need to think and update further later.
+                # Also a delete which changes the cell addresses, may not affect the value
+                # SO this wont do for avoiding the full calc cache data clearing.
+                if tmpData == curData:
                     curCData = me['cdata'].get(k)
+                curData = tmpData
+            else:
+                curCData = me['cdata'].get(k)
         if bRowMode:
             if r < sR:
                 newDict[k] = curData
