@@ -289,7 +289,7 @@ def del_cell():
     '''
     if me['data'].pop((me['curRow'],me['curCol']), None) != None:
         me['dirty'] = True
-        syncd.cell_updated((me['curRow'], me['curCol']), "")
+        syncd.cell_updated((me['curRow'], me['curCol']), "", clearedSet=set())
 
 
 def cut_cell():
@@ -323,7 +323,7 @@ def paste_cell(bAdjustCellAddress=True):
         # Paste data
         me['data'][(me['curRow'],me['curCol'])] = theData
         me['dirty'] = True
-        syncd.cell_updated((me['curRow'], me['curCol']), theData)
+        syncd.cell_updated((me['curRow'], me['curCol']), theData, clearedSet=set())
 
 
 def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):

@@ -1098,7 +1098,7 @@ def rl_editplusmode(stdscr, key):
             #me['cdataUpdate'] = True
             tData = me['data'].get((me['curRow'],me['curCol']))
             if tData != None:
-                syncd.cell_updated((me['curRow'], me['curCol']), tData)
+                syncd.cell_updated((me['curRow'], me['curCol']), tData, clearedSet=set())
         elif me['state'] == ':':
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'

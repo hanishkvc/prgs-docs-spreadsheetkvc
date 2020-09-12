@@ -108,6 +108,9 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     rows / cols, the clearedSet helps to avoid trying to clear calc cache
     of same dependent cells more than once, across multiple calls to
     cell_updated.
+
+    In normal use one should call cell_updated with a empty clearedSet.
+    Think carefully before using cell_updated without clearedSet.
     '''
     origCellFwdLink = me['fwdLinks'].get(cellKey)
     cellFwdLink = set()
