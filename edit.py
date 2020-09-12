@@ -6,6 +6,7 @@
 
 import traceback
 import parsekvc as parse
+import syncd
 
 
 
@@ -287,7 +288,7 @@ def del_cell():
     '''
     if me['data'].pop((me['curRow'],me['curCol']), None) != None:
         me['dirty'] = True
-        me['cdataUpdate'] = True
+        syncd.cell_updated((me['curRow'], me['curCol']), "")
 
 
 def cut_cell():
