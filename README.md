@@ -475,6 +475,14 @@ NOTE: markers have m prefix in their name.
 NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to one another.
 
 
+##### xtra operations
+
+* xrefresh
+
+	Force clear the calculated results cache, so that all cells get recalculated, as they become visible
+	either directly and or indirectly through some other visible cell.
+
+
 ##### Other operations
 
 * e file (in future)
@@ -523,6 +531,8 @@ back to default command mode.
 
 If Esc key is pressed, the program will discard any command in the edit buffer and then
 return back to default command mode.
+
+
 
 #### edit/insert mode
 
@@ -1616,6 +1626,8 @@ cells depend on the edited cell, then the calculations finish very fast and user
 	rcmds call syncd.cell_updated as required.
 
 MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.
+
+Added a xrefresh command.
 
 
 

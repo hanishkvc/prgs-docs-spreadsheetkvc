@@ -551,6 +551,14 @@ def do_ccmd(scr, cmd, args):
     setup_fileio()
 
 
+def do_xcmd(scr, cmd, args):
+    '''
+    The x commands handling
+    '''
+    if (cmd == 'xrefresh'):
+        me['cdataUpdate'] = True
+
+
 def quit(scr):
     '''
     Check that no unsaved changes exists, before gracefully quiting.
@@ -686,6 +694,8 @@ def explicit_commandmode(stdscr, cmdArgs):
         edit.do_rcmd(stdscr, cmd, args)
     elif cmd[0] == 'm':
         edit.do_mcmd(stdscr, cmd, args)
+    elif (cmd[0] == 'x'):
+        do_xcmd(stdscr, cmd, args)
     elif cmd.startswith("!"):
         shell_cmd(stdscr, cmd, args)
     elif cmd == 'q':
