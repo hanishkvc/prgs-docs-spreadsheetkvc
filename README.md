@@ -1601,9 +1601,17 @@ cells depend on the edited cell, then the calculations finish very fast and user
 		Inturn call syncd.create_links (as it doesnt take much time, instead of trying to adjust the values to account for insert).
 		With this the performance is relaively much better.
 
-		[TODO: Need to think of possible optimisations if any wrt these]
+		Delete: One needs to check for equivalence of =expression, wrt generating same value, before and after delete.
+		So for now cells with =expression have their cdata cleared. While other types of cells have their numeric value
+		copied from old calc cache to new calc cache. This is better than full cache clearing, but not optimal.
 
-			Instead of newly creating links, maybe update existing ones.
+			Also not thinking of adapting fwd/rev links wrt delete, instead links are newly created, as it doesnt
+			take much time at one level.
+
+			ALso will have to update the cell address adjust logic to return as to whether the delete involved just
+			moving the cell addresses and or reducing the size of cell ranges if any.
+
+			Delete is a WorkInProgress wrt optimising it, rather currently nothing beyond basic done.
 
 	rcmds call syncd.cell_updated as required.
 

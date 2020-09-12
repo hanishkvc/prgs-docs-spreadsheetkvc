@@ -266,13 +266,12 @@ def delete_rc(cmd, args):
         curCData = None
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
-                tmpData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
-                # This in itself is not sufficient. Need to think and update further later.
-                # Also a delete which changes the cell addresses, may not affect the value
-                # SO this wont do for avoiding the full calc cache data clearing.
-                if tmpData == curData:
-                    curCData = me['cdata'].get(k)
-                curData = tmpData
+                curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
+                # In this path the full dependency list and its equivalence before and after
+                # delete will need to be cross checked, when deciding whether the old cdata
+                # for the cell is still valid or not.
+                # The cell content being same or different before or after delete, in itself is
+                # not sufficient to decide whether the value of the cell will be same or not.
             else:
                 curCData = me['cdata'].get(k)
         if bRowMode:

@@ -666,7 +666,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
-        me['cdataUpdate'] = True
+        #me['cdataUpdate'] = True
     elif cmd.startswith('g'):
         if args != None:
             nav.goto_cell(stdscr, args)
