@@ -105,7 +105,10 @@ def cell_updated(cellKey, sContent):
     else:
         droppedCells = set()
     if len(cellFwdLink) > 0:
-        me['fwdLink'][cellKey] = cellFwdLink
+        me['fwdLinks'][cellKey] = cellFwdLink
+    else:
+        if origCellFwdLink != None:
+            me['fwdLinks'].pop(cellKey)
     for cell in droppedCells:
         cell_revlink_discard(cell, cellKey)
 
