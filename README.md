@@ -1579,7 +1579,16 @@ Cant forget the interesting docufilms from DW, among others. They were the compa
 
 Be discrete with chopping of the last char.
 
-[WIP] Make cell edits/modifications and resultant recalc propogation bit intelligent, rather than the brute force clearing of cache of all cells.
+Make cell edits/modifications and resultant recalc propogation bit intelligent, rather than the brute force clearing of calc cache of all cells. WHich
+forces all cells to be recalculated, as required. Now when a cell is edited, even in spreadsheets with very heavy bunch of calculations, if not many
+cells depend on the edited cell, then the calculations finish very fast and user can continue using the spreadsheet immidiately.
+
+	For cells which are towards the root of a long chain of cell-to-cell dependency based calcs, if they are edited, it would lead to all related
+	cells getting recalcuated. However the optimisation of not calculating cells which are not visible directly or indirectly limits the load to
+	a great extent. However if both the initial and the last few cells in a very very long chaing of cell-to-cell calcs is visible on the screen
+	at the same time and inturn if one of the initial cells in the calc-chain is modified, then as the full chain has to be calculated, it will
+	lead to some amount of time being required to finish the calcs, before user can continue using the spreadsheet.
+
 
 
 

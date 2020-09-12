@@ -74,8 +74,14 @@ def cdata_clear_revlinks(cellKey, depth=0, seenSet=None):
     When a cell is updated, it and all other cells which depend on this
     cell either directly or indirectly require to be cleared from calc
     cache, this logic helps with same.
+
+    If seenSet is provided, it is kept uptodate wrt all cells that have been
+    cleared from calc cache, by this series of clear_revlinks calls. So for
+    calc cell-to-cell chains involving lot of interconnections and deep chains,
+    the logic will efficiently handle the situation. Without seenSet it can
+    take long time for deeply interconnected chains of calcs.
     '''
-    print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
+    #print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
     me['cdata'].pop(cellKey, None)
     if seenSet != None:
         seenSet.add(cellKey)
@@ -88,12 +94,20 @@ def cdata_clear_revlinks(cellKey, depth=0, seenSet=None):
         cdata_clear_revlinks(cell, depth+1, seenSet)
 
 
-def cell_updated(cellKey, sContent, clearCache=True):
+def cell_updated(cellKey, sContent, clearCache=True, seenSet=set()):
     '''
     Update the fw and reverse links associated with each cell
 
     NOTE: For now it maintains a expanded list of cells. TO keep the
     logic which depends on this at other places simple and stupid.
+
+    seenSet can be used to ensure that calc cache clearing can be done
+    efficiently for spreadsheets involving very-very-long chains of
+    cell-to-cell interdependencies. Also when a bunch of cells are
+    updated from the same context like say during insert / delete of
+    rows / cols, the seenSet helps to avoid trying to clear calc cache
+    of same dependent cells more than once, across multiple calls to
+    cell_updated.
     '''
     origCellFwdLink = me['fwdLinks'].get(cellKey)
     cellFwdLink = set()
@@ -137,7 +151,7 @@ def cell_updated(cellKey, sContent, clearCache=True):
         cell_revlink_discard(cell, cellKey)
     # Clear cell calc cache for all dependents
     if clearCache:
-        cdata_clear_revlinks(cellKey, seenSet=set())
+        cdata_clear_revlinks(cellKey, seenSet)
 
 
 def create_links():
