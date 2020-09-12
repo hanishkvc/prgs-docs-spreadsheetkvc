@@ -3,7 +3,7 @@
 # HanishKVC, 2020
 #
 
-import enum
+import enum, re
 
 
 
@@ -369,7 +369,7 @@ def get_celladdrs(sIn, startPos = 0):
 
 
 RangeState = enum.Enum("RangeState", "NoThing CanEnter Entered Done")
-def get_celladdrs_incranges(sIn, startPos=0):
+def get_celladdrs_incranges_old(sIn, startPos=0):
     '''
     Get list of cell address tokens and or cell address ranges.
 
@@ -422,6 +422,27 @@ def get_celladdrs_incranges(sIn, startPos=0):
     return lCellAddrs
 
 
+def get_celladdrs_incranges(sIn):
+    rawList = re.findall("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)", sIn)
+    caList = []
+    bInCARange = False
+    for raw in rawList:
+        ca = raw[1]
+        ca = ca.replace(' ', '')
+        if ca[-1] == ':':
+            pCA = ca[:-1]
+        else:
+            pCA = ca
+        if bInCARange:
+            caList[-1].append(pCA)
+            bInCARange = False
+        else:
+            caList.append([pCA])
+        if ca[-1] == ':':
+            bInCARange = True
+    return caList
+
+
 
 
 def test_101():
@@ -434,7 +455,10 @@ def test_101():
     print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55 - 99AA + AA99"))
     print(get_celladdrs("what else CA$22:CB33 'Not $AA22' +25-$C33/(A20-30)*$DD$55 - 99AA + AA99"))
     print(get_tokens("rgennums A1:B10 10 -5 +60 8.5 det", 12, ['-','+']))
-    print(parse.get_celladdrs_incranges("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(get_celladdrs_incranges_old("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(get_celladdrs_incranges("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(re.findall(".*?([$]?[a-zA-Z]+[$]?[0-9]+).*?", "123+beA23-12+testit/$zze$54"))
+    print(re.findall("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)", "123+beA23-12+testit/$zze$54 d  BE99     : CE10 :: MM1:NN99"))
 
 
 
