@@ -81,7 +81,7 @@ def cdata_clear_revlinks(cellKey, clearedSet=None, depth=0):
     the logic will efficiently handle the situation. Without clearedSet it can
     take long time for deeply interconnected chains of calcs.
     '''
-    #print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
+    print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
     me['cdata'].pop(cellKey, None)
     if clearedSet != None:
         clearedSet.add(cellKey)
@@ -168,7 +168,7 @@ def create_links():
     init()
     clearedSet = set()
     for key in me['data']:
-        cell_updated(key, me['data'][key], clearedSet)
+        cell_updated(key, me['data'][key], clearedSet=clearedSet)
 
 
 

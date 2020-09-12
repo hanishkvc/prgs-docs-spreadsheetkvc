@@ -388,7 +388,7 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
                     incR = dR - sR
                     incC = dC - sC
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
-            syncd.cell_updated((dR,dC), sData, clearedSet)
+            syncd.cell_updated((dR,dC), sData, clearedSet=clearedSet)
             me['data'][(dR,dC)] = sData
             c += 1
         r += 1
@@ -409,7 +409,7 @@ def _do_rclear(scr, dstSKey, dstEKey):
     for dR in range(dstSKey[0], dstEKey[0]+1):
         for dC in range(dstSKey[1], dstEKey[1]+1):
             me['data'].pop((dR,dC), None)
-            syncd.cell_updated((dR,dC), "", clearedSet)
+            syncd.cell_updated((dR,dC), "", clearedSet=clearedSet)
     return True
 
 
@@ -425,7 +425,7 @@ def _do_rclear_err(scr, dstSKey, dstEKey):
                 if sData.startswith("#Err") and (sData[7] == '#'):
                     sData = sData[8:]
                     me['data'][(dR,dC)] = sData
-                    syncd.cell_updated((dR,dC), sData, clearedSet) # Can do without in most cases, but just in case
+                    syncd.cell_updated((dR,dC), sData, clearedSet=clearedSet) # Can do without in most cases, but just in case
     return True
 
 
@@ -447,7 +447,7 @@ def _do_rgennums(scr, startKey, endKey, tokens):
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             me['data'][(r,c)] = "{}".format(curValue)
-            syncd.cell_updated((r,c), "", clearedSet)
+            syncd.cell_updated((r,c), "", clearedSet=clearedSet)
             curValue += delta
     if endKey[0] > me['numRows']:
         me['numRows'] = endKey[0]
