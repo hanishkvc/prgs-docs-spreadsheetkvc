@@ -134,6 +134,15 @@ def cell_updated(cellKey, sContent):
     cdata_clear_revlinks(cellKey)
 
 
+def create_links():
+    '''
+    Create fwd and rev Links freshly for all cells in the spreadsheet in memory.
+    '''
+    init()
+    for key in me['data']:
+        cell_updated(key, me['data'][key])
+
+
 
 
 # vim: set sts=4 expandtab: #

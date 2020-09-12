@@ -10,6 +10,7 @@ import cryptography, secrets
 import seckvc as sec
 import nav
 import cuikvc as cui
+import syncd
 
 
 # Entities from main logic
@@ -175,6 +176,7 @@ def load_file(me, scr, sFile, filePass=None):
         me['cdataUpdate'] = True
         scr.clear()
         _load_file(me, sFile, filePass)
+        syncd.create_links()
         me['dirty'] = False
         revertfrom_help_ifneeded(me)
         nav.goto_cell(scr, "A1")
