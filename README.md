@@ -1589,6 +1589,8 @@ cells depend on the edited cell, then the calculations finish very fast and user
 	at the same time and inturn if one of the initial cells in the calc-chain is modified, then as the full chain has to be calculated, it will
 	lead to some amount of time being required to finish the calcs, before user can continue using the spreadsheet.
 
+Away in Netflix a interesting watchable series.
+
 
 
 

@@ -94,7 +94,7 @@ def cdata_clear_revlinks(cellKey, seenSet=None, depth=0):
         cdata_clear_revlinks(cell, seenSet, depth+1)
 
 
-def cell_updated(cellKey, sContent, clearCache=True, seenSet=set()):
+def cell_updated(cellKey, sContent, clearCache=True, seenSet=None):
     '''
     Update the fw and reverse links associated with each cell
 
@@ -159,8 +159,9 @@ def create_links():
     Create fwd and rev Links freshly for all cells in the spreadsheet in memory.
     '''
     init()
+    seenSet = set()
     for key in me['data']:
-        cell_updated(key, me['data'][key])
+        cell_updated(key, me['data'][key], seenSet)
 
 
 
