@@ -1591,7 +1591,9 @@ cells depend on the edited cell, then the calculations finish very fast and user
 	at the same time and inturn if one of the initial cells in the calc-chain is modified, then as the full chain has to be calculated, it will
 	lead to some amount of time being required to finish the calcs, before user can continue using the spreadsheet.
 
-	cell content edit/cut/delete now use the efficient syncdCellUpdated logic to clear calc cache.
+	cell content edit/cut/delete/paste now use the efficient syncdCellUpdated logic to clear calc cache.
+
+	TODO: use for rcmds. Update fwd/rev links for insert and delete operations.
 
 
 

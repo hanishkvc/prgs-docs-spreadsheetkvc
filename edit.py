@@ -449,7 +449,7 @@ def do_rcmd(scr, cmd, args):
             print("rcmd:btw:{} {}".format(cAddr, key), file=GERRFILE)
         # Execute the commands
         numKeys = len(lKeys)
-        if numKeys == 3:
+        if numKeys == 3: # If 3 cell addresses, then its assumed to be srcStart, srcENd and dstStart, so generate dstEnd from srcRange
             lKeys.append((lKeys[2][0] + (lKeys[1][0] - lKeys[0][0]), lKeys[2][1] + (lKeys[1][1] - lKeys[0][1])))
         if cmd == "rcopy":
             bDone = _do_rcopy(scr, lKeys[0], lKeys[1], lKeys[2], lKeys[3])
