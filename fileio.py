@@ -316,6 +316,8 @@ def path_completion(fpc, sCur):
     sCur is the current path, which needs to be completed.
     '''
     sDirName = os.path.dirname(sCur)
+    if sDirName == "":
+        sDirName = "."
     sBaseName = os.path.basename(sCur)
     if (len(fpc) > 0) and (fpc['prev'] == sDirName) and (len(fpc['list']) > 0):
         if (sBaseName != ""):

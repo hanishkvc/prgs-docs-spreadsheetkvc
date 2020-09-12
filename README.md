@@ -1615,6 +1615,8 @@ cells depend on the edited cell, then the calculations finish very fast and user
 
 	rcmds call syncd.cell_updated as required.
 
+MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.
+
 
 
 
