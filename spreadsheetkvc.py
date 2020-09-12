@@ -18,7 +18,7 @@ import parsekvc as parse
 import funcs
 import re
 import fileio
-import edit, nav
+import edit, nav, syncd
 
 
 THEQUOTE = "'"
@@ -1217,7 +1217,16 @@ def setup_nav():
     nav._celladdr_valid = _celladdr_valid
 
 
+def setup_syncd():
+    syncd.GLOGFILE = GLOGFILE
+    syncd.GERRFILE = GERRFILE
+    syncd.me = me
+    syncd._celladdr_valid = _celladdr_valid
+    syncd.init()
+
+
 def setup_helpermodules():
+    setup_syncd()
     setup_funcs()
     setup_nav()
     setup_fileio()
