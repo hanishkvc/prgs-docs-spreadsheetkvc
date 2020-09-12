@@ -142,7 +142,7 @@ def create_links():
     '''
     init()
     for key in me['data']:
-        cell_updated(key, me['data'][key])
+        cell_updated(key, me['data'][key], clearCache=False)
 
 
 
