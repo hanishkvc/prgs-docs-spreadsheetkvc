@@ -284,7 +284,8 @@ def del_cell():
     '''
     Delete current cell's content, if available.
 
-    If there was content to del, then set dirty and cdataupdate flags.
+    If there was content to del, then set dirty flag and
+    clear calc cache as required.
     '''
     if me['data'].pop((me['curRow'],me['curCol']), None) != None:
         me['dirty'] = True
@@ -295,7 +296,8 @@ def cut_cell():
     '''
     Cut the current cell content.
 
-    If there was content to cut, then set dirty and cdataupdate flags.
+    If there was content to cut, then set dirty flag and
+    clear calc cache as required.
     '''
     copy_cell()
     del_cell()
@@ -307,7 +309,7 @@ def paste_cell(bAdjustCellAddress=True):
 
     Adjust the cell addresses if any in the =expression, during paste, if requested.
 
-    Also set dirty and cdataupate flags.
+    Also set dirty flag and clear calc cache as required.
     '''
     if me['copyData'] != None:
         theData = me['copyData']
@@ -321,7 +323,7 @@ def paste_cell(bAdjustCellAddress=True):
         # Paste data
         me['data'][(me['curRow'],me['curCol'])] = theData
         me['dirty'] = True
-        me['cdataUpdate'] = True
+        syncd.cell_updated((me['curRow'], me['curCol']), theData)
 
 
 def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
