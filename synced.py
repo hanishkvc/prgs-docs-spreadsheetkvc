@@ -53,6 +53,17 @@ def cell_revlink_add(cell, revLink):
     cellRevLink.add(revLink)
 
 
+def cell_revlink_discard(cell, revLink):
+    '''
+    Update the revLinks of a cell, by removing the cell named by revLink.
+    '''
+    cellRevLink = me['revLinks'].get(cell)
+    if cellRevLink != None:
+        cellRevLink.discard(revLink)
+    else:
+        print("WARN:syncdCellRevLinkDiscard:cell[{}] revLinkToRemove[{}]".format(cell, revLink), file=GERRFILE)
+
+
 def cell_updated(cellKey, sContent):
     '''
     Update the fw and reverse links associated with each cell
@@ -60,11 +71,8 @@ def cell_updated(cellKey, sContent):
     NOTE: For now it maintains a expanded list of cells. TO keep the
     logic which depends on this at other places simple and stupid.
     '''
-    cellFwdLink = me['fwdLinks'].get(cellKey)
-    if cellFwdLink == None:
-        cellFwdLink = set()
-        me['fwdLink'][cellKey] = cellFwdLink
-    origCellFwdLink = cellFwdLink.copy()
+    origCellFwdLink = me['fwdLinks'].get(cellKey)
+    cellFwdLink = set()
     # Handle the new content of the cell
     if sContent.strip().startswith('='):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
@@ -74,23 +82,32 @@ def cell_updated(cellKey, sContent):
         if (len(cellAddrPlus) == 1):
             bCellAddr, key = _celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
-                print("sync.cellUpdated:WARN:{}:{}".format(sContent, key))
+                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key), file=GERRFILE)
                 continue
             cellFwdLink.add(key)
             cell_revlink_add(key, cellKey)
         elif (len(cellAddrPlus) == 2):
             bCellAddr, key1 = _celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
-                print("sync.cellUpdated:WARN:{}:{}".format(sContent, key))
+                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key), file=GERRFILE)
                 continue
             bCellAddr, key2 = _celladdr_valid(cellAddrPlus[1])
             if not bCellAddr:
-                print("sync.cellUpdated:WARN:{}:{}".format(sContent, key))
+                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key), file=GERRFILE)
                 continue
             for r in range(key1[0], key2[0]+1):
                 for c in range(key1[1], key2[1]+1):
                     cellFwdLink.add((r,c))
                     cell_revlink_add((r,c), cellKey)
+    # Handle cells removed from the =expression
+    if origCellFwdLink != None:
+        droppedCells = origCellFwdLink.difference(cellFwdLink)
+    else:
+        droppedCells = set()
+    if len(cellFwdLink) > 0:
+        me['fwdLink'][cellKey] = cellFwdLink
+    for cell in droppedCells:
+        cell_revlink_discard(cell, cellKey)
 
 
 
