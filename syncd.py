@@ -67,7 +67,7 @@ def cell_revlink_discard(cell, revLink):
         print("WARN:syncdCellRevLinkDiscard:cell[{}] revLinkToRemove[{}]".format(cell, revLink), file=GERRFILE)
 
 
-def cdata_clear_revlinks(cellKey, seenSet=None, depth=0):
+def cdata_clear_revlinks(cellKey, clearedSet=None, depth=0):
     '''
     Clear cdata cache entry of a cell and all its revLinks.
 
@@ -75,37 +75,37 @@ def cdata_clear_revlinks(cellKey, seenSet=None, depth=0):
     cell either directly or indirectly require to be cleared from calc
     cache, this logic helps with same.
 
-    If seenSet is provided, it is kept uptodate wrt all cells that have been
+    If clearedSet is provided, it is kept uptodate wrt all cells that have been
     cleared from calc cache, by this series of clear_revlinks calls. So for
     calc cell-to-cell chains involving lot of interconnections and deep chains,
-    the logic will efficiently handle the situation. Without seenSet it can
+    the logic will efficiently handle the situation. Without clearedSet it can
     take long time for deeply interconnected chains of calcs.
     '''
     #print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
     me['cdata'].pop(cellKey, None)
-    if seenSet != None:
-        seenSet.add(cellKey)
+    if clearedSet != None:
+        clearedSet.add(cellKey)
     revLinks = me['revLinks'].get(cellKey)
     if revLinks == None:
         revLinks = []
     for cell in revLinks:
-        if (seenSet != None) and (cell in seenSet):
+        if (clearedSet != None) and (cell in clearedSet):
             continue
-        cdata_clear_revlinks(cell, seenSet, depth+1)
+        cdata_clear_revlinks(cell, clearedSet, depth+1)
 
 
-def cell_updated(cellKey, sContent, clearCache=True, seenSet=None):
+def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     '''
     Update the fw and reverse links associated with each cell
 
     NOTE: For now it maintains a expanded list of cells. TO keep the
     logic which depends on this at other places simple and stupid.
 
-    seenSet can be used to ensure that calc cache clearing can be done
+    clearedSet can be used to ensure that calc cache clearing can be done
     efficiently for spreadsheets involving very-very-long chains of
     cell-to-cell interdependencies. Also when a bunch of cells are
     updated from the same context like say during insert / delete of
-    rows / cols, the seenSet helps to avoid trying to clear calc cache
+    rows / cols, the clearedSet helps to avoid trying to clear calc cache
     of same dependent cells more than once, across multiple calls to
     cell_updated.
     '''
@@ -151,7 +151,7 @@ def cell_updated(cellKey, sContent, clearCache=True, seenSet=None):
         cell_revlink_discard(cell, cellKey)
     # Clear cell calc cache for all dependents
     if clearCache:
-        cdata_clear_revlinks(cellKey, seenSet)
+        cdata_clear_revlinks(cellKey, clearedSet)
 
 
 def create_links():
@@ -159,9 +159,9 @@ def create_links():
     Create fwd and rev Links freshly for all cells in the spreadsheet in memory.
     '''
     init()
-    seenSet = set()
+    clearedSet = set()
     for key in me['data']:
-        cell_updated(key, me['data'][key], seenSet)
+        cell_updated(key, me['data'][key], clearedSet)
 
 
 
