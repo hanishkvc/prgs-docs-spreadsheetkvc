@@ -4,6 +4,7 @@
 #
 
 
+import time
 import parsekvc as parse
 
 
@@ -94,6 +95,16 @@ def cdata_clear_revlinks(cellKey, clearedSet=None, depth=0):
         cdata_clear_revlinks(cell, clearedSet, depth+1)
 
 
+TIMECAP1 = 0
+TIMECAP2 = 0
+TIMECAP3 = 0
+def cell_updated_time_init():
+    global TIMECAP1, TIMECAP2, TIMECAP3
+    TIMECAP1 = 0
+    TIMECAP2 = 0
+    TIMECAP3 = 0
+
+
 def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     '''
     Update the fw and reverse links associated with each cell
@@ -112,13 +123,17 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     In normal use one should call cell_updated with a empty clearedSet.
     Think carefully before using cell_updated without clearedSet.
     '''
+    global TIMECAP1, TIMECAP2, TIMECAP3
     origCellFwdLink = me['fwdLinks'].get(cellKey)
     cellFwdLink = set()
     # Handle the new content of the cell
+    T1 = time.time()
     if sContent.strip().startswith('='):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
     else:
         lCellAddrs = []
+    T2 = time.time()
+    TIMECAP1 += (T2-T1)
     for cellAddrPlus in lCellAddrs:
         if (len(cellAddrPlus) == 1):
             bCellAddr, key = _celladdr_valid(cellAddrPlus[0])
@@ -140,6 +155,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
                 for c in range(key1[1], key2[1]+1):
                     cellFwdLink.add((r,c))
                     cell_revlink_add((r,c), cellKey)
+    T3 = time.time()
+    TIMECAP2 += (T3-T2)
     # Handle cells removed from the =expression
     if origCellFwdLink != None:
         droppedCells = origCellFwdLink.difference(cellFwdLink)
@@ -155,6 +172,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     # Clear cell calc cache for all dependents
     if clearCache:
         cdata_clear_revlinks(cellKey, clearedSet)
+    T4 = time.time()
+    TIMECAP3 += (T4-T3)
 
 
 def create_links():
@@ -167,8 +186,10 @@ def create_links():
     '''
     init()
     clearedSet = set()
+    cell_updated_time_init()
     for key in me['data']:
         cell_updated(key, me['data'][key], clearCache=False, clearedSet=clearedSet)
+    print("DBUG:T1:{}, T2:{}, T3:{}".format(TIMECAP1, TIMECAP2, TIMECAP3), file=GERRFILE)
 
 
 
