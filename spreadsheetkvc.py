@@ -656,7 +656,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
-        me['cdataUpdate'] = True
+        #me['cdataUpdate'] = True
     elif cmd.startswith('d') and not me['readOnly']:
         if args == None:
             args = "1"

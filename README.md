@@ -1597,6 +1597,10 @@ cells depend on the edited cell, then the calculations finish very fast and user
 
 	Insert and Delete row/col operations also call syncd.create_links.
 
+		Insert: Move current cdata values as required into new cdata dictionary with updated positions, where required.
+		Inturn call syncd.create_links (as it doesnt take much time, instead of trying to adjust the values to account for insert).
+		With this the performance is relaively much better.
+
 		[TODO: Need to think of possible optimisations if any wrt these]
 
 			Instead of newly creating links, maybe update existing ones.

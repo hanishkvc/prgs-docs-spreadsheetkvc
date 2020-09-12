@@ -174,6 +174,8 @@ def insert_rc_ab(cmd, args):
     Insert n number of rows or columns, before or after the current row|column.
 
     Call update_celladdr to adjust =expressions where required.
+
+    Also adjust/update the calc cache data i.e cdata dictionary.
     '''
     bRowMode = False
     bColMode = False
@@ -213,12 +215,15 @@ def insert_rc_ab(cmd, args):
         curData = me['data'][k]
         newData = curData
         if len(curData) > 0:
+            curCData = me['cdata'].get(k)
             if (type(curData) == str) and (curData[0] == '='):
                 newData = update_celladdrs_all(curData, cR, incR, cC, incC, bUpdateFixed=True)
                 if newData.find("#Err") == -1:
-                    curCData = me['cdata'].get(k)
                     if curCData != None:
                         newCDataDict[(nR,nC)] = curCData
+            else:
+                if curCData != None:
+                    newCDataDict[(nR,nC)] = curCData
         newDict[(nR,nC)] = newData
     me['data'] = newDict
     me['cdata'] = newCDataDict
