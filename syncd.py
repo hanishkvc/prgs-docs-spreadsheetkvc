@@ -8,6 +8,9 @@ import parsekvc as parse
 
 
 me = None
+GERRFILE = None
+GLOGFILE = None
+_celladdr_valid = None
 
 
 '''
@@ -64,6 +67,22 @@ def cell_revlink_discard(cell, revLink):
         print("WARN:syncdCellRevLinkDiscard:cell[{}] revLinkToRemove[{}]".format(cell, revLink), file=GERRFILE)
 
 
+def cdata_clear_revlinks(cellKey):
+    '''
+    Clear cdata cache entry of a cell and all its revLinks.
+
+    When a cell is updated, it and all other cells which depend on this
+    cell either directly or indirectly require to be cleared from calc
+    cache, this logic helps with same.
+    '''
+    me['cdata'].pop(cellKey, None)
+    revLinks = me['revLinks'].get(cellKey)
+    if revLinks == None:
+        revLinks = []
+    for cell in revLinks:
+        cdata_clear_revlinks(cell)
+
+
 def cell_updated(cellKey, sContent):
     '''
     Update the fw and reverse links associated with each cell
@@ -111,6 +130,8 @@ def cell_updated(cellKey, sContent):
             me['fwdLinks'].pop(cellKey)
     for cell in droppedCells:
         cell_revlink_discard(cell, cellKey)
+    # Clear cell calc cache for all dependents
+    cdata_clear_revlinks(cellKey)
 
 
 
