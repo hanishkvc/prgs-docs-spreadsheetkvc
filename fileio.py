@@ -176,7 +176,9 @@ def load_file(me, scr, sFile, filePass=None):
         me['cdataUpdate'] = True
         scr.clear()
         _load_file(me, sFile, filePass)
+        cstatusbar(scr, ['[build deps...  ]'])
         syncd.create_links()
+        cstatusbar(scr, ['[               ]'])
         me['dirty'] = False
         revertfrom_help_ifneeded(me)
         nav.goto_cell(scr, "A1")
