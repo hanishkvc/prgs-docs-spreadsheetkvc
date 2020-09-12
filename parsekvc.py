@@ -422,8 +422,9 @@ def get_celladdrs_incranges_old(sIn, startPos=0):
     return lCellAddrs
 
 
+RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
 def get_celladdrs_incranges(sIn):
-    rawList = re.findall("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)", sIn)
+    rawList = RE_CAINCR.findall(sIn)
     caList = []
     bInCARange = False
     for raw in rawList:
