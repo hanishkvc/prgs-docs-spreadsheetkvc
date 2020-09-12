@@ -64,7 +64,12 @@ def cell_updated(cellKey, sContent):
     if cellFwdLink == None:
         cellFwdLink = set()
         me['fwdLink'][cellKey] = cellFwdLink
-    lCellAddrs = parse.get_celladdrs_incranges(sContent)
+    origCellFwdLink = cellFwdLink.copy()
+    # Handle the new content of the cell
+    if sContent.strip().startswith('='):
+        lCellAddrs = parse.get_celladdrs_incranges(sContent)
+    else:
+        lCellAddrs = []
     for cellAddrPlus in lCellAddrs:
         if (len(cellAddrPlus) == 1):
             bCellAddr, key = _celladdr_valid(cellAddrPlus[0])
