@@ -75,6 +75,7 @@ def cdata_clear_revlinks(cellKey):
     cell either directly or indirectly require to be cleared from calc
     cache, this logic helps with same.
     '''
+    print("DBUG:syncdCdataClearRevLinks:cell[{}]".format(cellKey), file=GERRFILE)
     me['cdata'].pop(cellKey, None)
     revLinks = me['revLinks'].get(cellKey)
     if revLinks == None:
@@ -83,7 +84,7 @@ def cdata_clear_revlinks(cellKey):
         cdata_clear_revlinks(cell)
 
 
-def cell_updated(cellKey, sContent):
+def cell_updated(cellKey, sContent, clearCache=True):
     '''
     Update the fw and reverse links associated with each cell
 
@@ -131,7 +132,8 @@ def cell_updated(cellKey, sContent):
     for cell in droppedCells:
         cell_revlink_discard(cell, cellKey)
     # Clear cell calc cache for all dependents
-    cdata_clear_revlinks(cellKey)
+    if clearCache:
+        cdata_clear_revlinks(cellKey)
 
 
 def create_links():
