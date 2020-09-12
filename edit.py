@@ -195,6 +195,7 @@ def insert_rc_ab(cmd, args):
         cC -= 1
 
     newDict = dict()
+    newCDataDict = dict()
     for k in me['data']:
         r,c = k
         if bRowMode:
@@ -214,8 +215,13 @@ def insert_rc_ab(cmd, args):
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
                 newData = update_celladdrs_all(curData, cR, incR, cC, incC, bUpdateFixed=True)
+                if newData.find("#Err") == -1:
+                    curCData = me['cdata'].get(k)
+                    if curCData != None:
+                        newCDataDict[(nR,nC)] = curCData
         newDict[(nR,nC)] = newData
     me['data'] = newDict
+    me['cdata'] = newCDataDict
     if bRowMode:
         me['numRows'] += cnt
     if bColMode:
@@ -248,23 +254,36 @@ def delete_rc(cmd, args):
         incC = -1*cnt
 
     newDict = dict()
+    newCDataDict = dict()
     for k in me['data']:
         r,c = k
         curData = me['data'][k]
+        curCData = None
         if len(curData) > 0:
             if (type(curData) == str) and (curData[0] == '='):
                 curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
+                if curData.find('#Err') == -1:
+                    curCData = me['cdata'].get(k)
         if bRowMode:
             if r < sR:
                 newDict[k] = curData
+                if curCData != None:
+                    newCDataDict[k] = curCData
             elif r > eR:
                 newDict[(r+incR,c)] = curData
+                if curCData != None:
+                    newCDataDict[(r+incR,c)] = curCData
         if bColMode:
             if c < sC:
                 newDict[k] = curData
+                if curCData != None:
+                    newCDataDict[k] = curCData
             elif c > eC:
                 newDict[(r,c+incC)] = curData
+                if curCData != None:
+                    newCDataDict[(r,c+incC)] = curCData
     me['data'] = newDict
+    me['cdata'] = newCDataDict
     if bRowMode:
         me['numRows'] -= cnt
     if bColMode:
