@@ -67,7 +67,7 @@ def cell_revlink_discard(cell, revLink):
         print("WARN:syncdCellRevLinkDiscard:cell[{}] revLinkToRemove[{}]".format(cell, revLink), file=GERRFILE)
 
 
-def cdata_clear_revlinks(cellKey, depth=0):
+def cdata_clear_revlinks(cellKey, depth=0, seenSet=None):
     '''
     Clear cdata cache entry of a cell and all its revLinks.
 
@@ -77,11 +77,15 @@ def cdata_clear_revlinks(cellKey, depth=0):
     '''
     print("DBUG:syncdCdataClearRevLinks:{}:cell[{}]".format(depth, cellKey), file=GERRFILE)
     me['cdata'].pop(cellKey, None)
+    if seenSet != None:
+        seenSet.add(cellKey)
     revLinks = me['revLinks'].get(cellKey)
     if revLinks == None:
         revLinks = []
     for cell in revLinks:
-        cdata_clear_revlinks(cell, depth+1)
+        if (seenSet != None) and (cell in seenSet):
+            continue
+        cdata_clear_revlinks(cell, depth+1, seenSet)
 
 
 def cell_updated(cellKey, sContent, clearCache=True):
@@ -133,7 +137,7 @@ def cell_updated(cellKey, sContent, clearCache=True):
         cell_revlink_discard(cell, cellKey)
     # Clear cell calc cache for all dependents
     if clearCache:
-        cdata_clear_revlinks(cellKey)
+        cdata_clear_revlinks(cellKey, seenSet=set())
 
 
 def create_links():
