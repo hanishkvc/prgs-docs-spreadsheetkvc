@@ -238,6 +238,7 @@ def new_file(me, scr):
     revertfrom_help_ifneeded(me)
     nav.goto_cell(scr, "A1")
     me['data'] = dict()
+    syncd.create_links()
     me['dirty'] = False
     me['cdataUpdate'] = True
 

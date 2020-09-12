@@ -652,6 +652,8 @@ def explicit_commandmode(stdscr, cmdArgs):
             args = "1"
         cstatusbar(stdscr, ['[insert in progress...]'])
         edit.insert_rc_ab(cmd, args)
+        cstatusbar(stdscr, ['[sync deps progress...]'])
+        syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
         me['cdataUpdate'] = True
@@ -660,6 +662,8 @@ def explicit_commandmode(stdscr, cmdArgs):
             args = "1"
         cstatusbar(stdscr, ['[delete in progress...]'])
         edit.delete_rc(cmd, args)
+        cstatusbar(stdscr, ['[sync deps progress...]'])
+        syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
         me['cdataUpdate'] = True
@@ -671,6 +675,7 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif (cmd == 'clear') and not me['readOnly']:
         if len(me['data']) > 0:
             me['data'] = dict()
+            syncd.create_links()
             me['dirty'] = True
             me['cdataUpdate'] = True
     elif (cmd == 'new'):

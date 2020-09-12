@@ -1593,7 +1593,15 @@ cells depend on the edited cell, then the calculations finish very fast and user
 
 	cell content edit/cut/delete/paste now use the efficient syncdCellUpdated logic to clear calc cache.
 
-	TODO: use for rcmds. Update fwd/rev links for insert and delete operations.
+	clear and new also call syncd.create_links.
+
+	Insert and Delete operations also call syncd.create_links.
+
+		[TODO: Need to think of possible optimisations if any wrt these]
+
+			Instead of newly creating links, maybe update existing ones.
+
+	TODO: use for rcmds.
 
 
 
