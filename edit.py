@@ -347,6 +347,7 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
     baseSrcR = srcSKey[0]
     baseSrcC = srcSKey[1]
     r = 0
+    clearedSet = set()
     for dR in range(dstSKey[0], dstEKey[0]+1):
         sR = baseSrcR + (r%srcRLen)
         c = 0
@@ -358,6 +359,7 @@ def _do_rcopy(scr, srcSKey, srcEKey, dstSKey, dstEKey, bAdjustCellAddrs=True):
                     incR = dR - sR
                     incC = dC - sC
                     sData = update_celladdrs_exceptfixed(sData, 0, incR, 0, incC)
+            syncd.cell_updated((dR,dC), sData, clearedSet)
             me['data'][(dR,dC)] = sData
             c += 1
         r += 1
@@ -374,9 +376,11 @@ def _do_rclear(scr, dstSKey, dstEKey):
 
     NOTE: Doesnt alert if clearing cells with data|content in them.
     '''
+    clearedSet = set()
     for dR in range(dstSKey[0], dstEKey[0]+1):
         for dC in range(dstSKey[1], dstEKey[1]+1):
             me['data'].pop((dR,dC), None)
+            syncd.cell_updated((dR,dC), "", clearedSet)
     return True
 
 
@@ -384,6 +388,7 @@ def _do_rclear_err(scr, dstSKey, dstEKey):
     '''
     Clear error tags in the specified block of cells at dst.
     '''
+    clearedSet = set()
     for dR in range(dstSKey[0], dstEKey[0]+1):
         for dC in range(dstSKey[1], dstEKey[1]+1):
             sData = me['data'].get((dR,dC), None)
@@ -391,6 +396,7 @@ def _do_rclear_err(scr, dstSKey, dstEKey):
                 if sData.startswith("#Err") and (sData[7] == '#'):
                     sData = sData[8:]
                     me['data'][(dR,dC)] = sData
+                    syncd.cell_updated((dR,dC), sData, clearedSet) # Can do without in most cases, but just in case
     return True
 
 
@@ -408,9 +414,11 @@ def _do_rgennums(scr, startKey, endKey, tokens):
     else:
         delta = 1
     curValue = start
+    clearedSet = set()
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             me['data'][(r,c)] = "{}".format(curValue)
+            syncd.cell_updated((r,c), "", clearedSet)
             curValue += delta
     if endKey[0] > me['numRows']:
         me['numRows'] = endKey[0]
@@ -464,7 +472,6 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
-        me['cdataUpdate'] = True
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False

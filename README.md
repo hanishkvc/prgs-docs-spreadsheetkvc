@@ -1595,13 +1595,13 @@ cells depend on the edited cell, then the calculations finish very fast and user
 
 	clear and new also call syncd.create_links.
 
-	Insert and Delete operations also call syncd.create_links.
+	Insert and Delete row/col operations also call syncd.create_links.
 
 		[TODO: Need to think of possible optimisations if any wrt these]
 
 			Instead of newly creating links, maybe update existing ones.
 
-	TODO: use for rcmds.
+	rcmds call syncd.cell_updated as required.
 
 
 
