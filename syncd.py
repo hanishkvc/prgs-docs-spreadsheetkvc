@@ -157,6 +157,10 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
 def create_links():
     '''
     Create fwd and rev Links freshly for all cells in the spreadsheet in memory.
+
+    NOTE: Normally when/where create_links is called, even full calc cache update would be
+    triggered by setting cdataUpdate flag to true before or after calling create_links,
+    so the call to cell_updated from create_links can set clearCache to False.
     '''
     init()
     clearedSet = set()
