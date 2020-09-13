@@ -1684,6 +1684,10 @@ process each and every cell wrt its =expression, to see if they need to be updat
 
 Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.
 
+Center the row and col addresses shown.
+
+TODO:LATER: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
+
 
 
 

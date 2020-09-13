@@ -298,10 +298,15 @@ def _cdraw_coladdrs(colStart, colEnd):
         else:
             ctype = curses.A_REVERSE
         sColAddr = coladdr_num2alpha(i)
-        cellstr(stdscr, 0, i, sColAddr, ctype)
+        cellstr(stdscr, 0, i, "{:^{width}}".format(sColAddr, width=me['cellWidth']-1), ctype)
 
 
 def _cdraw_rowaddrs(rowStart, rowEnd):
+    '''
+    Show the row numbers in the address col at the left.
+
+    It centers the row numbers, shown.
+    '''
     for i in range(rowStart, rowEnd+1):
         if not GBUSECOLOR:
             if (i == me['curRow']):
@@ -317,7 +322,7 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
                 ctype |= curses.color_pair(2)
             else:
                 ctype |= curses.color_pair(1)
-        cellstr(stdscr, i, 0, "{:^15}|".format(i), ctype)
+        cellstr(stdscr, i, 0, "{:^{width}}|".format(i, width=me['cellWidth']-1), ctype)
 
 
 def _cdata_update(rStart, cStart, rEnd, cEnd):
