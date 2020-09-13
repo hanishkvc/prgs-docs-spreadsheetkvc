@@ -30,6 +30,7 @@ GBFLYPYTHON = False
 GBTEXT2ZERO = True
 gbStartHelp = True
 GBUSECOLOR  = False
+GBRAWVIEW = False
 
 
 # How to differentiate text cells compared to =expression cells
@@ -405,7 +406,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 ctype = curses.A_REVERSE
             else:
                 ctype = curses.A_NORMAL
-            data = value_key((r,c))
+            data = value_key((r,c), GBRAWVIEW)
             #print("cdrawdata: {},{}={}".format(r,c,data), file=GLOGFILE)
             if (data != ""):
                 if type(data) != str:
@@ -577,20 +578,26 @@ def do_xcmd(scr, cmd, args):
     '''
     The x commands handling
     '''
+    global GBRAWVIEW
+
     if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
-    if (cmd == 'xrows'):
+    elif (cmd == 'xrows'):
         newRows = int(args)
         if newRows < me['numRows']:
             dlg(scr, ["xrows: cant reduce the number of rows", "Use dr to remove rows, as required"])
             return
         me['numRows'] = newRows
-    if (cmd == 'xcols'):
+    elif (cmd == 'xcols'):
         newCols = int(args)
         if newCols < me['numCols']:
             dlg(scr, ["xcols: cant reduce the number of cols", "Use dc to remove cols, as required"])
             return
         me['numCols'] = newCols
+    elif (cmd == 'xviewraw'):
+        GBRAWVIEW = True
+    elif (cmd == 'xviewnormal'):
+        GBRAWVIEW = False
 
 
 def quit(scr):
@@ -958,7 +965,7 @@ def nvalue_key(key, bUseCachedData=True, bText2Zero=None, bDontCacheText=True):
     return val
 
 
-def value_key(key):
+def value_key(key, raw=False):
     '''
     Return the value associated with the given cell.
     The cell is specified using its corresponding key.
@@ -973,7 +980,9 @@ def value_key(key):
         return ""
     if len(sVal) == 0:
         return ""
-    return nvalue_key(key, bText2Zero=False)
+    if not raw:
+        return nvalue_key(key, bText2Zero=False)
+    return sVal
 
 
 def rl_commandmode(stdscr, key):

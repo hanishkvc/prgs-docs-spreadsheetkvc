@@ -510,6 +510,13 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 	NOTE: You cant reduce the number of cols using xcols, you need to use dc for it.
 
+* xviewraw
+
+	Display the contents of the cell as is, i.e nothing is evaluated, the expressions are shown as is.
+
+* xviewnormal
+
+	This is the normal view, in which the cell contents are evaluated and the results shown to the user.
 
 
 
@@ -1687,6 +1694,8 @@ Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when
 Center the row and col addresses shown.
 
 TODO:LATER: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
+
+xviewraw and xviewnormal commands added.
 
 
 
