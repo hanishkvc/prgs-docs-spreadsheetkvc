@@ -98,11 +98,13 @@ def cdata_clear_revlinks(cellKey, clearedSet=None, depth=0):
 TIMECAP1 = 0
 TIMECAP2 = 0
 TIMECAP3 = 0
+TOKENCAP1 = 0
 def cell_updated_time_init():
-    global TIMECAP1, TIMECAP2, TIMECAP3
+    global TIMECAP1, TIMECAP2, TIMECAP3, TOKENCAP1
     TIMECAP1 = 0
     TIMECAP2 = 0
     TIMECAP3 = 0
+    TOKENCAP1 = 0
 
 
 def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
@@ -123,7 +125,7 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     In normal use one should call cell_updated with a empty clearedSet.
     Think carefully before using cell_updated without clearedSet.
     '''
-    global TIMECAP1, TIMECAP2, TIMECAP3
+    global TIMECAP1, TIMECAP2, TIMECAP3, TOKENCAP1
     origCellFwdLink = me['fwdLinks'].get(cellKey)
     cellFwdLink = set()
     # Handle the new content of the cell
@@ -132,6 +134,7 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
     else:
         lCellAddrs = []
+    TOKENCAP1 += len(lCellAddrs)
     T2 = time.time()
     TIMECAP1 += (T2-T1)
     for cellAddrPlus in lCellAddrs:
@@ -189,7 +192,7 @@ def create_links():
     cell_updated_time_init()
     for key in me['data']:
         cell_updated(key, me['data'][key], clearCache=False, clearedSet=clearedSet)
-    print("DBUG:T1:{}, T2:{}, T3:{}".format(TIMECAP1, TIMECAP2, TIMECAP3), file=GERRFILE)
+    print("DBUG:T1:{}, T2:{}, T3:{}, CAs:{}".format(TIMECAP1, TIMECAP2, TIMECAP3, TOKENCAP1), file=GERRFILE)
 
 
 
