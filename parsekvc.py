@@ -447,11 +447,14 @@ def get_celladdrs_incranges(sIn):
         else:
             pCA = ca
         if bInCARange:
-            caList[-1].append(pCA)
+            if raw[0].strip() == "":
+                caList[-1].append(pCA)
+            else:
+                caList.append([pCA])
             bInCARange = False
         else:
             caList.append([pCA])
-        if ca[-1] == ':':
+        if (ca[-1] == ':') and (raw[2].strip() == ""):
             bInCARange = True
     return caList
 
