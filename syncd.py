@@ -131,7 +131,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     # Handle the new content of the cell
     T1 = time.time()
     if sContent.strip().startswith('='):
-        lCellAddrs = parse.get_celladdrs_incranges(sContent)
+        #lCellAddrs = parse.get_celladdrs_incranges(sContent)
+        lCellAddrs = parse.get_celladdrs_incranges_internal(sContent)
     else:
         lCellAddrs = []
     TOKENCAP1 += len(lCellAddrs)
@@ -148,11 +149,11 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
         elif (len(cellAddrPlus) == 2):
             bCellAddr, key1 = _celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
-                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key), file=GERRFILE)
+                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key1), file=GERRFILE)
                 continue
             bCellAddr, key2 = _celladdr_valid(cellAddrPlus[1])
             if not bCellAddr:
-                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key), file=GERRFILE)
+                print("WARN:syncdCellUpdated:{}:{}".format(sContent, key2), file=GERRFILE)
                 continue
             for r in range(key1[0], key2[0]+1):
                 for c in range(key1[1], key2[1]+1):
