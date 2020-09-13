@@ -102,7 +102,7 @@ def cscreenadapt(stdscr):
 def cstart():
     cui.GERRFILE=GERRFILE
     cui.GLOGFILE=GLOGFILE
-    stdscr = cui.cstart()
+    stdscr = cui.cstart(GBUSECOLOR)
     cscreenadapt(stdscr)
     #print(me, file=GLOGFILE)
     return stdscr
@@ -303,7 +303,7 @@ def _cdraw_coladdrs(colStart, colEnd):
 
 def _cdraw_rowaddrs(rowStart, rowEnd):
     for i in range(rowStart, rowEnd+1):
-        if not GUSECOLOR:
+        if not GBUSECOLOR:
             if (i == me['curRow']):
                 ctype = curses.A_NORMAL
             else:
@@ -314,9 +314,9 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
             else:
                 ctype = curses.A_NORMAL
             if (i%2) == 0:
-                ctype |= curses.color_pair(1)
+                ctype |= curses.color_pair(2)
             else:
-                ctype |= curses.color_pair(0)
+                ctype |= curses.color_pair(1)
         cellstr(stdscr, i, 0, "    {:8}   |".format(i), ctype)
 
 
@@ -428,9 +428,9 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
             if (c < colStart):
                 continue
             if (r%2) == 0:
-                ctype |= curses.color_pair(1)
+                ctype |= curses.color_pair(2)
             else:
-                ctype |= curses.color_pair(0)
+                ctype |= curses.color_pair(1)
             cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
 
 

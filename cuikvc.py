@@ -32,9 +32,11 @@ def cstart(useColor=True):
     stdscr = curses.initscr()
     if useColor:
         curses.start_color()
-        curses.init_color(curses.COLOR_CYAN, 10, 220, 250)
         curses.init_color(curses.COLOR_BLACK, 0, 0, 0)
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_CYAN)
+        #curses.init_color(curses.COLOR_CYAN, 10, 220, 250)
+        #curses.init_color(curses.COLOR_CYAN, 10, 220, 250)
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_CYAN)
+        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLUE)
     _screen_size(stdscr)
     curses.noecho()
     curses.cbreak()
