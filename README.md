@@ -35,8 +35,8 @@ Some of its features are
   program will autoscroll if required to allow user to continue editing/entering content,
   within reasonable limits.
 
-	* [Outside of cell editing] Overflowing cell's content will be shown in place of
-	  adjacent cells, provided those adjacent cells are empty.
+	* [Outside of edit mode, ie default mode] Overflowing cell's content will be shown
+	  in place of adjacent cells, provided those adjacent cells are empty.
 
 * Support evaluation of mathematical expressions which inturn can refer to
 
@@ -75,7 +75,7 @@ Some of its features are
 
 	NOTE: If 'P' (capital P) is used for pasting, then it wont adjust the cell addresses.
 
-* Try be simple and sane wrt fieldsep and textquote.
+* the program tries to be simple and sane wrt fieldsep and textquote.
 
 	If fieldsep in cell content, auto protect with text quoting of cell content.
 
@@ -83,8 +83,8 @@ Some of its features are
 
 	If text quote some where in the middle of cell content, replace with a placeholder char.
 
-* Any Cells having looping in their =expression calculations (within themselves and or through a
-  chain of cells) and or involve very very long (1000s) cell-to-cell dependency depth chaining
+* Any Cells having looping in their =expression calculations (backto themselves directly and or
+  through a chain of cells) and or involve very very long (1000s) cell-to-cell dependency depth chaining
   will be identified and result in None result or ErrTagging. ErrTagging ensures that those cells
   dont get accounted in subsequent recalculations and thus dont bog down the program.
 
@@ -98,16 +98,16 @@ Some of its features are
   size (in terms of number of rows and cols) of the spreadsheet, in memory it occupies only as much
   space as required for cells with contents in them.
 
-	From within the program one could use one of the :irb or :ira or :icb or :ica commands
-	to increase the size of the spreadsheet, as needed. Look further down for details.
+	From within the program one could use one of the :xrows or xcols or :irb or :ira or :icb or
+	:ica commands to increase the size of the spreadsheet, as needed. Look further down for details.
 
 	NOTE: sparse data structure is useful for having huge spreadsheets with good number of empty
 	cells inbetween and not necessarily huge spreadsheets with most of the cells filled up ;)
 
 * support range operations (rcmds) which allow manipulating multiple cells easily using simple commands.
 
-	One can even mark cells as well as program supports infering destination cell address range
-	from source address range.
+	One can even mark cells so that they dont have to remember the cell address, as well as program
+	supports infering destination cell address range from source address range.
 
 * Some additional features like
 
@@ -116,6 +116,9 @@ Some of its features are
 	* auto-adjust to terminal window size changes.
 
 	* tab-completion of file path names for load and save operations.
+
+* Edit and Insert operations trigger cell recalculations only if and were required, which inturn will
+  occur when the cell or its dependents become visible.
 
 
 for more details refer to the documentation below.
@@ -292,7 +295,8 @@ In this explicit command mode, the user can enter one of the following commands
 
 		ps passwd file
 
-	NOTE: program will prompt for user file password once again, to ensure that user doesnt use/key-in a wrong password by mistake.
+	NOTE: program will prompt for user file password once again, to ensure that user
+	doesnt use/key-in a wrong password by mistake.
 
 * l file
 
@@ -310,8 +314,8 @@ In this explicit command mode, the user can enter one of the following commands
 	create a new spreadsheet in memory.
 
 
-NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user to
-explicitly specify the file to write to.
+NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user
+to explicitly specify the file to write to.
 
 
 ##### Insert/Delete operations
@@ -632,11 +636,15 @@ Example
 
 	=10-5+sum(B10:C99)
 
+NOTE: If one wants numeric content or =expression to be interpreted as text content,
+then one requires to place such numeric or =expression content within the configured
+quotes.
 
 
 ### Interpretation of cell contents
 
-If no data (inc empty string) then return 0 (where numeric value expected, else return "" i.e empty string).
+If no data (which also includes empty string) then return 0 (where numeric value expected,
+else return "" i.e empty string).
 
 If starts with =,  then do the internal =expression evaluation of same.
 
@@ -648,7 +656,8 @@ if starts with numeric or starts with + or - then python eval it for a numeric.
 
 If none of above, return 0 where numeric value expected, else return as is as a string.
 
-	Anything starting with alphabet or space or textquote or anything not matching above is treated as text.
+	Anything starting with alphabet or space or textquote or anything not matching
+	above is treated as text.
 
 
 ### =expressions
@@ -678,6 +687,7 @@ by specifying the corresponding cell's address.
 If a text cell is referenced where numeric value is required, it will be treated as
 containing the value 0.
 
+
 #### evaluation
 
 The program follows a windowed lazy/defered evaluation with caching strategy for the cells.
@@ -702,19 +712,24 @@ that they depend on
 When cell contents are updated/modified by the user, the program clears the cache, and repeats
 the windowed defered evaluation with caching as explained above again.
 
-TODO: May add a reverse dependency list for the cells, so that when user edits any cells, only
-related cell caches are cleared and thus need reevaluation.
+The program maintains a reverse dependency list for each cell, so that when user edits any cell,
+only related cells' caches are cleared and thus inturn cells needing reevaluation is limited to
+the cell itself and its dependent cells.
+
+NOTE: If the user suspects that the recalculation optimisation logic of the program is at fault,
+they can run the :xrecalc command which will clear the calc cache of all cells, so they all get
+recalculated as and when required.
 
 
 #### Looping and Deep chaining.
 
-If =expression in a cell refers back to itself either directly and or through another cell(s) in
+If =expression in a cell refers back to itself either directly and or through other cell(s) in
 the chain of calculations required to find the cell's value, then it is considered to be looped.
 
 The program will trap such invalid looping and Err tag the contents of all cells involved in the
 calculation, whose value is impacted by looping. This allows the user to see what and all cells
 where involved in that looping. It also allows the program to continue with evaluation of the
-other cells.
+other cells, while ignoring these err tagged cells.
 
 The program will also flag the calc loop error tag, for cells whose =expression involves chaining
 of cells which refer to one another such that the chain length extends to thousands of cells. IE
@@ -823,7 +838,7 @@ The arguments of python functions could be specified either as a
 
 	* function which returns a numeric value or
 
-	* cell address (but not a cell address range)
+	* cell address (but not a cell address range for now)
 
 
 #### python functions
@@ -1063,10 +1078,12 @@ getting messed up with such messages
 #### Non csv or csv file with wrong fieldsep
 
 Loading a Non csv file and or a csv file with a different field seperator can lead
-to the loaded file setting the program's display to a single column view. So also the
-content of the file will be clipped from display perspective. One could run the command
+to the loaded file setting the program's display to a single row and or column view,
+as the case may (i.e depending on how many lines are there and inturn if any of
+those lines have fieldsep char in them or not). So also the content of the file will
+be clipped from display perspective. One could run the command
 
-	:ira 25
+	:xcols 25
 
 	or so to allow the overflowing text to be visible.
 
@@ -1197,6 +1214,8 @@ on the way.
 
 A usable at a basic level (nothing fancy, yet;) commandline spreadsheet logic has been
 implemented to some extent.
+
+The existing commandline spreadsheet program sc crashing in few cases, also didnt help.
 
 ### 20200825IST1220
 
@@ -1660,10 +1679,11 @@ Added a xrefresh command.
 
 DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
 
-DONE: Add xrows and xcols to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
-to see if they need to be updated.
+DONE: Add xrows and xcols to increase rows or cols at the end quickly. Instead of using ica, icb, ira or irb which also
+process each and every cell wrt its =expression, to see if they need to be updated.
 
 Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.
+
 
 
 
