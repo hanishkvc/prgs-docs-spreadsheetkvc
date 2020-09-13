@@ -317,7 +317,7 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
                 ctype |= curses.color_pair(2)
             else:
                 ctype |= curses.color_pair(1)
-        cellstr(stdscr, i, 0, "    {:8}   |".format(i), ctype)
+        cellstr(stdscr, i, 0, "{:^15}|".format(i), ctype)
 
 
 def _cdata_update(rStart, cStart, rEnd, cEnd):
