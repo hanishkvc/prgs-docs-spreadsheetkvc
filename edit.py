@@ -214,16 +214,16 @@ def insert_rc_ab(cmd, args):
                 nC = c
         curData = me['data'][k]
         newData = curData
-        if len(curData) > 0:
-            curCData = me['cdata'].get(k)
-            if (type(curData) == str) and (curData[0] == '='):
-                newData = update_celladdrs_all(curData, cR, incR, cC, incC, bUpdateFixed=True)
-                if newData.find("#Err") == -1:
-                    if curCData != None:
-                        newCDataDict[(nR,nC)] = curCData
-            else:
+        curCData = me['cdata'].get(k)
+        fwdLinks = me['fwdLinks'].get(k)
+        if (fwdLinks != None) and (len(fwdLinks) > 0):
+            newData = update_celladdrs_all(curData, cR, incR, cC, incC, bUpdateFixed=True)
+            if newData.find("#Err") == -1:
                 if curCData != None:
                     newCDataDict[(nR,nC)] = curCData
+        else:
+            if curCData != None:
+                newCDataDict[(nR,nC)] = curCData
         newDict[(nR,nC)] = newData
     me['data'] = newDict
     me['cdata'] = newCDataDict

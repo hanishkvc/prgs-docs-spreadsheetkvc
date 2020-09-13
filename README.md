@@ -1697,6 +1697,9 @@ TODO:LATER: Right align the cell contents, while overflowing towards the left ce
 
 xviewraw and xviewnormal commands added.
 
+Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets
+with lot of (millions)  =expressions which are independent.
+
 
 
 

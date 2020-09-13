@@ -705,6 +705,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
+        # insert_rc_ab adjusts calc cache as required so not force clearing full cache.
         #me['cdataUpdate'] = True
     elif cmd.startswith('d') and not me['readOnly']:
         if args == None:
@@ -715,6 +716,7 @@ def explicit_commandmode(stdscr, cmdArgs):
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])
         me['dirty'] = True
+        # delete_rc adjusts calc cache as required so not force clearing full cache.
         #me['cdataUpdate'] = True
     elif cmd.startswith('g'):
         if args != None:

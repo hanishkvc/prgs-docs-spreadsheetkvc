@@ -190,6 +190,12 @@ def create_links():
     NOTE: Normally when/where create_links is called, even full calc cache update would be
     triggered by setting cdataUpdate flag to true before or after calling create_links,
     so the call to cell_updated from create_links can set clearCache to False.
+
+    As create links doesnt touch the calc cache, so remember to either
+
+        force clear the full calc cache by using cdataUpdate
+
+        OR adjust calc cache suitably in the context from where create_links is called.
     '''
     init()
     clearedSet = set()
