@@ -130,6 +130,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     cellFwdLink = set()
     # Handle the new content of the cell
     T1 = time.time()
+    if sContent == None:
+        sContent = ""
     if sContent.strip().startswith('='):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
         #lCellAddrs = parse.get_celladdrs_incranges_internal(sContent)
