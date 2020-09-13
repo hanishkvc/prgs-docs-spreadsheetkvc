@@ -486,10 +486,13 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 ##### xtra operations
 
-* xrefresh
+* xrecalc
 
 	Force clear the calculated results cache, so that all cells get recalculated, as they become visible
 	either directly and or indirectly through some other visible cell.
+
+	As and when a given cell or a some other cell which depends on it becomes visible, the cell will be
+	recalculated.
 
 
 ##### Other operations
@@ -1646,6 +1649,7 @@ DONE: Use color to distinguish between alternate rows, so that easier for user t
 TODO: Add xrows and xcols or so to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
 to see if they need to be updated.
 
+Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.
 
 
 

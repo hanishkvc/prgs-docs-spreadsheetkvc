@@ -572,7 +572,7 @@ def do_xcmd(scr, cmd, args):
     '''
     The x commands handling
     '''
-    if (cmd == 'xrefresh'):
+    if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
 
 
