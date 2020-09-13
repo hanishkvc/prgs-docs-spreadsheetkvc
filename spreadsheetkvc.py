@@ -415,6 +415,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 sData = ""
             if (c < colStart):
                 continue
+            if (r%2) == 0:
+                ctype |= curses.color_pair(1)
+            else:
+                ctype |= curses.color_pair(0)
             cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
 
 
