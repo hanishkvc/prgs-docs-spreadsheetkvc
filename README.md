@@ -223,6 +223,15 @@ The program supports the following commandline arguments
 		Allow bit more varied set of python expressions to be stored in cells and inturn
 		run those python expressions by refering to those cells from other cells
 
+	--usecolor
+
+		Enable color mode of the program. In this mode the program will show alternate
+		rows in two different background colors, so that the user can easily identify all
+		cells (and their contents) on a given row.
+
+		By default color mode is not enabled, user needs to use this argument.
+
+
 
 ### program modes
 
@@ -1632,7 +1641,7 @@ Added a xrefresh command.
 
 ### 20200913IST1530 - GauriGaneshaToOnamToTeachersDayRelease
 
-TODO: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
+DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
 
 TODO: Add xrows and xcols or so to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
 to see if they need to be updated.

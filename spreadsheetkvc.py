@@ -29,7 +29,7 @@ DONTEXIT = -9999
 GBFLYPYTHON = False
 GBTEXT2ZERO = True
 gbStartHelp = True
-GBUSECOLOR  = True
+GBUSECOLOR  = False
 
 
 # How to differentiate text cells compared to =expression cells
@@ -427,10 +427,11 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 sData = ""
             if (c < colStart):
                 continue
-            if (r%2) == 0:
-                ctype |= curses.color_pair(2)
-            else:
-                ctype |= curses.color_pair(1)
+            if GBUSECOLOR:
+                if (r%2) == 0:
+                    ctype |= curses.color_pair(2)
+                else:
+                    ctype |= curses.color_pair(1)
             cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
 
 
@@ -1307,7 +1308,7 @@ def setup_files():
     GERRFILE=setup_errfile()
 
 
-CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp creadonly calldepth flypython")
+CmdArgs = enum.Enum("CmdArgs", "help fieldsep quote startnohelp creadonly calldepth flypython usecolor")
 def print_usage():
     print("{}:spreadsheetkvc: usage".format(sys.argv[0]))
     print("    --{}          Prints this commandline usage info".format(CmdArgs.help.name))
@@ -1317,6 +1318,7 @@ def print_usage():
     print("    --{}     run in readonly|view mode".format(CmdArgs.creadonly.name))
     print("    --{} <depth>    specify the maximum call depth | cell chaining allowed".format(CmdArgs.calldepth.name))
     print("    --{}     allow more varied python expressions in cells".format(CmdArgs.flypython.name))
+    print("    --{}      use alternate color rows on the terminal".format(CmdArgs.usecolor.name))
     exit(0)
 
 
@@ -1327,7 +1329,7 @@ def process_cmdline(args):
     global THEFIELDSEP
     global THEQUOTE
     global gbStartHelp
-    global CALLDEPTHMAX, GBFLYPYTHON
+    global CALLDEPTHMAX, GBFLYPYTHON, GBUSECOLOR
     i = 1
     while i < len(args):
         cmd = args[i][2:]
@@ -1348,6 +1350,8 @@ def process_cmdline(args):
             CALLDEPTHMAX = int(args[i])
         elif cmd == CmdArgs.flypython.name:
             GBFLYPYTHON = True
+        elif cmd == CmdArgs.usecolor.name:
+            GBUSECOLOR = True
         i += 1
 
 
