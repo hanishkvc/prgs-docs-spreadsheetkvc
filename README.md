@@ -494,6 +494,20 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 	As and when a given cell or a some other cell which depends on it becomes visible, the cell will be
 	recalculated.
 
+* xrows <numOfRows>
+
+	Use to increase the number of rows in the spreadsheet to the new number specified.
+
+	NOTE: You cant reduce the number of rows using xrows, you need to use dr for it.
+
+* xcols <numOfCols>
+
+	Use to increase the number of cols in the spreadsheet to the new number specified.
+
+	NOTE: You cant reduce the number of cols using xcols, you need to use dc for it.
+
+
+
 
 ##### Other operations
 
@@ -1646,7 +1660,7 @@ Added a xrefresh command.
 
 DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
 
-TODO: Add xrows and xcols or so to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
+DONE: Add xrows and xcols to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
 to see if they need to be updated.
 
 Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.

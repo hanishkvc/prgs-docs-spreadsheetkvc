@@ -574,6 +574,18 @@ def do_xcmd(scr, cmd, args):
     '''
     if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
+    if (cmd == 'xrows'):
+        newRows = int(args)
+        if newRows < me['numRows']:
+            dlg(scr, ["xrows: cant reduce the number of rows", "Use dr to remove rows, as required"])
+            return
+        me['numRows'] = newRows
+    if (cmd == 'xcols'):
+        newCols = int(args)
+        if newCols < me['numCols']:
+            dlg(scr, ["xcols: cant reduce the number of cols", "Use dc to remove cols, as required"])
+            return
+        me['numCols'] = newCols
 
 
 def quit(scr):
