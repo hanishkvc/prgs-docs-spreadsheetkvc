@@ -415,11 +415,11 @@ def get_celladdrs_incranges_internal(sIn, startPos=0):
                     rangeState = RangeState.Entered
                 elif rangeState == RangeState.Entered:
                     rangeState = RangeState.Done
-                if rangeState == RangeState.NoThing:
-                    lCellAddrs.append([tokenList[i]])
-                elif rangeState == RangeState.Done:
-                    lCellAddrs.append([tokenList[i-2], tokenList[i]])
+                if rangeState == RangeState.Done:
+                    lCellAddrs[-1].append(tokenList[i])
                     rangeState = RangeState.NoThing
+                else:
+                    lCellAddrs.append([tokenList[i]])
             else:
                 rangeState = RangeState.NoThing
         else:
