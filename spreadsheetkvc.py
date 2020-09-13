@@ -29,6 +29,8 @@ DONTEXIT = -9999
 GBFLYPYTHON = False
 GBTEXT2ZERO = True
 gbStartHelp = True
+GBUSECOLOR  = True
+
 
 # How to differentiate text cells compared to =expression cells
 # This is the default, cattr_textnum will try and adjust at runtime.
@@ -301,11 +303,21 @@ def _cdraw_coladdrs(colStart, colEnd):
 
 def _cdraw_rowaddrs(rowStart, rowEnd):
     for i in range(rowStart, rowEnd+1):
-        if (i == me['curRow']):
-            ctype = curses.A_NORMAL
+        if not GUSECOLOR:
+            if (i == me['curRow']):
+                ctype = curses.A_NORMAL
+            else:
+                ctype = curses.A_REVERSE
         else:
-            ctype = curses.A_REVERSE
-        cellstr(stdscr, i, 0, "{}".format(i), ctype)
+            if (i == me['curRow']):
+                ctype = curses.A_REVERSE
+            else:
+                ctype = curses.A_NORMAL
+            if (i%2) == 0:
+                ctype |= curses.color_pair(1)
+            else:
+                ctype |= curses.color_pair(0)
+        cellstr(stdscr, i, 0, "    {:8}   |".format(i), ctype)
 
 
 def _cdata_update(rStart, cStart, rEnd, cEnd):
