@@ -25,6 +25,7 @@ def _screen_size(scr):
     me['scrRows'], me['scrCols'] = scr.getmaxyx()
 
 
+BCOLORFGWHITE = True
 def cstart(useColor=True):
     '''
     Initialise the curses ui
@@ -33,10 +34,14 @@ def cstart(useColor=True):
     if useColor:
         curses.start_color()
         curses.init_color(curses.COLOR_BLACK, 0, 0, 0)
-        #curses.init_color(curses.COLOR_CYAN, 10, 220, 250)
-        #curses.init_color(curses.COLOR_CYAN, 10, 220, 250)
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_CYAN)
-        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLUE)
+        if BCOLORFGWHITE:
+            curses.init_color(curses.COLOR_BLUE,  20, 220, 250)
+            curses.init_color(curses.COLOR_CYAN,  20, 250, 240)
+            curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_CYAN)
+            curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLUE)
+        else:
+            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_CYAN)
+            curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_BLUE)
     _screen_size(stdscr)
     curses.noecho()
     curses.cbreak()
