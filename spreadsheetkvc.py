@@ -1195,6 +1195,11 @@ def setup_sighandlers():
     signal.signal(signal.SIGWINCH, cwinsize_change)
 
 
+def setup_parse():
+    parse.GLOGFILE = GLOGFILE
+    parse.GERRFILE = GERRFILE
+
+
 def setup_funcs():
     if GBFLYPYTHON:
         funcs.BFILTERPYFUNC = False
@@ -1245,6 +1250,7 @@ def setup_syncd():
 
 
 def setup_helpermodules():
+    setup_parse()
     setup_syncd()
     setup_funcs()
     setup_nav()

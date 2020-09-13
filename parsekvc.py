@@ -6,6 +6,9 @@
 import enum, re
 
 
+GLOGFILE = None
+GERRFILE = None
+
 
 class AlphaNumType(enum.IntFlag):
     NOTHING = 0
@@ -369,7 +372,7 @@ def get_celladdrs(sIn, startPos = 0):
 
 
 RangeState = enum.Enum("RangeState", "NoThing CanEnter Entered Done")
-def get_celladdrs_incranges_old(sIn, startPos=0):
+def get_celladdrs_incranges_internal(sIn, startPos=0):
     '''
     Get list of cell address tokens and or cell address ranges.
 
@@ -404,7 +407,7 @@ def get_celladdrs_incranges_old(sIn, startPos=0):
                         rangeState = RangeState.CanEnter
                     else:
                         rangeState = RangeState.NoThing
-                        print("getCellAddrsIncRanges:WARN:{}:{}".format(sIn, (tokenList[i], typeList[i])))
+                        print("getCellAddrsIncRanges:WARN:{}:{}".format(sIn, (tokenList[i], typeList[i])), file=GLOGFILE)
             anType, typeSeq = alphanum_type(tokenList[i], symbolSet1=['$'])
             typeSeq, typeIds = collapse_sametype(typeSeq, AlphaNumTypeId)
             if typeIds in [ 'AN', '1AN', 'A1N', '1A1N']:
@@ -424,6 +427,11 @@ def get_celladdrs_incranges_old(sIn, startPos=0):
 
 RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
 def get_celladdrs_incranges(sIn):
+    '''
+    Use re module to parse the line and extract cell addresses (including ranges) in them.
+    In some cases the non re version is found to take bit more time,
+    so using re version by default.
+    '''
     rawList = RE_CAINCR.findall(sIn)
     caList = []
     bInCARange = False
