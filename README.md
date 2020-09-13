@@ -1630,6 +1630,14 @@ MapTo/Use current directory for completing path using tab completion, if only fi
 Added a xrefresh command.
 
 
+### 20200913IST1530 - GauriGaneshaToOnamToTeachersDayRelease
+
+TODO: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
+
+TODO: Add xrows and xcols or so to increase rows or cols at the end quickly. Instead of using ica ira which also process each and every cell wrt its =expression,
+to see if they need to be updated.
+
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)

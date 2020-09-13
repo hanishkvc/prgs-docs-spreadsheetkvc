@@ -386,7 +386,8 @@ def get_celladdrs_incranges_internal(sIn, startPos=0):
 
     If the token contains single quotes, then it will be skipped.
     Similarly if the token is a string in single quotes, it will
-    be skipped.
+    be skipped. NOTE: This ignore contents of quoted text within
+    the string.
 
     Checks that AlphaNum tokens match valid cell address patterns,
     including $ in them.
@@ -435,6 +436,8 @@ def get_celladdrs_incranges(sIn):
     Use re module to parse the line and extract cell addresses (including ranges) in them.
     In some cases the non re version is found to take bit more time,
     so using re version by default.
+
+    NOTE: This doesnt ignore contents of quoted text within the string.
     '''
     rawList = RE_CAINCR.findall(sIn)
     caList = []

@@ -132,9 +132,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     T1 = time.time()
     if sContent.strip().startswith('='):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
-        lCellAddrs2 = parse.get_celladdrs_incranges_internal(sContent)
-        print(lCellAddrs, file=GERRFILE)
-        print(lCellAddrs2, file=GERRFILE)
+        #lCellAddrs = parse.get_celladdrs_incranges_internal(sContent)
+        #print(lCellAddrs, file=GERRFILE)
     else:
         lCellAddrs = []
     TOKENCAP1 += len(lCellAddrs)
