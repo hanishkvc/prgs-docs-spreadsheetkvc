@@ -113,7 +113,7 @@ Some samples;;;=1947**26;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;= (B109/2.5)+(3*20) +pow(2,6);;'= (B109/2.5)+(3*20) +pow(2,6)';;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;=stddev(B109:B$113);;'=stddev(B109:B$113)';;;;;;;;;;;;;;;;;;;;;;;;;;;;
 .........................................................................................................................;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-CSV files, optional Authenticated Enryption;;;;Sparse datastructure for arbitrary size spreadsheet;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CSV files, optional Authenticated Encryption;;;;Sparse datastructure for arbitrary size spreadsheet;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Implemented in Python with source on github;;;;'Use Curses for Table/Matrix view; Allow inline Cell editing';;;;;;;;;;;;;;;;;;;;;;;;;;;
 '=expressions interpreted as souped up python evals';;;;Lazy Cached Cell evaluation, triggered on view of self or dependents;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Insert/Delete/Paste adjust CellAddresses inc$ as required;;;;Builtin Funcs + Python Math funcs, Helper commands;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -431,6 +431,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
         for c in range(crangeStart, crangeEnd, crangeDelta):
+            curAlign = align
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
@@ -446,7 +447,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                             sRemaining = sData[me['cellWidth']:]
                             sData = sData[:me['cellWidth']]
                         else:
-                            align = Align.Right # Align numbers to right, if it fits in a cell, in default mode.
+                            curAlign = Align.Right # Align numbers to right, if it fits in a cell, in default mode.
                             sRemaining = sData[:-me['cellWidth']]
                             sData = sData[-me['cellWidth']:]
                     else:
@@ -482,7 +483,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= curses.color_pair(2)
                 else:
                     ctype |= curses.color_pair(1)
-            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True, align=align)
+            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True, align=curAlign)
 
 
 def _cdraw_editbuffer(stdscr):
