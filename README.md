@@ -1707,7 +1707,47 @@ xviewraw and xviewnormal commands added.
 Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets
 with lot of (millions)  =expressions which are independent. Similar stratergy also added to delete rows/cols logic.
 
+TODO:LATER: cell address ranges as lists for python functions.
 
+TODO:LATER: Date related functions
+
+
+
+
+## thoughts behind this program
+
+Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner,
+which also allows one to identify when corruption occurs and or unauthorised modifications have been done.
+
+Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like
+
+	authenticated encryption.
+
+	sparse data structure based memory storage
+
+	windowed lazy/deffered cached evaluations, triggered when a cell or its dependent cells become visible
+
+	using recursion limit exception to implement a optimistic multipass oppurtunistic eval logic for resolving deep chaining,
+	while still error tagging loops.
+
+		optimistic and oppurtunistic - go ahead inspite of exceptions, evaluating what ever can be at any given tiem.
+
+		multiplass - eval cells with deep chaining in steps where required, caching and reusing results as they become available.
+
+	using forward and reverse dependency lists and use same to optimise edit/modify(insert/del) operations on spreadsheet.
+
+	table/matrix view of fixed size cells with overflowing of contents into adjacent cells from display perspective.
+
+	adjust cell addresses in =expressions during copy-paste or insert/delete operations.
+
+	parse tokens and expressions.
+
+	tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
+
+	speed is not the goal, while still being sufficiently usable, in the middle of exploring the above
+
+Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook
+and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
