@@ -40,6 +40,7 @@ CATTR_DATANUM = (curses.A_NORMAL)
 # How many columns to left or right of current display viewport should one
 # peek to see, if there is any overflowing text that needs to be displayed.
 DATACOL_OVERSCAN = 20
+GBALIGN_LEFT = False
 # Exit EditMode on pressing Enter
 gbEnterExitsEditMode = True
 
@@ -396,7 +397,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
             dataColStart = 1
         dataColEnd = colEnd
         crangeStart = dataColStart
-        crangeEnd = dataColEnd
+        crangeEnd = dataColEnd+1
         crangeDelta = 1
     else:
         dataColStart = colStart
@@ -404,7 +405,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         if dataColEnd > me['numCols']:
             dataColEnd = me['numCols']
         crangeStart = dataColEnd
-        crangeEnd = dataColStart
+        crangeEnd = dataColStart-1
         crangeDelta = -1
     # Evaluate any cells in the viewport that may require to be evaluated
     if me['state'] != 'E':
@@ -417,7 +418,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     rtype = CATTR_DATATEXT
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
-        for c in range(crangeStart, crangeEnd+1, crangeDelta):
+        for c in range(crangeStart, crangeEnd, crangeDelta):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
