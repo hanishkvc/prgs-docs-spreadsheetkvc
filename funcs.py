@@ -185,6 +185,22 @@ def do_avg(args):
     return total/cnt
 
 
+def do_config(args):
+    '''
+    Config spreadsheet from within
+
+    format, iffloat, precision
+    '''
+    argsList = parse.get_funcargs(args)
+    if argsList[0] == "format":
+        if argsList[1] == "iffloat":
+            me['format.iffloat'] = int(argsList[2])
+            return "'FltPreci:{}'".format(me['format.iffloat'])
+            #return round(1.11111111111111111111, me['format.iffloat'])
+            #return 1.11111111111111111111
+
+
+
 pyFuncs = [ 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]
 def allowed_pyfunc(sCmd, sArgs):
     '''
@@ -254,6 +270,8 @@ def do_func(sCmdIn, sArgs):
             return do_stddev(sCmd, sArgs)
         elif sCmd.startswith("VAR"):
             return do_stddev(sCmd, sArgs)
+        elif sCmd == "CONFIG":
+            return do_config(sArgs)
         else:
             return do_pyfunc(sCmdIn, sArgs)
     except RecursionError:

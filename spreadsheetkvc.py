@@ -442,6 +442,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 if type(data) != str:
                     ctype |= CATTR_DATANUM
                     sData = str(data)
+                    if type(data) == float:
+                        floatPrecision = me.get('format.iffloat')
+                        if floatPrecision != None:
+                            sData = "{:.{preci}f}".format(data, preci=floatPrecision)
                     if bNumericDisplayOverflow:
                         if (GALIGN == Align.Left) or ((GALIGN == Align.Default) and (len(sData) > me['cellWidth'])):
                             sRemaining = sData[me['cellWidth']:]
