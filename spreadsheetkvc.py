@@ -455,7 +455,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 else:
                     sData = data
                     ctype |= CATTR_DATATEXT
-                    if GALIGN == Align.Left:
+                    if (GALIGN == Align.Left) or (GALIGN == Align.Default):
                         sRemaining = sData[me['cellWidth']:]
                         sData = sData[:me['cellWidth']]
                     else:
@@ -464,7 +464,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     rtype = CATTR_DATATEXT
             elif (not me['clipCell']):
                 ctype |= rtype
-                if GALIGN == Align.Left:
+                if (GALIGN == Align.Left) or (GALIGN == Align.Default):
                     sData = sRemaining[0:me['cellWidth']]
                     sRemaining = sRemaining[me['cellWidth']:]
                 else:
