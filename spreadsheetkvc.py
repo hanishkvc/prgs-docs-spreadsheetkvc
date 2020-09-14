@@ -37,9 +37,9 @@ GBRAWVIEW = False
 # This is the default, cattr_textnum will try and adjust at runtime.
 CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
 CATTR_DATANUM = (curses.A_NORMAL)
-# How many columns to left of current display viewport should one peek
-# to see, if there is any overflowing text that needs to be displayed.
-DATACOLSTART_OVERSCAN = 20
+# How many columns to left or right of current display viewport should one
+# peek to see, if there is any overflowing text that needs to be displayed.
+DATACOL_OVERSCAN = 20
 # Exit EditMode on pressing Enter
 gbEnterExitsEditMode = True
 
@@ -389,19 +389,29 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     Display the cells which are currently visible on the screen.
     '''
     #print("cdrawdata:Starting", file=GERRFILE)
-    dataColStart = colStart - DATACOLSTART_OVERSCAN
-    if dataColStart < 1:
-        dataColStart = 1
+    # Adjust the data viewport
+    if GBALIGN_LEFT:
+        dataColStart = colStart - DATACOL_OVERSCAN
+        if dataColStart < 1:
+            dataColStart = 1
+        dataColEnd = colEnd
+    else:
+        dataColStart = colStart
+        dataColEnd = colEnd + DATACOL_OVERSCAN
+        if dataColEnd > me['numCols']:
+            dataColEnd = me['numCols']
+    # Evaluate any cells in the viewport that may require to be evaluated
     if me['state'] != 'E':
         cstatusbar(scr, ['[status: processing ...]'], 1, 32)
-    cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, colEnd)
+    cdata_update(me['cdataUpdate'], rowStart, dataColStart, rowEnd, dataColEnd)
     me['cdataUpdate'] = False
     if me['state'] != 'E':
         cstatusbar(scr, ['                        '], 1, 32)
+    # Update the display
     rtype = CATTR_DATATEXT
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
-        for c in range(dataColStart, colEnd+1):
+        for c in range(dataColStart, dataColEnd+1):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
