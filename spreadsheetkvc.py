@@ -167,7 +167,7 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True, alignLeft=True):
+def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True, align=Align.Left):
     '''
     Display contents of the cell, only if it is in the current display viewport
     as well as if the cell (not its contents) can be fully shown on the screen.
@@ -176,7 +176,7 @@ def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True, alignLe
     '''
     cellWidth = me['cellWidth']
     if clipToCell:
-        if alignLeft:
+        if (align == Align.Left) or (align == Align.Default):
             tmsg = msg[0:cellWidth]
         else:
             tmsg = msg[-cellWidth:]
@@ -184,7 +184,7 @@ def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True, alignLe
         tmsg = msg
     mlen = len(tmsg)
     if mlen < cellWidth:
-        if alignLeft:
+        if (align == Align.Left) or (align == Align.Default):
             tmsg = "{:<{width}}".format(tmsg, width=cellWidth)
         else:
             tmsg = "{:>{width}}".format(tmsg, width=cellWidth)
