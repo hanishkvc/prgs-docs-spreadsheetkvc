@@ -162,7 +162,7 @@ def cellpos(row, col):
     return y, x
 
 
-def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True):
+def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True, alignLeft=True):
     '''
     Display contents of the cell, only if it is in the current display viewport
     as well as if the cell (not its contents) can be fully shown on the screen.
@@ -171,7 +171,7 @@ def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True):
     '''
     cellWidth = me['cellWidth']
     if clipToCell:
-        if GBALIGN_LEFT:
+        if alignLeft:
             tmsg = msg[0:cellWidth]
         else:
             tmsg = msg[-cellWidth:]
@@ -179,7 +179,7 @@ def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True):
         tmsg = msg
     mlen = len(tmsg)
     if mlen < cellWidth:
-        if GBALIGN_LEFT:
+        if alignLeft:
             tmsg = "{:<{width}}".format(tmsg, width=cellWidth)
         else:
             tmsg = "{:>{width}}".format(tmsg, width=cellWidth)
@@ -474,7 +474,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= curses.color_pair(2)
                 else:
                     ctype |= curses.color_pair(1)
-            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True)
+            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True, alignLeft=GBALIGN_LEFT)
 
 
 def _cdraw_editbuffer(stdscr):
