@@ -118,7 +118,9 @@ Some of its features are
 	* tab-completion of file path names for load and save operations.
 
 * Edit and Insert operations trigger cell recalculations only if and were required, which inturn will
-  occur when the cell or its dependents become visible.
+  occur when the cell or its dependents become visible. Delete rows/cols also follows a similar strategy,
+  but delete row/col operation is disruptive to dependent cells compared to insert, so require to recalc
+  all cells with dependencies for now.
 
 
 for more details refer to the documentation below.
@@ -1698,7 +1700,7 @@ TODO:LATER: Right align the cell contents, while overflowing towards the left ce
 xviewraw and xviewnormal commands added.
 
 Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets
-with lot of (millions)  =expressions which are independent.
+with lot of (millions)  =expressions which are independent. Similar stratergy also added to delete rows/cols logic.
 
 
 

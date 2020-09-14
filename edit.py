@@ -264,16 +264,16 @@ def delete_rc(cmd, args):
         r,c = k
         curData = me['data'][k]
         curCData = None
-        if len(curData) > 0:
-            if (type(curData) == str) and (curData[0] == '='):
-                curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
-                # In this path the full dependency list and its equivalence before and after
-                # delete will need to be cross checked, when deciding whether the old cdata
-                # for the cell is still valid or not.
-                # The cell content being same or different before or after delete, in itself is
-                # not sufficient to decide whether the value of the cell will be same or not.
-            else:
-                curCData = me['cdata'].get(k)
+        fwdLinks = me['fwdLinks'].get(k)
+        if (fwdLinks != None) and (len(fwdLinks) > 0):
+            curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
+            # In this path the full dependency list and its equivalence before and after
+            # delete will need to be cross checked, when deciding whether the old cdata
+            # for the cell is still valid or not.
+            # The cell content being same or different before or after delete, in itself is
+            # not sufficient to decide whether the value of the cell will be same or not.
+        else:
+            curCData = me['cdata'].get(k)
         if bRowMode:
             if r < sR:
                 newDict[k] = curData
