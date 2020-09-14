@@ -117,11 +117,14 @@ Some of its features are
 
 	* tab-completion of file path names for load and save operations.
 
-* Edit and Insert operations trigger cell recalculations only if and were required, which inturn will
-  occur when the cell or its dependents become visible. Delete rows/cols also follows a similar strategy,
-  but delete row/col operation is disruptive to dependent cells compared to insert, so require to recalc
-  all cells with dependencies for now.
+* Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
+  for cells which are affected by it (edits propogate the changes across dependent cells).
+  Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells
+  compared to insert, so require to recalc all cells with dependencies for now.
 
+	Note: the actual recalculation occurs when a affected cell or its dependents become visible. While
+	the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are
+	updated immidiately.
 
 for more details refer to the documentation below.
 
@@ -495,10 +498,12 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 * xrecalc
 
 	Force clear the calculated results cache, so that all cells get recalculated, as they become visible
-	either directly and or indirectly through some other visible cell.
+	either directly and or indirectly through some other visible cell. As and when a given cell or a some
+	other cell which depends on it becomes visible, the cell will be recalculated.
 
-	As and when a given cell or a some other cell which depends on it becomes visible, the cell will be
-	recalculated.
+	If you feel that the program has messed up with its recacl limiting optimisations and inturn has not
+	recalculated a cell, which it should have. You can use this command to force the program to recalculate
+	all cells.
 
 * xrows <numOfRows>
 
