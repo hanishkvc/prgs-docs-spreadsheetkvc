@@ -117,6 +117,10 @@ Some of its features are
 
 	* tab-completion of file path names for load and save operations.
 
+	* normal or raw display mode.
+
+	* global align left, right or default.
+
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
   for cells which are affected by it (edits propogate the changes across dependent cells).
   Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells
@@ -535,6 +539,10 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 	Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.
 
+* xaligndefault (this is the default alignment mode of program)
+
+	Align text cells to left. Align numbers which fit within the cell to right else align to left.
+	Any content that doesnt fit within the cell will overflow into empty cells on the right.
 
 
 ##### Other operations
@@ -1712,7 +1720,7 @@ Center the row and col addresses shown.
 
 DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
 
-	Add support for xalignleft (default) and xalignright
+	Add support for xalignleft, xalignright and xaligndefault.
 
 xviewraw and xviewnormal commands added.
 

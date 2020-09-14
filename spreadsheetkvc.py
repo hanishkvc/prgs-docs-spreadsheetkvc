@@ -37,10 +37,15 @@ GBRAWVIEW = False
 # This is the default, cattr_textnum will try and adjust at runtime.
 CATTR_DATATEXT = (curses.A_ITALIC | curses.A_DIM)
 CATTR_DATANUM = (curses.A_NORMAL)
+
 # How many columns to left or right of current display viewport should one
 # peek to see, if there is any overflowing text that needs to be displayed.
 DATACOL_OVERSCAN = 20
-GBALIGN_LEFT = False
+
+#Align = enum.Enum("Align", "Left Right Default Mixed")
+Align = enum.Enum("Align", "Left Right Default")
+GALIGN = Align.Default
+
 # Exit EditMode on pressing Enter
 gbEnterExitsEditMode = True
 
@@ -396,7 +401,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     '''
     #print("cdrawdata:Starting", file=GERRFILE)
     # Adjust the data viewport
-    if GBALIGN_LEFT:
+    if (GALIGN == Align.Left) or (GALIGN == Align.Default):
         dataColStart = colStart - DATACOL_OVERSCAN
         if dataColStart < 1:
             dataColStart = 1
@@ -404,6 +409,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         crangeStart = dataColStart
         crangeEnd = dataColEnd+1
         crangeDelta = 1
+        align = Align.Left
     else:
         dataColStart = colStart
         dataColEnd = colEnd + DATACOL_OVERSCAN
@@ -412,6 +418,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         crangeStart = dataColEnd
         crangeEnd = dataColStart-1
         crangeDelta = -1
+        align = Align.Right
     # Evaluate any cells in the viewport that may require to be evaluated
     if me['state'] != 'E':
         cstatusbar(scr, ['[status: processing ...]'], 1, 32)
@@ -435,10 +442,11 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= CATTR_DATANUM
                     sData = str(data)
                     if bNumericDisplayOverflow:
-                        if GBALIGN_LEFT:
+                        if (GALIGN == Align.Left) or ((GALIGN == Align.Default) and (len(sData) > me['cellWidth'])):
                             sRemaining = sData[me['cellWidth']:]
                             sData = sData[:me['cellWidth']]
                         else:
+                            align = Align.Right # Align numbers to right, if it fits in a cell, in default mode.
                             sRemaining = sData[:-me['cellWidth']]
                             sData = sData[-me['cellWidth']:]
                     else:
@@ -447,7 +455,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                 else:
                     sData = data
                     ctype |= CATTR_DATATEXT
-                    if GBALIGN_LEFT:
+                    if GALIGN == Align.Left:
                         sRemaining = sData[me['cellWidth']:]
                         sData = sData[:me['cellWidth']]
                     else:
@@ -456,7 +464,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     rtype = CATTR_DATATEXT
             elif (not me['clipCell']):
                 ctype |= rtype
-                if GBALIGN_LEFT:
+                if GALIGN == Align.Left:
                     sData = sRemaining[0:me['cellWidth']]
                     sRemaining = sRemaining[me['cellWidth']:]
                 else:
@@ -474,7 +482,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= curses.color_pair(2)
                 else:
                     ctype |= curses.color_pair(1)
-            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True, alignLeft=GBALIGN_LEFT)
+            cellstr(stdscr, r, c, str(sData), ctype, clipToCell=True, align=align)
 
 
 def _cdraw_editbuffer(stdscr):
@@ -614,7 +622,7 @@ def do_xcmd(scr, cmd, args):
     '''
     The x commands handling
     '''
-    global GBRAWVIEW, GBALIGN_LEFT
+    global GBRAWVIEW, GALIGN
 
     if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
@@ -635,9 +643,11 @@ def do_xcmd(scr, cmd, args):
     elif (cmd == 'xviewnormal'):
         GBRAWVIEW = False
     elif (cmd == 'xalignleft'):
-        GBALIGN_LEFT = True
+        GALIGN = Align.Left
     elif (cmd == 'xalignright'):
-        GBALIGN_LEFT = False
+        GALIGN = Align.Right
+    elif (cmd == 'xaligndefault'):
+        GALIGN = Align.Default
 
 
 def quit(scr):
