@@ -423,19 +423,29 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= CATTR_DATANUM
                     sData = str(data)
                     if bNumericDisplayOverflow:
-                        sRemaining = sData[me['cellWidth']:]
+                        if GBALIGN_LEFT:
+                            sRemaining = sData[me['cellWidth']:]
+                        else:
+                            sRemaining = sData[:-me['cellWidth']]
                     else:
                         sRemaining = ""
                     rtype = CATTR_DATANUM
                 else:
                     sData = data
                     ctype |= CATTR_DATATEXT
-                    sRemaining = sData[me['cellWidth']:]
+                    if GBALIGN_LEFT:
+                        sRemaining = sData[me['cellWidth']:]
+                    else:
+                        sRemaining = sData[:-me['cellWidth']]
                     rtype = CATTR_DATATEXT
             elif (not me['clipCell']):
                 ctype |= rtype
-                sData = sRemaining[0:me['cellWidth']]
-                sRemaining = sRemaining[me['cellWidth']:]
+                if GBALIGN_LEFT:
+                    sData = sRemaining[0:me['cellWidth']]
+                    sRemaining = sRemaining[me['cellWidth']:]
+                else:
+                    sData = sRemaining[-me['cellWidth']:]
+                    sRemaining = sRemaining[:-me['cellWidth']]
                 #if (sData != ""):
                 #    print("cdrawdata:overflow:{}+{}".format(sData, sRemaining), file=GLOGFILE)
             else: # data == "" AND clipCell
