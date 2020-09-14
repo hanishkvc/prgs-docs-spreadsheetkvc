@@ -432,8 +432,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     if bNumericDisplayOverflow:
                         if GBALIGN_LEFT:
                             sRemaining = sData[me['cellWidth']:]
+                            sData = sData[:me['cellWidth']]
                         else:
                             sRemaining = sData[:-me['cellWidth']]
+                            sData = sData[-me['cellWidth']:]
                     else:
                         sRemaining = ""
                     rtype = CATTR_DATANUM
@@ -442,8 +444,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= CATTR_DATATEXT
                     if GBALIGN_LEFT:
                         sRemaining = sData[me['cellWidth']:]
+                        sData = sData[:me['cellWidth']]
                     else:
                         sRemaining = sData[:-me['cellWidth']]
+                        sData = sData[-me['cellWidth']:]
                     rtype = CATTR_DATATEXT
             elif (not me['clipCell']):
                 ctype |= rtype
