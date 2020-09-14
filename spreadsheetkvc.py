@@ -171,13 +171,18 @@ def cellstr(stdscr, r, c, msg, attr, clipToCell=True, clipToScreen=True):
     '''
     cellWidth = me['cellWidth']
     if clipToCell:
-        tmsg = msg[0:cellWidth]
+        if GBALIGN_LEFT:
+            tmsg = msg[0:cellWidth]
+        else:
+            tmsg = msg[-cellWidth:]
     else:
         tmsg = msg
     mlen = len(tmsg)
     if mlen < cellWidth:
-        for i in range(cellWidth-mlen):
-            tmsg += " "
+        if GBALIGN_LEFT:
+            tmsg = "{:<{width}}".format(tmsg, width=cellWidth)
+        else:
+            tmsg = "{:>{width}}".format(tmsg, width=cellWidth)
     ty,tx = cellpos(r,c)
     cellWidth=0
     if ((tx < 0) or ((tx+cellWidth) > me['scrCols'])) or ((ty < 0) or ((ty+1) > me['scrRows'])) :
