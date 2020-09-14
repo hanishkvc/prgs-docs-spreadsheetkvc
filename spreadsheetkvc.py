@@ -395,11 +395,17 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
         if dataColStart < 1:
             dataColStart = 1
         dataColEnd = colEnd
+        crangeStart = dataColStart
+        crangeEnd = dataColEnd
+        crangeDelta = 1
     else:
         dataColStart = colStart
         dataColEnd = colEnd + DATACOL_OVERSCAN
         if dataColEnd > me['numCols']:
             dataColEnd = me['numCols']
+        crangeStart = dataColEnd
+        crangeEnd = dataColStart
+        crangeDelta = -1
     # Evaluate any cells in the viewport that may require to be evaluated
     if me['state'] != 'E':
         cstatusbar(scr, ['[status: processing ...]'], 1, 32)
@@ -411,7 +417,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
     rtype = CATTR_DATATEXT
     for r in range(rowStart, rowEnd+1):
         sRemaining = ""
-        for c in range(dataColStart, dataColEnd+1):
+        for c in range(crangeStart, crangeEnd+1, crangeDelta):
             if ((r == me['curRow']) and (c == me['curCol'])):
                 ctype = curses.A_REVERSE
             else:
