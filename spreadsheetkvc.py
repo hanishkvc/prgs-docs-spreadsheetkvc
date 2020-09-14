@@ -614,7 +614,7 @@ def do_xcmd(scr, cmd, args):
     '''
     The x commands handling
     '''
-    global GBRAWVIEW
+    global GBRAWVIEW, GBALIGN_LEFT
 
     if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
@@ -634,6 +634,10 @@ def do_xcmd(scr, cmd, args):
         GBRAWVIEW = True
     elif (cmd == 'xviewnormal'):
         GBRAWVIEW = False
+    elif (cmd == 'xalignleft'):
+        GBALIGN_LEFT = True
+    elif (cmd == 'xalignright'):
+        GBALIGN_LEFT = False
 
 
 def quit(scr):

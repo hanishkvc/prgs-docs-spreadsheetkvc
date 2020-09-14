@@ -525,6 +525,16 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 	This is the normal view, in which the cell contents are evaluated and the results shown to the user.
 
+* xalignleft
+
+	Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.
+
+	This is the default.
+
+* xalignright
+
+	Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.
+
 
 
 ##### Other operations
@@ -1700,7 +1710,9 @@ Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when
 
 Center the row and col addresses shown.
 
-TODO:LATER: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
+DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
+
+	Add support for xalignleft (default) and xalignright
 
 xviewraw and xviewnormal commands added.
 
