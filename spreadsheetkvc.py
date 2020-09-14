@@ -1273,6 +1273,7 @@ def setup_edit():
     edit.GERRFILE = GERRFILE
     edit.me = me
     edit.dlg = dlg
+    edit.cstatusbar = cstatusbar
     edit._celladdr_valid = _celladdr_valid
     edit._celladdr_valid_ex = _celladdr_valid_ex
     edit.cell_key2addr = cell_key2addr

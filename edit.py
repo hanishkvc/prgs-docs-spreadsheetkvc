@@ -14,6 +14,7 @@ GLOGFILE = None
 GERRFILE = None
 me = None
 dlg = None
+cstatusbar = None
 _celladdr_valid = None
 _celladdr_valid_ex = None
 cell_key2addr = None
@@ -463,6 +464,7 @@ def do_rcmd(scr, cmd, args):
     It converts cell markers, if any, to cell addresses.
     Gets the cell keys for the given cell addresses.
     '''
+    cstatusbar(scr, ['[status: rcmd processing ...]'])
     bDone = False
     try:
         print("rcmd:{} {}".format(cmd, args), file=GERRFILE)
@@ -504,6 +506,7 @@ def do_rcmd(scr, cmd, args):
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False
+    cstatusbar(scr, ['                             '])
     if not bDone:
         dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
