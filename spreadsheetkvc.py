@@ -93,6 +93,7 @@ me = {
         'callDepth': 0,
         'markers': dict(),
         'fpc': dict(),
+        'cformat.iffloat': None,
         'exit': DONTEXIT
         }
 
@@ -443,7 +444,7 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     ctype |= CATTR_DATANUM
                     sData = str(data)
                     if type(data) == float:
-                        floatPrecision = me.get('format.iffloat')
+                        floatPrecision = me.get('cformat.iffloat')
                         if floatPrecision != None:
                             sData = "{:.{preci}f}".format(data, preci=floatPrecision)
                     if bNumericDisplayOverflow:
@@ -617,11 +618,11 @@ def _do_cformat(cmd, lArgs):
     '''
     if lArgs[0] == "iffloat":
         if lArgs[1].upper() == 'NONE':
-            me['format.iffloat'] = None
+            me['cformat.iffloat'] = None
         else:
-            me['format.iffloat'] = int(lArgs[1])
-        return "'FltPreci:{}'".format(me['format.iffloat'])
-        #return round(1.11111111111111111111, me['format.iffloat'])
+            me['cformat.iffloat'] = int(lArgs[1])
+        return "'FltPreci:{}'".format(me['cformat.iffloat'])
+        #return round(1.11111111111111111111, me['cformat.iffloat'])
         #return 1.11111111111111111111
 
 
