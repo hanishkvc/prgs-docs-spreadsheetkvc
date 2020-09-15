@@ -19,6 +19,7 @@ import funcs
 import re
 import fileio
 import edit, nav, syncd
+import taber
 
 
 THEQUOTE = "'"
@@ -93,6 +94,7 @@ me = {
         'callDepth': 0,
         'markers': dict(),
         'fpc': dict(),
+        'tc': dict(),
         'cformat.iffloat': None,
         'cformat.number2float': False,
         'exit': DONTEXIT
@@ -758,7 +760,8 @@ def path_completion(fpc, cmdArgs):
             theBase =  "{} {}".format(cmd, lArgs[0])
             theArg = lArgs[1]
     else:
-        return cmdArgs
+        #return cmdArgs
+        return taber.tab_complete(me['tc'], taber.treeDB, cmdArgs)
     # Try find a path
     if theArg == "":
         theArg = "~"
@@ -1279,6 +1282,7 @@ def rl_editplusmode(stdscr, key):
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
             me['fpc'] = dict()
+            me['tc'] = dict()
         #print("runLogic:{}".format(me), file=GLOGFILE)
     elif key == curses.KEY_LEFT:
         me['crsrOffset'] -= 1
