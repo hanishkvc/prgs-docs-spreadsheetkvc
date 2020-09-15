@@ -322,6 +322,9 @@ explicit command mode.</code></pre>
 <p>NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen. However for calculations which depend on such a cell, the results of round function will be used directly.</p></li>
 <li><p>cformat number2float &lt;yes|no&gt;</p>
 <p>Treat all numbers as floats.</p></li>
+<li><p>cformat neat OR cformat raw</p>
+<p>neat enables number2float conversion and floating point precision of 2, from displaying numbers perspective.</p>
+<p>raw shows number cell contents as is by disabling number2float conversion and floating point precision adjustment.</p></li>
 </ul>
 <p>NOTE: if using =config(cformat… in a spreadsheet, to have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2</p>
 <p>NOTE: the effects of the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user using :cformat explicit command and or it got set by being part a =config(cformat… expression in one of the spreadsheet that was loaded.</p>
@@ -476,7 +479,7 @@ while CellB4[=B3] CellB3[=B2] CellB2[=B1] CellB1[=10]
 <pre><code>get the count of non empty cells in the specified range of cells.</code></pre>
 <p>avg(CellAddressRange), even average can be used in place of avg</p>
 <pre><code>calculate the average of the values in the range of cells. It doesnt consider
-the empty cells.</code></pre>
+the empty cells. However text cell if any will be accounted with a val of 0.</code></pre>
 <p>min(CellAddressRange)</p>
 <pre><code>the minimum value among the specified range of cells.</code></pre>
 <p>max(CellAddressRange)</p>

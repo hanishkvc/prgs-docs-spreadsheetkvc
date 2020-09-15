@@ -21,7 +21,7 @@ def defaultmode_dlg(scr):
                 "  [h|?] show help / usage info",
                 "  [:] Enter explicit commands mode",
                 "",
-                "             :xviewraw, :xviewnormal and :xrecalc",
+                "   :cformat neat|raw, :xviewraw, :xviewnormal and :xrecalc",
                 "  Use :help to get more details, including supported funcs  ",
                 "******* Look at README.md and help.csv for more info *******",
                 ]

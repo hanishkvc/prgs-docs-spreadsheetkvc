@@ -55,6 +55,7 @@ def _do_sum(args, bIgnoreEmpty=True):
     '''
     sum up contents of a matrix of cells.
     It also returns the number of cells involved.
+    bIgnoreEmpty can be used to control whether empty cells are considered or not.
     '''
     start,end = args.split(':')
     bCellAddr, (sR,sC) = _celladdr_valid(start)

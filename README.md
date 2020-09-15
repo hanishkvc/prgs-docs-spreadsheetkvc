@@ -890,7 +890,7 @@ cnt(CellAddressRange), even count can be used in place of cnt
 avg(CellAddressRange), even average can be used in place of avg
 
 	calculate the average of the values in the range of cells. It doesnt consider
-	the empty cells.
+	the empty cells. However text cell if any will be accounted with a val of 0.
 
 min(CellAddressRange)
 
