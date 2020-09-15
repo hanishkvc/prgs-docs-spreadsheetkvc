@@ -60,6 +60,7 @@ def tab_complete(tc, tree, sIn):
     '''
     if len(tc) == 0:
         tc['pos'] = 0
+    bSpaceAtEnd = (sIn[-1] == ' ')
     tokens, types = parse.get_tokens(sIn)
     curDB = tree
     sOut = ""
@@ -87,6 +88,14 @@ def tab_complete(tc, tree, sIn):
             sOut += "{} ".format(filterAll[0])
             continue
         else:
+            if curToken in filterAll:
+                if (i < len(tokens)) or bSpaceAtEnd:
+                    curDB = curDB.get(curToken)
+                    if curDB == None:
+                        sOut += "{}".format(curToken)
+                        return sOut
+                    sOut += "{} ".format(curToken)
+                    continue
             tc['pos'] += 1
             tc['pos'] = tc['pos'] % len(filterAll)
             sOut += "{}".format(filterAll[tc['pos']])
