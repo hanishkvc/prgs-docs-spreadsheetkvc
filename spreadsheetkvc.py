@@ -611,12 +611,24 @@ def _do_calign(cmd, args):
         GALIGN = Align.Default
 
 
+def _do_cformat(cmd, lArgs):
+    '''
+    configure global formatting
+    '''
+    if lArgs[0] == "iffloat":
+        me['format.iffloat'] = int(lArgs[1])
+        return "'FltPreci:{}'".format(me['format.iffloat'])
+        #return round(1.11111111111111111111, me['format.iffloat'])
+        #return 1.11111111111111111111
+
+
 def do_ccmd(scr, cmd, args):
     '''
     The Config commands handling
 
     cro, crw
     cfs, ctq
+    calign, cformat,
     '''
     global THEFIELDSEP, THEQUOTE
 
@@ -635,6 +647,9 @@ def do_ccmd(scr, cmd, args):
         THEQUOTE = args[0]
     elif cmd.startswith('calign'):
         _do_calign(cmd, args)
+    elif cmd.startswith('cformat'):
+        lArgs = args.split(' ')
+        _do_cformat(cmd, lArgs)
     setup_fileio()
 
 
@@ -1320,6 +1335,7 @@ def setup_funcs():
     funcs.nvalue_expr = nvalue_expr
     funcs.GLOGFILE = GLOGFILE
     funcs.GERRFILE = GERRFILE
+    funcs._do_cformat = _do_cformat
 
 
 def setup_fileio():

@@ -16,6 +16,7 @@ nvalue_key = None
 nvalue_expr = None
 GLOGFILE = None
 GERRFILE = None
+_do_cformat = None
 
 
 def _do_minmax(args, bIgnoreEmpty=True):
@@ -192,13 +193,8 @@ def do_config(args):
     format, iffloat, precision
     '''
     argsList = parse.get_funcargs(args)
-    if argsList[0] == "format":
-        if argsList[1] == "iffloat":
-            me['format.iffloat'] = int(argsList[2])
-            return "'FltPreci:{}'".format(me['format.iffloat'])
-            #return round(1.11111111111111111111, me['format.iffloat'])
-            #return 1.11111111111111111111
-
+    if argsList[0] == "cformat":
+        return _do_cformat(argsList[0], argsList[1:])
 
 
 pyFuncs = [ 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]

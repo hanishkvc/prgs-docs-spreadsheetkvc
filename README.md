@@ -526,6 +526,17 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 	Configure the precision to be used when showing floating point numbers
 
+	:cformat iffloat 2
+
+User can also trigger the same from with in a spreadsheet by using the following in a cell
+
+	=config(cformat, iffloat, floatPrecision)
+
+	NOTE: To have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2
+
+NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen.
+However for calculations which depend on such a cell, the results of round function will be used directly.
+
 
 #### xtra operations
 
