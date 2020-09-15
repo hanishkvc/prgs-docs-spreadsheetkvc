@@ -622,6 +622,17 @@ def _do_calign(cmd, lArgs):
 def _do_cformat(cmd, lArgs):
     '''
     configure global formatting
+
+    NOTE: If these return None, and inturn they are used as part of a =config(cformat
+    expression in a cell, then as None results arent cached, so they will get executed
+    each time the corresponding cell is displayed. This can allow one to selectively
+    change formating for few cells in a hackish way. But it will require the =config
+    expression to be on either side of the cells which needs formating, because depending
+    on global left or right alignment, the cells may be evaluated in either direction.
+    But this is not guarenteed to work always, and behaviour may change in future.
+
+        Also it leads to a ugly None result shown corresponding to the cell with the
+        =config(cformat... expression.
     '''
     if lArgs[0] == "iffloat":
         if lArgs[1].upper() == 'NONE':
