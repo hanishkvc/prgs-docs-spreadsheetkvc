@@ -288,7 +288,12 @@ keys for achieving the specified operations.
 ### explicit command mode
 
 This mode is entered by pressing : when in the default command mode.
-In this explicit command mode, the user can enter one of the following commands
+In this explicit command mode, the user can enter one of the commands mentioned below.
+
+NOTE: if the program doesnt seem to do anything after you have entered a command and its arguments and inturn pressed <enter> key,
+then verify that the arguments given to the command are proper or not. If there is a mistake in the argument, correct it by using
+arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program
+will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.
 
 #### File operations
 
