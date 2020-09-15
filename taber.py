@@ -30,16 +30,12 @@ def tab_complete(tc, tree, sIn):
     sOut = ""
     for curToken in tokens:
         theList = sorted(curDB.keys())
-
-        #filterUser = filter(lambda x: x.startswith("Enter:"), theList)
-        #if len(theList) == len(filterUser): # No predefined option, only user enterable
-
         filterAll = list(filter(lambda x: x.startswith(curToken), theList))
         if len(filterAll) == 0:
             sOut += "{} ".format(curToken)
             return sOut
         elif len(filterAll) == 1:
-            sOut += "{} ".format(curToken)
+            sOut += "{} ".format(filterAll[0])
             curDB = curDB.get(curToken)
             if curDB == None:
                 return sOut
