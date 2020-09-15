@@ -665,10 +665,10 @@ def do_ccmd(scr, cmd, args):
         replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
     elif cmd.startswith('calign'):
-        lArgs = args.split(' ')
+        lArgs, lTypes = parse.get_tokens(args)
         _do_calign(cmd, lArgs)
     elif cmd.startswith('cformat'):
-        lArgs = args.split(' ')
+        lArgs, lTypes = parse.get_tokens(args)
         _do_cformat(cmd, lArgs)
     setup_fileio()
 
