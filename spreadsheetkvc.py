@@ -598,6 +598,19 @@ def replace_incontent(cOld, cNew):
                 me['data'][(r,c)] = sData
 
 
+def _do_calign(cmd, args):
+    '''
+    configure the global alignment
+    '''
+    global GALIGN
+    if (cmd == 'calignleft'):
+        GALIGN = Align.Left
+    elif (cmd == 'calignright'):
+        GALIGN = Align.Right
+    elif (cmd == 'caligndefault'):
+        GALIGN = Align.Default
+
+
 def do_ccmd(scr, cmd, args):
     '''
     The Config commands handling
@@ -620,6 +633,8 @@ def do_ccmd(scr, cmd, args):
         replace_incontent(args[0], THEALT2INBTWQUOTE)
         replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
+    elif cmd.startswith('calign'):
+        _do_calign(cmd, args)
     setup_fileio()
 
 
@@ -627,7 +642,7 @@ def do_xcmd(scr, cmd, args):
     '''
     The x commands handling
     '''
-    global GBRAWVIEW, GALIGN
+    global GBRAWVIEW
 
     if (cmd == 'xrecalc'):
         me['cdataUpdate'] = True
@@ -647,12 +662,6 @@ def do_xcmd(scr, cmd, args):
         GBRAWVIEW = True
     elif (cmd == 'xviewnormal'):
         GBRAWVIEW = False
-    elif (cmd == 'xalignleft'):
-        GALIGN = Align.Left
-    elif (cmd == 'xalignright'):
-        GALIGN = Align.Right
-    elif (cmd == 'xaligndefault'):
-        GALIGN = Align.Default
 
 
 def quit(scr):

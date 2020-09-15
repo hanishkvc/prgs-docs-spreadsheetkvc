@@ -121,6 +121,8 @@ Some of its features are
 
 	* global align left, right or default.
 
+	* global config float precision
+
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
   for cells which are affected by it (edits propogate the changes across dependent cells).
   Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells
@@ -190,6 +192,9 @@ Inturn to load a password protected file key in the following.
 
 The program requires python3, ncurses or equivalent and python-cryptography.
 
+It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.
+
+
 ### command line arguments
 
 The program supports the following commandline arguments
@@ -245,7 +250,7 @@ The program supports the following commandline arguments
 
 
 
-### program modes
+## program modes
 
 The program supports the following modes
 
@@ -256,7 +261,7 @@ The program supports the following modes
 	explicit command mode.
 
 
-#### default command mode
+### default command mode
 
 The program by default runs in the default command mode. In this mode one can press the following
 keys for achieving the specified operations.
@@ -280,12 +285,12 @@ keys for achieving the specified operations.
 * h or ? can be used to show a help/usage dialog.
 
 
-#### explicit command mode
+### explicit command mode
 
 This mode is entered by pressing : when in the default command mode.
 In this explicit command mode, the user can enter one of the following commands
 
-##### File operations
+#### File operations
 
 * w file
 
@@ -327,7 +332,7 @@ NOTE: To avoid user overwriting/modifying files unknowingly, the program require
 to explicitly specify the file to write to.
 
 
-##### Insert/Delete operations
+#### Insert/Delete operations
 
 * dr [numOfRows]
 
@@ -359,7 +364,7 @@ to explicitly specify the file to write to.
 	insert n columns after current column.
 	If numOfCols not specified, it defaults to 1.
 
-##### range operations (rcmds)
+#### range operations (rcmds)
 
 * rcopy srcCellAddrRange dstCellAddrRange or rcopy srcCellAddrRange dstCellStartAddr
 
@@ -441,7 +446,7 @@ The marker is specified using the syntax @mMarkerId
 
 		:rgennums @m1:D20
 
-##### Markers
+#### Markers
 
 Markers allow one to identify cell address by using marker ids. THis allows one to work with :r range operations
 in a easy | user freindly way.
@@ -465,7 +470,9 @@ in a easy | user freindly way.
 NOTE: markers have m prefix in their name.
 
 
-##### Config commands
+#### Config commands
+
+##### Read Write Mode
 
 * cro|creadonly
 
@@ -474,6 +481,8 @@ NOTE: markers have m prefix in their name.
 * crw|creadwrite
 
 	switch program to readwrite mode, so that user can modify the spreadsheet. This is the default mode.
+
+##### FieldSeperator and TextQuote
 
 * cfs|cfieldsep theFieldSepChar
 
@@ -496,8 +505,29 @@ NOTE: markers have m prefix in their name.
 
 NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to one another.
 
+##### Global Alignment
 
-##### xtra operations
+* calignleft
+
+	Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.
+
+* calignright
+
+	Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.
+
+* caligndefault (this is the default alignment mode of program)
+
+	Align text cells to left. Align numbers which fit within the cell to right else align to left.
+	Any content that doesnt fit within the cell will overflow into empty cells on the right.
+
+##### Global formatting
+
+* cformat iffloat floatPrecision
+
+	Configure the precision to be used when showing floating point numbers
+
+
+#### xtra operations
 
 * xrecalc
 
@@ -529,23 +559,8 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 	This is the normal view, in which the cell contents are evaluated and the results shown to the user.
 
-* xalignleft
 
-	Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.
-
-	This is the default.
-
-* xalignright
-
-	Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.
-
-* xaligndefault (this is the default alignment mode of program)
-
-	Align text cells to left. Align numbers which fit within the cell to right else align to left.
-	Any content that doesnt fit within the cell will overflow into empty cells on the right.
-
-
-##### Other operations
+#### Other operations
 
 * e file (in future)
 
@@ -596,7 +611,7 @@ return back to default command mode.
 
 
 
-#### edit/insert mode
+### edit/insert mode
 
 On pressing 'i', 'e' from the default command mode, the user can enter this mode.
 
@@ -1707,7 +1722,7 @@ MapTo/Use current directory for completing path using tab completion, if only fi
 Added a xrefresh command.
 
 
-### 20200913IST1530 - GauriGaneshaToOnamToTeachersDayRelease
+### 20200913IST1530 - GauriGaneshaToOnamToTeachersDayPlus01Release
 
 DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
 
@@ -1721,6 +1736,7 @@ Center the row and col addresses shown.
 DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
 
 	Add support for xalignleft, xalignright and xaligndefault.
+	NOTE: Has been renamed to calignleft|right|default now.
 
 xviewraw and xviewnormal commands added.
 
@@ -1763,6 +1779,8 @@ Explore any ideas that may pop up when trying to implement a spreadsheet just li
 	parse tokens and expressions.
 
 	tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
+
+	alignment, precision for display, ...
 
 	speed is not the goal, while still being sufficiently usable, in the middle of exploring the above
 
