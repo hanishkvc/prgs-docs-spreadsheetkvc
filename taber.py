@@ -10,7 +10,12 @@ import parsekvc as parse
 treeDB = {
             'help': None,
             'calign': { 'left': None, 'right': None, 'default': None },
-            'cformat': { 'iffloat': None, 'number2float': None, 'neat': None, 'raw': None },
+            'cformat': {
+                        'iffloat': None,
+                        'number2float':  { 'yes': None, 'no': None },
+                        'neat': None,
+                        'raw': None
+                        },
             'clear': None,
             'l': None,
             'w': None,
