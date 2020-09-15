@@ -1811,9 +1811,9 @@ Explore any ideas that may pop up when trying to implement a spreadsheet just li
 
 	tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
 
-	alignment, precision for display, ...
+	alignment, raw/normal mode, precision and conversion for display, ...
 
-	speed is not the goal, while still being sufficiently usable, in the middle of exploring the above
+	speed is not the goal, while still being sufficiently usable, in the middle of exploring/trying out the above
 
 Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook
 and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.
