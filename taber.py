@@ -11,10 +11,13 @@ treeDB = {
             'help': None,
             'calign': { 'left': None, 'right': None, 'default': None },
             'cformat': { 'iffloat': None, 'number2float': None, 'neat': None, 'raw': None },
+            'clear': None,
             'l': None,
             'w': None,
+            's': None,
             'pl': None,
             'pw': None,
+            'ps': None,
             'icb': None,
             'ica': None,
             'irb': None,
@@ -23,6 +26,11 @@ treeDB = {
             'dc': None,
             'ctextquote': None,
             'cfieldsep': None,
+            'g': None,
+            'm': None,
+            'mclear': None,
+            'mshow': None,
+            'new': None,
             'rcopy': None,
             'rcopyasis': None,
             'rclear': None,
@@ -32,7 +40,9 @@ treeDB = {
             'xrows': None,
             'xcols': None,
             'xviewraw': None,
-            'xviewnormal': None
+            'xviewnormal': None,
+            '!': None,
+            'q': None,
         }
 
 tc = { 'pos': 0 }
