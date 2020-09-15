@@ -182,7 +182,8 @@ explicit command mode.</code></pre>
 <li><p>h or ? can be used to show a help/usage dialog.</p></li>
 </ul>
 <h3 id="explicit-command-mode">explicit command mode</h3>
-<p>This mode is entered by pressing : when in the default command mode. In this explicit command mode, the user can enter one of the following commands</p>
+<p>This mode is entered by pressing : when in the default command mode. In this explicit command mode, the user can enter one of the commands mentioned below.</p>
+<p>NOTE: if the program doesnt seem to do anything after you have entered a command and its arguments and inturn pressed <enter> key, then verify that the arguments given to the command are proper or not. If there is a mistake in the argument, correct it by using arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.</p>
 <h4 id="file-operations">File operations</h4>
 <ul>
 <li><p>w file</p>
@@ -299,11 +300,11 @@ explicit command mode.</code></pre>
 <p>NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to one another.</p>
 <h5 id="global-alignment">Global Alignment</h5>
 <ul>
-<li><p>calignleft</p>
+<li><p>calign left</p>
 <p>Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.</p></li>
-<li><p>calignright</p>
+<li><p>calign right</p>
 <p>Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.</p></li>
-<li><p>caligndefault (this is the default alignment mode of program)</p>
+<li><p>calign default (this is the default alignment mode of program)</p>
 <p>Align text cells to left. Align numbers which fit within the cell to right else align to left. Any content that doesnt fit within the cell will overflow into empty cells on the right.</p></li>
 </ul>
 <h5 id="global-formatting">Global formatting</h5>
@@ -888,9 +889,10 @@ rcmds call syncd.cell_updated as required.</code></pre>
 <p>Center the row and col addresses shown.</p>
 <p>DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.</p>
 <pre><code>Add support for xalignleft, xalignright and xaligndefault.
-NOTE: Has been renamed to calignleft|right|default now.</code></pre>
+NOTE: Has been renamed and spaced out to calign left|right|default now.</code></pre>
 <p>xviewraw and xviewnormal commands added.</p>
 <p>Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets with lot of (millions) =expressions which are independent. Similar stratergy also added to delete rows/cols logic.</p>
+<p>cformat commands to control how numbers are displayed. Doesnt affect the calculations.</p>
 <p>TODO:LATER: cell address ranges as lists for python functions.</p>
 <p>TODO:LATER: Date related functions</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
