@@ -555,6 +555,13 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 	Treat all numbers as floats.
 
 
+* cformat neat OR cformat raw
+
+	neat enables number2float conversion and floating point precision of 2, from displaying numbers perspective.
+
+	raw shows number cell contents as is by disabling number2float conversion and floating point precision adjustment.
+
+
 NOTE: if using =config(cformat... in a spreadsheet, to have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2
 
 NOTE: the effects of the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user

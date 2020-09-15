@@ -650,6 +650,12 @@ def _do_cformat(cmd, lArgs):
         else:
             raise Exception('cformat: Invalid argument')
         return "'Num2Float:{}'".format(me['cformat.number2float'])
+    elif lArgs[0] == "neat":
+        me['cformat.number2float'] = True
+        me['cformat.iffloat'] = 2
+    elif lArgs[0] == "raw":
+        me['cformat.number2float'] = False
+        me['cformat.iffloat'] = None
 
 
 def do_ccmd(scr, cmd, args):
