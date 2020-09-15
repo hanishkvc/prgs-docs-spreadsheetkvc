@@ -616,6 +616,7 @@ def _do_calign(cmd, lArgs):
     elif (lArgs[0] == 'default'):
         GALIGN = Align.Default
     else:
+        me['gotStr'] += "ERROR"
         raise Exception('calign: Invalid argument')
 
 
@@ -637,6 +638,7 @@ def _do_cformat(cmd, lArgs):
         elif lArgs[1].upper() == 'YES':
             me['cformat.number2float'] = True
         else:
+            me['gotStr'] += "ERROR"
             raise Exception('cformat: Invalid argument')
         return "'Num2Float:{}'".format(me['cformat.number2float'])
 
