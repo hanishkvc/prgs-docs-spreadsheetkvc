@@ -61,7 +61,7 @@ def tab_complete(tc, tree, sIn):
     if len(tc) == 0:
         tc['pos'] = 0
     bSpaceAtEnd = (sIn[-1] == ' ')
-    tokens, types = parse.get_tokens(sIn)
+    tokens, types = parse.get_tokens(sIn, ANAddOn=[':'])
     curDB = tree
     sOut = ""
     for i in range(len(tokens)):
