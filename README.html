@@ -67,7 +67,11 @@
 <ul>
 <li><p>supports a readonly view mode, if required.</p></li>
 <li><p>auto-adjust to terminal window size changes.</p></li>
-<li><p>tab-completion of file path names for load and save operations.</p></li>
+<li><p>tab-completion of</p>
+<ul>
+<li><p>file path names for load and save operations.</p></li>
+<li><p>predefined parts of the :commands (explicit commands) supported by the program.</p></li>
+</ul></li>
 <li><p>normal or raw display mode.</p></li>
 <li><p>global align left, right or default.</p></li>
 <li><p>global config float precision</p></li>
@@ -184,6 +188,26 @@ explicit command mode.</code></pre>
 <h3 id="explicit-command-mode">explicit command mode</h3>
 <p>This mode is entered by pressing : when in the default command mode. In this explicit command mode, the user can enter one of the commands mentioned below.</p>
 <p>NOTE: if the program doesnt seem to do anything after you have entered a command and its arguments and inturn pressed <enter> key, then verify that the arguments given to the command are proper or not. If there is a mistake in the argument, correct it by using arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.</p>
+<p>Tab completion support available for</p>
+<pre><code>* file path names for load and save commands (for both normal and password version)
+
+    If you are happy with the dir name suggested by tab completion, then add a &#39;/&#39; at the end so that
+    the program will start providing suggestions for the sub directories and or files below it.
+
+* predefined/fixed parts of the commands explained below.
+
+    If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
+    so that program will provide completion suggestion for any subsequent predefined parts of the command.
+
+If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
+prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
+to see if the program will complete it with some suggestions of its own.
+
+    If there are no matching suggestions the program will either let the user entered part be as it is, or may
+    error tag the non-existing part in case of file paths.
+
+If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program,
+the program will cycle throught all the suggestions.</code></pre>
 <h4 id="file-operations">File operations</h4>
 <ul>
 <li><p>w file</p>
@@ -661,9 +685,9 @@ Using multipass evaluation logic with valid result caching and error list helps 
 
 [DONE] Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.</code></pre>
 <p>[DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell’s content is updated.</p>
-<p>[LATER] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells, when a given cell is edited. Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by the program.</p>
+<p>[DONE] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells, when a given cell is edited. Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by the program.</p>
 <p>[DONE] Allow cols beyond ZZ.</p>
-<p>[LATER] Tab completion of dir|filenames?</p>
+<p>[DONE] Tab completion of dir|filenames as well as predefined parts of commands.</p>
 <p>[DONE] Change fieldsep and quote from within the program (i.e while it is running).</p>
 <p>[PARTIAL] MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.</p>
 <pre><code>[DONE] Maybe each cell contains either a Int, Float or String data type.
@@ -839,11 +863,11 @@ However during row/col insertion/deletion operations, all cell addresses are aut
 <p>Stop python snippets from running in uncontrolled way, if desired. Its also the default. [DONE] Add a cmdline arg to open up python eval so that bit more varied set of python expressions can be run from a cell.</p>
 <p>Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.</p>
 <p>[DONE] Expand ~ at begin of path (os.path.expanduser)</p>
-<p>[LATER] Move eval/value logics to a seperate file</p>
+<p>[LATER] Move eval/value logics to a seperate file.</p>
 <p>[DONE] move navigation related stuff to a seperate file.</p>
 <p>[LATER] Maybe use numpy array for calculated cache. (There are equal or more fundamental changes that can help, so so so).</p>
 <p>Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.</p>
-<p>[TODO] [opti] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during recalculation of cells, rather than all cells with =expressions.</p>
+<p>[DONE] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during recalculation of cells, rather than all cells with =expressions. [update] the program also builds a list of forward and reverse dependencies for each of the cell with =expressions which have cell addresses in them, as noted in other places of this readme and in the code.</p>
 <p>[DONE] Progress status for insert/delete</p>
 <p>[DONE] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.</p>
 <p>By default avoid overwriting existing file during saves.</p>
@@ -885,7 +909,7 @@ Insert and Delete row/col operations also call syncd.create_links.
 rcmds call syncd.cell_updated as required.</code></pre>
 <p>MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.</p>
 <p>Added a xrefresh command.</p>
-<h3 id="ist1530---gauriganeshatoonamtoteachersdayplus01release">20200913IST1530 - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
+<h3 id="ist1530---gauriganeshatoonamtoteachersdayplus01release">20200913IST1530+ - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
 <p>DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.</p>
 <p>DONE: Add xrows and xcols to increase rows or cols at the end quickly. Instead of using ica, icb, ira or irb which also process each and every cell wrt its =expression, to see if they need to be updated.</p>
 <p>Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.</p>
@@ -896,6 +920,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>xviewraw and xviewnormal commands added.</p>
 <p>Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets with lot of (millions) =expressions which are independent. Similar stratergy also added to delete rows/cols logic.</p>
 <p>cformat commands to control how numbers are displayed. Doesnt affect the calculations.</p>
+<p>Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program)</p>
 <p>TODO:LATER: cell address ranges as lists for python functions.</p>
 <p>TODO:LATER: Date related functions</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
@@ -922,7 +947,7 @@ adjust cell addresses in =expressions during copy-paste or insert/delete operati
 
 parse tokens and expressions.
 
-tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
+tab completion of file paths and command parts, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
 
 alignment, raw/normal mode, precision and conversion for display, ...
 

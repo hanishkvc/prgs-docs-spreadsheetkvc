@@ -115,7 +115,11 @@ Some of its features are
 
 	* auto-adjust to terminal window size changes.
 
-	* tab-completion of file path names for load and save operations.
+	* tab-completion of
+
+		* file path names for load and save operations.
+
+		* predefined parts of the :commands (explicit commands) supported by the program.
 
 	* normal or raw display mode.
 
@@ -294,6 +298,30 @@ NOTE: if the program doesnt seem to do anything after you have entered a command
 then verify that the arguments given to the command are proper or not. If there is a mistake in the argument, correct it by using
 arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program
 will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.
+
+Tab completion support available for
+
+	* file path names for load and save commands (for both normal and password version)
+
+		If you are happy with the dir name suggested by tab completion, then add a '/' at the end so that
+		the program will start providing suggestions for the sub directories and or files below it.
+
+	* predefined/fixed parts of the commands explained below.
+
+		If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
+		so that program will provide completion suggestion for any subsequent predefined parts of the command.
+
+	If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
+	prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
+	to see if the program will complete it with some suggestions of its own.
+
+		If there are no matching suggestions the program will either let the user entered part be as it is, or may
+		error tag the non-existing part in case of file paths.
+
+	If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program,
+	the program will cycle throught all the suggestions.
+
+
 
 #### File operations
 
@@ -1262,13 +1290,13 @@ level windowing logic to flag loops or overly long cell-to-cell chaining.
 
 [DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell's content is updated.
 
-[LATER] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells,
+[DONE] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells,
 when a given cell is edited. Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite
 to the one used for cell calculation by the program.
 
 [DONE] Allow cols beyond ZZ.
 
-[LATER] Tab completion of dir|filenames?
+[DONE] Tab completion of dir|filenames as well as predefined parts of commands.
 
 [DONE] Change fieldsep and quote from within the program (i.e while it is running).
 
@@ -1693,7 +1721,7 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 [DONE] Expand ~ at begin of path (os.path.expanduser)
 
-[LATER] Move eval/value logics to a seperate file
+[LATER] Move eval/value logics to a seperate file.
 
 [DONE] move navigation related stuff to a seperate file.
 
@@ -1701,8 +1729,9 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.
 
-[TODO] [opti] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during
-recalculation of cells, rather than all cells with =expressions.
+[DONE] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during
+recalculation of cells, rather than all cells with =expressions. [update] the program also builds a list of forward and reverse dependencies
+for each of the cell with =expressions which have cell addresses in them, as noted in other places of this readme and in the code.
 
 [DONE] Progress status for insert/delete
 
@@ -1765,7 +1794,7 @@ MapTo/Use current directory for completing path using tab completion, if only fi
 Added a xrefresh command.
 
 
-### 20200913IST1530 - GauriGaneshaToOnamToTeachersDayPlus01Release
+### 20200913IST1530+ - GauriGaneshaToOnamToTeachersDayPlus01Release
 
 DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.
 
@@ -1787,6 +1816,8 @@ Insert uses fwdLinks to ignore cells with =expressions which dont depend on othe
 with lot of (millions)  =expressions which are independent. Similar stratergy also added to delete rows/cols logic.
 
 cformat commands to control how numbers are displayed. Doesnt affect the calculations.
+
+Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program)
 
 TODO:LATER: cell address ranges as lists for python functions.
 
@@ -1823,7 +1854,7 @@ Explore any ideas that may pop up when trying to implement a spreadsheet just li
 
 	parse tokens and expressions.
 
-	tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
+	tab completion of file paths and command parts, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
 
 	alignment, raw/normal mode, precision and conversion for display, ...
 
