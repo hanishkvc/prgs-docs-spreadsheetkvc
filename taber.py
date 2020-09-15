@@ -93,6 +93,8 @@ def tab_complete(tc, tree, sIn):
                     curDB = curDB.get(curToken)
                     if curDB == None:
                         sOut += "{}".format(curToken)
+                        if bSpaceAtEnd:
+                            sOut += ' '
                         return sOut
                     sOut += "{} ".format(curToken)
                     continue
