@@ -522,11 +522,19 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 ##### Global formatting
 
-* cformat iffloat floatPrecision
+* cformat iffloat <floatPrecision|None>
 
 	Configure the precision to be used when showing floating point numbers
 
-	:cformat iffloat 2
+	If floatPrecision is provided the precision to be used when showing floating point number is set.
+
+	If None is provided, then floating point numbers are shown as is with no specific display formatting.
+
+	Some examples
+
+		:cformat iffloat 2
+
+		:cformat iffloat None
 
 User can also trigger the same from with in a spreadsheet by using the following in a cell
 
@@ -536,6 +544,9 @@ User can also trigger the same from with in a spreadsheet by using the following
 
 NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen.
 However for calculations which depend on such a cell, the results of round function will be used directly.
+
+NOTE: the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user using :cformat explicit command
+and or it got set by being part a =config(cformat... expression in one of the spreadsheet that was loaded.
 
 
 #### xtra operations

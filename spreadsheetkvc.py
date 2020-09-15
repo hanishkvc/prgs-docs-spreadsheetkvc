@@ -616,7 +616,10 @@ def _do_cformat(cmd, lArgs):
     configure global formatting
     '''
     if lArgs[0] == "iffloat":
-        me['format.iffloat'] = int(lArgs[1])
+        if lArgs[1].upper() == 'NONE':
+            me['format.iffloat'] = None
+        else:
+            me['format.iffloat'] = int(lArgs[1])
         return "'FltPreci:{}'".format(me['format.iffloat'])
         #return round(1.11111111111111111111, me['format.iffloat'])
         #return 1.11111111111111111111
