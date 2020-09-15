@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SpreadSheetKVC Readme</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+</head>
+<body>
+<h1 id="spreadsheetkvc">SpreadSheetKVC</h1>
+<p>Author: HanishKVC, 2020 Version: v20200909IST1947</p>
+<p>spreadsheetkvc is a spreadsheet program which runs on the commandline using ncurses and python.</p>
+<p>It works with csv file. It allows the saved csv file to be optionally encrypted and inturn load such encrypted csv files. If encrypted file is manipulated, the program will be able to notice the same, and inturn stop processing the same, because it uses authenticated encryption concept.</p>
+<p>Text and Numeric values can be entered into cells as is, unless one wants a numeric value to be treated as a text, in which case quote it. [One needs to be in edit mode by pressing i or e to add or edit cell contents].</p>
+<p>While expressions/formulas to be evaluated using a combination of values, contents of other cells and or supported functions, need to be prefixed with = symbol. These are called =expression.</p>
+<p>The program will try to make the =expression and numeric cells highlighted compared to Text cell’s to try and make it easy to distinguish between them.</p>
+<h2 id="features">Features</h2>
+<p>Some of its features are</p>
+<ul>
+<li><p>Uses curses to show a visual matrix/table of cells in text terminal.</p></li>
+<li><p>Loads and stores csv files. User can change the fieldsep and text quote used if required, so that one can work with csv files, with different chars for these.</p>
+<ul>
+<li>the csv files can inturn be secured using authenticated encryption, if desired.</li>
+</ul></li>
+<li><p>Allows inline editing of cell contents. If a text cell content occupies multiple lines, program will autoscroll if required to allow user to continue editing/entering content, within reasonable limits.</p>
+<ul>
+<li>[Outside of edit mode, ie default mode] Overflowing cell’s content will be shown in place of adjacent cells, provided those adjacent cells are empty.</li>
+</ul></li>
+<li><p>Support evaluation of mathematical expressions which inturn can refer to</p>
+<ul>
+<li><p>numeric values</p></li>
+<li><p>contents of other cells.</p></li>
+<li><p>a predefined set of useful supported functions.</p></li>
+<li><p>builtin python functions</p>
+<ul>
+<li>The user can specify cell addresses as arguments to the function. In which case the program will convert the cell address to the value in the specified cell and inturn call the python function.</li>
+</ul></li>
+</ul></li>
+<li><p>The program follows a windowed lazy/defered evaluation with caching strategy for the cells. This ensures that large spreadsheets with heavy calculations can be displayed relatively quickly without much calculation overhead, in general.</p></li>
+<li><p>Written in python, with source available on github, so that anyone can understand, modify|extend and or bugfix as required, to meet their needs ;) This also allows arbitrary precision integer operations.</p></li>
+<li><p>insertion and deletion of rows or cols, auto adjusts cell addresses refered in expressions, where possible. THis includes all cell addresses, i.e including those which have the $-prefix.</p>
+<ul>
+<li>If refered cell is deleted, then it tags the corresponding cell address reference in the expression with a Err tag. However if user continues to insert or delete other rows/cols, then it will continue to adjust such Err tagged cell addresses, if possible. Do keep this in mind.</li>
+</ul></li>
+<li><p>copy/cut-paste operation adjusts cell addresses in =expressions, when pasting into a cell.</p>
+<p>However at same time it also respects $-prefixed fixed celladdress parts notation. So such cell address parts which are $-prefixed will not be changed.</p>
+<p>NOTE: If ‘P’ (capital P) is used for pasting, then it wont adjust the cell addresses.</p></li>
+<li><p>the program tries to be simple and sane wrt fieldsep and textquote.</p>
+<p>If fieldsep in cell content, auto protect with text quoting of cell content.</p>
+<p>If text quote at begin or end of cell content, auto insert at the other end, if missing.</p>
+<p>If text quote some where in the middle of cell content, replace with a placeholder char.</p></li>
+<li><p>Any Cells having looping in their =expression calculations (backto themselves directly and or through a chain of cells) and or involve very very long (1000s) cell-to-cell dependency depth chaining will be identified and result in None result or ErrTagging. ErrTagging ensures that those cells dont get accounted in subsequent recalculations and thus dont bog down the program.</p>
+<p>User will be able to see if a cell is error tagged, because same is shown as part of cell content.</p>
+<p>Program uses a decent enough effort optimistic multipass evaluation logic with valid result caching to try and handle very very deep calc chaining in managable parts in a discrete sliding manner, while still allowing looping to be trapped.</p></li>
+<li><p>Uses the sparse dictionary data structure to store the cells in memory. So irrespective of the size (in terms of number of rows and cols) of the spreadsheet, in memory it occupies only as much space as required for cells with contents in them.</p>
+<p>From within the program one could use one of the :xrows or xcols or :irb or :ira or :icb or :ica commands to increase the size of the spreadsheet, as needed. Look further down for details.</p>
+<p>NOTE: sparse data structure is useful for having huge spreadsheets with good number of empty cells inbetween and not necessarily huge spreadsheets with most of the cells filled up ;)</p></li>
+<li><p>support range operations (rcmds) which allow manipulating multiple cells easily using simple commands.</p>
+<p>One can even mark cells so that they dont have to remember the cell address, as well as program supports infering destination cell address range from source address range.</p></li>
+<li><p>Some additional features like</p>
+<ul>
+<li><p>supports a readonly view mode, if required.</p></li>
+<li><p>auto-adjust to terminal window size changes.</p></li>
+<li><p>tab-completion of file path names for load and save operations.</p></li>
+<li><p>normal or raw display mode.</p></li>
+<li><p>global align left, right or default.</p></li>
+<li><p>global config float precision</p></li>
+</ul></li>
+<li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only for cells which are affected by it (edits propogate the changes across dependent cells). Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells compared to insert, so require to recalc all cells with dependencies for now.</p>
+<p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
+</ul>
+<p>for more details refer to the documentation below.</p>
+<h2 id="sample-usage-session">Sample usage session</h2>
+<p>After program is up and running. Press Esc key to be sure that we are in default mode.</p>
+<p>Key in the following command to load the help.csv file with basic usage help.</p>
+<pre><code>:help&lt;ENTERKEY&gt;</code></pre>
+<p>NOTE: You can exit this help mode by either</p>
+<pre><code>(a) creating a new spreadsheet in memory by using new command i.e
+
+    :new&lt;ENTERKEY&gt;
+
+(b) Or by loading a existing file into memory
+
+    :l pathto/filename&lt;ENTERKEY&gt;</code></pre>
+<p>Key in following command to load a file named filename from path pathto.</p>
+<pre><code>:l pathto/filename&lt;ENTERKEY&gt;</code></pre>
+<p>Use arrow keys to move around the cells in the spreadsheet.</p>
+<p>To editExisting|insertNew content into a cell, use arrow keys to highlight the required cell. Press ‘i’ key to insert new cell content. OR else press ‘e’ key to edit existing cell content.</p>
+<pre><code>key in the required content into the cell.
+
+press Enter key to save the changes in the edit buffer into memory and return to default mode.
+
+press Esc key to discard changes in edit buffer and return back to the default mode.
+
+NOTE: The editing occurs in the edit mode.</code></pre>
+<p>To save changes to the spreadsheet key in the following explicit command.</p>
+<pre><code>:w pathto/filename&lt;ENTERKEY&gt;</code></pre>
+<p>Instead if you want to save the spreadsheet into a password protected file, key in the following.</p>
+<pre><code>:pw password pathto/filename&lt;ENTERKEY&gt;
+
+NOTE: program will prompt for user file password once again, to ensure that user doesnt use/key-in a wrong password by mistake.</code></pre>
+<p>Inturn to load a password protected file key in the following.</p>
+<pre><code>:pl password pathto/filename&lt;ENTERKEY&gt;</code></pre>
+<h2 id="usage">Usage</h2>
+<h3 id="requirements">Requirements</h3>
+<p>The program requires python3, ncurses or equivalent and python-cryptography.</p>
+<p>It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.</p>
+<h3 id="command-line-arguments">command line arguments</h3>
+<p>The program supports the following commandline arguments</p>
+<pre><code>--help
+
+    program prints info about the commandline arguments supported by it.
+
+--fieldsep &lt;seperator&gt;
+
+    By default the program uses [;] i.e semicolon as the field seperator of the csv files.
+    However the user can change this to a different character by using this argument.
+
+    --fieldsep &#39;,&#39;
+
+--quote &lt;textquote&gt;
+
+    By default program uses [&#39;] i.e single quote, if required, as the field text quote in the
+    csv files.  However user can change this to a different character by using this argument.
+
+    --quote &#39;`&#39;
+
+--startnohelp
+
+    To avoid showing the help dialog on program start.
+
+--creadonly
+
+    The program starts in readonly mode, where user cant modify the loaded spreadsheets.
+    That is one cant insert or delete rows/cols. Nor can one edit/insert/cut/delete/paste cells.
+
+    However user can switch to readwrite mode by giving :creadwrite explicit command.
+
+--calldepth &lt;depth&gt;
+
+    Set the maximum call depth | cell chaining allowed by program to &lt;depth&gt;.
+
+    Default value is 1000. This is not a end user option. It is more for some one developing and
+    or debugging the program to trigger and or manipulate things.
+
+--flypython
+
+    Allow bit more varied set of python expressions to be stored in cells and inturn
+    run those python expressions by refering to those cells from other cells
+
+--usecolor
+
+    Enable color mode of the program. In this mode the program will show alternate
+    rows in two different background colors, so that the user can easily identify all
+    cells (and their contents) on a given row.
+
+    By default color mode is not enabled, user needs to use this argument.</code></pre>
+<h2 id="program-modes">program modes</h2>
+<p>The program supports the following modes</p>
+<pre><code>default command mode,
+
+edit/insert mode and
+
+explicit command mode.</code></pre>
+<h3 id="default-command-mode">default command mode</h3>
+<p>The program by default runs in the default command mode. In this mode one can press the following keys for achieving the specified operations.</p>
+<ul>
+<li><p>i can be used to insert new content in the current cell.</p></li>
+<li><p>e can be used to edit the current cell’s content.</p></li>
+<li><p>c can be used to copy the current cell’s content.</p></li>
+<li><p>C can be used to cut the current cell’s content.</p></li>
+<li><p>p can be used to paste a previously copied/cut cell content into current cell. This also adjusts the cell addresses as required.</p></li>
+<li><p>P can be used to paste a previously copied/cut cell content into current cell. This pastes the content as is. NOTE: This is capital P.</p></li>
+<li><p>D can be used to delete the contents of the current cell.</p></li>
+<li><p>: can be used to enter the explicit command mode.</p></li>
+<li><p>h or ? can be used to show a help/usage dialog.</p></li>
+</ul>
+<h3 id="explicit-command-mode">explicit command mode</h3>
+<p>This mode is entered by pressing : when in the default command mode. In this explicit command mode, the user can enter one of the following commands</p>
+<h4 id="file-operations">File operations</h4>
+<ul>
+<li><p>w file</p>
+<p>to save the contents of the current spreadsheet into specified file. If the file already exists, it asks the user whether to overwrite or not.</p>
+<p>One could also use</p>
+<pre><code>  s file</code></pre></li>
+<li><p>pw passwd file</p>
+<p>to encrypt and save the file.</p>
+<p>One could also use</p>
+<pre><code>  ps passwd file</code></pre>
+<p>NOTE: program will prompt for user file password once again, to ensure that user doesnt use/key-in a wrong password by mistake.</p></li>
+<li><p>l file</p>
+<p>to load the specified spreadsheet. If the spreadsheet already in memory has unsaved changes, then it alerts the user. So user can decide whether to continue with load and lose changes in memory and or abort the load.</p></li>
+<li><p>pl passwd file</p>
+<p>to decrypt a previously encrypted file and load it.</p></li>
+<li><p>new</p>
+<p>create a new spreadsheet in memory.</p></li>
+</ul>
+<p>NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user to explicitly specify the file to write to.</p>
+<h4 id="insertdelete-operations">Insert/Delete operations</h4>
+<ul>
+<li><p>dr [numOfRows]</p>
+<p>used to delete n number of rows starting from current row. If numOfRows not specified, it defaults to 1.</p></li>
+<li><p>dc [numOfCols]</p>
+<p>used to delete n number of cols starting from current column. If numOfCols not specified, it defaults to 1.</p></li>
+<li><p>irb [numOfRows]</p>
+<p>insert n rows before current row. If numOfRows not specified, it defaults to 1.</p></li>
+<li><p>ira [numOfRows]</p>
+<p>insert n rows after current row. If numOfRows not specified, it defaults to 1.</p></li>
+<li><p>icb [numOfCols]</p>
+<p>insert n columns before current column. If numOfCols not specified, it defaults to 1.</p></li>
+<li><p>ica [numOfCols]</p>
+<p>insert n columns after current column. If numOfCols not specified, it defaults to 1.</p></li>
+</ul>
+<h4 id="range-operations-rcmds">range operations (rcmds)</h4>
+<ul>
+<li><p>rcopy srcCellAddrRange dstCellAddrRange or rcopy srcCellAddrRange dstCellStartAddr</p>
+<p>Copy a block of cells starting from srcStartAddress to dstStartAddress. In the process convert any cell addresses in the copied =expressions, as required.</p>
+<p>If srcCellAddrRange doesnt match dstCellAddrRange wrt size, then dstCellAddrRange takes precedence in deciding the size.</p>
+<p>If only destination start cell address is given and not the destination end cell address, then end cell address will be infered from the source addr range.</p>
+<p>The srcBlock will be duplicated as required to fill dstBlock, if the srcBlock is smaller than the dstBlock.</p>
+<pre><code>  :rcopy A1:A1 A10:B19
+
+  The value in cell A1 will be duplicated across the 20 cells.
+
+  :rcopy A1:B2 A10:B19
+
+  The values in the square of cells at A1 will be duplicated across
+  the rectangular 20 cells starting at A10.
+
+  NOTE: Its not necessary that the dstBlockSize is a multiple of
+  the srcBlockSize. If not a multiple, then only a partial set of
+  values will be copied if that is the case based on the sizes.</code></pre>
+<p>If the srcBlock is larger than the dstBlock, then only that part of the srcBlock which can fit in the dstBlock size specified, will be copied.</p>
+<p>src|dstCellAddrRange consists of startAddress:endAddress</p></li>
+<li><p>rcopyasis srcCellAddrRange dstCellAddrRange or rcopyasis srcCellAddrRange dstCellStartAddr</p>
+<p>This is similar to :rcopy command mentioned above. The main difference is that this doesnt modify the cell addresses in the =expressions that are copied.</p></li>
+<li><p>rclear cellAddrRange</p>
+<p>Clear the cells in the given address range.</p></li>
+<li><p>rclearerr cellAddrRange</p>
+<p>Clear Error tag prefix in the cells in the given address range. This allows such cells to be evaluated again.</p></li>
+<li><p>rgennums cellAddrRange [start] [delta]</p>
+<p>Generate numbers starting from start (default 1) and incrementing|decrementing (default 1) with delta and use it to fill the cells specified in the cellAddrRange.</p>
+<p>Ex: Mutliplication table for 11</p>
+<pre><code>  :rgennums A1:A10 11 11</code></pre>
+<p>Ex: Multiplication table of 11, in reverse</p>
+<pre><code>  :rgennums B1:B10 110 -11</code></pre>
+<p>Ex: Generate table id starting from 1</p>
+<pre><code>  :rgennums C1:C10</code></pre>
+<p>NOTE: Delta can be either positive or negative.</p></li>
+</ul>
+<p>NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.</p>
+<p>The marker is specified using the syntax <span class="citation" data-cites="mMarkerId">@mMarkerId</span></p>
+<pre><code>Ex: If marker m1 corresponds to B10 then instead of typing
+
+    :rgennums B10:D20
+
+    one could use
+
+    :rgennums @m1:D20</code></pre>
+<h4 id="markers">Markers</h4>
+<p>Markers allow one to identify cell address by using marker ids. THis allows one to work with :r range operations in a easy | user freindly way.</p>
+<ul>
+<li><p>mshow</p>
+<p>Show the currently set markers</p></li>
+<li><p>mclear</p>
+<p>Clear the current set of markers</p></li>
+<li><p>mMarkerId</p>
+<p>Set the marker mMarkerId to point to current cell. MarkerIds can be AlphaNumeric.</p>
+<p>The AlphaNumeric should ideally only include the characters in a-z, A-Z and 0-9</p>
+<pre><code>  Example :m1 :ma :mZZ :mstart and so on</code></pre></li>
+</ul>
+<p>NOTE: markers have m prefix in their name.</p>
+<h4 id="config-commands">Config commands</h4>
+<h5 id="read-write-mode">Read Write Mode</h5>
+<ul>
+<li><p>cro|creadonly</p>
+<p>switch program to readonly mode, so that user cant modify the contents of the spreadsheet.</p></li>
+<li><p>crw|creadwrite</p>
+<p>switch program to readwrite mode, so that user can modify the spreadsheet. This is the default mode.</p></li>
+</ul>
+<h5 id="fieldseperator-and-textquote">FieldSeperator and TextQuote</h5>
+<ul>
+<li><p>cfs|cfieldsep theFieldSepChar</p>
+<p>set the fieldsep for the csv file.</p>
+<p>Ex: cfs ’ (for setting single quote as fieldsep)</p>
+<p>Ex: cfs ; (for setting semicolon as fieldsep)</p>
+<p>NOTE: If it so happens that the newly defined fieldsep is part of some cell content, then the program will autoquote the corresponding content, if it is not already quoted, when saving to file.</p></li>
+<li><p>ctq|ctextquote theTextQuoteChar</p>
+<p>set the text quote for the csv file.</p>
+<p>All instance of the new textquote char already in text cells, will get replaced by alt2inbtwquote char [i.e _].</p>
+<p>All instances of old textquote char in text cells, will get replaced by the new textquote.</p></li>
+</ul>
+<p>NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to one another.</p>
+<h5 id="global-alignment">Global Alignment</h5>
+<ul>
+<li><p>calignleft</p>
+<p>Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.</p></li>
+<li><p>calignright</p>
+<p>Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.</p></li>
+<li><p>caligndefault (this is the default alignment mode of program)</p>
+<p>Align text cells to left. Align numbers which fit within the cell to right else align to left. Any content that doesnt fit within the cell will overflow into empty cells on the right.</p></li>
+</ul>
+<h5 id="global-formatting">Global formatting</h5>
+<ul>
+<li><p>cformat iffloat &lt;floatPrecision|None&gt;</p>
+<p>Configure the precision to be used when showing floating point numbers</p>
+<p>If floatPrecision is provided the precision to be used when showing floating point number is set.</p>
+<p>If None is provided, then floating point numbers are shown as is with no specific display formatting.</p>
+<p>Some examples</p>
+<pre><code>  :cformat iffloat 2
+
+  :cformat iffloat None</code></pre>
+<p>User can also trigger the same from with in a spreadsheet by using the following in a cell</p>
+<p>=config(cformat, iffloat, floatPrecision)</p>
+<p>NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen. However for calculations which depend on such a cell, the results of round function will be used directly.</p></li>
+<li><p>cformat number2float &lt;yes|no&gt;</p>
+<p>Treat all numbers as floats.</p></li>
+</ul>
+<p>NOTE: if using =config(cformat… in a spreadsheet, to have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2</p>
+<p>NOTE: the effects of the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user using :cformat explicit command and or it got set by being part a =config(cformat… expression in one of the spreadsheet that was loaded.</p>
+<pre><code>This effect is purely from a what is shown perspective. And doesnt effect any calculations or so.</code></pre>
+<h4 id="xtra-operations">xtra operations</h4>
+<ul>
+<li><p>xrecalc</p>
+<p>Force clear the calculated results cache, so that all cells get recalculated, as they become visible either directly and or indirectly through some other visible cell. As and when a given cell or a some other cell which depends on it becomes visible, the cell will be recalculated.</p>
+<p>If you feel that the program has messed up with its recacl limiting optimisations and inturn has not recalculated a cell, which it should have. You can use this command to force the program to recalculate all cells.</p></li>
+<li><p>xrows <numOfRows></p>
+<p>Use to increase the number of rows in the spreadsheet to the new number specified.</p>
+<p>NOTE: You cant reduce the number of rows using xrows, you need to use dr for it.</p></li>
+<li><p>xcols <numOfCols></p>
+<p>Use to increase the number of cols in the spreadsheet to the new number specified.</p>
+<p>NOTE: You cant reduce the number of cols using xcols, you need to use dc for it.</p></li>
+<li><p>xviewraw</p>
+<p>Display the contents of the cell as is, i.e nothing is evaluated, the expressions are shown as is.</p></li>
+<li><p>xviewnormal</p>
+<p>This is the normal view, in which the cell contents are evaluated and the results shown to the user.</p></li>
+</ul>
+<h4 id="other-operations">Other operations</h4>
+<ul>
+<li><p>e file (in future)</p>
+<p>to export the current spreadsheet into a file.</p></li>
+<li><p>g(oto) CellAddr</p>
+<p>Center the screen to the specified celladdress.</p></li>
+<li><p>clear</p>
+<p>clear the contents of the current spreadsheet.</p></li>
+<li><p>!shellCmd arguments</p>
+<p>Execute shell command. When shell command finishes/exits, show a input prompt so that the user has a chance to see the output of the shell command.</p>
+<p>If the shell command you are running can generate multi page output, better pipe it to more or less i.e for example like what is shown in brackets below.</p>
+<pre><code>  [:!ps ax | less]</code></pre>
+<p>NOTE: There is no space between ! and the shell command to run.</p></li>
+<li><p>help</p>
+<p>show help.csv file. User can either create a new spreadsheet or load an existing spreadsheet to exit out of help.</p></li>
+<li><p>q</p>
+<p>is used to quit the program.</p>
+<p>All unsaved changes will be lost. Program does warn about this condition and gives the user the chance to abort the quit. Remember to save the data by first using :w command explicitly, before quiting, if you want all edits to be saved.</p></li>
+</ul>
+<p>The user can enter the command and its arguments and then press enter key to trigger the command. The user can use backspace to delete the chars to correct mistakes when entering the command and the arguments.</p>
+<p>On pressing the enter key, the specified command will be run and the program will return back to default command mode.</p>
+<p>If Esc key is pressed, the program will discard any command in the edit buffer and then return back to default command mode.</p>
+<h3 id="editinsert-mode">edit/insert mode</h3>
+<p>On pressing ‘i’, ‘e’ from the default command mode, the user can enter this mode.</p>
+<p>In this mode the user either enters a new content for the cell and or edits the existing content of the cell.</p>
+<p>As and when the user presses the Enter key, the cell data entered till that point gets saved into spreadsheet in memory and the program will return back to default command mode.</p>
+<pre><code>This also triggers the logic to remove any white space at the begining and end
+of the current edit buffer, as it gets saved into the cell. So use the currently
+configured quote char at the begining and end of the cell content being edited,
+if you have white space at the begin or end of the current cell content, which
+inturn you want to save as part of the cell.
+
+The program will auto add text quote character to the begin or end of cell content,
+if it finds the text quote character only at the other end of cell content.
+
+If text quote found somewhere inbetween the cell content, it gets replaced with
+a place holder.</code></pre>
+<p>User can discard the changes in the edit buffer and return back to default command mode, by pressing the Esc key. The original content of the cell is retained in this case.</p>
+<p>NOTE: If user enters a very long line, then it may wrap to next line in the edit / insert mode, however once the program returns back to default command mode, the cell content wont wrap into next line. In default command mode the cell content will overflow into adjacent cells on the same line/row, only if those adjacent cells dont have any content (even empty string is a content) of their own.</p>
+<p>If one scrolls the cell containing a long text line too far beyond the currently visible screen viewport, then the overflowing text may not be visible, beyond a point.</p>
+<pre><code>[DevelNote] THis is to keep the screen refresh relatively fast. User can modify
+the source, to change the amount of scroll allowed while still continuing to show
+the overflowing text from a given cell. One needs to Modify DATACOLSTART_OVERSCAN
+to control this.</code></pre>
+<p>If you feel there is a empty string in any field and you want to remove it, use the ‘D’ command in the default command mode, which will delete any content from the current cell, including empty string.</p>
+<p>[DevelNote] If gbEnterExitsEditMode is set to False, then pressing enter key in edit mode, will only save the current edit buffer into a backup buffer. Also program will continue to remain in edit mode. The user will have to press the Esc key to save any backed-up edit buffer into spreadsheet in memory and return back to default mode. This was also the original behaviour of this program previously.</p>
+<h2 id="cell-contents-and-expressions">Cell contents and =expressions</h2>
+<p>In the edit/insert mode one can enter textual or numeric value directly into the cell.</p>
+<p>While entering expressions to be evaluated, one requires to prefix them with = symbol.</p>
+<p>Example</p>
+<pre><code>A text
+
+&#39; Another text with space in front&#39;
+
+123456
+
+=2
+
+=5+3/6.8*2**32
+
+= (5+3)/(6.8*2)**32
+
+=10-5+sum(B10:C99)</code></pre>
+<p>NOTE: If one wants numeric content or =expression to be interpreted as text content, then one requires to place such numeric or =expression content within the configured quotes.</p>
+<h3 id="interpretation-of-cell-contents">Interpretation of cell contents</h3>
+<p>If no data (which also includes empty string) then return 0 (where numeric value expected, else return "" i.e empty string).</p>
+<p>If starts with =, then do the internal =expression evaluation of same.</p>
+<p>if starts with numeric or starts with + or - then python eval it for a numeric.</p>
+<pre><code>If user wants to treat it has text, then they need to add textquote.
+
+No need to prefix numbers with =. (applies for some simple expressions also)</code></pre>
+<p>If none of above, return 0 where numeric value expected, else return as is as a string.</p>
+<pre><code>Anything starting with alphabet or space or textquote or anything not matching
+above is treated as text.</code></pre>
+<h3 id="expressions">=expressions</h3>
+<p>These are expressions/formulas which allows one to operate on existing data in the cells and inturn infer and or generate new data from it.</p>
+<p>The =expressions are evaluated using pythons eval function. So basic python arithematic expressions can be evaluated as part of =expressions.</p>
+<p>The program also allows few predefined functions to be used as part of the =expressions. This allows the user to operate on the data in the cells suitably. The supported functions are mentioned later in this document.</p>
+<p>Example</p>
+<pre><code>=10-5+sum(B10:C99)
+
+=cnt(B10:C99)
+
+= 99/(100 + Zz99) * sum(A1:B10)</code></pre>
+<p>As can be noticed in the above examples, one can refer to values in other cells directly by specifying the corresponding cell’s address.</p>
+<p>=expressions should only refer to other =expression or numeric cells and not text cells. If a text cell is referenced where numeric value is required, it will be treated as containing the value 0.</p>
+<h4 id="evaluation">evaluation</h4>
+<p>The program follows a windowed lazy/defered evaluation with caching strategy for the cells. Prg defers cell [re]evaluation, till the cell becomes visible or some other cell which depends on it either directly or indirectly becomes visible. This ensures that large spreadsheets with heavy calculations involving very very long chaining across cells load relatively fast and can be edited normally in most cases.</p>
+<p>Only when cells with heavy chaining become visible, the program will pause to do the calculations required and inturn show its results.</p>
+<p>THe cell evaluation with in the display window, is done in a row major fashion. The calculated results are cached and reused, when calculating other cells. For optimal performance, especially for =expressions which have DEEP cell chaining dependencies ideally have cell dependencies such that they depend on</p>
+<pre><code>cells to their left on the same row and or any cell in the rows to its top.
+
+This suggestion is mainly for calculations involving very very long chaining of cells.
+FOr normal calculations, the cells could be anywhere in the spreadsheet.</code></pre>
+<p>When cell contents are updated/modified by the user, the program clears the cache, and repeats the windowed defered evaluation with caching as explained above again.</p>
+<p>The program maintains a reverse dependency list for each cell, so that when user edits any cell, only related cells’ caches are cleared and thus inturn cells needing reevaluation is limited to the cell itself and its dependent cells.</p>
+<p>NOTE: If the user suspects that the recalculation optimisation logic of the program is at fault, they can run the :xrecalc command which will clear the calc cache of all cells, so they all get recalculated as and when required.</p>
+<h4 id="looping-and-deep-chaining.">Looping and Deep chaining.</h4>
+<p>If =expression in a cell refers back to itself either directly and or through other cell(s) in the chain of calculations required to find the cell’s value, then it is considered to be looped.</p>
+<p>The program will trap such invalid looping and Err tag the contents of all cells involved in the calculation, whose value is impacted by looping. This allows the user to see what and all cells where involved in that looping. It also allows the program to continue with evaluation of the other cells, while ignoring these err tagged cells.</p>
+<p>The program will also flag the calc loop error tag, for cells whose =expression involves chaining of cells which refer to one another such that the chain length extends to thousands of cells. IE where one cell refers to another cell, and that another cell refers to some other cell and so on.</p>
+<pre><code>NOTE: A cell directly refering to say 100 or even 500 cells for that matter is not a issue.
+Similarly using Cell Address Ranges like say sum(A1:ZZ1024) in itself is also not deep cell
+chaining, rather it corresponds to a cell chaining depth of only 1. If any of those cells
+inturn depend on other cells for their calculations, and those other cells inturn dependent
+on even more cells for their value and so on and on and on to a very very deep extent, that
+is when a very very deep cell calculation chaining occurs and only then will this trigger.
+
+IE cells chain from one cell to another cell and from that another cell to some other cell
+and so on to very very deep extents.
+
+i.e CellB4[=B1+B2+B3] or CellB4[=sum(B1:ZZ1024]
+
+    is a call depth of only 1
+
+while CellB4[=B3] CellB3[=B2] CellB2[=B1] CellB1[=10]
+
+    leads to a call depth of 3 as far as CellB4 is concerned.</code></pre>
+<p>User will be able to see if a cell is error tagged, because same is shown as part of cell content. Once user has fixed the looping in calculation and or better organised things. User can run</p>
+<pre><code>:rclearerr cellAddrRange</code></pre>
+<p>to clear err tags from the cells in the specified range. So that the program will start accounting those cells again.</p>
+<p>Prg uses a decent enough effort multipass evaluation logic with valid result caching to try and handle very very deep calc chaining, where the solution is built part by part in small managable chunks, over multiple passes.</p>
+<p>[DevelNote]</p>
+<p>If CALCLOOPMAX is reduced to 200 or so, then looping in =expressions and or very long cell-to-cell dependency chaining will be identified (in this case if the depth crosses 200 or so) and all cells involved in the chain will also get error tagged.</p>
+<p>However by default program is setup to not trigger this in the normal case (by setting CALCLOOPMAX to a very high value of 1000). Instead the program allows python recursion error to trigger and break the calculation if it is sufficiently deep to trigger the same. In this case chances are few of the involved cells’ values would have got calculated. Even otherwise, it will continue with calculating the remaining cells. THis ensures that over a series of passes, the cells starting from the origin of the calc chain and slowly building up towards the end of the calc chain get calculated and cached. At each pass all cells with in the recursion limit depth to the last set of calculated cells in the chain, get calculated. Thus the chain gets resolved automatically through managable parts / blocks, in a discrete sliding manner from the start to the end of the chain, over a series of passes.</p>
+<p>THis allows very deep chains (well most of them any way, in a reasonable time and definitely all, if one is willing to wait for sufficient time) to be calculated while still trapping loops.</p>
+<h2 id="supported-functions-for-expressions">Supported functions for =expressions</h2>
+<h3 id="native-functions">Native functions</h3>
+<p>sum(CellAddressRange)</p>
+<pre><code>sum the contents of the specified range of cells</code></pre>
+<p>cnt(CellAddressRange), even count can be used in place of cnt</p>
+<pre><code>get the count of non empty cells in the specified range of cells.</code></pre>
+<p>avg(CellAddressRange), even average can be used in place of avg</p>
+<pre><code>calculate the average of the values in the range of cells. It doesnt consider
+the empty cells.</code></pre>
+<p>min(CellAddressRange)</p>
+<pre><code>the minimum value among the specified range of cells.</code></pre>
+<p>max(CellAddressRange)</p>
+<pre><code>the maximum value among the specified range of cells.</code></pre>
+<p>var(CellAddressRange) and varp(CellAddressRange)</p>
+<pre><code>gives the variance assuming the specified range of cells as representing
+either a sample space (var) or a full population (varp)</code></pre>
+<p>stdev(CellAddressRange), stddev(CellAddressRange), and stdevp(CellAddressRange), stddevp(CellAddressRange)</p>
+<pre><code>gives the standard deviation of the specified range of cells, by assuming them
+to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)</code></pre>
+<p>prod(CellAddressRange)</p>
+<pre><code>product of the contents in the specified range of cells.</code></pre>
+<h3 id="python-builtin-functions">Python builtin functions</h3>
+<h4 id="generic-note">Generic note</h4>
+<p>The arguments of python functions could be specified either as a</p>
+<pre><code>* numeric value or
+
+* function which returns a numeric value or
+
+* cell address (but not a cell address range for now)</code></pre>
+<h4 id="python-functions">python functions</h4>
+<p>round(number, precision)</p>
+<pre><code>round the specified number to have the specified number of digits following dot.</code></pre>
+<p>pow(base, exponent)</p>
+<pre><code>calculate base raised to exponent</code></pre>
+<p>int(numeric)</p>
+<pre><code>convert the numeric value to be a integer</code></pre>
+<p>float(numeric)</p>
+<pre><code>convert to float value</code></pre>
+<p>NOTE: Most of the math functions in python math module are also supported. However to be useful, they should ideally take only scalar values and return scalar value.</p>
+<h2 id="celladdress-and-ranges">CellAddress And Ranges</h2>
+<p>The Cols addressed starting from A to ZZ</p>
+<p>The Rows are addressed starting from 1 to …</p>
+<p>So the Cell is addressed as ColRowAddr like for example A1 or D55 or DC999 or so …</p>
+<p>To specify a range of cells use startCellAddress:endCellAddress like</p>
+<pre><code>=A1:A10
+
+=A1:Z1
+
+= ZA22:ZZ62
+
+=sum(AB57:CD60)
+
+= prod (HO99 : WO100 )</code></pre>
+<p>One can prefix the row and or col address part with $. In which case during insertion and deletion of rows or cols, such addresses are not modified automatically.</p>
+<pre><code>= B12 * $DO34 + ( $A$10 - Z$99)</code></pre>
+<h2 id="csv-file-format">csv file format</h2>
+<h3 id="general-info">General Info</h3>
+<p>The csv file used by this program uses semicolon [;] to seperate the fields within each row i.e within each line in the file.</p>
+<p>If any field contains the field seperator with in its content, then the field content is embedded within [’] ie single quotes.</p>
+<p>To avoid confusing the program, dont use ’ char as part of the spreadsheet contents, other than for</p>
+<pre><code>quoting text contents with field seperator in them. AND OR
+
+if you want to have white space at the beginning and or end of the text contents
+of a cell, put the full cell text content within quotes.</code></pre>
+<p>Text QUote char anywhere other than the either ends of cell text content, will get replaced by [_] i.e underscore.</p>
+<p>NOTE: User can set a different field seperator or quote char from the commandline and or by using the cfieldsep and ctextquote commands.</p>
+<h3 id="encryption-support">Encryption support</h3>
+<p>The program allows the csv file to be encrypted while saving it using a special write command (pw). And inturn there is a matching pl command to load such encrypted files.</p>
+<p>It uses the python cryptography library for the actual low level security algorithms. In turn it can either use the standardised recipe layer provided by the cryptography library OR use its own internal recipe layer (this is the default) for doing the actual encryption and decryption of the encryption protected files.</p>
+<p>[DevelNote: Even thou both the internal and cryptography library’s recipe layers use similar concepts, the bitstreams are not compatible between them, so dont intermix them between saving and loading, as it will fail].</p>
+<p>It uses authenticated encrytion mechanism so that any tampering of the encrypted content can be identified. The encrypted data is stored in the base64 url safe encoding format.</p>
+<p>[DevelNote: This also keeps the logic for working with normal and encrypted files almost the same wrt load and save operations.]</p>
+<p>THere are two passwords that the program uses wrt each file</p>
+<pre><code>P1. A user level password, this is specific to a user and shared for all the
+encrypted files operated by the user. This is stored in users home folder at
+
+    ~/.config/spreadsheetkvc/userpass
+
+    If this file is missing, then a default password is used. Not using
+    user level password is also the simplest way to share encrypted files
+    with others.
+
+    If a user makes use of this, then they should remember to keep its
+    access restricted to the user and not share to group or all.
+
+P2. The file password, this is specific to each file that is encrypted.
+This is specified as part of the pw and pl commands.</code></pre>
+<p>If the user is sharing encrypted files with others, then dont specify the user level password. Only use the file specific password, unless you dont mind sharing your user level password of this program with others.</p>
+<p>A random salt is also used each time a file is saved. This inturn is embedded within the saved encrypted file.</p>
+<p>NOTE: If user enables the use of external i.e cryptography library’s AE recipe, then the system date and time info of when the encryption was carried out, is stored as part of its aead logic, where the date time is stored in a unencrypted but base64 encoded format, while at same time the same is accounted as part of the mac maintained for the encrypted message.</p>
+<h3 id="converting-csv-files">Converting CSV files</h3>
+<p>TO convert a csv file from using one fieldsep character to another.</p>
+<p>First set the fieldsep to that used by the csv file currently.</p>
+<pre><code>Ex: :cfieldsep theFieldSepChar</code></pre>
+<p>Next load the file</p>
+<pre><code>Ex: :l pathto/file</code></pre>
+<p>Set the new fieldsep you want to use while saving</p>
+<pre><code>Ex: :cfieldsep theNewFieldSepChar</code></pre>
+<p>Next write the file with the new fiedlsep</p>
+<pre><code>Ex: :w pathto/file</code></pre>
+<h2 id="misc">Misc</h2>
+<h3 id="notes">Notes</h3>
+<h4 id="esc-esc-essscccccccc">Esc, Esc, Essscccccccc</h4>
+<p>If a explicit command seems to get stuck or not do anything, remember to try and press Esc one or more times and see if the program comes back to default command mode.</p>
+<p>You will know that you are in default command mode, when you see the program’s name in the top left corner of the terminal (i.e 0,0 cell).</p>
+<h4 id="flypython">FlyPython</h4>
+<p>If flypython mode is enabled by passing –flypython in the command line to the program, then a text cell’s content can be interpreted as a python expression when that text cell is refered by a =expression in another cell.</p>
+<pre><code>However there are limits to this like
+
+a =expression cant directly include module-submodule chaining or module/class functions
+like say os.path.abspath or list.reverse or so. Because =expression evaluation logic
+splits this up thus ending up with only the last part being evaluated as a independent
+function and not the associated class or module name which contains it.
+
+while having a text cell with the required python expression (which can include calls
+to module, submodule and or class and its functions) and then running it by using
+=TextCellAddress expression in some other cell has the limitation that the cell addresses
+if any in the python expression of the text cell dont get expanded into cell values.
+
+May unlock these later, not sure for now.</code></pre>
+<p>In normal mode</p>
+<pre><code>a text cell, if refered from =expression will be valued as containing
+the numeric value 0.
+
+while numeric and =expression cells can contain basic python expressions,
+which refer to and operate on basic data type values directly or by fetching
+from cells that contain them directly or through other =expressions, which
+can also use the allowed set of functions by the program.
+
+    But they cant refer to any python variables or modules in general,
+    because globals and locals will be empty.</code></pre>
+<h4 id="expressions-1">=expressions</h4>
+<h5 id="text-cell-value-is-0">text cell value is 0</h5>
+<p>Do keep in mind that =expressions which allow numeric evaluation of the specified expression in a given cell, expects any cell references|addresses used in them to inturn (i.e those referenced cells) also contain =expressions and or numbers and not plain text data (numbers in quotes are text).</p>
+<p>Any text cell will be treated as containing 0, if refered in a =expression.</p>
+<p>If flypython mode is enabled, then things are interpreted differently.</p>
+<h5 id="none">None</h5>
+<p>So if you get a None instead of a numeric value which you were expecting, then cross check that all cells refered by that cell or any other cell indirectly referenced through a chain of =expressions, all contain valid expressions and or valid values.</p>
+<h4 id="log-files-stderr">log files, stderr, …</h4>
+<p>By default any exception data is written to a named temp file, which is not deleted on program exit. Such files have a sskvc_ prefix.</p>
+<p>All log and error messages are redirected to /dev/null by default.</p>
+<p>If by some chance any exception or error message which should have gone into one of the above mentioned log files, appears on the screen and thus leading to distraction wrt using the program, then you can run the program like below to avoid the screen getting messed up with such messages</p>
+<pre><code>spreadsheetkvc.py 2&gt; /tmp/sskvc.stderr</code></pre>
+<h4 id="non-csv-or-csv-file-with-wrong-fieldsep">Non csv or csv file with wrong fieldsep</h4>
+<p>Loading a Non csv file and or a csv file with a different field seperator can lead to the loaded file setting the program’s display to a single row and or column view, as the case may (i.e depending on how many lines are there and inturn if any of those lines have fieldsep char in them or not). So also the content of the file will be clipped from display perspective. One could run the command</p>
+<pre><code>:xcols 25
+
+or so to allow the overflowing text to be visible.</code></pre>
+<h4 id="exit-code">Exit code</h4>
+<p>If the program exits normally then it returns 0.</p>
+<p>If the program is exited normally by the user, by ignoring the warning about unsaved changes, then it returns 1.</p>
+<h4 id="cell-address-adjustment-and-operations">Cell Address adjustment and Operations</h4>
+<h5 id="rowscols-insertdelete-operations">Row(s)/Col(s) Insert/Delete operations</h5>
+<p>When rows or cols are inserted or deleted, the program tries to adjust cell addresses if any in =expressions, as required.</p>
+<p>NOTE: If the cell address that is explicitly referenced in the =expression, is deleted, then a Err tag is prefixed to that cell address.</p>
+<h5 id="paste-operation">Paste operation</h5>
+<p>If ‘paste with cell address adjustment’ is triggered (i.e small p), then cell addresses, if any in the =expression being pasted will be auto adjusted as required.</p>
+<p>However if the cell address parts are $-prefixed, then those parts wont be adjusted.</p>
+<p>During auto adjusting if the adjusted cell address refers to outside the spreadsheet, then it will be Err tagged.</p>
+<h3 id="tododone">TODO/DONE</h3>
+<p>[DONE] ncurses cursor is currently not updated/positioned beyond the current cells begining position. So also the program doesnt allow one to edit anywhere in the middle of the cell contents, user can only either add to the existing text/content and or delete the last char using backspace.</p>
+<pre><code>This has been implemented now and the user can edit any part of the cell&#39;s
+content. One needs to use the left and right arrow keys to move the text
+cursor around in the edit/insert mode so that one can modify any part of
+the cell content.</code></pre>
+<p>[DONE] Allow Multi Row/Col delete.</p>
+<p>[DONE] If Row/Col is deleted, then corresponding cell address references should be flagged.</p>
+<p>[DONE] Refresh screen draw as part of file load operation.</p>
+<p>[DONE] Change delete default mode command from ‘d’ to ‘D’, so that user doesnt unknownling trigger it.</p>
+<p>[DONE] Show overflowing content of cells beyond what is currently visible, by maintaining a larger content viewport than the display viewport.</p>
+<p>[DONE] Add a View only mode.</p>
+<p>[DONE] :help loads help.csv in readonly mode.</p>
+<p>[DONE] helper commands which work on a range of cells like</p>
+<pre><code>[DONE] rcopy srcRange destRange
+
+[DONE] rgennums startCell:endCell [startNum] [delta]
+
+[DONE] rclear</code></pre>
+<p>Simple print to text file logic</p>
+<p>[DONE] commandline shell</p>
+<p>[LATER] =rows, =cols</p>
+<p>[DONE] Allow paste to update cell addresses in the =expression.</p>
+<p>[DONE] Trap calc loops. Tracks (uni/)multipath calc indirection and crossing of predefined callDepth and or exhausting of sliding recursion limit based block level windowing logic to flag loops or overly long cell-to-cell chaining.</p>
+<pre><code>[BYPASSED] Opti TrapCalcLoop - Check number of cell addresses across all =expressions and use it to decide, when to break a calc as dead-looped.
+
+[DONE] ErrTag Cells belonging to a CalcLoop, only if they have =expressions, which refer to i.e include other cell addresses.
+Using multipass evaluation logic with valid result caching and error list helps achieve this.
+
+[DONE] Maintain a current depth (either recursive or indirections) wrt calls and use it to decide, when to stop.</code></pre>
+<p>[DONE] Lazy/Opti recalcs - No need to recalculate unless some field/cell’s content is updated.</p>
+<p>[LATER] Maintain reverse list of cell depedencies (i.e each cell maintains a list of cells which dependOn/use it) to avoid recalculating cells, when a given cell is edited. Needly mainly for crazy spreadsheets with overly very very long cell-to-cell chaining, that too in the direction opposite to the one used for cell calculation by the program.</p>
+<p>[DONE] Allow cols beyond ZZ.</p>
+<p>[LATER] Tab completion of dir|filenames?</p>
+<p>[DONE] Change fieldsep and quote from within the program (i.e while it is running).</p>
+<p>[PARTIAL] MAYBE treat each cell like a python variable or statement or expression. So also no need for = prefix. All text needs Quotes.</p>
+<pre><code>[DONE] Maybe each cell contains either a Int, Float or String data type.
+
+    Each cell contains either Nothing or =expression or Numeric or Text
+
+[DONE] Maybe Retain = prefix to trigger eval, while without = interpret as one of the basic data types.</code></pre>
+<p>[DONE] Move file related stuff to fileio module.</p>
+<p>[DONE] Markers so that it is easier to use rcommands.</p>
+<p>[DONE] Dont clip numeric values.</p>
+<p>[PARTIAL] CLear statusbar if screen doesnt fill horizontally.</p>
+<pre><code>Done wrt cdata_update processing in a simple and dumb way for now.</code></pre>
+<h2 id="history">History</h2>
+<h3 id="ist1829">20200823IST1829</h3>
+<p>Implemented as part of the Gauri Ganesh weekend, to scratch a itch I had with need for a simple commandline spreadsheet package, compounded on top by the fact that libreoffice is a slippery slop trying to run on chromebooks(chrome os). Then there was the need to storing things securely on the disk, when required. And as mostly always also to explore and think randomly and or something different for a bit and have some interesting fun on the way.</p>
+<p>A usable at a basic level (nothing fancy, yet;) commandline spreadsheet logic has been implemented to some extent.</p>
+<p>The existing commandline spreadsheet program sc crashing in few cases, also didnt help.</p>
+<h3 id="ist1220">20200825IST1220</h3>
+<p>Make the program more forgiving, by alerting before overwriting as well as before quiting without saving changes. Also remove implicit command mode Q quiting. Now user has to enter :q explicit command, to quit the program.</p>
+<p>Automatically redirect exception messages to a named temp file.</p>
+<p>Add en|de-cryption support for files, so that they can be saved/stored in a secure manner.</p>
+<p>Add support for specifying csv fieldseperator from the commandline.</p>
+<h3 id="ist2304">20200826IST2304</h3>
+<p>Added basic logic to adjust cell addresses in =expressions, when rows or cols are added and or deleted. This is a quick go at it, in the middle of doing other things, and not tested fully (not that other things have been tested fully ;-), but at a basic level it should potentially work to some extent if not more.</p>
+<p>NOTE: Even thou the token logic checks for $ as part of cell address, it isnt handled in any other place and will fail, if used.</p>
+<p>NOTE: Paste in a copy-cut/paste flow doesnt adjust any cell addresses.</p>
+<p>NOTE: While deleting rows or cols, the deleted row or col’s address refered in other cells, is not touched/modified. However subsequent row/col’s addresses are udpated suitably.</p>
+<p>Set dirty flag in more places, so that program doesnt just silently quit, if user has not written any possible|potential changes to a file.</p>
+<h3 id="ist2322">20200827IST2322</h3>
+<p>Added logic to show text cursor in edit and explicit command mode. While in default/implicit command mode it doesnt show any cursor, because one cant edit any text buffer in this mode.</p>
+<p>On entering edit (including insert) mode, the blinking text cursor is not shown till user presses some key. Using arrow key will trigger the showing of text cursor, while at same time ignoring the arrow key press in the edit mode.</p>
+<p>NOTE: arrow keys allow moving across cells in default/implicit command mode. While they are ignored in edit/explicit command mode currently. In future may allow user to edit somewhere other than the end of the edit buffer, in which case the arrow keys will be used to position the cursor as required within the edit buffer.</p>
+<p>Set dirty flag if required, when entering insert edit mode.</p>
+<p>Trap exception from curses, when editing long lines which go beyond the visible screen and need to dip(wrap around) into next line during editing.</p>
+<pre><code>When using backspace to remove characters from end of such long wrapped line and the
+line comes back to fit with in the current line, there could be few chars belonging
+to the line visible on the screen on the right edge in some cases, as I dont clear
+the full screen in the middle of a edit, while at same time if a new cell cant fully
+fit within the available screen space, then the extra space at right edge is not
+used normally. Such space will get used only during such wrapping long line edits
+and this leads to those chars remaining at right edge of the screen, even after
+backspacing them. However if user inputs new characters to reach that area of the
+screen again, the previous char will get overwritten properly in the screen.
+
+Parallely it doesnt affect data in any way, and also user should be able to see whats
+happening in a relatively straight way, when it occurs so not forcing a screen refresh
+for now.</code></pre>
+<h4 id="editanywhere-branch">editAnywhere Branch</h4>
+<p>Allow editing anywhere in the edit buffer, in the editplus mode i.e edit(inc insert) and explicit command modes. One can delete characters from anywhere in the current cell as well as characters to anywhere in the current cell. Rather the logic works on the current edit buffer, so it could be a cell’s edit/insert mode data or explicit command and its args.</p>
+<p>TODO: If a long line overflows/wraps into the next line, then the cursor wont be visible, if it goes into this wrapped around line. i.e edit cursor will be visible only if it is in the original line itself or at the end of the wrapped around line. Need to update cellcur to update the row passed to move if required, along with the adjusted new col position also.</p>
+<p>TODO: If such long lines wrap beyond the screen space vertically, then curses addstr will raise a exception. Need to handle this situation appropriately. NOTE that this creates a problem only in edit mode. In normal mode as line is not allowed to wrap into next line, this situation doesnt occur.</p>
+<p>UPDATE: These todos have been implemented, in a proper way.</p>
+<h3 id="ist2057">20200828IST2057</h3>
+<p>Allow one to modify any location in the edit buffer in editplus mode i.e edit/insert or explicit command mode. Even if the edit buffer/line overflows into multiple lines it is handled properly.</p>
+<p>Logic which protects cell text content with field seperator in it, works in a more controlled manner by adding the protecting QUOTE only when required wrt the both ends of the text content.</p>
+<p>If edit buffer overflows beyond the screen vertically, then the view is scrolled down by few lines, so that the user can continue to edit the overflowing edit buffer, as it will be with in the screen now.</p>
+<p>Merge editAnywhere branch into master branch, as the edit anywhere in the edit buffer related logic has been handled reasonably now. This also brings in few of the other updates/cleanups/ fixes mentioned before into the main branch now.</p>
+<h3 id="ist1619">20200829IST1619</h3>
+<p>Added a new secFromPrimitives branch which implements a form of authenticated encryption on its own using the primitives in the cryptography.hazmat package, rather than depending on cryptograpy fernet recipe.</p>
+<p>Spreadsheet package updated to use this new internal implementation as part of its password protected save (pw) and load (pl) commands, by default. User can change bInternalEncDec var to switch between internal and fernet logics.</p>
+<p>NOTE: The internal and external AE implementations are not bitstream compatible with one another, even thou both are potentially following similar concept to some extent. So a password protected file saved using one ae implementation cant be loaded by the other implementation.</p>
+<p>Merge secFromPrimitives into master branch</p>
+<p>Add a Basic HelpDialog which is shown on startup.</p>
+<h3 id="ist1537">20200830IST1537</h3>
+<p>Let program use full text screen, i.e even a partial cell column is now shown at the right edge of screen. Useful on small terminal screens like 80x24 or so…</p>
+<p>Handle exception during cell data printing so that user still can see and trigger explicit commands if required.</p>
+<p>Adapt to terminal window size changes automatically.</p>
+<p>Clear command to clear current spread sheet.</p>
+<p>Show help dialogs by pressing h or ? in default mode or by giving :help explicit command.</p>
+<p>Updated dr and dc explicit commands to delete n rows/cols.</p>
+<p>If the deleted rows or cols is explicitly referenced in a =expression as a celladdress reference, then it will be tagged with a Err tag and that address will not be adjusted.</p>
+<pre><code>TODO: In future check if the explicit cell address reference is part of a range and if so
+see if it can be adjusted to a shorter range. However the current logic is also sufficient
+at a basic level to alert the user that things have changed after a delete and the user
+should adjust the affected =expressions as required by them.</code></pre>
+<h3 id="ist1347">20200831IST1347</h3>
+<p>Changed the text quoting char from ` to ’ to avoid confusion to end users.</p>
+<p>Strip white space from begin and end of edit buffer before saving into cell. So user will need to put the full cell content inside quotes, to protect such white space, if required.</p>
+<p>THis was started on the Gowri/Ganesh festival weekend and now being updated/cleanedup in the Onam festival weekend.</p>
+<h3 id="ist0234---onamrelease">20200901IST0234 - OnamRelease</h3>
+<p>Now one can call builtin python functions as part of =expressions.</p>
+<p>Updated to a new _nvalue and associated logic, which is more flexible and allows =expressions to be more complex, including calling functions within functions i.e a function’s argument can inturn be a function call. Also it evaluates the parts of a =expression in a more structured way. Also it no longer forces the result of the evaluation to be a float.</p>
+<pre><code>This allows round and int python functions to be used as part of =expressions in a more
+flexible manner.</code></pre>
+<p>Added new parse module and the same is used for many parts of the parsing logic of the program now. This is a cleaner, simpler and at same time flexible logic.</p>
+<p>Base and Line key logic moved into sec module.</p>
+<p>Functions logic moved into funcs module.</p>
+<p>Differentiate between text and numeric(=expression) cells.</p>
+<p>Default mode delete command changed from ‘d’ to ‘D’ key press.</p>
+<p>Alert user, if trying to load a file, while unsaved changes are in memory.</p>
+<p>Clear screen when loading a file.</p>
+<p>Make sure that not just a text cell, but also a =expression cell blocks overflowing text from adjacent cell that is towards it’s left.</p>
+<p>Have a larger data viewport compared to display viewport, so that any overflowing text from adjacent cells which are no longer in the display viewport is still displayed. However to keep the processing load of drawing of cell matrix efficient, the data viewport is bigger to display viewport by 20 cells to the left side (because cells on left is what can overflow into current or more cells). User can modify this if required by updating the source. Power To SOURCE ;)</p>
+<p>Avoid exception cornercase by converting char to int, rather than int to char. Because getch can send crazy value if a terminal window size change occurs.</p>
+<p>Set terminal title when a file is successfully loaded.</p>
+<p>readonly, readwrite explicit commands. In readonly mode one cant change the spreadsheet contents. Also readonly commandline option.</p>
+<h3 id="ist0147---onamrelease">20200902IST0147 - OnamRelease</h3>
+<p>:help explicit command loads help.csv file in readonly mode. This uses the new load_help logic. Previously it was loading the helpdlg.</p>
+<p>Cell content delete command sets dirty flag, if there was content to delete.</p>
+<p>Added the explicit command new, to create a new spreadsheet in memory, this allows the user to come out of the help mode. A user could also load a existing file to come out of the help mode.</p>
+<p>Adjust numeric and text cell attributes based on curses attributes available.</p>
+<p>Reposition to A1 cell, when file is loaded.</p>
+<p>s and ps as aliases to w and pw explicit commands.</p>
+<p>Pressing enter key in edit mode, saves edit buffer and returns to default command mode.</p>
+<p>Avoid stray/unwanted newline and fieldsep wrt load and save file logics.</p>
+<p>celladdr related get_token moved to parsekvc and updated to use its routines.</p>
+<p>Fix some oversights.</p>
+<p>TOdays updates done in between watching a bunch of good malayalam movies Savaari, Chalakkudykkaran Changathy and Ayalum Njanum Thammil, among others.</p>
+<h3 id="ist1235---onamrelease">20200903IST1235 - OnamRelease</h3>
+<p>parsing helper routines made more powerful and flexible while still keeping it simpler. Inturn get_celladdr has been simplified while parallely being better at its job.</p>
+<p>Handle request from user to keep cell address parts fixed by using $ prefix for such parts.</p>
+<pre><code>While copy/pasting =expressions, the $-prefixed fixed address request is respected.
+However during row/col insertion/deletion operations, all cell addresses are auto-adjusted in existing =expressions.</code></pre>
+<p>Added a explicit command (:!) to execute shell commands.</p>
+<p>So while entering text content to a cell, which needs to be protected with quotes (bcas whitespace at begin or end and or bcas there is fieldsep in the content), user can just add quote at the beginining, while program will automatically add it to the end.</p>
+<p>paste operation adjusts =expression cell addresses as required.</p>
+<h3 id="ist1018---onamrelease">20200904IST1018 - OnamRelease</h3>
+<p>insert mode saves the original content if any into backupEdit, so if user doesnt commit his new cell content by pressing enter key, ie if the user presses Esc key to discard his new edit, the program will revert the cell to its original content.</p>
+<p>Handle exiting editMode with empty edit buffer and or edit buffer with a single single qoute.</p>
+<p>FIx a oversight with hardcoding of old text quote char in the save_file logic.</p>
+<p>‘P’ pastes data without adjusting cell addresses.</p>
+<p>:new resets display viewport to A1</p>
+<p>If :g celladdr has celladdr beyond spreadsheet, adjust to nearest valid cell.</p>
+<p>Filter python functions by default, so only whitelisted functions can be used in =expressions.</p>
+<p>Fixed possible corner cases with empty/no arg for function and empty cell content copy situations.</p>
+<p>:rcopy which copies a block along with adjusting of the cell addresses in =expressions, if any, logic implemented.</p>
+<p>:rcopyasis which copies a block of cells as is, ie dont change cell addresses in =expressions, implemented.</p>
+<p>:rclear clears the contents of the cells specified.</p>
+<p>Any looping in the =expression calculations is now trapped, tagged and stopped for simple cases.</p>
+<p>Handle quote char if any inbetween (replace with placeholder), or any at the end.</p>
+<h3 id="ist1212---onamplusteachersdayrelease">20200905IST1212 - OnamPlusTeachersDayRelease</h3>
+<p>Use a more specific callDepth based calc looping trapping logic. The previous logic would have triggered the maybe calc loop flag even for cells, which are lets say referenced from a very very huge number of other cells all of which are inturn used or referenced from a single cell using a cell range in its =expression. This should avoid such false positives.</p>
+<p>renamed :readonly and :readwrite to :mreadonly :mreadwrite so that only range based commands start with r for now. And m cleanly maps to mode.</p>
+<p>–calldepth cmdline argument.</p>
+<p>:rgennums number sequence generator.</p>
+<p>Comment out some prints in main display path.</p>
+<p>Display cached cell eval data, to make the spreadsheet displaying fast in general, irrespective of the amount of calculations involved in the spreadsheet. Cell data recalculations occur only when some cell content changes due to user triggered actions like editing/inserting/deleting cells etc.</p>
+<p>Trap exception during cell =expression evaluation, so that all cells get evaluated and cache gets updated on a call to cdata_update.</p>
+<p>Cells with no data in them maps to 0 for numeric evaluations.</p>
+<p>Cells accessed through the supported functions (by being part of their arguments) are now accounted by the CalcLooping trapping logic both wrt the callDepth as well as cell calcCnt.</p>
+<p>:rcopy[asis] and :rgennums now increase the spreadsheet size, if required.</p>
+<p>When retrieving numeric value of cells, if their value is already calculated and cached, the same will be reused. At same time, as was already implemented, any modification to cell content will also clear the cache, ensuring that all cell values will get recalculated.</p>
+<p>Fix a oversight, where I was trying to remove the newline char at end of each read line from file, at two different places. This was leading to the last char of the last field’s value, in each row, getting eaten up.</p>
+<p>Done while viewing few good movies including Joseph among others.</p>
+<p>NValue also updates the cell calculation cache, so that a cell is not recalculated more than once irrespective of in which way the cell dependencies flow.</p>
+<p>cdata_update modified to allow long chain(s) of cells based calcs to be handled in a part by part basis over multiple steps/loops. cdata_update sets error tag on cells which raised exception.</p>
+<p>That bit odd missing recursion errors has been identified, I had a try-except in do_func but not logging into ErrFile, but LogFile. So now recrusion error is pushed up the logic chain. Inturn cdata_update tags Recursion and Exception err cells.</p>
+<p>Standardised ErrTag pattern. Added :rclearerr command.</p>
+<p>Spead up usage for general case, with partial Cell ReCalculation by default, with full recalculation triggered only if cells in view trigger a recursion error.</p>
+<h3 id="ist1212---gauriganeshatoonamtoteachersdayrelease">20200907IST1212 - GauriGaneshaToOnamToTeachersDayRelease</h3>
+<p>Show a processing status message from _cdraw_data before _cdata_update is called. This ensures that if cdata_update is forced to trigger time consuming calculations, then user sees the processing status message.</p>
+<p>Added support for arbitrary number of cols, similar to rows. While trying to test this, noticed that gnumeric and libreoffice potentially seem to have a limit on the number of columsn allowed (need to verify libreoffice/gnumeric bit more later).</p>
+<p>Show processing status message in Non edit modes only.</p>
+<p>Rename mreadonly and mreadwrite to creadonly (cro) and creadwrite (crw). This makes way for m based marker commands in future. As also c based cfieldsep and ctextquote commands in future.</p>
+<p>To avoid confusion and to have consistancy and semantic match, have renamed arguments of functions which took cell’s row and col info from y,x to r,c.</p>
+<p>Added statusbar helper, use for processing status.</p>
+<p>Add cfieldsep and ctextquote commands to set fieldsep and textquote from within the program. This will allow one to convert a csv file from using 1 fieldsep and or quote to a different one. When user requests this change, all existing text cell contents also get the corresponding textquote char in them updated, if it was a ctextquote command. cfieldsep doesnt update text contents, bcas old fieldsep if any in a text field, has nothing to do with the csv fieldsep.</p>
+<p>TODO:THINK WHile saving, will have to check for and handle quotes appropriately. Currently only field sep handled during saving. Note: If loaded csv file was proper, then when user edits things, program tries to ensure that textquote is handled properly. And also if user changes textquote at runtime. So also while saving if textquote is not explicitly checked for safe use, things should be fine at one level, in most cases.</p>
+<p>While setting textquote using ctextquote, if the new textquote is already part of any cell text contents, then it will get replaced by the alt2inbtwquote char. This ensures that contents of the csv file wont get misinterpreted later.</p>
+<p>Load/Save show statusbar update.</p>
+<p>Allow Numeric values to overflow into adjacent empty cells.</p>
+<h3 id="ist1037---gauriganeshatoonamtoteachersdayrelease">20200908IST1037 - GauriGaneshaToOnamToTeachersDayRelease</h3>
+<p>Moved file io logic to fileio module. Need to test it bitmore.</p>
+<p>Fix main’s dlg/status for multi line messages, which start at 0th row. Note that dlg/status row/col corresponds to data cells and not screen row/cols or screen y/x.</p>
+<p>Added marker commands. Rcmds can now use markers in place of cell addresses.</p>
+<p>Cleaned up few of the messages. Clear cdata_update processing message.</p>
+<p>Moved the edit related logics into edit module (i.e copy/cut/paste/del cell, insert/delete row/col, rcopy/rclear). Even rgennums which edits contents of the cells also moved into edit module.</p>
+<p>For rcmds which require source and destination cell ranges (i.e commands like rcopy and rcopyasis), if user gives only the source cell range and then only the start cell address wrt the destination, then infer the destination end cell address from the source cell range.</p>
+<p>Fixed the odd slow navigation towards right or down direction of very large spreadsheets. This was due to me dumping in those two direction navigation logics. ALso commented/removed full me print in general.</p>
+<h3 id="ist0955---gauriganeshatoonamtoteachersdayrelease">20200909IST0955 - GauriGaneshaToOnamToTeachersDayRelease</h3>
+<p>Consolidate all cell content evaluations to depend on nvalue_key for the core/highlevel interpretation irrespective of from where cell content needs to be used i.e be it cdraw_data-&gt;value_Key, or be it cdata_update or anywhere else. Inturn a new and potentially simplified from user perspective cell content interpretation now implemented in nvalue_key.</p>
+<p>Also the internal/program evaluation of =expression remains in the nvalue_expr (previous _nvalue)</p>
+<p>Stop python snippets from running in uncontrolled way, if desired. Its also the default. [DONE] Add a cmdline arg to open up python eval so that bit more varied set of python expressions can be run from a cell.</p>
+<p>Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.</p>
+<p>[DONE] Expand ~ at begin of path (os.path.expanduser)</p>
+<p>[LATER] Move eval/value logics to a seperate file</p>
+<p>[DONE] move navigation related stuff to a seperate file.</p>
+<p>[LATER] Maybe use numpy array for calculated cache. (There are equal or more fundamental changes that can help, so so so).</p>
+<p>Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.</p>
+<p>[TODO] [opti] parse =expressions and mark those which have cell addresses, so that only they get checked during insert/delete as well as during recalculation of cells, rather than all cells with =expressions.</p>
+<p>[DONE] Progress status for insert/delete</p>
+<p>[DONE] cross check password by reentering same before using for save. So that it helps in case user has wrongly typed the password by mistake.</p>
+<p>By default avoid overwriting existing file during saves.</p>
+<p>Added a basic tab completion of file paths support for file load/save operations including password based ones. If a partial path name is given, and if basenames within current dirname match it, it will loop thro that list first for n times, before returning to the generic list for that dirname. [DONE] Need to relook at the code once and reflow things, where possible and or simplify it.</p>
+<h3 id="ist1120---gauriganeshatoonamtoteachersdayrelease">20200911IST1120 - GauriGaneshaToOnamToTeachersDayRelease</h3>
+<p>Made the tab based path completion logic more user-controlled and inturn more constrained and less over-intelligent. In the process also simplifying it and making its end use more natural. Error tag missing and or non accessible path entries.</p>
+<p>Cant forget the interesting docufilms from DW, among others. They were the companions while thinking and coding some of these ;-)</p>
+<p>Be discrete with chopping of the last char.</p>
+<p>Away in Netflix a interesting watchable series.</p>
+<p>Make cell edits/modifications and resultant recalc propogation bit intelligent, rather than the brute force clearing of calc cache of all cells. WHich forces all cells to be recalculated, as required. Now when a cell is edited, even in spreadsheets with very heavy bunch of calculations, if not many cells depend on the edited cell, then the calculations finish very fast and user can continue using the spreadsheet immidiately.</p>
+<pre><code>For cells which are towards the root of a long chain of cell-to-cell dependency based calcs, if they are edited, it would lead to all related
+cells getting recalcuated. However the optimisation of not calculating cells which are not visible directly or indirectly limits the load to
+a great extent. However if both the initial and the last few cells in a very very long chaing of cell-to-cell calcs is visible on the screen
+at the same time and inturn if one of the initial cells in the calc-chain is modified, then as the full chain has to be calculated, it will
+lead to some amount of time being required to finish the calcs, before user can continue using the spreadsheet.
+
+cell content edit/cut/delete/paste now use the efficient syncdCellUpdated logic to clear calc cache.
+
+clear and new also call syncd.create_links.
+
+Insert and Delete row/col operations also call syncd.create_links.
+
+    Insert: Move current cdata values as required into new cdata dictionary with updated positions, where required.
+    Inturn call syncd.create_links (as it doesnt take much time, instead of trying to adjust the values to account for insert).
+    With this the performance is relaively much better.
+
+    Delete: One needs to check for equivalence of =expression, wrt generating same value, before and after delete.
+    So for now cells with =expression have their cdata cleared. While other types of cells have their numeric value
+    copied from old calc cache to new calc cache. This is better than full cache clearing, but not optimal.
+
+        Also not thinking of adapting fwd/rev links wrt delete, instead links are newly created, as it doesnt
+        take much time at one level.
+
+        ALso will have to update the cell address adjust logic to return as to whether the delete involved just
+        moving the cell addresses and or reducing the size of cell ranges if any.
+
+        Delete is a WorkInProgress wrt optimising it, rather currently nothing beyond basic done.
+
+rcmds call syncd.cell_updated as required.</code></pre>
+<p>MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.</p>
+<p>Added a xrefresh command.</p>
+<h3 id="ist1530---gauriganeshatoonamtoteachersdayplus01release">20200913IST1530 - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
+<p>DONE: Use color to distinguish between alternate rows, so that easier for user to map content to its corresponding row.</p>
+<p>DONE: Add xrows and xcols to increase rows or cols at the end quickly. Instead of using ica, icb, ira or irb which also process each and every cell wrt its =expression, to see if they need to be updated.</p>
+<p>Renamed xrefresh to xrecalc, as it mainly recalculates all the cells as and when they or their dependents become visible.</p>
+<p>Center the row and col addresses shown.</p>
+<p>DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.</p>
+<pre><code>Add support for xalignleft, xalignright and xaligndefault.
+NOTE: Has been renamed to calignleft|right|default now.</code></pre>
+<p>xviewraw and xviewnormal commands added.</p>
+<p>Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets with lot of (millions) =expressions which are independent. Similar stratergy also added to delete rows/cols logic.</p>
+<p>TODO:LATER: cell address ranges as lists for python functions.</p>
+<p>TODO:LATER: Date related functions</p>
+<h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
+<p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
+<p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
+<pre><code>authenticated encryption.
+
+sparse data structure based memory storage
+
+windowed lazy/deffered cached evaluations, triggered when a cell or its dependent cells become visible
+
+using recursion limit exception to implement a optimistic multipass oppurtunistic eval logic for resolving deep chaining,
+while still error tagging loops.
+
+    optimistic and oppurtunistic - go ahead inspite of exceptions, evaluating what ever can be at any given tiem.
+
+    multiplass - eval cells with deep chaining in steps where required, caching and reusing results as they become available.
+
+using forward and reverse dependency lists and use same to optimise edit/modify(insert/del) operations on spreadsheet.
+
+table/matrix view of fixed size cells with overflowing of contents into adjacent cells from display perspective.
+
+adjust cell addresses in =expressions during copy-paste or insert/delete operations.
+
+parse tokens and expressions.
+
+tab completion of file paths, curses again, escape to shell from within, constrain python functions and allow use of cells, ...
+
+alignment, precision for display, ...
+
+speed is not the goal, while still being sufficiently usable, in the middle of exploring the above</code></pre>
+<p>Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.</p>
+<h2 id="vasudhaiva-kutumbakam-the-world-is-one-family">Vasudhaiva Kutumbakam (the World is One Family)</h2>
+<p>If you find the program useful, and inturn if you can afford to donate, donating to a local good cause near you, would help those in need.</p>
+</body>
+</html>
