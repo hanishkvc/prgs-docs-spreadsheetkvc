@@ -62,23 +62,24 @@ def tab_complete(tc, tree, sIn):
         theList = sorted(curDB.keys())
         filterAll = list(filter(lambda x: x.startswith(curToken), theList))
         if len(filterAll) == 0:
-            sOut += "{} ".format(curToken)
+            sOut += "{}".format(curToken)
             return sOut
         elif len(filterAll) == 1:
-            sOut += "{} ".format(filterAll[0])
             curDB = curDB.get(curToken)
             if curDB == None:
+                sOut += "{}".format(filterAll[0])
                 return sOut
+            sOut += "{} ".format(filterAll[0])
             continue
         else:
             tc['pos'] += 1
             tc['pos'] = tc['pos'] % len(filterAll)
-            sOut += "{} ".format(filterAll[tc['pos']])
+            sOut += "{}".format(filterAll[tc['pos']])
             return sOut
     theList = sorted(curDB.keys())
     tc['pos'] += 1
     tc['pos'] = tc['pos'] % len(theList)
-    sOut += "{} ".format(theList[tc['pos']])
+    sOut += "{}".format(theList[tc['pos']])
     return sOut
 
 
