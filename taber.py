@@ -63,7 +63,9 @@ def tab_complete(tc, tree, sIn):
     tokens, types = parse.get_tokens(sIn)
     curDB = tree
     sOut = ""
-    for curToken in tokens:
+    for i in range(len(tokens)):
+        curToken = tokens[i]
+        i += 1
         theList = sorted(curDB.keys())
         if len(theList) == 1:
             if theList[0].startswith('ANY'):
