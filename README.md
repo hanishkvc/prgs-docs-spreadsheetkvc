@@ -121,6 +121,8 @@ Some of its features are
 
 		* predefined parts of the :commands (explicit commands) supported by the program.
 
+			* suggest hint for the command parts that user has to specify. (for most commands)
+
 	* normal or raw display mode.
 
 	* global align left, right or default.
@@ -299,7 +301,7 @@ then verify that the arguments given to the command are proper or not. If there 
 arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program
 will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.
 
-Tab completion support available for
+##### Tab completion support available for
 
 	* file path names for load and save commands (for both normal and password version)
 
@@ -310,6 +312,9 @@ Tab completion support available for
 
 		If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
 		so that program will provide completion suggestion for any subsequent predefined parts of the command.
+
+		It also provides hints for the parts of the command that user has to specify (this is done for most commands,
+		but not all).
 
 	If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
 	prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
@@ -363,6 +368,8 @@ Tab completion support available for
 
 NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user
 to explicitly specify the file to write to.
+
+NOTE: tab-completion doesnt provide hint for passwd part.
 
 
 #### Insert/Delete operations
@@ -499,6 +506,8 @@ in a easy | user freindly way.
 	The AlphaNumeric should ideally only include the characters in a-z, A-Z and 0-9
 
 		Example :m1 :ma :mZZ :mstart and so on
+
+	NOTE: tab-completion doesnt provide hint for MarkerId part.
 
 NOTE: markers have m prefix in their name.
 
@@ -1817,7 +1826,7 @@ with lot of (millions)  =expressions which are independent. Similar stratergy al
 
 cformat commands to control how numbers are displayed. Doesnt affect the calculations.
 
-Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program)
+Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program). Also shows hint for parts that user has to specify.
 
 TODO:LATER: cell address ranges as lists for python functions.
 
