@@ -11,7 +11,7 @@ treeDB = {
             'help': None,
             'calign': { 'left': None, 'right': None, 'default': None },
             'cformat': {
-                        'iffloat': None,
+                        'iffloat': { 'ANYNUM': None },
                         'number2float':  { 'yes': None, 'no': None },
                         'neat': None,
                         'raw': None
@@ -23,12 +23,12 @@ treeDB = {
             'pl': None,
             'pw': None,
             'ps': None,
-            'icb': None,
-            'ica': None,
-            'irb': None,
-            'ira': None,
-            'dr': None,
-            'dc': None,
+            'icb': { 'ANYNUM': None },
+            'ica': { 'ANYNUM': None },
+            'irb': { 'ANYNUM': None },
+            'ira': { 'ANYNUM': None },
+            'dr': { 'ANYNUM': None },
+            'dc': { 'ANYNUM': None },
             'ctextquote': None,
             'cfieldsep': None,
             'g': None,
@@ -36,8 +36,8 @@ treeDB = {
             'mclear': None,
             'mshow': None,
             'new': None,
-            'rcopy': None,
-            'rcopyasis': None,
+            'rcopy': { 'ANYALPHANUM': { 'ANYALPHANUM': None } },
+            'rcopyasis': { 'ANYALPHANUM': { 'ANYALPHANUM': None } },
             'rclear': None,
             'rclearerr': None,
             'rgennums': None,
@@ -65,6 +65,14 @@ def tab_complete(tc, tree, sIn):
     sOut = ""
     for curToken in tokens:
         theList = sorted(curDB.keys())
+        if len(theList) == 1:
+            if theList[0].startswith('ANY'):
+                curDB = curDB.get(theList[0])
+                if curDB == None:
+                    sOut += "{}".format(curToken)
+                    return sOut
+                sOut += "{} ".format(curToken)
+                continue
         filterAll = list(filter(lambda x: x.startswith(curToken), theList))
         if len(filterAll) == 0:
             sOut += "{}".format(curToken)
