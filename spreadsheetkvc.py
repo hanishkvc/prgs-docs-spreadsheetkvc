@@ -94,6 +94,7 @@ me = {
         'markers': dict(),
         'fpc': dict(),
         'cformat.iffloat': None,
+        'cformat.number2float': False,
         'exit': DONTEXIT
         }
 
@@ -624,6 +625,14 @@ def _do_cformat(cmd, lArgs):
         return "'FltPreci:{}'".format(me['cformat.iffloat'])
         #return round(1.11111111111111111111, me['cformat.iffloat'])
         #return 1.11111111111111111111
+    elif lArgs[0] == "number2float":
+        if lArgs[1].upper() == 'NO':
+            me['cformat.number2float'] = False
+        elif lArgs[1].upper() == 'YES':
+            me['cformat.number2float'] = True
+        else:
+            raise Exception('Invalid argument')
+        return "'Num2Float:{}'".format(me['cformat.number2float'])
 
 
 def do_ccmd(scr, cmd, args):

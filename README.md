@@ -522,7 +522,7 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 ##### Global formatting
 
-* cformat iffloat <floatPrecision|None>
+* cformat iffloat \<floatPrecision|None>
 
 	Configure the precision to be used when showing floating point numbers
 
@@ -536,17 +536,26 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 		:cformat iffloat None
 
-User can also trigger the same from with in a spreadsheet by using the following in a cell
+  User can also trigger the same from with in a spreadsheet by using the following in a cell
 
 	=config(cformat, iffloat, floatPrecision)
 
-	NOTE: To have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2
 
-NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen.
-However for calculations which depend on such a cell, the results of round function will be used directly.
+  NOTE: Results of any cell with =round() function will inturn be processed according to the cformat iffloat rule, when showing it on the screen.
+  However for calculations which depend on such a cell, the results of round function will be used directly.
 
-NOTE: the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user using :cformat explicit command
-and or it got set by being part a =config(cformat... expression in one of the spreadsheet that was loaded.
+
+* cformat number2float \<yes|no>
+
+	Treat all numbers as floats.
+
+
+NOTE: if using =config(cformat... in a spreadsheet, to have maximum chance of getting triggered, put it in the cells A1 or A2 or B1 or B2
+
+NOTE: the effects of the last cformat formatting rule will persist across files irrespective of if it was triggered explicitly by the user
+using :cformat explicit command and or it got set by being part a =config(cformat... expression in one of the spreadsheet that was loaded.
+
+	This effect is purely from a what is shown perspective. And doesnt effect any calculations or so.
 
 
 #### xtra operations
