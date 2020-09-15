@@ -49,6 +49,11 @@ def tab_complete(tc, tree, sIn):
             tc['pos'] = tc['pos'] % len(filterAll)
             sOut += "{} ".format(filterAll[tc['pos']])
             return sOut
+    theList = sorted(curDB.keys())
+    tc['pos'] += 1
+    tc['pos'] = tc['pos'] % len(theList)
+    sOut += "{} ".format(theList[tc['pos']])
+    return sOut
 
 
 
