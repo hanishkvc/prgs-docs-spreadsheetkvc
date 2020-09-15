@@ -8,9 +8,23 @@ import parsekvc as parse
 
 
 treeDB = {
-            'calign': { 'left': None, 'right': None, 'Default': None },
+            'calign': { 'left': None, 'right': None, 'default': None },
+            'cformat': { 'iffloat': None, 'number2float': None, 'neat': None, 'raw': None },
+            'l': None,
+            'w': None,
+            'pl': None,
+            'pw': None,
+            'icb': None,
+            'ica': None,
+            'irb': None,
+            'ira': None,
+            'dr': None,
+            'dc': None,
             'ctextquote': None,
             'cfieldsep': None,
+            'xrecalc': None,
+            'xrows': None,
+            'xcols': None,
             'xviewraw': None,
             'xviewnormal': None
         }
