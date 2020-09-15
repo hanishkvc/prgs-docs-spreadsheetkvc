@@ -507,15 +507,15 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 
 ##### Global Alignment
 
-* calignleft
+* calign left
 
 	Align the cell content to the left. Any content that doesnt fit within the cell will overflow into the empty cells on the right.
 
-* calignright
+* calign right
 
 	Align the cell content to the right. Any content that doesnt fit within the cell will overflow into the empty cells on the left.
 
-* caligndefault (this is the default alignment mode of program)
+* calign default (this is the default alignment mode of program)
 
 	Align text cells to left. Align numbers which fit within the cell to right else align to left.
 	Any content that doesnt fit within the cell will overflow into empty cells on the right.
@@ -1767,12 +1767,14 @@ Center the row and col addresses shown.
 DONE: Right align the cell contents, while overflowing towards the left cells which are empty. Indicate clipping of cell contents.
 
 	Add support for xalignleft, xalignright and xaligndefault.
-	NOTE: Has been renamed to calignleft|right|default now.
+	NOTE: Has been renamed and spaced out to calign left|right|default now.
 
 xviewraw and xviewnormal commands added.
 
 Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets
 with lot of (millions)  =expressions which are independent. Similar stratergy also added to delete rows/cols logic.
+
+cformat commands to control how numbers are displayed. Doesnt affect the calculations.
 
 TODO:LATER: cell address ranges as lists for python functions.
 

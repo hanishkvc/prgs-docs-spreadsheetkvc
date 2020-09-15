@@ -60,7 +60,7 @@ Explicit Command Mode;;ENTERED by pressing : in default mode;;;;;;;;;;;;;;;;;;;;
 ;cfieldsep C;set character C has the fieldsep for csv file (Ex :cfieldsep . use . as the field sep);;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;ctextquote C;set character C has the text quote char for text cell contents (Ex :ctextquote " use ["] as the textquote);;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;creadonly OR creadwrite;;;set program to readonly or readwrite mode;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;calignleft OR calignright OR caligndefault;;;Align cell contents globally to left or right or default mode;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;calign <left|right|default>;;;Align cell contents globally to left or right or default mode;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;cformat iffloat <floatPrecision|None>;;;set or clear the precision of floating point numbers, for display purpose;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;cformat number2float <yes|no>;;;convert integers to floating point numbers, for display purpose;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;** Markers **;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

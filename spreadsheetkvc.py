@@ -604,17 +604,19 @@ def replace_incontent(cOld, cNew):
                 me['data'][(r,c)] = sData
 
 
-def _do_calign(cmd, args):
+def _do_calign(cmd, lArgs):
     '''
     configure the global alignment
     '''
     global GALIGN
-    if (cmd == 'calignleft'):
+    if (lArgs[0] == 'left'):
         GALIGN = Align.Left
-    elif (cmd == 'calignright'):
+    elif (lArgs[0] == 'right'):
         GALIGN = Align.Right
-    elif (cmd == 'caligndefault'):
+    elif (lArgs[0] == 'default'):
         GALIGN = Align.Default
+    else:
+        raise Exception('calign: Invalid argument')
 
 
 def _do_cformat(cmd, lArgs):
@@ -635,7 +637,7 @@ def _do_cformat(cmd, lArgs):
         elif lArgs[1].upper() == 'YES':
             me['cformat.number2float'] = True
         else:
-            raise Exception('Invalid argument')
+            raise Exception('cformat: Invalid argument')
         return "'Num2Float:{}'".format(me['cformat.number2float'])
 
 
@@ -663,7 +665,8 @@ def do_ccmd(scr, cmd, args):
         replace_incontent(THEQUOTE, args[0])
         THEQUOTE = args[0]
     elif cmd.startswith('calign'):
-        _do_calign(cmd, args)
+        lArgs = args.split(' ')
+        _do_calign(cmd, lArgs)
     elif cmd.startswith('cformat'):
         lArgs = args.split(' ')
         _do_cformat(cmd, lArgs)
