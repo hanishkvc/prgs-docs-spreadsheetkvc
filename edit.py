@@ -7,6 +7,7 @@
 import traceback
 import parsekvc as parse
 import syncd
+import nav
 
 
 
@@ -457,6 +458,21 @@ def _do_rgennums(scr, startKey, endKey, tokens):
     return True
 
 
+def _do_rsearch(scr, startKey, endKey, tokens):
+    '''
+    Search the given token in the given range of cells
+    '''
+    for r in range(startKey[0], endKey[0]+1):
+        for c in range(startKey[1], endKey[1]+1):
+            curData = me['data'].get((r,c))
+            if curData == None:
+                continue
+            if curData.find(tokens[0]) == -1:
+                continue
+            nav._goto_cell(scr, r,c)
+            dlg(scr, [ '{}{}:{}'.format(r, c, curData) ])
+
+
 def do_rcmd(scr, cmd, args):
     '''
     RCommands demuxer.
@@ -501,6 +517,9 @@ def do_rcmd(scr, cmd, args):
         elif cmd == "rgennums":
             tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
+        elif cmd == "rsearch":
+            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
+            bDone = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
     except:
