@@ -460,8 +460,13 @@ def _do_rgennums(scr, startKey, endKey, tokens):
 
 def _do_rsearch(scr, startKey, endKey, tokens):
     '''
-    Search the given token in the given range of cells
+    Search for the given token in the given range of cells
     '''
+    endKey = list(endKey)
+    if endKey[0] > me['numRows']:
+        endKey[0] = me['numRows']
+    if endKey[1] > me['numCols']:
+        endKey[1] = me['numCols']
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             curData = me['data'].get((r,c))
@@ -470,7 +475,7 @@ def _do_rsearch(scr, startKey, endKey, tokens):
             if curData.find(tokens[0]) == -1:
                 continue
             nav._goto_cell(scr, r,c)
-            dlg(scr, [ '{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
+            dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
     return True
 
 
