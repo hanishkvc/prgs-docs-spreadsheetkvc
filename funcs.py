@@ -36,17 +36,24 @@ def _cellrange_to_list(lRange, bIgnoreEmpty=True):
 
 
 def cellrange_to_list(sIn):
+    '''
+    Expand a cell range into a list of its values.
+    The cell range could be either given directly or within brackets.
+        Only one set of brackets allowed i.e [cellRange] is ok, but [[cellRange]] will be ignored.
+    '''
     tokens, types = parse.get_evalparts(sIn)
     if (len(tokens) == 1):
         if types[0] == parse.EvalPartType.Group:
+            grpStart = tokens[0]
+            grpEnd = tokens[-1]
             maybeCellRange = tokens[1:-1]
             if maybeCellRange != "":
                 tokens, types = parse.get_evalparts(maybeCellRange)
-                if len(tokens) == 3:
-                    if (types[0] == parse.EvalPartType.AlphaNum) and ((types[1] == parse.EvalPartType.Any) and (types[1] == ':')) and (types[2] == parse.EvalPartType.AlphaNum):
-                        bList, theList = _cellrange_to_list(tokens)
-                        if bList:
-                            return True, theList
+    if len(tokens) == 3:
+        if (types[0] == parse.EvalPartType.AlphaNum) and ((types[1] == parse.EvalPartType.Any) and (types[1] == ':')) and (types[2] == parse.EvalPartType.AlphaNum):
+            bList, theList = _cellrange_to_list(tokens)
+            if bList:
+                return True, theList
     return False, sIn
 
 
