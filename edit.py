@@ -473,6 +473,7 @@ def _do_rsearch(scr, startKey, endKey, tokens):
     if sToFind[0] == parse.TOKENQUOTE:
         sToFind = sToFind[1:-1]
     sReplaceWith = None
+    bReplaced = False
     if len(tokens) >= 3:
         if tokens[1] == 'replace':
             sReplaceWith = tokens[2]
@@ -493,7 +494,8 @@ def _do_rsearch(scr, startKey, endKey, tokens):
                 if chr(got).upper() == 'Y':
                     curData = curData.replace(sToFind, sReplaceWith)
                     me['data'][(r,c)] = curData
-    return True
+                    bReplaced = True
+    return True, bReplaced
 
 
 def do_rcmd(scr, cmd, args):
@@ -544,7 +546,9 @@ def do_rcmd(scr, cmd, args):
             me['dirty'] = True
         if cmd == "rsearch":
             tokens, types = parse.get_tokens(sAdjustedArgs, lPos[-1], ['-','+'])
-            bDone = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
+            bDone, bReplaced = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
+            if bReplaced:
+                me['dirty'] = True
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False
