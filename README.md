@@ -470,6 +470,10 @@ to explicitly specify the file to write to.
 
 	NOTE: Delta can be either positive or negative.
 
+* rsearch cellAddrRange StringToSearch
+
+	Cycles the user through all the cells which contain the string given by the user.
+
 
 NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.
 
@@ -1842,6 +1846,8 @@ DONE: cell address ranges as lists, if found as argument to python functions.
 ### 20200916IST1507 - GauriGaneshaToOnamToTeachersDayPlus01Release
 
 Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.
+
+Added :rsearch command to search for a given token/string in the cells.
 
 TODO: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
 

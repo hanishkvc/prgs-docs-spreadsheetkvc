@@ -470,7 +470,8 @@ def _do_rsearch(scr, startKey, endKey, tokens):
             if curData.find(tokens[0]) == -1:
                 continue
             nav._goto_cell(scr, r,c)
-            dlg(scr, [ '{}{}:{}'.format(r, c, curData) ])
+            dlg(scr, [ '{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
+    return True
 
 
 def do_rcmd(scr, cmd, args):
@@ -517,11 +518,11 @@ def do_rcmd(scr, cmd, args):
         elif cmd == "rgennums":
             tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
-        elif cmd == "rsearch":
-            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
-            bDone = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
+        if cmd == "rsearch":
+            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
+            bDone = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
     except:
         traceback.print_exc(file=GERRFILE)
         bDone = False
