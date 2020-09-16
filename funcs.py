@@ -268,7 +268,7 @@ def do_pyfunc(sCmd, sArgs):
     '''
     if not allowed_pyfunc(sCmd, sArgs):
         return ERRPFN
-    print("do_pyfunc:{}:{}".format(sCmd, sArgs), file=GERRFILE)
+    #print("do_pyfunc:{}:{}".format(sCmd, sArgs), file=GERRFILE)
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
@@ -283,7 +283,7 @@ def do_pyfunc(sCmd, sArgs):
     if theArgs.startswith(','):
         theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd, theArgs)
-    print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
+    #print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
     return eval(sPyFunc)
 
 
