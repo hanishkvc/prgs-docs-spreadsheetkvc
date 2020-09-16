@@ -19,6 +19,37 @@ GERRFILE = None
 _do_cformat = None
 
 
+def _cellrange_to_list(lRange, bIgnoreEmpty=True):
+    bCellAddr, (sR,sC) = _celladdr_valid(lRange[0])
+    if not bCellAddr:
+        return False, []
+    bCellAddr, (eR,eC) = _celladdr_valid(lRange[2])
+    if not bCellAddr:
+        return False, []
+    lOut = []
+    for r in range(sR, eR+1):
+        for c in range(sC, eC+1):
+            if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
+                continue
+            lOut.append(nvalue_key((r,c)))
+    return True, lOut
+
+
+def cellrange_to_list(sIn):
+    tokens, types = parse.get_evalparts(sIn)
+    if (len(tokens) == 1):
+        if types[0] == parse.EvalPartType.Group:
+            maybeCellRange = tokens[1:-1]
+            if maybeCellRange != "":
+                tokens, types = parse.get_evalparts(maybeCellRange)
+                if len(tokens) == 3:
+                    if (types[0] == parse.EvalPartType.AlphaNum) and ((types[1] == parse.EvalPartType.Any) and (types[1] == ':')) and (types[2] == parse.EvalPartType.AlphaNum):
+                        bList, theList = _cellrange_to_list(tokens)
+                        if bList:
+                            return True, theList
+    return False, sIn
+
+
 def _do_minmax(args, bIgnoreEmpty=True):
     '''
     Find the min and max from the matrix of cells.
@@ -233,7 +264,13 @@ def do_pyfunc(sCmd, sArgs):
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
-        sValOrArg = nvalue_expr(curArg)
+        # Handle a pure CellRange Group
+        bList, theList = cellrange_to_list(curArg)
+        if bList:
+            sValOrArg = theList
+        else:
+            # Evaluate the argument
+            sValOrArg = nvalue_expr(curArg)
         theArgs += ",{}".format(sValOrArg)
     if theArgs.startswith(','):
         theArgs = theArgs[1:]
