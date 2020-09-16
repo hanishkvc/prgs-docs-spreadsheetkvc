@@ -78,6 +78,7 @@
 <li><p>normal or raw display mode.</p></li>
 <li><p>global align left, right or default.</p></li>
 <li><p>global config float precision</p></li>
+<li><p>search and if required replace support</p></li>
 </ul></li>
 <li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only for cells which are affected by it (edits propogate the changes across dependent cells). Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells compared to insert, so require to recalc all cells with dependencies for now.</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
@@ -283,6 +284,11 @@ the program will cycle throught all the suggestions.</code></pre>
 <p>Ex: Generate table id starting from 1</p>
 <pre><code>  :rgennums C1:C10</code></pre>
 <p>NOTE: Delta can be either positive or negative.</p></li>
+<li><p>rsearch cellAddrRange StringToSearch</p>
+<p>Cycles the user through all the cells which contain the string given by the user.</p>
+<p>NOTE: Use single quotes around the string, if you want to search for something containing spaces in them.</p></li>
+<li><p>rsearch cellAddrRange StringToSearch replace NewStringToUse</p>
+<p>Similar to rsearch, but additionally allow the searched string to be replaced with the new string given.</p></li>
 </ul>
 <p>NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.</p>
 <p>The marker is specified using the syntax <span class="citation" data-cites="mMarkerId">@mMarkerId</span></p>
@@ -937,6 +943,10 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>cformat commands to control how numbers are displayed. Doesnt affect the calculations.</p>
 <p>Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program). Also shows hint for parts that user has to specify.</p>
 <p>DONE: cell address ranges as lists, if found as argument to python functions.</p>
+<h3 id="ist1507---gauriganeshatoonamtoteachersdayplus01release">20200916IST1507 - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
+<p>Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.</p>
+<p>Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.</p>
+<p>TODO: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.</p>
 <p>TODO:LATER: Date related functions</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>

@@ -41,7 +41,7 @@ treeDB = {
             'rclear': { 'ANYCELLRANGE': None },
             'rclearerr': { 'ANYCELLRANGE': None },
             'rgennums': { 'ANYCELLRANGE': { 'ANYNUMStart': { 'ANYNUMDelta': None } } },
-            'rsearch': { 'ANYCELLRANGE': { 'ANYALPHANUMorANYQUOTED': None } },
+            'rsearch': { 'ANYCELLRANGE': { 'ANYALPHANUMorANYQUOTEDnoteNextReplaceOptional': { 'replace': { 'ANYALPHANUMorANYQUOTED': None } } } },
             'xrecalc': None,
             'xrows': { 'ANYNUM': None },
             'xcols': { 'ANYNUM': None },

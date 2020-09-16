@@ -129,6 +129,8 @@ Some of its features are
 
 	* global config float precision
 
+	* search and if required replace support
+
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
   for cells which are affected by it (edits propogate the changes across dependent cells).
   Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells
@@ -475,6 +477,11 @@ to explicitly specify the file to write to.
 	Cycles the user through all the cells which contain the string given by the user.
 
 	NOTE: Use single quotes around the string, if you want to search for something containing spaces in them.
+
+* rsearch cellAddrRange StringToSearch replace NewStringToUse
+
+	Similar to rsearch, but additionally allow the searched string to be replaced with the new string given.
+
 
 NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.
 
@@ -1848,7 +1855,7 @@ DONE: cell address ranges as lists, if found as argument to python functions.
 
 Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.
 
-Added :rsearch command to search for a given token/string in the cells.
+Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.
 
 TODO: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
 
