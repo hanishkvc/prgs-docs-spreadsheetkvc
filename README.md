@@ -474,6 +474,7 @@ to explicitly specify the file to write to.
 
 	Cycles the user through all the cells which contain the string given by the user.
 
+	NOTE: Use single quotes around the string, if you want to search for something containing spaces in them.
 
 NOTE: In these range operations (rcmds), one can use markers in place of cell addresses, if required.
 

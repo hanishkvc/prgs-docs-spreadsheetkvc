@@ -467,12 +467,15 @@ def _do_rsearch(scr, startKey, endKey, tokens):
         endKey[0] = me['numRows']
     if endKey[1] > me['numCols']:
         endKey[1] = me['numCols']
+    sToFind = tokens[0]
+    if sToFind[0] == parse.TOKENQUOTE:
+        sToFind = sToFind[1:-1]
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             curData = me['data'].get((r,c))
             if curData == None:
                 continue
-            if curData.find(tokens[0]) == -1:
+            if curData.find(sToFind) == -1:
                 continue
             nav._goto_cell(scr, r,c)
             dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
