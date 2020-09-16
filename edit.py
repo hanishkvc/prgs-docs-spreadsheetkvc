@@ -518,6 +518,8 @@ def do_mcmd(scr, cmd, args):
     mclear to clear current markers
     mshow to show current markers
     mMarkerId assign current cell (i.e row/col) to specified marker id.
+        even m MarkerId is allowed, while setting marker.
+        But while using @m prefix is needed.
     '''
     if cmd[0] != 'm':
         dlg(scr, ['DBUG {} {}'.format(cmd, args)])
@@ -535,7 +537,10 @@ def do_mcmd(scr, cmd, args):
         lMarkers.append("{:40}".format("Press any key..."))
         dlg(scr, lMarkers)
         return True
-    markerId = cmd[1:]
+    if args.strip() == "":
+        markerId = cmd[1:]
+    else:
+        markerId = args
     me['markers'][markerId] = (me['curRow'], me['curCol'])
     return True
 

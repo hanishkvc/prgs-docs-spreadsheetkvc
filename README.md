@@ -497,17 +497,19 @@ in a easy | user freindly way.
 
 	Clear the current set of markers
 
-* mMarkerId
+* mMarkerId		(OR m MarkerId)
 
-	Set the marker mMarkerId to point to current cell. MarkerIds can be AlphaNumeric.
+	Set the marker MarkerId to point to current cell. MarkerIds can be AlphaNumeric.
 
 	The AlphaNumeric should ideally only include the characters in a-z, A-Z and 0-9
 
 		Example :m1 :ma :mZZ :mstart and so on
 
-	NOTE: tab-completion doesnt provide hint for MarkerId part.
+		THese are also equally valid commands to set markers :m 1 :m a :m ZZ :m start and so on
 
-NOTE: markers have m prefix in their name.
+	NOTE: tab-completion only hints the m MarkerId notation.
+
+When using a marker in place of a cell address in any of the range operations, one needs to prefix the MarkerId with @m i.e @mMarkerId
 
 
 #### Config commands

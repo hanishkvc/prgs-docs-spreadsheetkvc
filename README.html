@@ -233,7 +233,6 @@ the program will cycle throught all the suggestions.</code></pre>
 <p>create a new spreadsheet in memory.</p></li>
 </ul>
 <p>NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user to explicitly specify the file to write to.</p>
-<p>NOTE: tab-completion doesnt provide hint for passwd part.</p>
 <h4 id="insertdelete-operations">Insert/Delete operations</h4>
 <ul>
 <li><p>dr [numOfRows]</p>
@@ -302,13 +301,15 @@ the program will cycle throught all the suggestions.</code></pre>
 <p>Show the currently set markers</p></li>
 <li><p>mclear</p>
 <p>Clear the current set of markers</p></li>
-<li><p>mMarkerId</p>
-<p>Set the marker mMarkerId to point to current cell. MarkerIds can be AlphaNumeric.</p>
+<li><p>mMarkerId (OR m MarkerId)</p>
+<p>Set the marker MarkerId to point to current cell. MarkerIds can be AlphaNumeric.</p>
 <p>The AlphaNumeric should ideally only include the characters in a-z, A-Z and 0-9</p>
-<pre><code>  Example :m1 :ma :mZZ :mstart and so on</code></pre>
-<p>NOTE: tab-completion doesnt provide hint for MarkerId part.</p></li>
+<pre><code>  Example :m1 :ma :mZZ :mstart and so on
+
+  THese are also equally valid commands to set markers :m 1 :m a :m ZZ :m start and so on</code></pre>
+<p>NOTE: tab-completion only hints the m MarkerId notation.</p></li>
 </ul>
-<p>NOTE: markers have m prefix in their name.</p>
+<p>When using a marker in place of a cell address in any of the range operations, one needs to prefix the MarkerId with <span class="citation" data-cites="m">@m</span> i.e <span class="citation" data-cites="mMarkerId">@mMarkerId</span></p>
 <h4 id="config-commands">Config commands</h4>
 <h5 id="read-write-mode">Read Write Mode</h5>
 <ul>
