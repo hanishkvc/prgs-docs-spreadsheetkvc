@@ -106,6 +106,9 @@ def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
     If it finds a string quoted using single quotes, then it
     will be extracted as a single string token.
 
+        This string will only include spaces, alpha numerals
+        and any ANAddOns.
+
     If a list of chars is passed in ANAddon, then any character
     in that list will be treated as part of AlphaNum token.
     '''
