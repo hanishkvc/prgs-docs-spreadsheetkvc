@@ -50,7 +50,7 @@ def cellrange_to_list(sIn):
             if maybeCellRange != "":
                 tokens, types = parse.get_evalparts(maybeCellRange)
     if len(tokens) == 3:
-        if (types[0] == parse.EvalPartType.AlphaNum) and ((types[1] == parse.EvalPartType.Any) and (types[1] == ':')) and (types[2] == parse.EvalPartType.AlphaNum):
+        if (types[0] == parse.EvalPartType.AlphaNum) and ((types[1] == parse.EvalPartType.Any) and (tokens[1] == ':')) and (types[2] == parse.EvalPartType.AlphaNum):
             bList, theList = _cellrange_to_list(tokens)
             if bList:
                 return True, theList
