@@ -448,7 +448,10 @@ def _cdraw_data(scr, rowStart, rowEnd, colStart, colEnd):
                     if type(data) == int:
                         num2flt = me.get('cformat.number2float')
                         if num2flt:
-                            data = data * 1.0
+                            try:
+                                data = data * 1.0
+                            except:
+                                pass
                     sData = str(data)
                     if type(data) == float:
                         floatPrecision = me.get('cformat.iffloat')
