@@ -32,7 +32,7 @@ treeDB = {
             'ctextquote': { 'ANYCHAR': None },
             'cfieldsep': { 'ANYCHAR': None },
             'g': { 'ANYCELLADDR': None },
-            'm': None,
+            'm': { 'ANYALPHANUMMarker': None },
             'mclear': None,
             'mshow': None,
             'new': None,

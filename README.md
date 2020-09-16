@@ -121,7 +121,7 @@ Some of its features are
 
 		* predefined parts of the :commands (explicit commands) supported by the program.
 
-			* suggest hint for the command parts that user has to specify. (for most commands)
+			* suggest hint for the command parts that user has to specify.
 
 	* normal or raw display mode.
 
@@ -313,8 +313,7 @@ will not continue if the arguments are not proper. User can always press <Esc> k
 		If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
 		so that program will provide completion suggestion for any subsequent predefined parts of the command.
 
-		It also provides hints for the parts of the command that user has to specify (this is done for most commands,
-		but not all).
+		It also provides hints for the parts of the command that user has to specify (this is done for most commands).
 
 	If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
 	prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
