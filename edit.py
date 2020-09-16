@@ -539,6 +539,8 @@ def do_mcmd(scr, cmd, args):
         return True
     if args.strip() == "":
         markerId = cmd[1:]
+        if markerId == "":
+            raise Exception('SetMarker: Marker missing')
     else:
         markerId = args
     me['markers'][markerId] = (me['curRow'], me['curCol'])

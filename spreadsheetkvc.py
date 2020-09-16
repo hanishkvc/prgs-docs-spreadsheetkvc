@@ -857,6 +857,8 @@ def explicit_commandmode(stdscr, cmdArgs):
     elif cmd.startswith("r") and not me['readOnly']:
         edit.do_rcmd(stdscr, cmd, args)
     elif cmd[0] == 'm':
+        if args == None:
+            args = ""
         edit.do_mcmd(stdscr, cmd, args)
     elif (cmd[0] == 'x'):
         do_xcmd(stdscr, cmd, args)
