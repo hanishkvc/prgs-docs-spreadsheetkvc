@@ -236,7 +236,7 @@ def do_config(args):
         return _do_cformat(argsList[0], argsList[1:])
 
 
-pyFuncs = [ 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]
+pyFuncs = [ 'min', 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]
 def allowed_pyfunc(sCmd, sArgs):
     '''
     Check if the specified python function should be allowed or not.
@@ -268,6 +268,7 @@ def do_pyfunc(sCmd, sArgs):
     '''
     if not allowed_pyfunc(sCmd, sArgs):
         return ERRPFN
+    print("do_pyfunc:{}:{}".format(sCmd, sArgs), file=GERRFILE)
     argsList = parse.get_funcargs(sArgs)
     theArgs = ""
     for curArg in argsList:
@@ -282,7 +283,7 @@ def do_pyfunc(sCmd, sArgs):
     if theArgs.startswith(','):
         theArgs = theArgs[1:]
     sPyFunc = "{}({})".format(sCmd, theArgs)
-    #print("do_pyfunc:{}".format(sPyFunc), file=GLOGFILE)
+    print("do_pyfunc:{}".format(sPyFunc), file=GERRFILE)
     return eval(sPyFunc)
 
 
@@ -301,8 +302,8 @@ def do_func(sCmdIn, sArgs):
             return do_avg(sArgs)
         elif (sCmd == "CNT") or (sCmd == "COUNT"):
             return do_cnt(sArgs)
-        elif sCmd == "MIN":
-            return do_min(sArgs)
+        #elif sCmd == "MIN":
+        #    return do_min(sArgs)
         elif sCmd == "MAX":
             return do_max(sArgs)
         elif sCmd == "PROD":
