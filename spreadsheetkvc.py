@@ -509,6 +509,7 @@ def _cdraw_editbuffer(stdscr):
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, clipToCell=False, clipToScreen=False)
     if me['state'] == ':':
         #cellstr(stdscr, me['numRows']-1, 0, me['gotStr'], curses.A_REVERSE, False)
+        cellstr(stdscr, 0, 0, "{:{width}}".format(' ', width=me['scrCols']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
         cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
 
 
