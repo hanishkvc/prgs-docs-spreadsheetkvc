@@ -964,7 +964,14 @@ The arguments of python functions could be specified either as a
 
 	* function which returns a numeric value or
 
-	* cell address (but not a cell address range for now)
+	* cell address (its numeric value will be used) or
+
+	* cell address range (converted to a list of numeric values belonging to the cells)
+
+		A function argument which is a cell address range, shouldnt contain any other operations.
+		While other arguments of the function could even be expressions, which get evaluated to form the final argument value.
+
+		cell address range can be used, provided the underlying python function accepts a list of values.
 
 
 #### python functions
@@ -988,7 +995,9 @@ float(numeric)
 
 
 NOTE: Most of the math functions in python math module are also supported. However to be
-useful, they should ideally take only scalar values and return scalar value.
+useful, they should ideally take or return only scalar values and or simple 1d lists.
+And as mentioned before these scalar or 1d list values could be either direct or from cells
+and or output of other functions.
 
 
 ## CellAddress And Ranges
@@ -1827,7 +1836,7 @@ cformat commands to control how numbers are displayed. Doesnt affect the calcula
 
 Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program). Also shows hint for parts that user has to specify.
 
-TODO:LATER: cell address ranges as lists for python functions.
+DONE: cell address ranges as lists, if found as argument to python functions.
 
 TODO:LATER: Date related functions
 

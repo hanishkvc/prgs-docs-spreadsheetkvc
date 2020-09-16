@@ -72,7 +72,7 @@
 <li><p>file path names for load and save operations.</p></li>
 <li><p>predefined parts of the :commands (explicit commands) supported by the program.</p>
 <ul>
-<li>suggest hint for the command parts that user has to specify. (for most commands)</li>
+<li>suggest hint for the command parts that user has to specify.</li>
 </ul></li>
 </ul></li>
 <li><p>normal or raw display mode.</p></li>
@@ -202,8 +202,7 @@ explicit command mode.</code></pre>
     If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
     so that program will provide completion suggestion for any subsequent predefined parts of the command.
 
-    It also provides hints for the parts of the command that user has to specify (this is done for most commands,
-    but not all).
+    It also provides hints for the parts of the command that user has to specify (this is done for most commands).
 
 If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
 prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
@@ -532,7 +531,14 @@ to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)
 
 * function which returns a numeric value or
 
-* cell address (but not a cell address range for now)</code></pre>
+* cell address (its numeric value will be used) or
+
+* cell address range (converted to a list of numeric values belonging to the cells)
+
+    A function argument which is a cell address range, shouldnt contain any other operations.
+    While other arguments of the function could even be expressions, which get evaluated to form the final argument value.
+
+    cell address range can be used, provided the underlying python function accepts a list of values.</code></pre>
 <h4 id="python-functions">python functions</h4>
 <p>round(number, precision)</p>
 <pre><code>round the specified number to have the specified number of digits following dot.</code></pre>
@@ -542,7 +548,7 @@ to represent a sample space (stdev,stddev) or a full population (stdevp,stddevp)
 <pre><code>convert the numeric value to be a integer</code></pre>
 <p>float(numeric)</p>
 <pre><code>convert to float value</code></pre>
-<p>NOTE: Most of the math functions in python math module are also supported. However to be useful, they should ideally take only scalar values and return scalar value.</p>
+<p>NOTE: Most of the math functions in python math module are also supported. However to be useful, they should ideally take or return only scalar values and or simple 1d lists. And as mentioned before these scalar or 1d list values could be either direct or from cells and or output of other functions.</p>
 <h2 id="celladdress-and-ranges">CellAddress And Ranges</h2>
 <p>The Cols addressed starting from A to ZZ</p>
 <p>The Rows are addressed starting from 1 to …</p>
@@ -930,7 +936,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>Insert uses fwdLinks to ignore cells with =expressions which dont depend on other cells. This speeds up insert op a lot for spreadhsheets with lot of (millions) =expressions which are independent. Similar stratergy also added to delete rows/cols logic.</p>
 <p>cformat commands to control how numbers are displayed. Doesnt affect the calculations.</p>
 <p>Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program). Also shows hint for parts that user has to specify.</p>
-<p>TODO:LATER: cell address ranges as lists for python functions.</p>
+<p>DONE: cell address ranges as lists, if found as argument to python functions.</p>
 <p>TODO:LATER: Date related functions</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
