@@ -460,7 +460,9 @@ def _do_rgennums(scr, startKey, endKey, tokens):
 
 def _do_rsearch(scr, startKey, endKey, tokens):
     '''
-    Search for the given token in the given range of cells
+    Search for the given token in the given range of cells.
+
+    If replace is requested then replace search string with the replace string.
     '''
     endKey = list(endKey)
     if endKey[0] > me['numRows']:
@@ -470,6 +472,12 @@ def _do_rsearch(scr, startKey, endKey, tokens):
     sToFind = tokens[0]
     if sToFind[0] == parse.TOKENQUOTE:
         sToFind = sToFind[1:-1]
+    sReplaceWith = None
+    if len(tokens) >= 3:
+        if tokens[1] == 'replace':
+            sReplaceWith = tokens[2]
+            if sReplaceWith[0] == parse.TOKENQUOTE:
+                sReplaceWith = sReplaceWith[1:-1]
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             curData = me['data'].get((r,c))
@@ -478,7 +486,13 @@ def _do_rsearch(scr, startKey, endKey, tokens):
             if curData.find(sToFind) == -1:
                 continue
             nav._goto_cell(scr, r,c)
-            dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
+            if sReplaceWith == None:
+                dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
+            else:
+                got = dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData), 'Replace [y/N]:' ])
+                if chr(got).upper() == 'Y':
+                    curData = curData.replace(sToFind, sReplaceWith)
+                    me['data'][(r,c)] = curData
     return True
 
 
