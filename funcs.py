@@ -44,9 +44,9 @@ def cellrange_to_list(sIn):
     tokens, types = parse.get_evalparts(sIn)
     if (len(tokens) == 1):
         if types[0] == parse.EvalPartType.Group:
-            grpStart = tokens[0]
-            grpEnd = tokens[-1]
-            maybeCellRange = tokens[1:-1]
+            grpStart = tokens[0][0]
+            grpEnd = tokens[0][-1]
+            maybeCellRange = tokens[0][1:-1]
             if maybeCellRange != "":
                 tokens, types = parse.get_evalparts(maybeCellRange)
     if len(tokens) == 3:
