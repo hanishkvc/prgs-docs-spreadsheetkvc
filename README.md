@@ -369,8 +369,6 @@ will not continue if the arguments are not proper. User can always press <Esc> k
 NOTE: To avoid user overwriting/modifying files unknowingly, the program requires the user
 to explicitly specify the file to write to.
 
-NOTE: tab-completion doesnt provide hint for passwd part.
-
 
 #### Insert/Delete operations
 

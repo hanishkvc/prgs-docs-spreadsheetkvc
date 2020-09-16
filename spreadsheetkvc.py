@@ -751,7 +751,7 @@ def path_completion(fpc, cmdArgs):
         theBase = cmd
     elif (cmd in ['pw', 'ps', 'pl']):
         if args == "":
-            return cmd + " "
+            return cmd + " SPECIFY**YouR@FilEPassWord**"
         if args.find(' ') == -1:
             theBase =  "{} {}".format(cmd, args)
             theArg = ""
