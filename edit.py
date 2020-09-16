@@ -491,7 +491,7 @@ def do_rcmd(scr, cmd, args):
     try:
         print("rcmd:{} {}".format(cmd, args), file=GERRFILE)
         # Handle Markers
-        lTokens, lTTypes = parse.get_tokens(args,0,['@'])
+        lTokens, lTTypes = parse.get_tokens(args, 0, ['@', '-', '+'])
         sAdjustedArgs = ""
         for i in range(len(lTTypes)):
             if (lTTypes[i] == parse.TokenType.AlphaNum) and (lTokens[i][0] == '@'):
@@ -521,12 +521,12 @@ def do_rcmd(scr, cmd, args):
         elif cmd == "rclearerr":
             bDone = _do_rclear_err(scr, lKeys[0], lKeys[1])
         elif cmd == "rgennums":
-            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
+            tokens, types = parse.get_tokens(sAdjustedArgs, lPos[-1], ['-','+'])
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
         if cmd == "rsearch":
-            tokens, types = parse.get_tokens(args, lPos[-1], ['-','+'])
+            tokens, types = parse.get_tokens(sAdjustedArgs, lPos[-1], ['-','+'])
             bDone = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
     except:
         traceback.print_exc(file=GERRFILE)
