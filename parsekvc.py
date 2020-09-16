@@ -84,6 +84,7 @@ def collapse_sametype(typeSeqIn, typeIdDict=None):
     return typeSeqOut, typeIds
 
 
+TOKENQUOTE = "'"
 TokenType = enum.Enum("TokenType", "NoMore AlphaNum Symbol Sign BracketStart BracketEnd Unknown")
 def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
     '''
@@ -106,8 +107,10 @@ def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
     If it finds a string quoted using single quotes, then it
     will be extracted as a single string token.
 
-        This string will only include spaces, alpha numerals
-        and any ANAddOns.
+        This string can include any character irrespective of
+        whether they are alphanumerals or ANAddons or space or
+        something else. It will start and end with the tokenquote
+        char (or end when there is no more char in input string).
 
     If a list of chars is passed in ANAddon, then any character
     in that list will be treated as part of AlphaNum token.
@@ -122,11 +125,11 @@ def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
     bInQuote = False
     bInToken = False
     while i < len(sIn):
+        if bInQuote and (sIn[i] != TOKENQUOTE):
+            sOut += sIn[i]
+            i += 1
+            continue
         if sIn[i].isspace():
-            if bInQuote:
-                sOut += sIn[i]
-                i += 1
-                continue
             if bInToken:
                 return TokenType.AlphaNum, sOut, iPosStart
             i += 1
@@ -138,7 +141,7 @@ def get_token(sIn, startPos=0, ANAddOnDefault=['.','$'], ANAddOn=None):
             sOut += sIn[i]
             i += 1
             continue
-        if sIn[i] == "'":
+        if sIn[i] == TOKENQUOTE:
             if bInToken:
                 if bInQuote:
                     bInQuote = False
