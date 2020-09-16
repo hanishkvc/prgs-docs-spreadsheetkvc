@@ -1857,10 +1857,12 @@ Make get_token quoted string logic more generic, so that any char can be contain
 
 Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.
 
-TODO: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
+DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
 
 TODO:LATER: Date related functions
 
+TODO:LATER: Make delete row/col bit more efficient by clearing calcs of all dependent cells (using recursive reverse links lists). And then creating the new calc
+cache by copying all the unaffected cell calcs. Currently delete clears all =expression cells with cell addresses in them, whether dependent or not.
 
 
 

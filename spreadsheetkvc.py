@@ -308,6 +308,8 @@ def _cdraw_coladdrs(colStart, colEnd):
     As columns are named alphabetically and not numerically, so the
     internal numeric address is changed to equivalent alphabetic address.
     '''
+    if me['state'] == ':':
+        return
     for i in range(colStart, colEnd+1):
         if (i == me['curCol']):
             ctype = curses.A_NORMAL
