@@ -253,6 +253,8 @@ def delete_rc(cmd, args):
             eR = me['numRows']
         cnt = eR - sR + 1
         incR = -1*cnt
+        sC = 0
+        eC = me['numCols']
     elif cmd[1] == 'c':
         bColMode = True
         eC = sC + cnt -1
@@ -260,6 +262,8 @@ def delete_rc(cmd, args):
             eC = me['numCols']
         cnt = eC - sC + 1
         incC = -1*cnt
+        sR = 0
+        eR = me['numRows']
 
     # clear the calc cache of cells affected_by|dependent_on
     # the cells about to be deleted.
