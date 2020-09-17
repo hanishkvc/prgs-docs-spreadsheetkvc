@@ -309,6 +309,7 @@ def _cdraw_coladdrs(colStart, colEnd):
     As columns are named alphabetically and not numerically, so the
     internal numeric address is changed to equivalent alphabetic address.
     '''
+    print('DBUG:cdrawColAddrs:state[{}]:ShowColHdr[{}]'.format(me['state'], GBSHOWCOLHDR), file=GERRFILE)
     if not GBSHOWCOLHDR:
         return
     for i in range(colStart, colEnd+1):
@@ -1265,6 +1266,7 @@ def rl_editplusmode(stdscr, key):
     '''
     if (key == curses.ascii.ESC):
         tabcomplete_clear()
+        print('DBUG:{}: NL Got'.format(me['state']), file=GERRFILE)
         GBSHOWCOLHDR = True
         if me['state'] == 'E':
             setdata_from_savededitbuf(stdscr)
@@ -1280,7 +1282,7 @@ def rl_editplusmode(stdscr, key):
                 me['crsrOffset'] = 0
     elif (key == curses.ascii.NL):
         tabcomplete_clear()
-        GBSHOWCOLHDR = True
+        print('DBUG:{}:NL Got:{}'.format(me['state'], me['gotStr']), file=GERRFILE)
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
             if gbEnterExitsEditMode:
@@ -1293,6 +1295,7 @@ def rl_editplusmode(stdscr, key):
             if tData != None:
                 syncd.cell_updated((me['curRow'], me['curCol']), tData, clearedSet=set())
         elif me['state'] == ':':
+            GBSHOWCOLHDR = True
             explicit_commandmode(stdscr, me['gotStr'])
             me['state'] = 'C'
             me['fpc'] = dict()
