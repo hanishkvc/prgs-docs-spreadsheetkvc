@@ -139,10 +139,8 @@ Some of its features are
 
 	* support markers including implicit ones (@mCUR, @mEND).
 
-* Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
-  for cells which are affected by it (edits propogate the changes across dependent cells).
-  Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells
-  compared to insert, so require to recalc all cells with dependencies for now.
+* Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations
+  only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).
 
 	Note: the actual recalculation occurs when a affected cell or its dependents become visible. While
 	the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are
@@ -410,6 +408,8 @@ to explicitly specify the file to write to.
 
 	insert n columns after current column.
 	If numOfCols not specified, it defaults to 1.
+
+[devel note] Delete operation is disruptive to dependent cells compared to insert.
 
 #### range operations (rcmds)
 
@@ -1280,6 +1280,7 @@ if any in =expressions, as required.
 NOTE: If the cell address that is explicitly referenced in the =expression, is deleted,
 then a Err tag is prefixed to that cell address.
 
+
 ##### Paste operation
 
 If 'paste with cell address adjustment' is triggered (i.e small p), then cell addresses,
@@ -1843,6 +1844,9 @@ cells depend on the edited cell, then the calculations finish very fast and user
 
 			Delete is a WorkInProgress wrt optimising it, rather currently nothing beyond basic done.
 
+			[update:20200917] using revlinks, delete is optimised similar to insert, in that only cells whose values
+			get affected by the delete row(s)/col(s) are recalculated now.
+
 	rcmds call syncd.cell_updated as required.
 
 MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.
@@ -1892,8 +1896,9 @@ Added implicit markers @mEND, @mCUR
 
 TODO:LATER: Date related functions
 
-TODO:LATER: Make delete row/col bit more efficient by clearing calcs of all dependent cells (using recursive reverse links lists). And then creating the new calc
-cache by copying all the unaffected cell calcs. Currently delete clears all =expression cells with cell addresses in them, whether dependent or not.
+DONE: Make delete row/col bit more efficient by clearing calcs of only the dependent cells of the deleted rows/cols (using recursive reverse links lists).
+And then creating the new calc cache by copying all the unaffected cell calcs. Previously delete used to clear all =expression cells with cell addresses in them,
+whether dependent or not.
 
 
 

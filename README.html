@@ -86,7 +86,7 @@
 <li><p>search and if required replace support.</p></li>
 <li><p>support markers including implicit ones (<span class="citation" data-cites="mCUR">@mCUR</span>, <span class="citation" data-cites="mEND">@mEND</span>).</p></li>
 </ul></li>
-<li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only for cells which are affected by it (edits propogate the changes across dependent cells). Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells compared to insert, so require to recalc all cells with dependencies for now.</p>
+<li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
 </ul>
 <p>for more details refer to the documentation below.</p>
@@ -254,6 +254,7 @@ the program will cycle throught all the suggestions.</code></pre>
 <li><p>ica [numOfCols]</p>
 <p>insert n columns after current column. If numOfCols not specified, it defaults to 1.</p></li>
 </ul>
+<p>[devel note] Delete operation is disruptive to dependent cells compared to insert.</p>
 <h4 id="range-operations-rcmds">range operations (rcmds)</h4>
 <ul>
 <li><p>rcopy srcCellAddrRange dstCellAddrRange or rcopy srcCellAddrRange dstCellStartAddr</p>
@@ -942,6 +943,9 @@ Insert and Delete row/col operations also call syncd.create_links.
 
         Delete is a WorkInProgress wrt optimising it, rather currently nothing beyond basic done.
 
+        [update:20200917] using revlinks, delete is optimised similar to insert, in that only cells whose values
+        get affected by the delete row(s)/col(s) are recalculated now.
+
 rcmds call syncd.cell_updated as required.</code></pre>
 <p>MapTo/Use current directory for completing path using tab completion, if only file part given and there is no directory part given by user.</p>
 <p>Added a xrefresh command.</p>
@@ -964,7 +968,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd. To help with knowing the current cell so that user can enter it as part of some of the :rcmds which could use them, now colhdr is enabled for :rcmds.</p>
 <p>Added implicit markers <span class="citation" data-cites="mEND">@mEND</span>, <span class="citation" data-cites="mCUR">@mCUR</span></p>
 <p>TODO:LATER: Date related functions</p>
-<p>TODO:LATER: Make delete row/col bit more efficient by clearing calcs of all dependent cells (using recursive reverse links lists). And then creating the new calc cache by copying all the unaffected cell calcs. Currently delete clears all =expression cells with cell addresses in them, whether dependent or not.</p>
+<p>DONE: Make delete row/col bit more efficient by clearing calcs of only the dependent cells of the deleted rows/cols (using recursive reverse links lists). And then creating the new calc cache by copying all the unaffected cell calcs. Previously delete used to clear all =expression cells with cell addresses in them, whether dependent or not.</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
 <p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
