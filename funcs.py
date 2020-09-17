@@ -12,7 +12,6 @@ import parsekvc as parse
 
 BFILTERPYFUNC = True
 me = None
-_celladdr_valid = None
 nvalue_key = None
 nvalue_expr = None
 GLOGFILE = None
@@ -21,10 +20,10 @@ _do_cformat = None
 
 
 def _cellrange_to_list(lRange, bIgnoreEmpty=True):
-    bCellAddr, (sR,sC) = _celladdr_valid(lRange[0])
+    bCellAddr, (sR,sC) = parse.celladdr_valid(lRange[0])
     if not bCellAddr:
         return False, []
-    bCellAddr, (eR,eC) = _celladdr_valid(lRange[2])
+    bCellAddr, (eR,eC) = parse.celladdr_valid(lRange[2])
     if not bCellAddr:
         return False, []
     lOut = []
@@ -63,10 +62,10 @@ def _do_minmax(args, bIgnoreEmpty=True):
     Find the min and max from the matrix of cells.
     '''
     start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    bCellAddr, (sR,sC) = parse.celladdr_valid(start)
     if not bCellAddr:
         return None, None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    bCellAddr, (eR,eC) = parse.celladdr_valid(end)
     if not bCellAddr:
         return None, None, None
     lItems = []
@@ -97,10 +96,10 @@ def _do_sum(args, bIgnoreEmpty=True):
     bIgnoreEmpty can be used to control whether empty cells are considered or not.
     '''
     start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    bCellAddr, (sR,sC) = parse.celladdr_valid(start)
     if not bCellAddr:
         return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    bCellAddr, (eR,eC) = parse.celladdr_valid(end)
     if not bCellAddr:
         return None, None
     total = 0
@@ -130,10 +129,10 @@ def _do_stddev(args, bIgnoreEmpty=True):
     It also returns the number of cells involved.
     '''
     start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    bCellAddr, (sR,sC) = parse.celladdr_valid(start)
     if not bCellAddr:
         return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    bCellAddr, (eR,eC) = parse.celladdr_valid(end)
     if not bCellAddr:
         return None, None
     avg = do_avg(args)
@@ -180,10 +179,10 @@ def _do_prod(args, bIgnoreEmpty=True):
     It also returns the number of cells involved.
     '''
     start,end = args.split(':')
-    bCellAddr, (sR,sC) = _celladdr_valid(start)
+    bCellAddr, (sR,sC) = parse.celladdr_valid(start)
     if not bCellAddr:
         return None, None
-    bCellAddr, (eR,eC) = _celladdr_valid(end)
+    bCellAddr, (eR,eC) = parse.celladdr_valid(end)
     if not bCellAddr:
         return None, None
     prod = 1

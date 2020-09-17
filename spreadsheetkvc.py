@@ -886,48 +886,6 @@ def cell_key2addr(key):
     return "{}{}".format(coladdr_num2alpha(c),r)
 
 
-def _celladdr_valid_ex(sAddr):
-    '''
-    Check if the given string is a cell address or not.
-
-    Extract the alpha col address and numeric row address.
-    Ignore $ prefix if any wrt col or row address.
-    If there is garbage beyond numeric row address, then mark invalid
-    '''
-    m=re.fullmatch("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)", sAddr)
-    if m == None:
-        return False, (None, None), (None, None)
-    if m['colFixed'] == '$':
-        bColFixed = True
-    else:
-        bColFixed = False
-    if m['rowFixed'] == '$':
-        bRowFixed = True
-    else:
-        bRowFixed = False
-    alphaAddr = m['colAddr']
-    numAddr = m['rowAddr']
-    # Get the data key for the cell
-    i = 0
-    alphaAddr = alphaAddr.upper()
-    numAlphaAddr = 0
-    while i < len(alphaAddr):
-        num = (ord(alphaAddr[i]) - ord('A'))+1
-        numAlphaAddr = numAlphaAddr*26 + num
-        i += 1
-    return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
-
-
-def _celladdr_valid(sAddr):
-    '''
-    Check if given string is a valid cell address or not.
-
-    If valid return the row and col addresses in numeric format.
-    '''
-    bValid, key, fixed = _celladdr_valid_ex(sAddr)
-    return bValid, key
-
-
 CALLDEPTHMAX = 10000
 def trap_calclooping(cellKey):
     '''
@@ -969,7 +927,7 @@ def _nvalue_saddr_or_str(sAddrOr):
         Return the corresponding cells numeric value
     Else return the passed string back again.
     '''
-    bCellAddr, cellKey = _celladdr_valid(sAddrOr)
+    bCellAddr, cellKey = parse.celladdr_valid(sAddrOr)
     if bCellAddr:
         val = nvalue_key(cellKey)
         #print("_nvalue_saddr_or_str:{}:{}:{}".format(sAddrOr, cellKey, val), file=GLOGFILE)
@@ -1410,7 +1368,6 @@ def setup_funcs():
     else:
         funcs.BFILTERPYFUNC = True
     funcs.me = me
-    funcs._celladdr_valid = _celladdr_valid
     funcs.nvalue_key = nvalue_key
     funcs.nvalue_expr = nvalue_expr
     funcs.GLOGFILE = GLOGFILE
@@ -1434,8 +1391,6 @@ def setup_edit():
     edit.me = me
     edit.dlg = dlg
     edit.cstatusbar = cstatusbar
-    edit._celladdr_valid = _celladdr_valid
-    edit._celladdr_valid_ex = _celladdr_valid_ex
     edit.cell_key2addr = cell_key2addr
     edit.coladdr_num2alpha = coladdr_num2alpha
 
@@ -1444,14 +1399,12 @@ def setup_nav():
     nav.me = me
     nav.cdraw = cdraw
     nav.cellcur = cellcur
-    nav._celladdr_valid = _celladdr_valid
 
 
 def setup_syncd():
     syncd.GLOGFILE = GLOGFILE
     syncd.GERRFILE = GERRFILE
     syncd.me = me
-    syncd._celladdr_valid = _celladdr_valid
     syncd.init()
 
 

@@ -16,8 +16,6 @@ GERRFILE = None
 me = None
 dlg = None
 cstatusbar = None
-_celladdr_valid = None
-_celladdr_valid_ex = None
 cell_key2addr = None
 coladdr_num2alpha = None
 
@@ -65,7 +63,7 @@ def update_celladdrs_all(sIn, afterR, incR, afterC, incC, bUpdateFixed=True):
             #print("updateCellAddrs:Out:{}".format(sOut), file=GERRFILE)
             return sOut
         #print("updateCellAddrs:Btw:{}".format(sToken), file=GERRFILE)
-        bCellAddr, (r,c), (rFixed, cFixed) = _celladdr_valid_ex(sToken)
+        bCellAddr, (r,c), (rFixed, cFixed) = parse.celladdr_valid_ex(sToken)
         # If not valid cell addr, skip it
         if not bCellAddr:
             iPos += len(sToken)
@@ -134,7 +132,7 @@ def update_celladdrs_exceptfixed(sIn, afterR, incR, afterC, incC):
             #print("updateCellAddrsExceptFixed:Out:{}".format(sOut), file=GERRFILE)
             return sOut
         #print("updateCellAddrsExceptFixed:Btw:{}".format(sToken), file=GERRFILE)
-        bCellAddr, (r,c), (rFixed, cFixed) = _celladdr_valid_ex(sToken)
+        bCellAddr, (r,c), (rFixed, cFixed) = parse.celladdr_valid_ex(sToken)
         rOrig, cOrig = r, c
         # If not valid cell addr, skip it
         if not bCellAddr:
@@ -552,7 +550,7 @@ def do_rcmd(scr, cmd, args):
         lCAddr, lPos = parse.get_celladdrs(sAdjustedArgs)
         lKeys = []
         for cAddr in lCAddr:
-            bCellAddr, key = _celladdr_valid(cAddr)
+            bCellAddr, key = parse.celladdr_valid(cAddr)
             if not bCellAddr:
                 return False
             lKeys.append(key)

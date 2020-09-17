@@ -11,7 +11,6 @@ import parsekvc as parse
 me = None
 GERRFILE = None
 GLOGFILE = None
-_celladdr_valid = None
 
 
 '''
@@ -147,18 +146,18 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     TIMECAP1 += (T2-T1)
     for cellAddrPlus in lCellAddrs:
         if (len(cellAddrPlus) == 1):
-            bCellAddr, key = _celladdr_valid(cellAddrPlus[0])
+            bCellAddr, key = parse.celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
                 print("WARN:syncdCellUpdated:{}:{}={}".format(sContent, cellAddrPlus[0], key), file=GERRFILE)
                 continue
             cellFwdLink.add(key)
             cell_revlink_add(key, cellKey)
         elif (len(cellAddrPlus) == 2):
-            bCellAddr, key1 = _celladdr_valid(cellAddrPlus[0])
+            bCellAddr, key1 = parse.celladdr_valid(cellAddrPlus[0])
             if not bCellAddr:
                 print("WARN:syncdCellUpdated:{}:{}={}".format(sContent, cellAddrPlus[0], key1), file=GERRFILE)
                 continue
-            bCellAddr, key2 = _celladdr_valid(cellAddrPlus[1])
+            bCellAddr, key2 = parse.celladdr_valid(cellAddrPlus[1])
             if not bCellAddr:
                 print("WARN:syncdCellUpdated:{}:{}={}".format(sContent, cellAddrPlus[1], key2), file=GERRFILE)
                 continue

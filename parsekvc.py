@@ -468,6 +468,49 @@ def get_celladdrs_incranges(sIn):
     return caList
 
 
+def celladdr_valid_ex(sAddr):
+    '''
+    Check if the given string is a cell address or not.
+
+    Extract the alpha col address and numeric row address.
+    Ignore $ prefix if any wrt col or row address.
+    If there is garbage beyond numeric row address, then mark invalid
+    '''
+    m=re.fullmatch("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)", sAddr)
+    if m == None:
+        return False, (None, None), (None, None)
+    if m['colFixed'] == '$':
+        bColFixed = True
+    else:
+        bColFixed = False
+    if m['rowFixed'] == '$':
+        bRowFixed = True
+    else:
+        bRowFixed = False
+    alphaAddr = m['colAddr']
+    numAddr = m['rowAddr']
+    # Get the data key for the cell
+    i = 0
+    alphaAddr = alphaAddr.upper()
+    numAlphaAddr = 0
+    while i < len(alphaAddr):
+        num = (ord(alphaAddr[i]) - ord('A'))+1
+        numAlphaAddr = numAlphaAddr*26 + num
+        i += 1
+    return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
+
+
+def celladdr_valid(sAddr):
+    '''
+    Check if given string is a valid cell address or not.
+
+    If valid return the row and col addresses in numeric format.
+    '''
+    bValid, key, fixed = celladdr_valid_ex(sAddr)
+    return bValid, key
+
+
+
 
 
 def test_101():

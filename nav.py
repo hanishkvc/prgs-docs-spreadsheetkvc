@@ -3,11 +3,11 @@
 # HanishKVC, 2020
 #
 
+import parsekvc as parse
 
 me = None
 cdraw = None
 cellcur = None
-_celladdr_valid = None
 
 
 def _goto_cell(stdscr, r, c):
@@ -32,7 +32,7 @@ def _goto_cell(stdscr, r, c):
 
 
 def goto_cell(stdscr, args):
-    bCellAddr, (r,c) = _celladdr_valid(args)
+    bCellAddr, (r,c) = parse.celladdr_valid(args)
     if bCellAddr:
         if r > me['numRows']:
             r = me['numRows']
