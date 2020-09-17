@@ -928,7 +928,7 @@ def _celladdr_valid(sAddr):
     return bValid, key
 
 
-CALLDEPTHMAX = 1000
+CALLDEPTHMAX = 10000
 def trap_calclooping(cellKey):
     '''
     If callDepth crosses the set threshold, then raise a CalcLoop exception and
@@ -1554,6 +1554,7 @@ stdscr=cstart()
 cattr_textnum(stdscr)
 setup_sighandlers()
 setup_helpermodules()
+sys.setrecursionlimit(5000)
 try:
     if gbStartHelp:
         helpdlg.help_dlg(stdscr)

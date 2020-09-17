@@ -1900,6 +1900,15 @@ DONE: Make delete row/col bit more efficient by clearing calcs of only the depen
 And then creating the new calc cache by copying all the unaffected cell calcs. Previously delete used to clear all =expression cells with cell addresses in them,
 whether dependent or not.
 
+Now given that most of the core interconnected logics have been handled in a sufficiently ok manner, and crash tested with shallow (default) recursion limit,
+open up the flood gates of performance (relatively speaking) by increasing the python recursion limit from 1K to 5K and also increase the programs core level
+trap logic to have depth of 10K. This ensures that chained calculations dont trigger the recursion exception for most normal use cases (rather even the current
+chained test files dont trigger this any more, so need to add new even deeper test files), and inturn the calculations occur faster as a whole. And Even python
+seems to behave better in general with deeper recursion limit.
+
+	NOTE: THis also means the program will take bit more time to trap loops, because more rope is given for the logics to play around.
+
+
 
 
 ## thoughts behind this program
