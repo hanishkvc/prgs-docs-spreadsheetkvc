@@ -17,12 +17,16 @@ _celladdr_valid = None
 '''
 Sync module maintains a list of both forward and reverse links.
 
+Forward links of a cell contain the list of cells which it depends on.
+
 Forward links can be used during insert and delete of rows/cols
 to decide whether the =expressions in cells require updating.
 
     Any cells removed from the forward link of a given cell,
     should inturn have their revlinks updated such that the
     given cell is no longer part of it.
+
+Reverse links of a cell provides the list of its dependent cells.
 
 Reverse links tell as to which and all cells require their calcs
 to be updated because a given cell has been updated.

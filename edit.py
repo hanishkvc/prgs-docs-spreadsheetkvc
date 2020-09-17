@@ -237,8 +237,9 @@ def insert_rc_ab(cmd, args):
 
 def delete_rc(cmd, args):
     '''
-    Delete the current row or column, as specified in the cmd.
+    Delete the current+ row(s) or column(s), as specified in the cmd.
     '''
+    # Identify the delete operation details
     bRowMode = False
     bColMode = False
     cnt = int(args)
@@ -260,6 +261,8 @@ def delete_rc(cmd, args):
         cnt = eC - sC + 1
         incC = -1*cnt
 
+    # update the affected =expressions
+    # as well as update the data and calc cache dictionaries
     newDict = dict()
     newCDataDict = dict()
     for k in me['data']:
