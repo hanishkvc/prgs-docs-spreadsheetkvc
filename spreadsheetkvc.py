@@ -1136,6 +1136,8 @@ def rl_commandmode(stdscr, key):
     If program is in readOnly Mode, it wont allow
         edit, insert, cut, paste and delete operations.
     '''
+    global GBSHOWCOLHDR
+
     if (key == curses.KEY_UP):
         nav.cellcur_up()
     elif (key == curses.KEY_DOWN):
@@ -1263,6 +1265,8 @@ def rl_editplusmode(stdscr, key):
         Or trigger the explicit command handling logic in
         explicit command mode.
     '''
+    global GBSHOWCOLHDR
+
     if (key == curses.ascii.ESC):
         tabcomplete_clear()
         GBSHOWCOLHDR = True
