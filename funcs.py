@@ -3,6 +3,7 @@
 # HanishKVC, 2020
 #
 
+import sys
 import traceback
 import math
 from math import *
@@ -320,8 +321,8 @@ def do_func(sCmdIn, sArgs):
         ##DBUG##print("do_func:recursionErr:{}:{}".format(sCmdIn, sArgs), file=GERRFILE)
         raise
     except:
-        print("do_func:exception:{}:{}".format(sCmdIn, sArgs), file=GLOGFILE)
-        traceback.print_exc(file=GERRFILE)
+        print("do_func:exception:{}:{}:{}".format(sys.exc_info()[1], sCmdIn, sArgs), file=GERRFILE)
+        #traceback.print_exc(file=GERRFILE)
     return None
 
 

@@ -478,6 +478,8 @@ to explicitly specify the file to write to.
 
 	NOTE: Use single quotes around the string, if you want to search for something containing spaces in them.
 
+	NOTE: Abort a search by pressing <ctrl>+<c> key combination.
+
 * rsearchreplace cellAddrRange StringToSearch ReplaceWithNewString
 
 	Similar to rsearch, but additionally allow the searched string to be replaced with the new string given.
