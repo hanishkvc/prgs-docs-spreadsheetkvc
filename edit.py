@@ -458,7 +458,7 @@ def _do_rgennums(scr, startKey, endKey, tokens):
     return True
 
 
-def _do_rsearch(scr, startKey, endKey, tokens):
+def _do_rsearch(scr, cmd, startKey, endKey, tokens):
     '''
     Search for the given token in the given range of cells.
 
@@ -477,7 +477,7 @@ def _do_rsearch(scr, startKey, endKey, tokens):
     # Fix replace token, if available
     sReplaceWith = None
     bReplaced = False
-    if len(tokens) >= 2:
+    if (cmd == 'rsearchreplace') and len(tokens) >= 2:
         sReplaceWith = tokens[1]
         if sReplaceWith[0] == parse.TOKENQUOTE:
             sReplaceWith = sReplaceWith[1:-1]
@@ -548,7 +548,7 @@ def do_rcmd(scr, cmd, args):
             me['dirty'] = True
         if cmd.startswith("rsearch"):
             tokens, types = parse.get_tokens(sAdjustedArgs, lPos[-1], ['-','+'])
-            bDone, bReplaced = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
+            bDone, bReplaced = _do_rsearch(scr, cmd, lKeys[0], lKeys[1], tokens[1:])
             if bReplaced:
                 me['dirty'] = True
     except:
