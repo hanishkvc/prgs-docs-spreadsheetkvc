@@ -524,6 +524,11 @@ in a easy | user freindly way.
 
 When using a marker in place of a cell address in any of the range operations, one needs to prefix the MarkerId with @m i.e @mMarkerId
 
+##### Special marker
+
+@mEND - The program provides a implicit MarkerId called END, which points to the last cell in the spreadsheet always.
+	User can override this if required, else it will always point to the last cell.
+
 
 #### Config commands
 

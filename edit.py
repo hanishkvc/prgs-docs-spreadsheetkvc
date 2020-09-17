@@ -516,7 +516,10 @@ def do_rcmd(scr, cmd, args):
         sAdjustedArgs = ""
         for i in range(len(lTTypes)):
             if (lTTypes[i] == parse.TokenType.AlphaNum) and (lTokens[i][0] == '@'):
-                key = me['markers'].get(lTokens[i][2:])
+                markerId = lTokens[i][2:]
+                key = me['markers'].get(markerId)
+                if (key == None) and (markerId == MARKER_SSEND):
+                    key = (me['numRows'], me['numCols'])
                 sAdjustedArgs += "{} ".format(cell_key2addr(key))
             else:
                 sAdjustedArgs += "{} ".format(lTokens[i])
@@ -559,6 +562,7 @@ def do_rcmd(scr, cmd, args):
         dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
 
+MARKER_SSEND = 'END'
 def do_mcmd(scr, cmd, args):
     '''
     Handle marker commands
@@ -577,11 +581,10 @@ def do_mcmd(scr, cmd, args):
         return True
     if cmd == 'mshow':
         lMarkers = ['********         Markers         ********']
-        if len(me['markers']) <= 0:
-            lMarkers.append("  {:36}  ".format("None"))
         for m in me['markers']:
             k = me['markers'][m]
             lMarkers.append("  m{:17} : {:16}  ".format(m, cell_key2addr(k)))
+        lMarkers.append("  m{:17} : {:16}  ".format(MARKER_SSEND, cell_key2addr((me['numRows'], me['numCols']))))
         lMarkers.append("{:40}".format("Press any key..."))
         dlg(scr, lMarkers)
         return True
