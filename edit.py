@@ -490,7 +490,7 @@ def _do_rsearch(scr, cmd, startKey, endKey, tokens):
                 continue
             nav._goto_cell(scr, r,c)
             if sReplaceWith == None:
-                dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData) ])
+                dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData), 'Press any key for next...' ])
             else:
                 got = dlg(scr, [ 'FoundAt:{}{}:{}                        '.format(coladdr_num2alpha(c), r, curData), 'Replace [y/N]:' ])
                 if chr(got).upper() == 'Y':
