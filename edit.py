@@ -261,6 +261,13 @@ def delete_rc(cmd, args):
         cnt = eC - sC + 1
         incC = -1*cnt
 
+    # clear the calc cache of cells affected_by|dependent_on
+    # the cells about to be deleted.
+    # THe dependents could be either direct or indirect.
+    clearedSet = set()
+    for r in range(sR, eR+1):
+        for c in range(sC, eC+1):
+            syncd.cell_updated((r,c), None, clearedSet=clearedSet)
     # update the affected =expressions
     # as well as update the data and calc cache dictionaries
     newDict = dict()
@@ -272,11 +279,8 @@ def delete_rc(cmd, args):
         fwdLinks = me['fwdLinks'].get(k)
         if (fwdLinks != None) and (len(fwdLinks) > 0):
             curData = update_celladdrs_all(curData, sR-1, incR, sC-1, incC, bUpdateFixed=True)
-            # In this path the full dependency list and its equivalence before and after
-            # delete will need to be cross checked, when deciding whether the old cdata
-            # for the cell is still valid or not.
-            # The cell content being same or different before or after delete, in itself is
-            # not sufficient to decide whether the value of the cell will be same or not.
+            if curData.find("#Err") == -1:
+                curCData = me['cdata'].get(k)
         else:
             curCData = me['cdata'].get(k)
         if bRowMode:
