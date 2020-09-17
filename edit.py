@@ -464,21 +464,23 @@ def _do_rsearch(scr, startKey, endKey, tokens):
 
     If replace is requested then replace search string with the replace string.
     '''
+    # Move end to within spreadsheet, if otherwise
     endKey = list(endKey)
     if endKey[0] > me['numRows']:
         endKey[0] = me['numRows']
     if endKey[1] > me['numCols']:
         endKey[1] = me['numCols']
+    # Fix find token
     sToFind = tokens[0]
     if sToFind[0] == parse.TOKENQUOTE:
         sToFind = sToFind[1:-1]
+    # Fix replace token, if available
     sReplaceWith = None
     bReplaced = False
-    if len(tokens) >= 3:
-        if tokens[1] == 'replace':
-            sReplaceWith = tokens[2]
-            if sReplaceWith[0] == parse.TOKENQUOTE:
-                sReplaceWith = sReplaceWith[1:-1]
+    if len(tokens) >= 2:
+        sReplaceWith = tokens[1]
+        if sReplaceWith[0] == parse.TOKENQUOTE:
+            sReplaceWith = sReplaceWith[1:-1]
     for r in range(startKey[0], endKey[0]+1):
         for c in range(startKey[1], endKey[1]+1):
             curData = me['data'].get((r,c))
@@ -544,7 +546,7 @@ def do_rcmd(scr, cmd, args):
             bDone = _do_rgennums(scr, lKeys[0], lKeys[1], tokens[1:])
         if bDone:
             me['dirty'] = True
-        if cmd == "rsearch":
+        if cmd.startswith("rsearch"):
             tokens, types = parse.get_tokens(sAdjustedArgs, lPos[-1], ['-','+'])
             bDone, bReplaced = _do_rsearch(scr, lKeys[0], lKeys[1], tokens[1:])
             if bReplaced:
