@@ -581,10 +581,13 @@ def do_mcmd(scr, cmd, args):
         return True
     if cmd == 'mshow':
         lMarkers = ['********         Markers         ********']
+        # user defined markers
         for m in me['markers']:
             k = me['markers'][m]
             lMarkers.append("  m{:17} : {:16}  ".format(m, cell_key2addr(k)))
-        lMarkers.append("  m{:17} : {:16}  ".format(MARKER_SSEND, cell_key2addr((me['numRows'], me['numCols']))))
+        # implicit markers, if user hasnt overridden
+        if me['markers'].get(MARKER_SSEND) == None:
+            lMarkers.append("  m{:17} : {:16}  ".format(MARKER_SSEND, cell_key2addr((me['numRows'], me['numCols']))))
         lMarkers.append("{:40}".format("Press any key..."))
         dlg(scr, lMarkers)
         return True

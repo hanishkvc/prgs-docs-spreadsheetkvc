@@ -529,6 +529,9 @@ When using a marker in place of a cell address in any of the range operations, o
 @mEND - The program provides a implicit MarkerId called END, which points to the last cell in the spreadsheet always.
 	User can override this if required, else it will always point to the last cell.
 
+	NOTE: the implicit marker is capitalised so that end user can use lower case or mixed case marker id with similar name,
+	without overriding one another, if possible.
+
 
 #### Config commands
 
@@ -1865,6 +1868,8 @@ Make get_token quoted string logic more generic, so that any char can be contain
 Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.
 
 DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
+
+Added implicit marker @mEND
 
 TODO:LATER: Date related functions
 
