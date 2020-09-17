@@ -77,8 +77,14 @@
 </ul></li>
 <li><p>normal or raw display mode.</p></li>
 <li><p>global align left, right or default.</p></li>
-<li><p>global config float precision</p></li>
-<li><p>search and if required replace support</p></li>
+<li><p>global format config for display purposes</p>
+<ul>
+<li><p>float precision.</p></li>
+<li><p>integer to float conversion.</p></li>
+<li><p>pre-cooked neat and raw modes</p></li>
+</ul></li>
+<li><p>search and if required replace support.</p></li>
+<li><p>support markers including implicit ones (<span class="citation" data-cites="mCUR">@mCUR</span>, <span class="citation" data-cites="mEND">@mEND</span>).</p></li>
 </ul></li>
 <li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only for cells which are affected by it (edits propogate the changes across dependent cells). Delete rows/cols also follows a similar strategy, but delete operation is disruptive to dependent cells compared to insert, so require to recalc all cells with dependencies for now.</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
@@ -316,10 +322,14 @@ the program will cycle throught all the suggestions.</code></pre>
 <p>NOTE: tab-completion only hints the m MarkerId notation.</p></li>
 </ul>
 <p>When using a marker in place of a cell address in any of the range operations, one needs to prefix the MarkerId with <span class="citation" data-cites="m">@m</span> i.e <span class="citation" data-cites="mMarkerId">@mMarkerId</span></p>
-<h5 id="special-marker">Special marker</h5>
-<p><span class="citation" data-cites="mEND">@mEND</span> - The program provides a implicit MarkerId called END, which points to the last cell in the spreadsheet always. User can override this if required, else it will always point to the last cell.</p>
-<pre><code>NOTE: the implicit marker is capitalised so that end user can use lower case or mixed case marker id with similar name,
-without overriding one another, if possible.</code></pre>
+<h5 id="implicit-markers">Implicit markers</h5>
+<p>The program provides the following implicit MarkerIds</p>
+<p><span class="citation" data-cites="mEND">@mEND</span> - this points to the last cell in the spreadsheet implicitly.</p>
+<pre><code>Useful for :rsearch or :rsearchcopy operation among others</code></pre>
+<p><span class="citation" data-cites="mCUR">@mCUR</span> - this points to the currently in-focus cell in the spreadsheet implicitly.</p>
+<pre><code>Useful in :rcopy or :rcopyasis or :rgennums and so on</code></pre>
+<p>NOTE: User can override these if required, else it will point to a cell determined at the time of use, as defined above.</p>
+<p>NOTE: the implicit markers are capitalised so that end user can use lower case or mixed case marker ids with similar name, without overriding one another, if possible.</p>
 <h4 id="config-commands">Config commands</h4>
 <h5 id="read-write-mode">Read Write Mode</h5>
 <ul>
@@ -952,7 +962,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.</p>
 <p>Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.</p>
 <p>DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.</p>
-<p>Added implicit marker <span class="citation" data-cites="mEND">@mEND</span></p>
+<p>Added implicit markers <span class="citation" data-cites="mEND">@mEND</span>, <span class="citation" data-cites="mCUR">@mCUR</span></p>
 <p>TODO:LATER: Date related functions</p>
 <p>TODO:LATER: Make delete row/col bit more efficient by clearing calcs of all dependent cells (using recursive reverse links lists). And then creating the new calc cache by copying all the unaffected cell calcs. Currently delete clears all =expression cells with cell addresses in them, whether dependent or not.</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>

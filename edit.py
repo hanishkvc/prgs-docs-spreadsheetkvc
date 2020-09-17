@@ -500,6 +500,22 @@ def _do_rsearch(scr, cmd, startKey, endKey, tokens):
     return True, bReplaced
 
 
+MARKER_SSEND = 'END'
+MARKER_SSCUR = 'CUR'
+def _get_marker(markerId):
+    '''
+    Retrive the key associated with a marker.
+
+    Also implement a set of implicit markers.
+    '''
+    key = me['markers'].get(markerId)
+    if (key == None) and (markerId == MARKER_SSEND):
+        key = (me['numRows'], me['numCols'])
+    if (key == None) and (markerId == MARKER_SSCUR):
+        key = (me['curRow'], me['curCol'])
+    return key
+
+
 def do_rcmd(scr, cmd, args):
     '''
     RCommands demuxer.
@@ -517,9 +533,7 @@ def do_rcmd(scr, cmd, args):
         for i in range(len(lTTypes)):
             if (lTTypes[i] == parse.TokenType.AlphaNum) and (lTokens[i][0] == '@'):
                 markerId = lTokens[i][2:]
-                key = me['markers'].get(markerId)
-                if (key == None) and (markerId == MARKER_SSEND):
-                    key = (me['numRows'], me['numCols'])
+                key = _get_marker(markerId)
                 sAdjustedArgs += "{} ".format(cell_key2addr(key))
             else:
                 sAdjustedArgs += "{} ".format(lTokens[i])
@@ -562,7 +576,6 @@ def do_rcmd(scr, cmd, args):
         dlg(scr, [ "Failed:{} {}".format(cmd, args), "Press any key to continue..." ])
 
 
-MARKER_SSEND = 'END'
 def do_mcmd(scr, cmd, args):
     '''
     Handle marker commands
@@ -586,8 +599,9 @@ def do_mcmd(scr, cmd, args):
             k = me['markers'][m]
             lMarkers.append("  m{:17} : {:16}  ".format(m, cell_key2addr(k)))
         # implicit markers, if user hasnt overridden
-        if me['markers'].get(MARKER_SSEND) == None:
-            lMarkers.append("  m{:17} : {:16}  ".format(MARKER_SSEND, cell_key2addr((me['numRows'], me['numCols']))))
+        for m in [MARKER_SSEND, MARKER_SSCUR]:
+            k = _get_marker(m)
+            lMarkers.append("  m{:17} : {:16}  ".format(m, cell_key2addr(k)))
         lMarkers.append("{:40}".format("Press any key..."))
         dlg(scr, lMarkers)
         return True

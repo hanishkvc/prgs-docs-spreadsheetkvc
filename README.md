@@ -127,9 +127,17 @@ Some of its features are
 
 	* global align left, right or default.
 
-	* global config float precision
+	* global format config for display purposes
 
-	* search and if required replace support
+		* float precision.
+
+		* integer to float conversion.
+
+		* pre-cooked neat and raw modes
+
+	* search and if required replace support.
+
+	* support markers including implicit ones (@mCUR, @mEND).
 
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert (rows/cols) operations trigger cell recalculations only
   for cells which are affected by it (edits propogate the changes across dependent cells).
@@ -524,13 +532,22 @@ in a easy | user freindly way.
 
 When using a marker in place of a cell address in any of the range operations, one needs to prefix the MarkerId with @m i.e @mMarkerId
 
-##### Special marker
+##### Implicit markers
 
-@mEND - The program provides a implicit MarkerId called END, which points to the last cell in the spreadsheet always.
-	User can override this if required, else it will always point to the last cell.
+The program provides the following implicit MarkerIds
 
-	NOTE: the implicit marker is capitalised so that end user can use lower case or mixed case marker id with similar name,
-	without overriding one another, if possible.
+@mEND - this points to the last cell in the spreadsheet implicitly.
+
+	Useful for :rsearch or :rsearchcopy operation among others
+
+@mCUR - this points to the currently in-focus cell in the spreadsheet implicitly.
+
+	Useful in :rcopy or :rcopyasis or :rgennums and so on
+
+NOTE: User can override these if required, else it will point to a cell determined at the time of use, as defined above.
+
+NOTE: the implicit markers are capitalised so that end user can use lower case or mixed case marker ids with similar name,
+without overriding one another, if possible.
 
 
 #### Config commands
@@ -1869,7 +1886,7 @@ Added :rsearch command to search for a given token/string in the cells. Also all
 
 DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
 
-Added implicit marker @mEND
+Added implicit markers @mEND, @mCUR
 
 TODO:LATER: Date related functions
 
