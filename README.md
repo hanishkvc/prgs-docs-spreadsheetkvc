@@ -1885,8 +1885,10 @@ Make get_token quoted string logic more generic, so that any char can be contain
 Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.
 
 DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd.
+To help with knowing the current cell so that user can enter it as part of some of the :rcmds which could use them, now colhdr is enabled for :rcmds.
 
 Added implicit markers @mEND, @mCUR
+
 
 TODO:LATER: Date related functions
 

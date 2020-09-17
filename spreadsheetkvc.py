@@ -512,7 +512,10 @@ def _cdraw_editbuffer(stdscr):
         cellstr(stdscr, me['curRow'], me['curCol'], me['gotStr'], curses.A_REVERSE, clipToCell=False, clipToScreen=False)
     if me['state'] == ':':
         #cellstr(stdscr, me['numRows']-1, 0, me['gotStr'], curses.A_REVERSE, False)
-        cellstr(stdscr, 0, 0, "{:{width}}".format(' ', width=me['scrCols']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
+        if GBSHOWCOLHDR:
+            cellstr(stdscr, 0, 0, "{:{width}}".format(' ', width=len(me['gotStr'])+8), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
+        else:
+            cellstr(stdscr, 0, 0, "{:{width}}".format(' ', width=me['scrCols']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
         cellstr(stdscr, 0, 0, ":{}".format(me['gotStr']), curses.A_REVERSE, clipToCell=False, clipToScreen=False)
 
 
@@ -1254,6 +1257,21 @@ def tabcomplete_usebase():
         me['gotStrUpdated'] = False
 
 
+def _colhdr_explicit_rcmds():
+    '''
+    Enable col hdr for certain commands in the explicit cmd mode.
+
+    currently it is enabled for the explicit rcmds.
+    '''
+    global GBSHOWCOLHDR
+
+    if me['state'] == ':':
+        if (me['gotStr'] != None) and (me['gotStr'].startswith('r')):
+            GBSHOWCOLHDR = True
+        else:
+            GBSHOWCOLHDR = False
+
+
 def rl_editplusmode(stdscr, key):
     '''
     Handle key presses in edit/insert/explicit command modes
@@ -1275,6 +1293,7 @@ def rl_editplusmode(stdscr, key):
         me['state'] = 'C'
     elif (key == curses.KEY_BACKSPACE):
         if me['crsrOffset'] > 0:
+            _colhdr_explicit_rcmds()
             tabcomplete_baseupdate()
             sBefore = me['gotStr'][0:me['crsrOffset']-1]
             sAfter = me['gotStr'][me['crsrOffset']:]
@@ -1312,6 +1331,7 @@ def rl_editplusmode(stdscr, key):
             me['crsrOffset'] = len(me['gotStr'])
     elif key == curses.ascii.TAB:
         if me['state'] == ':':
+            _colhdr_explicit_rcmds()
             tabcomplete_usebase()
             sNew = path_completion(me['fpc'], me['gotStrBase'])
             me['gotStr'] = sNew
@@ -1322,6 +1342,7 @@ def rl_editplusmode(stdscr, key):
         me['gotStr'] = "{}{}{}".format(sBefore, chr(key), sAfter)
         me['crsrOffset'] += 1
         tabcomplete_baseupdate()
+        _colhdr_explicit_rcmds()
 
 
 def runlogic(stdscr):
