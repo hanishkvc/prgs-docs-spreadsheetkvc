@@ -32,6 +32,7 @@ GBTEXT2ZERO = True
 gbStartHelp = True
 GBUSECOLOR  = False
 GBRAWVIEW = False
+GBSHOWCOLHDR = True
 
 
 # How to differentiate text cells compared to =expression cells
@@ -308,7 +309,7 @@ def _cdraw_coladdrs(colStart, colEnd):
     As columns are named alphabetically and not numerically, so the
     internal numeric address is changed to equivalent alphabetic address.
     '''
-    if me['state'] == ':':
+    if not GBSHOWCOLHDR:
         return
     for i in range(colStart, colEnd+1):
         if (i == me['curCol']):
@@ -1174,6 +1175,7 @@ def rl_commandmode(stdscr, key):
         me['state'] = ':'
         me['gotStr'] = ""
         me['crsrOffset'] = 0
+        GBSHOWCOLHDR = False
     elif (key == ord('h')) or (key == ord('?')):
         helpdlg.help_dlg(stdscr)
     return True
@@ -1263,6 +1265,7 @@ def rl_editplusmode(stdscr, key):
     '''
     if (key == curses.ascii.ESC):
         tabcomplete_clear()
+        GBSHOWCOLHDR = True
         if me['state'] == 'E':
             setdata_from_savededitbuf(stdscr)
         me['state'] = 'C'
@@ -1277,6 +1280,7 @@ def rl_editplusmode(stdscr, key):
                 me['crsrOffset'] = 0
     elif (key == curses.ascii.NL):
         tabcomplete_clear()
+        GBSHOWCOLHDR = True
         if me['state'] == 'E':
             me['backupEdit'] = me['gotStr']
             if gbEnterExitsEditMode:
