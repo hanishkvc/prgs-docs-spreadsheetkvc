@@ -572,6 +572,8 @@ without overriding one another, if possible.
 
 	Ex: cfs ; (for setting semicolon as fieldsep)
 
+	Ex: cfs \\t (for setting tab as fieldsep)
+
 	NOTE: If it so happens that the newly defined fieldsep is part of some cell content, then the program
 	will autoquote the corresponding content, if it is not already quoted, when saving to file.
 
@@ -1882,7 +1884,7 @@ Added support for tab completion of predefined parts of the : commands (i.e expl
 DONE: cell address ranges as lists, if found as argument to python functions.
 
 
-### 20200916IST1507 - GauriGaneshaToOnamToTeachersDayPlus01Release
+### 20200916IST1507+ - GauriGaneshaToOnamToTeachersDayPlus01Release
 
 Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.
 
@@ -1907,6 +1909,8 @@ chained test files dont trigger this any more, so need to add new even deeper te
 seems to behave better in general with deeper recursion limit.
 
 	NOTE: THis also means the program will take bit more time to trap loops, because more rope is given for the logics to play around.
+
+Allow user to set tab as fieldsep by passing \\t to :cfieldsep
 
 
 

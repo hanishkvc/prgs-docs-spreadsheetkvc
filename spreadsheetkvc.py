@@ -682,14 +682,21 @@ def do_ccmd(scr, cmd, args):
     '''
     global THEFIELDSEP, THEQUOTE
 
+    print("ccmd:{}, args:{}".format(cmd,args), file=GERRFILE)
     if (cmd == 'creadonly') or (cmd == 'cro'):
         me['readOnly'] = True
     elif (cmd == 'creadwrite') or (cmd == 'crw'):
         me['readOnly'] = False
     elif (cmd == 'cfieldsep') or (cmd == 'cfs'):
-        cstatusbar(scr, ['update fieldsep'])
-        #replace_incontent(THEFIELDSEP, args[0])
-        THEFIELDSEP = args[0]
+        fieldSep = args.split(' ',1)[0]
+        if (len(fieldSep) == 2) and (fieldSep == '\\t'):
+            fieldSep = '\t'
+        if len(fieldSep) != 1:
+            dlg(scr, ['fieldsep:invalid[{}]: need singleChar like ; or , or \\t'.format(fieldSep), 'Press any key...'])
+        else:
+            #replace_incontent(THEFIELDSEP, args[0])
+            THEFIELDSEP = fieldSep
+            dlg(scr, ['fieldsep: updated [{}]'.format(THEFIELDSEP), 'Press any key...'])
     elif (cmd == 'ctextquote') or (cmd == 'ctq'):
         cstatusbar(scr, ['update textquote'])
         replace_incontent(args[0], THEALT2INBTWQUOTE)

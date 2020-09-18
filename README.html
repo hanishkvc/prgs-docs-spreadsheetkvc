@@ -345,6 +345,7 @@ the program will cycle throught all the suggestions.</code></pre>
 <p>set the fieldsep for the csv file.</p>
 <p>Ex: cfs ’ (for setting single quote as fieldsep)</p>
 <p>Ex: cfs ; (for setting semicolon as fieldsep)</p>
+<p>Ex: cfs \t (for setting tab as fieldsep)</p>
 <p>NOTE: If it so happens that the newly defined fieldsep is part of some cell content, then the program will autoquote the corresponding content, if it is not already quoted, when saving to file.</p></li>
 <li><p>ctq|ctextquote theTextQuoteChar</p>
 <p>set the text quote for the csv file.</p>
@@ -962,7 +963,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>cformat commands to control how numbers are displayed. Doesnt affect the calculations.</p>
 <p>Added support for tab completion of predefined parts of the : commands (i.e explicit commands of the program). Also shows hint for parts that user has to specify.</p>
 <p>DONE: cell address ranges as lists, if found as argument to python functions.</p>
-<h3 id="ist1507---gauriganeshatoonamtoteachersdayplus01release">20200916IST1507 - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
+<h3 id="ist1507---gauriganeshatoonamtoteachersdayplus01release">20200916IST1507+ - GauriGaneshaToOnamToTeachersDayPlus01Release</h3>
 <p>Make get_token quoted string logic more generic, so that any char can be contained in a quoted string.</p>
 <p>Added :rsearch command to search for a given token/string in the cells. Also allow replacing of searched string.</p>
 <p>DONE: Handle the 0th row wrt explicit command entry. Dont show cell col header and remember to clear whats previously printed as user goes about editing the cmd. To help with knowing the current cell so that user can enter it as part of some of the :rcmds which could use them, now colhdr is enabled for :rcmds.</p>
@@ -971,6 +972,7 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>DONE: Make delete row/col bit more efficient by clearing calcs of only the dependent cells of the deleted rows/cols (using recursive reverse links lists). And then creating the new calc cache by copying all the unaffected cell calcs. Previously delete used to clear all =expression cells with cell addresses in them, whether dependent or not.</p>
 <p>Now given that most of the core interconnected logics have been handled in a sufficiently ok manner, and crash tested with shallow (default) recursion limit, open up the flood gates of performance (relatively speaking) by increasing the python recursion limit from 1K to 5K and also increase the programs core level trap logic to have depth of 10K. This ensures that chained calculations dont trigger the recursion exception for most normal use cases (rather even the current chained test files dont trigger this any more, so need to add new even deeper test files), and inturn the calculations occur faster as a whole. And Even python seems to behave better in general with deeper recursion limit.</p>
 <pre><code>NOTE: THis also means the program will take bit more time to trap loops, because more rope is given for the logics to play around.</code></pre>
+<p>Allow user to set tab as fieldsep by passing \t to :cfieldsep</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
 <p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
