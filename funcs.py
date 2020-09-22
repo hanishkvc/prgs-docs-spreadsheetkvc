@@ -8,12 +8,11 @@ import traceback
 import math
 from math import *
 import parsekvc as parse
+import cellval
 
 
 BFILTERPYFUNC = True
 me = None
-nvalue_key = None
-nvalue_expr = None
 GLOGFILE = None
 GERRFILE = None
 _do_cformat = None
@@ -31,7 +30,7 @@ def _cellrange_to_list(lRange, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            lOut.append(nvalue_key((r,c)))
+            lOut.append(cellval.nvalue_key((r,c)))
     return True, lOut
 
 
@@ -73,7 +72,7 @@ def _do_minmax(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            lItems.append(nvalue_key((r,c)))
+            lItems.append(cellval.nvalue_key((r,c)))
     tMin = min(lItems)
     tMax = max(lItems)
     return tMin, tMax, len(lItems)
@@ -108,7 +107,7 @@ def _do_sum(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            total += nvalue_key((r,c))
+            total += cellval.nvalue_key((r,c))
             cnt += 1
     return total, cnt
 
@@ -142,7 +141,7 @@ def _do_stddev(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            total += (nvalue_key((r,c)) - avg)**2
+            total += (cellval.nvalue_key((r,c)) - avg)**2
             cnt += 1
     varp = total/cnt
     stdevp = sqrt(varp)
@@ -191,7 +190,7 @@ def _do_prod(args, bIgnoreEmpty=True):
         for c in range(sC, eC+1):
             if ((me['data'].get((r,c)) == None) and bIgnoreEmpty):
                 continue
-            prod *= nvalue_key((r,c))
+            prod *= cellval.nvalue_key((r,c))
             cnt += 1
     return prod, cnt
 
@@ -278,7 +277,7 @@ def do_pyfunc(sCmd, sArgs):
             sValOrArg = theList
         else:
             # Evaluate the argument
-            sValOrArg = nvalue_expr(curArg)
+            sValOrArg = cellval.nvalue_expr(curArg)
         theArgs += ",{}".format(sValOrArg)
     if theArgs.startswith(','):
         theArgs = theArgs[1:]
