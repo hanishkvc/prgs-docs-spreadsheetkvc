@@ -97,6 +97,47 @@ def save_file(me, scr, sFile, filePass=None):
         dlg(scr, ["savefile:exception:{}:{}".format(a, sFile), "Press any key to continue"])
 
 
+def _load_line(line, r, filePass, fileKey, userKey):
+    '''
+    Handle a single line of input file being loaded.
+    '''
+    if filePass != None:
+        lineKey = sec.get_linekey(r, userKey, fileKey)
+        if bInternalEncDec:
+            line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
+        else:
+            sym = cryptography.fernet.Fernet(lineKey)
+            line = sym.decrypt(line.encode()).decode()
+    c = 1
+    i = 0
+    sCur = ""
+    bInQuote = False
+    lineLen = len(line)
+    # Remove the newline at the end
+    if line.endswith('\n'):
+        lineLen -= 1
+    while i < lineLen:
+        t = line[i]
+        if t == THEQUOTE:
+            bInQuote = not bInQuote
+            sCur += t
+        elif t == THEFIELDSEP:
+            if bInQuote:
+                sCur += t
+            else:
+                if sCur != "":
+                    me['data'][(r,c)] = sCur
+                    sCur = ""
+                c += 1
+        else:
+            sCur += t
+        i += 1
+    if sCur != "":
+        me['data'][(r,c)] = sCur
+        sCur = ""
+    return c
+
+
 def _load_file(me, sFile, filePass=None):
     '''
     Load the specified csv file
@@ -111,40 +152,7 @@ def _load_file(me, sFile, filePass=None):
     r = 0
     for line in f:
         r += 1
-        if filePass != None:
-            lineKey = sec.get_linekey(r, userKey, fileKey)
-            if bInternalEncDec:
-                line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
-            else:
-                sym = cryptography.fernet.Fernet(lineKey)
-                line = sym.decrypt(line.encode()).decode()
-        c = 1
-        i = 0
-        sCur = ""
-        bInQuote = False
-        lineLen = len(line)
-        # Remove the newline at the end
-        if line.endswith('\n'):
-            lineLen -= 1
-        while i < lineLen:
-            t = line[i]
-            if t == THEQUOTE:
-                bInQuote = not bInQuote
-                sCur += t
-            elif t == THEFIELDSEP:
-                if bInQuote:
-                    sCur += t
-                else:
-                    if sCur != "":
-                        me['data'][(r,c)] = sCur
-                        sCur = ""
-                    c += 1
-            else:
-                sCur += t
-            i += 1
-        if sCur != "":
-            me['data'][(r,c)] = sCur
-            sCur = ""
+        c = _load_line(line, r, filePass, fileKey, userKey)
     f.close()
     me['numRows'] = r
     me['numCols'] = c
