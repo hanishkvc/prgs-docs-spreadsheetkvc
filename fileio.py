@@ -11,6 +11,7 @@ import seckvc as sec
 import nav
 import cuikvc as cui
 import syncd
+import time
 
 
 # Entities from main logic
@@ -185,9 +186,14 @@ def load_file(me, scr, sFile, filePass=None):
         cstatusbar(scr, ['[Loading file...]'])
         me['cdataUpdate'] = True
         scr.clear()
+        t1 = time.time()
         _load_file(me, sFile, filePass)
+        t2 = time.time()
         cstatusbar(scr, ['[build deps...  ]'])
+        t3 = time.time()
         syncd.create_links()
+        t4 = time.time()
+        print("DBUG:loadFile:T1[{}] T2[{}]".format(t2-t1, t4-t3), file=GERRFILE)
         cstatusbar(scr, ['[               ]'])
         me['dirty'] = False
         revertfrom_help_ifneeded(me)
