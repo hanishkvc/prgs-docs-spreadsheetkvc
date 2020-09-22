@@ -97,7 +97,7 @@ def save_file(me, scr, sFile, filePass=None):
         dlg(scr, ["savefile:exception:{}:{}".format(a, sFile), "Press any key to continue"])
 
 
-def _load_line(line, r, filePass, fileKey, userKey):
+def _load_line(me, line, r, filePass, fileKey, userKey):
     '''
     Handle a single line of input file being loaded.
     '''
@@ -147,12 +147,14 @@ def _load_file(me, sFile, filePass=None):
         line = f.readline()
         salt = base64.urlsafe_b64decode(line.encode())
         userKey, fileKey = sec.get_basekeys(filePass, salt)
+    else:
+        userKey, fileKey = None, None
     print("loadfile:{}".format(sFile), file=GLOGFILE)
     me['data'] = dict()
     r = 0
     for line in f:
         r += 1
-        c = _load_line(line, r, filePass, fileKey, userKey)
+        c = _load_line(me, line, r, filePass, fileKey, userKey)
     f.close()
     me['numRows'] = r
     me['numCols'] = c
