@@ -345,10 +345,16 @@ def _cdraw_rowaddrs(rowStart, rowEnd):
 
 def _cdata_update(rStart, cStart, rEnd, cEnd):
     '''
-    Cache data calculation results.
-    If exception, then dont store anything. Just in case if the exception
-    is due to a long chain of cells in calc, then retrying it will help build
-    the solution part by part.
+    Cache data calculation results for the given block of cells, if not already cached.
+
+    If exception, then ignore that cell and try calculating other cells in the specified block.
+    Just in case if the exception is due to a long chain of cells in calc, then trying other cells
+    and coming back later to this cell, could potentially help build the solution part by part.
+
+    Caching is handled by nvalue_key logic.
+
+    If any exceptions while handling the block, it will return to the caller which cells had a
+    recursion limit exception and which cells if any had other exceptions.
     '''
     bRecursionError = False
     bException = False
@@ -377,6 +383,16 @@ def _cdata_update(rStart, cStart, rEnd, cEnd):
 ERREXCEPTION = "#ErrExc#"
 ERRLOOP = "#ErrLop#"
 def cdata_update(bClearCache=True, rStart=1, cStart=1, rEnd=-1, cEnd=-1):
+    '''
+    Help calculate, if needed, and cache calcd values for a given block of cells.
+
+    If there is recursion limit errors, even after multiple tries, then it will
+    force a all cells calc mode/phase. Which should help build solution for all
+    cells over multiple passes. NOTE: The i loop provides this multi pass, when
+    j loop is at j == 1, because full set of cells is tried to be calculated
+    as best as possible in any given pass, thus building over prev evaluated cells,
+    in deep chained scenarios.
+    '''
     if bClearCache:
         me['cdata'] = dict()
     if rEnd == -1:
