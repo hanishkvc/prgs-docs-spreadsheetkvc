@@ -1913,6 +1913,20 @@ seems to behave better in general with deeper recursion limit.
 Allow user to set tab as fieldsep by passing \\t to :cfieldsep
 
 
+### 20200923IST1035
+
+Move the getting cell value or nvalue logics into cellval module.
+
+Move handling of each input csv file line (encrypted or other wise) into its own func.
+
+As roughly speaking internally python interpreter runs as a single thread instance, using pure python threads to parallelise a job
+to speed it up doesnt really help. As at any given time only bytecode from one of the multiple threads will get interpreted. This
+ensures that simple operations on python's native datatypes are atomic (i.e either reading or writing into them, but not both in
+same expression/statement).
+
+Time load and cell dependency links building logics.
+
+
 
 
 ## thoughts behind this program
