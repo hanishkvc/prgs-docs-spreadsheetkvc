@@ -1932,8 +1932,18 @@ Time load and cell dependency links building logics.
 
 Added csvload(.load\_line) c extension module. This speeds up parsing of lines from the csv file to create the data dictionary by ~4 times.
 
-	filledexpr.csv file's loading part now takes only 1.2 seconds instead of the 4.6+ seconds of the pure python based logic.
-	However the forward and reverse dep list creation is still in python and that part still takes few seconds to build.
+	fillednum|expr.csv file's loading part now takes only 1.2 seconds instead of the 4.6+ seconds of the pure python based logic.
+	However the forward and reverse dep list creation is still in python and that part still takes few seconds to build, especially
+	if there are millions of cells with =expressions.
+
+	Initially though of using ctypes and a pure c logic imported into python to parse a line and return a bytes array containing
+	the cell contents like Cell1ContentLen2Bytes + Cell1ContentsNBytes + C2Len+C2Bytes + ... + CNLen0 + CNPLUS1Len + CNPLUS1Bytes + ...
+	Then decided against it and decided to implement a c extention module for python, so that the data dictionary is built up, as
+	the cell contents are parsed, so that there is no need to parse again in python.
+
+		Also decided to do the extension using the c-api/extending spec directly rather than using any 3rd party tools for extension
+		like cython or ..., because one never knows when the 3rd party tool may get dropped. And hopefully the c-api is stable.
+
 
 
 

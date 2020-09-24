@@ -12,6 +12,7 @@ import nav
 import cuikvc as cui
 import syncd
 import time
+import importlib
 
 
 # Entities from main logic
@@ -29,14 +30,13 @@ THEFIELDSEP = None
 bInternalEncDec = True
 
 
-GBCSVLOAD = False
+csvload = None
 def load_cext():
-    global GBCSVLOAD
+    global csvload
     try:
-        import csvload
-        GBCSVLOAD = True
+        csvload = importlib.import_module("csvload")
     except:
-        GBCSVLOAD = False
+        print("WARN:fileio:Couldnt load the csvload c module, so using slower python logic", file=GERRFILE)
 
 
 def _save_file(me, scr, sFile, filePass=None):
@@ -153,7 +153,7 @@ def load_line(me, line, r, filePass, fileKey, userKey):
         else:
             sym = cryptography.fernet.Fernet(lineKey)
             line = sym.decrypt(line.encode()).decode()
-    if GBCSVLOAD:
+    if csvload != None:
         return csvload.load_line(me['data'], r, line, len(line))
     return _load_line(me, line, r)
 
