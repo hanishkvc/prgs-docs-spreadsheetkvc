@@ -12,6 +12,7 @@ import nav
 import cuikvc as cui
 import syncd
 import time
+import csvload
 
 
 # Entities from main logic
@@ -98,17 +99,10 @@ def save_file(me, scr, sFile, filePass=None):
         dlg(scr, ["savefile:exception:{}:{}".format(a, sFile), "Press any key to continue"])
 
 
-def _load_line(me, line, r, filePass, fileKey, userKey):
+def _load_line(me, line, r):
     '''
-    Handle a single line of input file being loaded.
+    Handle a single line of input file being loaded, in python.
     '''
-    if filePass != None:
-        lineKey = sec.get_linekey(r, userKey, fileKey)
-        if bInternalEncDec:
-            line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
-        else:
-            sym = cryptography.fernet.Fernet(lineKey)
-            line = sym.decrypt(line.encode()).decode()
     c = 1
     i = 0
     sCur = ""
@@ -139,6 +133,20 @@ def _load_line(me, line, r, filePass, fileKey, userKey):
     return c
 
 
+def load_line(me, line, r, filePass, fileKey, userKey):
+    '''
+    Handle a single line of input file being loaded.
+    '''
+    if filePass != None:
+        lineKey = sec.get_linekey(r, userKey, fileKey)
+        if bInternalEncDec:
+            line = sec.aes_cbc_dec_b64(base64.urlsafe_b64decode(lineKey), line.encode()).decode()
+        else:
+            sym = cryptography.fernet.Fernet(lineKey)
+            line = sym.decrypt(line.encode()).decode()
+    return _load_line(me, line, r)
+
+
 def _load_file(me, sFile, filePass=None):
     '''
     Load the specified csv file
@@ -155,7 +163,7 @@ def _load_file(me, sFile, filePass=None):
     r = 0
     for line in f:
         r += 1
-        c = _load_line(me, line, r, filePass, fileKey, userKey)
+        c = load_line(me, line, r, filePass, fileKey, userKey)
     f.close()
     me['numRows'] = r
     me['numCols'] = c
