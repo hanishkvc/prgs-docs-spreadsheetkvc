@@ -4,6 +4,7 @@
 #
 
 import enum, re
+import csvload
 
 
 GLOGFILE = None
@@ -437,7 +438,7 @@ def get_celladdrs_incranges_internal(sIn, startPos=0):
 
 
 RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
-def get_celladdrs_incranges(sIn):
+def get_celladdrs_incranges_v2(sIn):
     '''
     Use re module to parse the line and extract cell addresses (including ranges) in them.
     In some cases the non re version is found to take bit more time,
@@ -465,6 +466,19 @@ def get_celladdrs_incranges(sIn):
             caList.append([pCA])
         if (ca[-1] == ':') and (raw[2].strip() == ""):
             bInCARange = True
+    return caList
+
+
+def get_celladdrs_incranges(sIn):
+    '''
+    Use re module to parse the line and extract cell addresses (including ranges) in them.
+    In some cases the non re version is found to take bit more time,
+    so using re version by default.
+
+    NOTE: This doesnt ignore contents of quoted text within the string.
+    '''
+    rawList = RE_CAINCR.findall(sIn)
+    caList = csvload.get_celladdrs_incranges_fromre(rawList)
     return caList
 
 
