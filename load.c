@@ -5,7 +5,9 @@
 #define THEQUOTE '\''
 #define THEFIELDSEP ';'
 
+
 PyObject * load_line(PyObject *self, PyObject *args) {
+    int r = 0;
     int c = 1;
     int i = 0;
     char sCur[4096];
@@ -14,8 +16,9 @@ PyObject * load_line(PyObject *self, PyObject *args) {
     int lineLen = 0;
     char *line;
     char t;
+    PyObject *dict;
 
-    if (!PyArg_ParseTuple(args, "is", &lineLen, &line)) {
+    if (!PyArg_ParseTuple(args, "Oisi", &dict, &r, &line, &lineLen)) {
         return NULL;
     }
     if (lineLen == 0)
@@ -37,6 +40,10 @@ PyObject * load_line(PyObject *self, PyObject *args) {
                 if (iS != 0) {
                     sCur[iS] = 0;
                     //me['data'][(r,c)] = sCur
+                    PyObject *k = PyTuple_New(2);
+                    PyTuple_SetItem(k, 0, PyLong_FromLong(r));
+                    PyTuple_SetItem(k, 1, PyLong_FromLong(c));
+                    PyObject_SetItem(dict, k, PyBytes_FromString(sCur));
                     iS = 0;
                 }
                 c += 1;
