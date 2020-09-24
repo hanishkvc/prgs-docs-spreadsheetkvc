@@ -102,8 +102,8 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
     PyObject *caList = PyList_New(0);
     bool bInCARange = false;
     PyObject *rawList;
-    int caLen;
-    int iD, iS;
+    long int caLen;
+    int iD, iS, j;
     char sCleanCA[32];
     int cCleanCALast;
 
@@ -125,11 +125,11 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
         }
         sCleanCA[iD] = 0;
         if (iD > 0) {
-            cCleanCALast = sClean[iD-1];
+            cCleanCALast = sCleanCA[iD-1];
             // Remove ':' if any at end
             if (cCleanCALast == ':') {
                 iD -= 1;
-                cCleanCA[iD] = 0;
+                sCleanCA[iD] = 0;
             }
         } else {
             cCleanCALast = 0;
@@ -169,7 +169,7 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
         Py_DECREF(raw);
         Py_DECREF(ca);
     }
-    return caList
+    return caList;
 }
 
 
