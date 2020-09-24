@@ -203,9 +203,11 @@ def create_links():
     init()
     clearedSet = set()
     cell_updated_time_init()
+    T1 = time.time()
     for key in me['data']:
         cell_updated(key, me['data'][key], clearCache=False, clearedSet=clearedSet)
-    print("DBUG:T1:{}, T2:{}, T3:{}, CAs:{}".format(TIMECAP1, TIMECAP2, TIMECAP3, TOKENCAP1), file=GERRFILE)
+    T2 = time.time()
+    print("DBUG:T1:{}, T2:{}, T3:{}, CAs:{}; OT:{}".format(TIMECAP1, TIMECAP2, TIMECAP3, TOKENCAP1, T2-T1), file=GERRFILE)
 
 
 

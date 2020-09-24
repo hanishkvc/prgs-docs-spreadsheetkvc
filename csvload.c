@@ -110,13 +110,14 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
     if (!PyArg_ParseTuple(args, "O", &rawList)) {
         return NULL;
     }
+    return caList;
     int listLen = PyList_Size(rawList);
-    printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
+    //printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
     for(int i = 0; i < listLen; i++) {
         PyObject *raw = PyList_GetItem(rawList, i);
         PyObject *ca = PyTuple_GetItem(raw, 1);
         char *sCA = PyUnicode_AsUTF8AndSize(ca, &caLen);
-        printf("DBUG:%d:%s\n", i, sCA);
+        //printf("DBUG:%d:%s\n", i, sCA);
         // Remove any space in ca
         iD = 0;
         for(iS = 0; iS < caLen; iS++) {
@@ -139,7 +140,7 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
         if (bInCARange) {
             PyObject *preCA = PyTuple_GetItem(raw, 0);
             char *sPreCA = PyUnicode_AsUTF8AndSize(preCA, &caLen);
-            printf("DBUG:%d:%s\n", i, sPreCA);
+            //printf("DBUG:%d:%s\n", i, sPreCA);
             //Py_DECREF(preCA);
             bool bCellAddrRangeOk = true;
             for(j = 0; j < caLen; j++) {
