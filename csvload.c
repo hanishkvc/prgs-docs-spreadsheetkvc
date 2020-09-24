@@ -15,9 +15,12 @@
 // Add a given cell content to the data dictionary
 static void dict_add(PyObject *dict, int r, int c, char *s) {
     PyObject *k = PyTuple_New(2);
-    PyTuple_SetItem(k, 0, PyLong_FromLong(r));
-    PyTuple_SetItem(k, 1, PyLong_FromLong(c));
-    PyObject_SetItem(dict, k, PyUnicode_FromString(s));
+    PyTuple_SetItem(k, 0, PyLong_FromLong(r)); // PyTupSetItem steals PyLong from us, so we dont have to worry
+    PyTuple_SetItem(k, 1, PyLong_FromLong(c)); // PyTupSetItem steals PyLong from us, so we dont have to worry
+    PyObject *v = PyUnicode_FromString(s); // PyObject_SetItem wont steal this from us, so we have to worry about it, so get a handle to it.
+    PyObject_SetItem(dict, k, v); // PyObjSetItem wont steal PyTuple and PyUnicode from us, so we have to handle them
+    Py_DECREF(k); // As we no longer require this, so dec refcnt
+    Py_DECREF(v); // As we no longer require this, so dec refcnt
 }
 
 
