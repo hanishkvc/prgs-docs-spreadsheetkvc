@@ -139,6 +139,8 @@ Some of its features are
 
 	* support markers including implicit ones (@mCUR, @mEND).
 
+	* optional c based loading for spreadsheets with millions of cells with contents.
+
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations
   only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).
 
@@ -207,6 +209,8 @@ Inturn to load a password protected file key in the following.
 The program requires python3, ncurses or equivalent and python-cryptography.
 
 It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.
+
+One needs to run sudo python setup.py install to install the c extension module for csv file line loading.
 
 
 ### command line arguments
@@ -1913,7 +1917,7 @@ seems to behave better in general with deeper recursion limit.
 Allow user to set tab as fieldsep by passing \\t to :cfieldsep
 
 
-### 20200923IST1035
+### 20200923IST1035+
 
 Move the getting cell value or nvalue logics into cellval module.
 
@@ -1925,6 +1929,11 @@ ensures that simple operations on python's native datatypes are atomic (i.e eith
 same expression/statement).
 
 Time load and cell dependency links building logics.
+
+Added csvload(.load\_line) c extension module. This speeds up parsing of lines from the csv file to create the data dictionary by ~4 times.
+
+	filledexpr.csv file's loading part now takes only 1.2 seconds instead of the 4.6+ seconds of the pure python based logic.
+	However the forward and reverse dep list creation is still in python and that part still takes few seconds to build.
 
 
 

@@ -17,7 +17,7 @@ static void dict_add(PyObject *dict, int r, int c, char *s) {
     PyObject *k = PyTuple_New(2);
     PyTuple_SetItem(k, 0, PyLong_FromLong(r));
     PyTuple_SetItem(k, 1, PyLong_FromLong(c));
-    PyObject_SetItem(dict, k, PyBytes_FromString(s));
+    PyObject_SetItem(dict, k, PyUnicode_FromString(s));
 }
 
 

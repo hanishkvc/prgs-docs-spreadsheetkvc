@@ -144,7 +144,8 @@ def load_line(me, line, r, filePass, fileKey, userKey):
         else:
             sym = cryptography.fernet.Fernet(lineKey)
             line = sym.decrypt(line.encode()).decode()
-    return _load_line(me, line, r)
+    #return _load_line(me, line, r)
+    return csvload.load_line(me['data'], r, line, len(line))
 
 
 def _load_file(me, sFile, filePass=None):
