@@ -5,8 +5,8 @@ run:
 html: README.md
 	pandoc --metadata pagetitle="SpreadSheetKVC Readme" -s -o README.html README.md
 
-cmods: load.c
-	gcc `pkg-config --cflags python3` load.c
+cmods: csvload.c
+	gcc `pkg-config --cflags python3` csvload.c
 
 clean: README.html
 	rm README.html

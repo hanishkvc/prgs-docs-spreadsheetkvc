@@ -2,12 +2,15 @@
 #include <Python.h>
 #include <stdbool.h>
 
+
+// TODO: Get these as arguments later
+// Currently these are hardcoded
 #define THEQUOTE '\''
 #define THEFIELDSEP ';'
 
 
 // Add a given cell content to the data dictionary
-void dict_add(PyObject *dict, int r, int c, char *s) {
+static void dict_add(PyObject *dict, int r, int c, char *s) {
     PyObject *k = PyTuple_New(2);
     PyTuple_SetItem(k, 0, PyLong_FromLong(r));
     PyTuple_SetItem(k, 1, PyLong_FromLong(c));
@@ -79,6 +82,11 @@ static struct PyModuleDef csvloadmodule = {
     -1,
     CSVLoadMethods
 };
+
+
+PyMODINIT_FUNC PyInit_csvload(void) {
+    return PyModule_Create(&csvloadmodule);
+}
 
 
 // vim: set sts=4 expandtab: //
