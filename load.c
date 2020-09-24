@@ -16,7 +16,7 @@ void dict_add(PyObject *dict, int r, int c, char *s) {
 
 
 // Extract the cell contents from the line and add it to the given data dictionary
-PyObject * load_line(PyObject *self, PyObject *args) {
+static PyObject* load_line(PyObject *self, PyObject *args) {
     int r = 0;
     int c = 1;
     int i = 0;
@@ -49,7 +49,7 @@ PyObject * load_line(PyObject *self, PyObject *args) {
             } else {
                 if (iS != 0) {
                     sCur[iS] = 0;
-                    dict_add(dict, r, c, sCur)
+                    dict_add(dict, r, c, sCur);
                     iS = 0;
                 }
                 c += 1;
@@ -61,10 +61,24 @@ PyObject * load_line(PyObject *self, PyObject *args) {
         i += 1;
     }
     if (iS != 0) {
-        dict_add(dict, r, c, sCur)
+        dict_add(dict, r, c, sCur);
     }
     return PyLong_FromLong(c);
 }
+
+
+static PyMethodDef CSVLoadMethods[] = {
+    { "load_line", load_line, METH_VARARGS, "load a csv file line" },
+    { NULL, NULL, 0, NULL}
+};
+
+
+static struct PyModuleDef csvloadmodule = {
+    PyModuleDef_HEAD_INIT,
+    "csvload",
+    -1,
+    CSVLoadMethods
+};
 
 
 // vim: set sts=4 expandtab: //
