@@ -22,6 +22,15 @@ static void dict_add(PyObject *dict, int r, int c, char *s) {
 
 
 // Extract the cell contents from the line and add it to the given data dictionary
+PyDoc_STRVAR(
+    load_line_doc,
+    "load_line(dataDict, rowNumber, lineString, lineLen)\n"
+    "--\n\n"
+    "load the given csv file line into data dictinary for the cells\n"
+    "Currently the following limits are there compared to pure python logic\n"
+    "\tmax cell content size is 4k\n"
+    "\tthe quote is fixed to '\n"
+    "\tthe fieldsep is fixed to ;\n");
 static PyObject* load_line(PyObject *self, PyObject *args) {
     int r = 0;
     int c = 1;
@@ -74,7 +83,7 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
 
 
 static PyMethodDef CSVLoadMethods[] = {
-    { "load_line", load_line, METH_VARARGS, "load a csv file line" },
+    { "load_line", load_line, METH_VARARGS, load_line_doc },
     { NULL, NULL, 0, NULL}
 };
 
