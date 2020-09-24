@@ -1,10 +1,11 @@
 
 #include <Python.h>
+#include <stdbool.h>
 
 #define THEQUOTE '\''
 #define THEFIELDSEP ';'
 
-load_line(PyObject *self, PyObject *args) {
+PyObject * load_line(PyObject *self, PyObject *args) {
     int c = 1;
     int i = 0;
     char sCur[4096];
@@ -12,12 +13,13 @@ load_line(PyObject *self, PyObject *args) {
     bool bInQuote = false;
     int lineLen = 0;
     char *line;
+    char t;
 
-    if !(PyArg_ParseTuple(args, "is", &lineLen, &line)) {
+    if (!PyArg_ParseTuple(args, "is", &lineLen, &line)) {
         return NULL;
     }
     if (lineLen == 0)
-        return NULL;
+        return PyLong_FromLong(c);
     // Remove the newline at the end
     if (line[lineLen] == '\n')
         lineLen -= 1;
@@ -33,7 +35,7 @@ load_line(PyObject *self, PyObject *args) {
                 iS += 1;
             } else {
                 if (iS != 0) {
-                    sCur[iS] = NULL;
+                    sCur[iS] = 0;
                     //me['data'][(r,c)] = sCur
                     iS = 0;
                 }
@@ -48,7 +50,7 @@ load_line(PyObject *self, PyObject *args) {
     if (iS != 0) {
         //me['data'][(r,c)] = sCur
     }
-    return c;
+    return PyLong_FromLong(c);
 }
 
 
