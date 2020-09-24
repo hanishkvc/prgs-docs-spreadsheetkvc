@@ -1,4 +1,7 @@
-
+/*
+ * csvload - A c based module for use from within python
+ * HanishKVC, 2020
+ */
 #include <Python.h>
 #include <stdbool.h>
 
@@ -42,7 +45,7 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
     while(i < lineLen) {
         t = line[i];
         if (t == THEQUOTE) {
-            bInQuote = ~ bInQuote;
+            bInQuote = !bInQuote;
             sCur[iS] = t;
             iS += 1;
         } else if (t == THEFIELDSEP) {
@@ -79,11 +82,18 @@ static PyMethodDef CSVLoadMethods[] = {
 static struct PyModuleDef csvloadmodule = {
     PyModuleDef_HEAD_INIT,
     "csvload",
+    NULL,
     -1,
     CSVLoadMethods
 };
 
 
+/* One could test this like this
+ * import csvload
+ * me = dict()
+ * ts = "test, me; what else"
+ * csvload.load_line(me, 1, ts, len(ts))
+ */
 PyMODINIT_FUNC PyInit_csvload(void) {
     return PyModule_Create(&csvloadmodule);
 }
