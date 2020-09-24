@@ -6,6 +6,16 @@
 #define THEFIELDSEP ';'
 
 
+// Add a given cell content to the data dictionary
+void dict_add(PyObject *dict, int r, int c, char *s) {
+    PyObject *k = PyTuple_New(2);
+    PyTuple_SetItem(k, 0, PyLong_FromLong(r));
+    PyTuple_SetItem(k, 1, PyLong_FromLong(c));
+    PyObject_SetItem(dict, k, PyBytes_FromString(s));
+}
+
+
+// Extract the cell contents from the line and add it to the given data dictionary
 PyObject * load_line(PyObject *self, PyObject *args) {
     int r = 0;
     int c = 1;
@@ -23,7 +33,7 @@ PyObject * load_line(PyObject *self, PyObject *args) {
     }
     if (lineLen == 0)
         return PyLong_FromLong(c);
-    // Remove the newline at the end
+    // Remove the newline at the end, if any
     if (line[lineLen] == '\n')
         lineLen -= 1;
     while(i < lineLen) {
@@ -39,11 +49,7 @@ PyObject * load_line(PyObject *self, PyObject *args) {
             } else {
                 if (iS != 0) {
                     sCur[iS] = 0;
-                    //me['data'][(r,c)] = sCur
-                    PyObject *k = PyTuple_New(2);
-                    PyTuple_SetItem(k, 0, PyLong_FromLong(r));
-                    PyTuple_SetItem(k, 1, PyLong_FromLong(c));
-                    PyObject_SetItem(dict, k, PyBytes_FromString(sCur));
+                    dict_add(dict, r, c, sCur)
                     iS = 0;
                 }
                 c += 1;
@@ -55,7 +61,7 @@ PyObject * load_line(PyObject *self, PyObject *args) {
         i += 1;
     }
     if (iS != 0) {
-        //me['data'][(r,c)] = sCur
+        dict_add(dict, r, c, sCur)
     }
     return PyLong_FromLong(c);
 }
