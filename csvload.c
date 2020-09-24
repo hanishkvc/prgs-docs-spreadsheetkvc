@@ -88,8 +88,95 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
 }
 
 
+//RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
+PyDoc_STRVAR(
+    get_celladdrs_incranges_fromre_doc,
+    "cellAddrsList = get_celladdrs_incranges_fromre(rawREList)\n"
+    "--\n\n"
+    "Parese the output of RE_CAINCR and extract cell addresses (including ranges) in them.\n"
+    "In some cases the non re version is found to take bit more time,\n"
+    "so using re version by default.\n"
+    "\n"
+    "NOTE: This doesnt ignore contents of quoted text within the string.\n");
+static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) {
+    PyObject *caList = PyList_New(0);
+    bool bInCARange = false;
+    PyObject *rawList;
+    int caLen;
+    int iD, iS;
+    char sCleanCA[32];
+    int cCleanCALast;
+
+    if (!PyArg_ParseTuple(args, "O", &rawList)) {
+        return NULL;
+    }
+    int listLen = PyList_Size(rawList);
+    for(int i = 0; i < listLen; i++) {
+        PyObject *raw = PyList_GetItem(rawList, i);
+        PyObject *ca = PyList_GetItem(raw, 1);
+        char *sCA = PyUnicode_AsUTF8AndSize(ca, &caLen);
+        // Remove any space in ca
+        iD = 0;
+        for(iS = 0; iS < caLen; iS++) {
+            if (sCA[iS] == ' ')
+                continue;
+            sCleanCA[iD] = sCA[iS];
+            iD += 1;
+        }
+        sCleanCA[iD] = 0;
+        if (iD > 0) {
+            cCleanCALast = sClean[iD-1];
+            // Remove ':' if any at end
+            if (cCleanCALast == ':') {
+                iD -= 1;
+                cCleanCA[iD] = 0;
+            }
+        } else {
+            cCleanCALast = 0;
+        }
+        if (bInCARange) {
+            PyObject *preCA = PyList_GetItem(raw, 0);
+            char *sPreCA = PyUnicode_AsUTF8AndSize(preCA, &caLen);
+            Py_DECREF(preCA);
+            bool bCellAddrRangeOk = true;
+            for(j = 0; j < caLen; j++) {
+                if (sPreCA[j] != ' ') {
+                    bCellAddrRangeOk = false;
+                }
+            }
+            if (bCellAddrRangeOk) {
+                //caList[-1].append(pCA)
+            } else {
+                //caList.append([pCA])
+            }
+            bInCARange = false;
+        } else {
+            //caList.append([pCA])
+        }
+        if (cCleanCALast == ':') {
+            PyObject *postCA = PyList_GetItem(raw, 2);
+            char *sPostCA = PyUnicode_AsUTF8AndSize(postCA, &caLen);
+            Py_DECREF(postCA);
+            bool bCellAddrRangeOk = true;
+            for(j = 0; j < caLen; j++) {
+                if (sPostCA[j] != ' ') {
+                    bCellAddrRangeOk = false;
+                }
+            }
+            if (bCellAddrRangeOk)
+                bInCARange = true;
+        }
+        Py_DECREF(raw);
+        Py_DECREF(ca);
+    }
+    return caList
+}
+
+
+
 static PyMethodDef CSVLoadMethods[] = {
     { "load_line", load_line, METH_VARARGS, load_line_doc },
+    { "get_celladdrs_incranges_fromre", get_celladdrs_incranges_fromre, METH_VARARGS, get_celladdrs_incranges_fromre_doc },
     { NULL, NULL, 0, NULL}
 };
 
