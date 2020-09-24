@@ -12,7 +12,6 @@ import nav
 import cuikvc as cui
 import syncd
 import time
-import csvload
 
 
 # Entities from main logic
@@ -28,6 +27,16 @@ THEFIELDSEP = None
 # Whether to use internal or cryptography libraries AuthenticatedEncryption
 # Both use similar concepts, but bitstreams are not directly interchangable
 bInternalEncDec = True
+
+
+GBCSVLOAD = False
+def load_cext():
+    global GBCSVLOAD
+    try:
+        import csvload
+        GBCSVLOAD = True
+    except:
+        GBCSVLOAD = False
 
 
 def _save_file(me, scr, sFile, filePass=None):
@@ -144,8 +153,9 @@ def load_line(me, line, r, filePass, fileKey, userKey):
         else:
             sym = cryptography.fernet.Fernet(lineKey)
             line = sym.decrypt(line.encode()).decode()
-    #return _load_line(me, line, r)
-    return csvload.load_line(me['data'], r, line, len(line))
+    if GBCSVLOAD:
+        return csvload.load_line(me['data'], r, line, len(line))
+    return _load_line(me, line, r)
 
 
 def _load_file(me, sFile, filePass=None):

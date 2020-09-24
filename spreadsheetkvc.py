@@ -1214,7 +1214,7 @@ def setup_funcs():
     funcs._do_cformat = _do_cformat
 
 
-def setup_fileio():
+def setup_fileio(load=False):
     fileio.GLOGFILE = GLOGFILE
     fileio.GERRFILE = GERRFILE
     fileio.THEQUOTE = THEQUOTE
@@ -1222,6 +1222,8 @@ def setup_fileio():
     fileio.dlg = dlg
     fileio.status = status
     fileio.cstatusbar = cstatusbar
+    if load:
+        fileio.load_cext()
 
 
 def setup_edit():
@@ -1253,7 +1255,7 @@ def setup_helpermodules():
     setup_cellval()
     setup_funcs()
     setup_nav()
-    setup_fileio()
+    setup_fileio(True)
     setup_edit()
     tabcomplete_clear()
 
