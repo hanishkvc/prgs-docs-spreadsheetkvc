@@ -88,6 +88,11 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
 }
 
 
+static str_empty(const char *str) {
+
+
+}
+
 //RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
 PyDoc_STRVAR(
     get_celladdrs_incranges_fromre_doc,
@@ -100,6 +105,8 @@ PyDoc_STRVAR(
     "NOTE: This doesnt ignore contents of quoted text within the string.\n");
 static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) {
     PyObject *caList = PyList_New(0);
+    PyObject *caRange = NULL;
+    //int caListCnt = 0;
     bool bInCARange = false;
     PyObject *rawList;
     long int caLen;
@@ -149,12 +156,25 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
             }
             if (bCellAddrRangeOk) {
                 //caList[-1].append(pCA)
+                int iEnd = PyList_Size(caList)-1;
+                if (iEnd == -1) {
+                    caRange = PyList_New(0);
+                    PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
+                    PyList_Append(caList, caRange);
+                } else {
+                    caRange = PyList_GetItem(caList, iEnd);
+                    PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
+                }
             } else {
-                //caList.append([pCA])
+                caRange = PyList_New(0);
+                PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
+                PyList_Append(caList, caRange);
             }
             bInCARange = false;
         } else {
-            //caList.append([pCA])
+            caRange = PyList_New(0);
+            PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
+            PyList_Append(caList, caRange);
         }
         if (cCleanCALast == ':') {
             PyObject *postCA = PyTuple_GetItem(raw, 2);

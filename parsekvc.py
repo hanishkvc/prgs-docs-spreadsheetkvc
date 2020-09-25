@@ -537,8 +537,10 @@ def test_101():
     print(get_celladdrs("what else CA22:CB33 'Not AA22' +25-C33/(A20-30)*DD55 - 99AA + AA99"))
     print(get_celladdrs("what else CA$22:CB33 'Not $AA22' +25-$C33/(A20-30)*$DD$55 - 99AA + AA99"))
     print(get_tokens("rgennums A1:B10 10 -5 +60 8.5 det", 12, ['-','+']))
-    print(get_celladdrs_incranges_old("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(get_celladdrs_incranges_internal("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(get_celladdrs_incranges_v2("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
     print(get_celladdrs_incranges("=whatelse+A11:$B12+32/(A32)   + ZZ9999 - MN102 % CB102:DD321 + sum(B1 : B2) - sin(B99, int(JK10: KJ99))"))
+    print(get_celladdrs_incranges("what+else - nothing /now A1 + BB123 * C1 :C2 / D1: D99 (E1 : d EZ99)"))
     print(re.findall(".*?([$]?[a-zA-Z]+[$]?[0-9]+).*?", "123+beA23-12+testit/$zze$54"))
     print(re.findall("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)", "123+beA23-12+testit/$zze$54 d  BE99     : CE10 :: MM1:NN99"))
 
