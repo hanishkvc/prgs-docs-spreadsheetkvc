@@ -132,19 +132,18 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     origCellFwdLink = me['fwdLinks'].get(cellKey)
     cellFwdLink = set()
     # Handle the new content of the cell
-    #T1 = time.time()
+    T1 = time.time()
     if sContent == None:
         sContent = ""
     if sContent.strip().startswith('='):
-        #lCellAddrs = parse.get_celladdrs_incranges(sContent)
+        lCellAddrs = parse.get_celladdrs_incranges(sContent)
         #lCellAddrs = parse.get_celladdrs_incranges_internal(sContent)
         #print(lCellAddrs, file=GERRFILE)
-        lCellAddrs = []
     else:
         lCellAddrs = []
     TOKENCAP1 += len(lCellAddrs)
-    #T2 = time.time()
-    #TIMECAP1 += (T2-T1)
+    T2 = time.time()
+    TIMECAP1 += (T2-T1)
     for cellAddrPlus in lCellAddrs:
         if (len(cellAddrPlus) == 1):
             bCellAddr, key = parse.celladdr_valid(cellAddrPlus[0])
@@ -166,8 +165,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
                 for c in range(key1[1], key2[1]+1):
                     cellFwdLink.add((r,c))
                     cell_revlink_add((r,c), cellKey)
-    #T3 = time.time()
-    #TIMECAP2 += (T3-T2)
+    T3 = time.time()
+    TIMECAP2 += (T3-T2)
     # Handle cells removed from the =expression
     if origCellFwdLink != None:
         droppedCells = origCellFwdLink.difference(cellFwdLink)
@@ -183,8 +182,8 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
     # Clear cell calc cache for all dependents
     if clearCache:
         cdata_clear_revlinks(cellKey, clearedSet)
-    #T4 = time.time()
-    #TIMECAP3 += (T4-T3)
+    T4 = time.time()
+    TIMECAP3 += (T4-T3)
 
 
 def create_links():
