@@ -1187,9 +1187,11 @@ def setup_sighandlers():
     signal.signal(signal.SIGWINCH, cwinsize_change)
 
 
-def setup_parse():
+def setup_parse(load=False):
     parse.GLOGFILE = GLOGFILE
     parse.GERRFILE = GERRFILE
+    if load:
+        parse.load_cext()
 
 
 def setup_cellval():
@@ -1250,7 +1252,7 @@ def setup_syncd():
 
 
 def setup_helpermodules():
-    setup_parse()
+    setup_parse(True)
     setup_syncd()
     setup_cellval()
     setup_funcs()

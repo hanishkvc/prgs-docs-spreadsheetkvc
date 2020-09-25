@@ -3,12 +3,24 @@
 # HanishKVC, 2020
 #
 
+import sys
 import enum, re
-import chelper
+import importlib
 
 
 GLOGFILE = None
 GERRFILE = None
+
+
+chelper = None
+def load_cext():
+    global chelper
+    try:
+        chelper = importlib.import_module("chelper")
+        print("INFO:parsekvc:Loaded chelper c module", file=GERRFILE)
+    except:
+        print("WARN:{}".format(sys.exc_info()), file=GERRFILE)
+        print("WARN:parsekvc:Couldnt load the chelper c module, so using slightly slower but better tested python logic", file=GERRFILE)
 
 
 class AlphaNumType(enum.IntFlag):
@@ -438,7 +450,7 @@ def get_celladdrs_incranges_internal(sIn, startPos=0):
 
 
 RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
-def get_celladdrs_incranges_v2(sIn):
+def get_celladdrs_incranges_py(sIn):
     '''
     Use re module to parse the line and extract cell addresses (including ranges) in them.
     In some cases the non re version is found to take bit more time,
@@ -475,8 +487,9 @@ def get_celladdrs_incranges(sIn):
 
     NOTE: This doesnt ignore contents of quoted text within the string.
     '''
-    caList = chelper.get_celladdrs_incranges(sIn)
-    return caList
+    if chelper != None:
+        return chelper.get_celladdrs_incranges(sIn)
+    return get_celladdrs_incranges_py(sIn)
 
 
 def celladdr_valid_ex(sAddr):

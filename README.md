@@ -1944,8 +1944,8 @@ Added csvload(.load\_line) c extension module. This speeds up parsing of lines f
 		Also decided to do the extension using the c-api/extending spec directly rather than using any 3rd party tools for extension
 		like cython or ..., because one never knows when the 3rd party tool may get dropped. And hopefully the c-api is stable.
 
-Added c based helper logic for getting list of all cell addresses and or ranges in a cell content. Because the re module of python was taking
-around 5 seconds for a spreadsheet containing ~ 3 million expression filled cells, this new c based logic does the same job in around 1.5 seconds.
+Added c based helper logic for getting list of all cell addresses and or ranges in a cell content, because re module of python was taking around
+5.5 seconds for a spreadsheet containing ~ 3 million expression filled cells. This new c based logic does the same job in around 1.5 seconds.
 
 
 

@@ -1,5 +1,5 @@
 /*
- * csvload - A c based module for use from within python
+ * chelper - A c based module containing helpers to speed up some of the logics used by the python logic.
  * HanishKVC, 2020
  */
 #include <Python.h>
@@ -198,14 +198,13 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
 }
 
 
-//RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
 PyDoc_STRVAR(
     get_celladdrs_incranges_doc,
     "cellAddrsList = get_celladdrs_incranges(sIn)\n"
     "--\n\n"
     "Parse the given string and extract cell addresses (including ranges) in them.\n"
     "\n"
-    "NOTE: This doesnt ignore contents of quoted text within the string.\n");
+    "NOTE: This doesnt ignore contents of quoted text within the string, currently.\n");
 static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     PyObject *caList = PyList_New(0);
     PyObject *caRange = NULL;
@@ -218,11 +217,10 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "s", &sIn)) {
         return NULL;
     }
-    //printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
     iS = 0;
     iC = 0;
-    iToken = 0; // iToken = 0 (Not in token), 1 ($ found), 2 (alpha part), 3(num part)
-    iCARange = 0; // 0 (Not CARange), 1 (1st part of CA), 2 (: found), 3 (2nd part of CA)
+    iToken = 0; // iToken = 0 (Not in token), 1 ($ found), 2 (alpha part), 3 (num part)
+    iCARange = 0; // 0 (Not CARange), 1 (CA inc 1st part of CA Range), 2 (: found)
     while (true) {
         c = sIn[iS];
         if (c == 0) {
@@ -296,9 +294,9 @@ static PyMethodDef CSVLoadMethods[] = {
 };
 
 
-static struct PyModuleDef csvloadmodule = {
+static struct PyModuleDef chelpermodule = {
     PyModuleDef_HEAD_INIT,
-    "csvload",
+    "chelper",
     NULL,
     -1,
     CSVLoadMethods
@@ -306,13 +304,14 @@ static struct PyModuleDef csvloadmodule = {
 
 
 /* One could test this like this
- * import csvload
+ * import chelper
  * me = dict()
  * ts = "test, me; what else"
- * csvload.load_line(me, 1, ts, len(ts))
+ * chelper.load_line(me, 1, ts, len(ts))
+ * chelper.get_celladdrs_incranges("string containing cell addresses (including ranges) like AB12 : BC123 + DE12 - 999 /1.5 + MN93:PQ99 / XY1 :YZ1024")
  */
-PyMODINIT_FUNC PyInit_csvload(void) {
-    return PyModule_Create(&csvloadmodule);
+PyMODINIT_FUNC PyInit_chelper(void) {
+    return PyModule_Create(&chelpermodule);
 }
 
 

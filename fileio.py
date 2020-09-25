@@ -36,7 +36,7 @@ def load_cext():
     try:
         chelper = importlib.import_module("chelper")
     except:
-        print("WARN:fileio:Couldnt load the chelper c module, so using slower python logic", file=GERRFILE)
+        print("WARN:fileio:Couldnt load the chelper c module, so using slightly slower but better tested python logic", file=GERRFILE)
 
 
 def _save_file(me, scr, sFile, filePass=None):
