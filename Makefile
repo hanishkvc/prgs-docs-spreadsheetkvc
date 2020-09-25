@@ -5,8 +5,8 @@ run:
 html: README.md
 	pandoc --metadata pagetitle="SpreadSheetKVC Readme" -s -o README.html README.md
 
-cmods: csvload.c
-	gcc `pkg-config --cflags python3` csvload.c
+cmods: chelper.c
+	gcc `pkg-config --cflags python3` chelper.c
 
 setup:
 	python3 setup.py build

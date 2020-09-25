@@ -1,11 +1,11 @@
 from distutils.core import setup, Extension
 
-csvload = Extension('csvload',
-                    sources = ['csvload.c'])
+chelper = Extension('chelper',
+                    sources = ['chelper.c'])
 
-setup (name = 'Helper for SpreadsheetKVC',
+setup (name = 'C Helpers for SpreadsheetKVC',
        version = '1.0',
-       description = 'Allow loading csv lines by SpreadsheetKVC, a curses based spreadsheet for commandline with authenticated encryption support',
+       description = 'C helpers for SpreadsheetKVC, a curses based spreadsheet for commandline with authenticated encryption support',
        author_email = 'hanishkvc@gmail.com',
        license = 'gpl',
-       ext_modules = [csvload])
+       ext_modules = [chelper])

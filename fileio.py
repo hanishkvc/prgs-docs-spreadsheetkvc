@@ -30,13 +30,13 @@ THEFIELDSEP = None
 bInternalEncDec = True
 
 
-csvload = None
+chelper = None
 def load_cext():
-    global csvload
+    global chelper
     try:
-        csvload = importlib.import_module("csvload")
+        chelper = importlib.import_module("chelper")
     except:
-        print("WARN:fileio:Couldnt load the csvload c module, so using slower python logic", file=GERRFILE)
+        print("WARN:fileio:Couldnt load the chelper c module, so using slower python logic", file=GERRFILE)
 
 
 def _save_file(me, scr, sFile, filePass=None):
@@ -153,8 +153,8 @@ def load_line(me, line, r, filePass, fileKey, userKey):
         else:
             sym = cryptography.fernet.Fernet(lineKey)
             line = sym.decrypt(line.encode()).decode()
-    if csvload != None:
-        return csvload.load_line(me['data'], r, line, len(line))
+    if chelper != None:
+        return chelper.load_line(me['data'], r, line, len(line))
     return _load_line(me, line, r)
 
 

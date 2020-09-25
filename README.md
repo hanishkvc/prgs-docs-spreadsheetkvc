@@ -139,7 +139,7 @@ Some of its features are
 
 	* support markers including implicit ones (@mCUR, @mEND).
 
-	* optional c based loading for spreadsheets with millions of cells with contents.
+	* optional c based loading and cell addr range parsing for spreadsheets with millions of cells with contents.
 
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations
   only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).
@@ -1943,6 +1943,9 @@ Added csvload(.load\_line) c extension module. This speeds up parsing of lines f
 
 		Also decided to do the extension using the c-api/extending spec directly rather than using any 3rd party tools for extension
 		like cython or ..., because one never knows when the 3rd party tool may get dropped. And hopefully the c-api is stable.
+
+Added c based helper logic for getting list of all cell addresses and or ranges in a cell content. Because the re module of python was taking
+around 5 seconds for a spreadsheet containing ~ 3 million expression filled cells, this new c based logic does the same job in around 1.5 seconds.
 
 
 

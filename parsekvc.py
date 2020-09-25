@@ -4,7 +4,7 @@
 #
 
 import enum, re
-import csvload
+import chelper
 
 
 GLOGFILE = None
@@ -469,28 +469,13 @@ def get_celladdrs_incranges_v2(sIn):
     return caList
 
 
-def get_celladdrs_incranges_v009(sIn):
-    '''
-    Use re module to parse the line and extract cell addresses (including ranges) in them.
-    In some cases the non re version is found to take bit more time,
-    so using re version by default.
-
-    NOTE: This doesnt ignore contents of quoted text within the string.
-    '''
-    rawList = RE_CAINCR.findall(sIn)
-    caList = csvload.get_celladdrs_incranges_fromre(rawList)
-    return caList
-
-
 def get_celladdrs_incranges(sIn):
     '''
-    Use re module to parse the line and extract cell addresses (including ranges) in them.
-    In some cases the non re version is found to take bit more time,
-    so using re version by default.
+    Parse the string and extract the cell addresses (including ranges) in one shot.
 
     NOTE: This doesnt ignore contents of quoted text within the string.
     '''
-    caList = csvload.get_celladdrs_incranges(sIn)
+    caList = chelper.get_celladdrs_incranges(sIn)
     return caList
 
 
