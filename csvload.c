@@ -260,25 +260,29 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
             }
         } else {
             if (c == ':') {
-            }
-            if (iToken == 3) { // Found a cell addr
-                sCur[iC] = 0;
-                if (iCARange == 0) {
-                    caRange = PyList_New(0);
-                    PyList_Append(caRange, PyUnicode_FromString(sCur));
-                    PyList_Append(caList, caRange);
-                    iCARange = 1;
-                } else if (iCARange == 2) {
-                    int iEnd = PyList_Size(caList)-1;
-                    caRange = PyList_GetItem(caList, iEnd);
-                    PyList_Append(caRange, PyUnicode_FromString(sCur));
-                    iCARange = 0;
-                } else {
-                    // Ideally shouldnt come here
-                    caRange = PyList_New(0);
-                    PyList_Append(caRange, PyUnicode_FromString(sCur));
-                    PyList_Append(caList, caRange);
-                    iCARange = 0;
+                if (((iToken == 3) || (iToken == 0)) && (iCARange == 1)) {
+                    iCARange = 2;
+                }
+            } else {
+                if (iToken == 3) { // Found a cell addr
+                    sCur[iC] = 0;
+                    if (iCARange == 0) {
+                        caRange = PyList_New(0);
+                        PyList_Append(caRange, PyUnicode_FromString(sCur));
+                        PyList_Append(caList, caRange);
+                        iCARange = 1;
+                    } else if (iCARange == 2) {
+                        int iEnd = PyList_Size(caList)-1;
+                        caRange = PyList_GetItem(caList, iEnd);
+                        PyList_Append(caRange, PyUnicode_FromString(sCur));
+                        iCARange = 0;
+                    } else {
+                        // Ideally shouldnt come here
+                        caRange = PyList_New(0);
+                        PyList_Append(caRange, PyUnicode_FromString(sCur));
+                        PyList_Append(caList, caRange);
+                        iCARange = 0;
+                    }
                 }
             }
             iToken = 0;
