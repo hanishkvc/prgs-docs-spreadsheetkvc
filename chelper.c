@@ -7,10 +7,22 @@
 #include <ctype.h>
 
 
-// TODO: Get these as arguments later
-// Currently these are hardcoded
 #define THEQUOTE '\''
 #define THEFIELDSEP ';'
+char gTextQuote = THEQUOTE;
+char gFieldSep = THEFIELDSEP;
+
+PyDoc_STRVAR(
+    config_csvchars_doc,
+    "config_csvchars(theFieldSep, theTextQuote)\n"
+    "--\n\n"
+    "configure the chars to use wrt text quoting and field seperation in the csv files\n");
+static PyObject* config_csvchars(PyObject *self, PyObject *args) {
+    if (!PyArg_ParseTuple(args, "cc", &gFieldSep, &gTextQuote)) {
+        return NULL;
+    }
+    Py_RETURN_TRUE;
+}
 
 
 // Add a given cell content to the data dictionary
@@ -59,11 +71,11 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
         lineLen -= 1;
     while(i < lineLen) {
         t = line[i];
-        if (t == THEQUOTE) {
+        if (t == gTextQuote) {
             bInQuote = !bInQuote;
             sCur[iS] = t;
             iS += 1;
-        } else if (t == THEFIELDSEP) {
+        } else if (t == gFieldSep) {
             if (bInQuote) {
                 sCur[iS] = t;
                 iS += 1;
@@ -94,9 +106,7 @@ PyDoc_STRVAR(
     get_celladdrs_incranges_fromre_doc,
     "cellAddrsList = get_celladdrs_incranges_fromre(rawREList)\n"
     "--\n\n"
-    "Parese the output of RE_CAINCR and extract cell addresses (including ranges) in them.\n"
-    "In some cases the non re version is found to take bit more time,\n"
-    "so using re version by default.\n"
+    "Parse the output of RE_CAINCR and extract cell addresses (including ranges) in them.\n"
     "\n"
     "NOTE: This doesnt ignore contents of quoted text within the string.\n");
 static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) {
@@ -283,6 +293,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
 static PyMethodDef CSVLoadMethods[] = {
     { "load_line", load_line, METH_VARARGS, load_line_doc },
     { "get_celladdrs_incranges", get_celladdrs_incranges, METH_VARARGS, get_celladdrs_incranges_doc },
+    { "config_csvchars", config_csvchars, METH_VARARGS, config_csvchars_doc },
     { "get_celladdrs_incranges_fromre", get_celladdrs_incranges_fromre, METH_VARARGS, get_celladdrs_incranges_fromre_doc },
     { NULL, NULL, 0, NULL}
 };

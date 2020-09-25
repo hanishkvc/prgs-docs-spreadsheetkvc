@@ -85,7 +85,7 @@
 </ul></li>
 <li><p>search and if required replace support.</p></li>
 <li><p>support markers including implicit ones (<span class="citation" data-cites="mCUR">@mCUR</span>, <span class="citation" data-cites="mEND">@mEND</span>).</p></li>
-<li><p>optional c based loading and cell addr range parsing for spreadsheets with millions of cells with contents.</p></li>
+<li><p>optional c based loading and cell addrs (including ranges) parsing for spreadsheets with millions of cells with contents.</p></li>
 </ul></li>
 <li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
@@ -126,7 +126,7 @@ NOTE: program will prompt for user file password once again, to ensure that user
 <h3 id="requirements">Requirements</h3>
 <p>The program requires python3, ncurses or equivalent and python-cryptography.</p>
 <p>It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.</p>
-<p>One needs to run sudo python setup.py install to install the c extension module for csv file line loading.</p>
+<p>If one wants to speed up the loading and some aspects of working with spreadsheets with millions of filled cells in them by some extent, then one needs to run sudo python setup.py install to install the c helper extension module.</p>
 <h3 id="command-line-arguments">command line arguments</h3>
 <p>The program supports the following commandline arguments</p>
 <pre><code>--help
@@ -201,27 +201,17 @@ explicit command mode.</code></pre>
 <p>This mode is entered by pressing : when in the default command mode. In this explicit command mode, the user can enter one of the commands mentioned below.</p>
 <p>NOTE: if the program doesnt seem to do anything after you have entered a command and its arguments and inturn pressed <enter> key, then verify that the arguments given to the command are proper or not. If there is a mistake in the argument, correct it by using arrow keys and then backspace to remove the wrong characters and keying in the new correct characters. For few commands, the program will not continue if the arguments are not proper. User can always press <Esc> key and go back to default mode.</p>
 <h5 id="tab-completion-support-available-for">Tab completion support available for</h5>
-<pre><code>* file path names for load and save commands (for both normal and password version)
-
-    If you are happy with the dir name suggested by tab completion, then add a &#39;/&#39; at the end so that
-    the program will start providing suggestions for the sub directories and or files below it.
-
-* predefined/fixed parts of the commands explained below.
-
-    If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
-    so that program will provide completion suggestion for any subsequent predefined parts of the command.
-
-    It also provides hints for the parts of the command that user has to specify (this is done for most commands).
-
-If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
-prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
-to see if the program will complete it with some suggestions of its own.
-
-    If there are no matching suggestions the program will either let the user entered part be as it is, or may
-    error tag the non-existing part in case of file paths.
-
-If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program,
-the program will cycle throught all the suggestions.</code></pre>
+<ul>
+<li><p>file path names for load and save commands (for both normal and password version)</p>
+<p>If you are happy with the dir name suggested by tab completion, then add a ‘/’ at the end so that the program will start providing suggestions for the sub directories and or files below it.</p></li>
+<li><p>predefined/fixed parts of the commands explained below.</p>
+<p>If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end, so that program will provide completion suggestion for any subsequent predefined parts of the command.</p>
+<p>It also provides hints for the parts of the command that user has to specify (this is done for most commands).</p></li>
+</ul>
+<p>If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab to see if the program will complete it with some suggestions of its own.</p>
+<pre><code>If there are no matching suggestions the program will either let the user entered part be as it is, or may
+error tag the non-existing part in case of file paths.</code></pre>
+<p>If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program, the program will cycle throught all the suggestions.</p>
 <h4 id="file-operations">File operations</h4>
 <ul>
 <li><p>w file</p>
@@ -903,7 +893,7 @@ However during row/col insertion/deletion operations, all cell addresses are aut
 <p>Stop python snippets from running in uncontrolled way, if desired. Its also the default. [DONE] Add a cmdline arg to open up python eval so that bit more varied set of python expressions can be run from a cell.</p>
 <p>Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of processing speed for memory.</p>
 <p>[DONE] Expand ~ at begin of path (os.path.expanduser)</p>
-<p>[LATER] Move eval/value logics to a seperate file.</p>
+<p>[DONE] Move eval/value logics to a seperate file.</p>
 <p>[DONE] move navigation related stuff to a seperate file.</p>
 <p>[LATER] Maybe use numpy array for calculated cache. (There are equal or more fundamental changes that can help, so so so).</p>
 <p>Make rgennums generate direct numbers now instead of =number. Speeds up operations which have to worry about =expressions like insert/delete/edit etc.</p>
@@ -995,9 +985,11 @@ the cell contents are parsed, so that there is no need to parse again in python.
 <p>Added c based helper logic for getting list of all cell addresses and or ranges in a cell content, because re module of python was taking around 5.5 seconds for a spreadsheet containing ~ 3 million expression filled cells. This new c based logic does the same job in around 1.5 seconds.</p>
 <p>Also commented out the timing logic in the cell_updated, as one round a good enough speedup has been done wrt its and its users logic now. This inturn helps reduce the time by another 1.5 seconds (as the timing logic was getting triggerd for each cell).</p>
 <p>With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing, now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.</p>
+<p>[TODO] Clip the last column in the spreadsheet, if only partially visible and or …</p>
+<p>chelper’s csv chars are updated to the latest fieldsep and textquote, before its load_line is called.</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
-<p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
-<p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
+<p>Wanting a simple commandline program which allows one to store and view roughly structured data including calculations in a secure manner, put differently a spreadsheet logic. It should also allow one to identify when corruption occurs and or unauthorised modifications have been done.</p>
+<p>Exploring any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
 <pre><code>authenticated encryption.
 
 sparse data structure based memory storage
@@ -1023,8 +1015,10 @@ tab completion of file paths and command parts, curses again, escape to shell fr
 
 alignment, raw/normal mode, precision and conversion for display, ...
 
-speed is not the goal, while still being sufficiently usable, in the middle of exploring/trying out the above</code></pre>
-<p>Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.</p>
+speed is not the goal, while still being sufficiently usable, in the middle of exploring/trying out the above
+
+Using c extension modules in python to speed up often used things if required.</code></pre>
+<p>Also scratch my immidiate itch of wanting a sufficiently sane and easy spreadsheet program given that libreoffice was crashing left/right/center on me on a chromebook and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore. Having my own cmdline spreadsheet which I can update/modify as and if required relatively easily, is the icing at the end.</p>
 <h2 id="vasudhaiva-kutumbakam-the-world-is-one-family">Vasudhaiva Kutumbakam (the World is One Family)</h2>
 <p>If you find the program useful, and inturn if you can afford to donate, donating to a local good cause near you, would help those in need.</p>
 </body>

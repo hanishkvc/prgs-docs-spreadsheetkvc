@@ -139,7 +139,7 @@ Some of its features are
 
 	* support markers including implicit ones (@mCUR, @mEND).
 
-	* optional c based loading and cell addr range parsing for spreadsheets with millions of cells with contents.
+	* optional c based loading and cell addrs (including ranges) parsing for spreadsheets with millions of cells with contents.
 
 * Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations
   only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).
@@ -210,7 +210,8 @@ The program requires python3, ncurses or equivalent and python-cryptography.
 
 It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.
 
-One needs to run sudo python setup.py install to install the c extension module for csv file line loading.
+If one wants to speed up the loading and some aspects of working with spreadsheets with millions of filled cells in them by some extent,
+then one needs to run sudo python setup.py install to install the c helper extension module.
 
 
 ### command line arguments
@@ -315,27 +316,27 @@ will not continue if the arguments are not proper. User can always press <Esc> k
 
 ##### Tab completion support available for
 
-	* file path names for load and save commands (for both normal and password version)
+* file path names for load and save commands (for both normal and password version)
 
-		If you are happy with the dir name suggested by tab completion, then add a '/' at the end so that
-		the program will start providing suggestions for the sub directories and or files below it.
+	If you are happy with the dir name suggested by tab completion, then add a '/' at the end so that
+	the program will start providing suggestions for the sub directories and or files below it.
 
-	* predefined/fixed parts of the commands explained below.
+* predefined/fixed parts of the commands explained below.
 
-		If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
-		so that program will provide completion suggestion for any subsequent predefined parts of the command.
+	If you are happy/ok with the full part of the tab completion suggestion you require to add a space to the end,
+	so that program will provide completion suggestion for any subsequent predefined parts of the command.
 
-		It also provides hints for the parts of the command that user has to specify (this is done for most commands).
+	It also provides hints for the parts of the command that user has to specify (this is done for most commands).
 
-	If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
-	prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
-	to see if the program will complete it with some suggestions of its own.
+If you are happy with only a part of a suggestion or want to check if there are any matching suggestions for a given
+prefix, then enter that prefix and or trim the current suggestion to the prefix you have in mind and then press tab
+to see if the program will complete it with some suggestions of its own.
 
-		If there are no matching suggestions the program will either let the user entered part be as it is, or may
-		error tag the non-existing part in case of file paths.
+	If there are no matching suggestions the program will either let the user entered part be as it is, or may
+	error tag the non-existing part in case of file paths.
 
-	If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program,
-	the program will cycle throught all the suggestions.
+If there are multiple matching suggestions, then if user presses tab without editing the suggestion provided by the program,
+the program will cycle throught all the suggestions.
 
 
 
@@ -1784,7 +1785,7 @@ Dont cache None/Empty cells in calculation cdata cache. Sacrifice bit of process
 
 [DONE] Expand ~ at begin of path (os.path.expanduser)
 
-[LATER] Move eval/value logics to a seperate file.
+[DONE] Move eval/value logics to a seperate file.
 
 [DONE] move navigation related stuff to a seperate file.
 
@@ -1953,15 +1954,19 @@ This inturn helps reduce the time by another 1.5 seconds (as the timing logic wa
 With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing,
 now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.
 
+[TODO] Clip the last column in the spreadsheet, if only partially visible and or ...
+
+chelper's csv chars are updated to the latest fieldsep and textquote, before its load\_line is called.
+
 
 
 
 ## thoughts behind this program
 
-Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner,
-which also allows one to identify when corruption occurs and or unauthorised modifications have been done.
+Wanting a simple commandline program which allows one to store and view roughly structured data including calculations in a secure manner, put differently
+a spreadsheet logic.  It should also allow one to identify when corruption occurs and or unauthorised modifications have been done.
 
-Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like
+Exploring any ideas that may pop up when trying to implement a spreadsheet just like that on the go like
 
 	authenticated encryption.
 
@@ -1990,8 +1995,11 @@ Explore any ideas that may pop up when trying to implement a spreadsheet just li
 
 	speed is not the goal, while still being sufficiently usable, in the middle of exploring/trying out the above
 
-Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook
-and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.
+	Using c extension modules in python to speed up often used things if required.
+
+Also scratch my immidiate itch of wanting a sufficiently sane and easy spreadsheet program given that libreoffice was crashing left/right/center on me
+on a chromebook and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore. Having my own cmdline
+spreadsheet which I can update/modify as and if required relatively easily, is the icing at the end.
 
 
 

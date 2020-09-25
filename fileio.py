@@ -201,6 +201,8 @@ def load_file(me, scr, sFile, filePass=None):
     #if not verify_pass(scr, filePass):
     #    return
     try:
+        if chelper != None:
+            chelper.config_csvchars(bytes(THEFIELDSEP, 'utf-8'), bytes(THEQUOTE, 'utf-8'))
         sFile = os.path.expanduser(sFile)
         cstatusbar(scr, ['[Loading file...]'])
         me['cdataUpdate'] = True
