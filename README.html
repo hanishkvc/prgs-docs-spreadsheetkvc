@@ -85,6 +85,7 @@
 </ul></li>
 <li><p>search and if required replace support.</p></li>
 <li><p>support markers including implicit ones (<span class="citation" data-cites="mCUR">@mCUR</span>, <span class="citation" data-cites="mEND">@mEND</span>).</p></li>
+<li><p>optional c based loading for spreadsheets with millions of cells with contents.</p></li>
 </ul></li>
 <li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
@@ -125,6 +126,7 @@ NOTE: program will prompt for user file password once again, to ensure that user
 <h3 id="requirements">Requirements</h3>
 <p>The program requires python3, ncurses or equivalent and python-cryptography.</p>
 <p>It can run in the terminals of a linux/unix/macosx system. And so also in the linux terminal provided by windows subsystem for linux.</p>
+<p>One needs to run sudo python setup.py install to install the c extension module for csv file line loading.</p>
 <h3 id="command-line-arguments">command line arguments</h3>
 <p>The program supports the following commandline arguments</p>
 <pre><code>--help
@@ -973,6 +975,23 @@ NOTE: Has been renamed and spaced out to calign left|right|default now.</code></
 <p>Now given that most of the core interconnected logics have been handled in a sufficiently ok manner, and crash tested with shallow (default) recursion limit, open up the flood gates of performance (relatively speaking) by increasing the python recursion limit from 1K to 5K and also increase the programs core level trap logic to have depth of 10K. This ensures that chained calculations dont trigger the recursion exception for most normal use cases (rather even the current chained test files dont trigger this any more, so need to add new even deeper test files), and inturn the calculations occur faster as a whole. And Even python seems to behave better in general with deeper recursion limit.</p>
 <pre><code>NOTE: THis also means the program will take bit more time to trap loops, because more rope is given for the logics to play around.</code></pre>
 <p>Allow user to set tab as fieldsep by passing \t to :cfieldsep</p>
+<h3 id="ist1035-remembering-spb-sp-balasubramaniam">20200923IST1035+ Remembering SPB (SP Balasubramaniam)</h3>
+<p>Move the getting cell value or nvalue logics into cellval module.</p>
+<p>Move handling of each input csv file line (encrypted or other wise) into its own func.</p>
+<p>As roughly speaking internally python interpreter runs as a single thread instance, using pure python threads to parallelise a job to speed it up doesnt really help. As at any given time only bytecode from one of the multiple threads will get interpreted. This ensures that simple operations on python’s native datatypes are atomic (i.e either reading or writing into them, but not both in same expression/statement).</p>
+<p>Time load and cell dependency links building logics.</p>
+<p>Added csvload(.load_line) c extension module. This speeds up parsing of lines from the csv file to create the data dictionary by ~4 times.</p>
+<pre><code>fillednum|expr.csv file&#39;s loading part now takes only 1.2 seconds instead of the 4.6+ seconds of the pure python based logic.
+However the forward and reverse dep list creation is still in python and that part still takes few seconds to build, especially
+if there are millions of cells with =expressions.
+
+Initially though of using ctypes and a pure c logic imported into python to parse a line and return a bytes array containing
+the cell contents like Cell1ContentLen2Bytes + Cell1ContentsNBytes + C2Len+C2Bytes + ... + CNLen0 + CNPLUS1Len + CNPLUS1Bytes + ...
+Then decided against it and decided to implement a c extention module for python, so that the data dictionary is built up, as
+the cell contents are parsed, so that there is no need to parse again in python.
+
+    Also decided to do the extension using the c-api/extending spec directly rather than using any 3rd party tools for extension
+    like cython or ..., because one never knows when the 3rd party tool may get dropped. And hopefully the c-api is stable.</code></pre>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
 <p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>
