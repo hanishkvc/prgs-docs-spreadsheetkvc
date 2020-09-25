@@ -14,6 +14,7 @@
 
 // Add a given cell content to the data dictionary
 static void dict_add(PyObject *dict, int r, int c, char *s) {
+    //printf("%d:%d:%s\n", r, c, s);
     PyObject *k = PyTuple_New(2);
     PyTuple_SetItem(k, 0, PyLong_FromLong(r)); // PyTupSetItem steals PyLong from us, so we dont have to worry
     PyTuple_SetItem(k, 1, PyLong_FromLong(c)); // PyTupSetItem steals PyLong from us, so we dont have to worry
@@ -49,6 +50,7 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "Oisi", &dict, &r, &line, &lineLen)) {
         return NULL;
     }
+    //printf("%d:%d:%s\n", r, lineLen, line);
     if (lineLen == 0)
         return PyLong_FromLong(c);
     // Remove the newline at the end, if any
@@ -79,6 +81,7 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
         i += 1;
     }
     if (iS != 0) {
+        sCur[iS] = 0;
         dict_add(dict, r, c, sCur);
     }
     return PyLong_FromLong(c);
