@@ -4,6 +4,7 @@
  */
 #include <Python.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 
 // TODO: Get these as arguments later
@@ -208,14 +209,11 @@ PyDoc_STRVAR(
 static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     PyObject *caList = PyList_New(0);
     PyObject *caRange = NULL;
-    //int caListCnt = 0;
-    bool bInCARange = false;
-    long int caLen;
-    int iD, iS, j;
-    char sCleanCA[32];
-    int cCleanCALast;
-    char *sIn, *sCur;
-    int iC;
+    char sCur[32];
+    char *sIn;
+    int iS, iC;
+    int iToken, iCARange;
+    int c;
 
     if (!PyArg_ParseTuple(args, "s", &sIn)) {
         return NULL;
@@ -223,6 +221,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     //printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
     iS = 0;
     iToken = 0; // iToken = 0 (Not in token), 1 ($ found), 2 (alpha part), 3(num part)
+    iCARange = 0; // 0 (Not CARange), 1 (1st part of CA), 2 (: found), 3 (2nd part of CA)
     while (true) {
         c = sIn[iS];
         if (c == 0) {
@@ -241,7 +240,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
             } else { // Cant get alpha after numerals in cell addr
                 iToken = 0;
             }
-        } else if (isnumeric(c)) {
+        } else if (isdigit(c)) {
             if ((iToken == 2) || (iToken == 3)) {
                 iToken = 3;
                 sCur[iC] = c;
@@ -259,85 +258,28 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iToken = 0;
             }
         } else {
+            if (c == ':') {
+            }
             if (iToken == 3) { // Found a cell addr
                 sCur[iC] = 0;
-                caRange = PyList_New(0);
-                PyList_Append(caRange, PyUnicode_FromString(sCur));
-                PyList_Append(caList, caRange);
+                if (iCARange == 0) {
+                    caRange = PyList_New(0);
+                    PyList_Append(caRange, PyUnicode_FromString(sCur));
+                    PyList_Append(caList, caRange);
+                    iCARange = 1;
+                } else if (iCARange == 2) {
+                    int iEnd = PyList_Size(caList)-1;
+                    caRange = PyList_GetItem(caList, iEnd);
+                    PyList_Append(caRange, PyUnicode_FromString(sCur));
+                    iCARange = 0;
+                } else {
+                    // Ideally shouldnt come here
+                    iCARange = 0;
+                }
             }
             iToken = 0;
         }
-        //
-        // BElow is from the celladdrs_incranges_fromre, which will be removed after picking some parts later.
-        //
-        //printf("DBUG:%d:%s\n", i, sCA);
-        // Remove any space in ca
-        iD = 0;
-        for(iS = 0; iS < caLen; iS++) {
-            if (sCA[iS] == ' ')
-                continue;
-            sCleanCA[iD] = sCA[iS];
-            iD += 1;
-        }
-        sCleanCA[iD] = 0;
-        if (iD > 0) {
-            cCleanCALast = sCleanCA[iD-1];
-            // Remove ':' if any at end
-            if (cCleanCALast == ':') {
-                iD -= 1;
-                sCleanCA[iD] = 0;
-            }
-        } else {
-            cCleanCALast = 0;
-        }
-        if (bInCARange) {
-            PyObject *preCA = PyTuple_GetItem(raw, 0);
-            char *sPreCA = PyUnicode_AsUTF8AndSize(preCA, &caLen);
-            //printf("DBUG:%d:%s\n", i, sPreCA);
-            //Py_DECREF(preCA);
-            bool bCellAddrRangeOk = true;
-            for(j = 0; j < caLen; j++) {
-                if (sPreCA[j] != ' ') {
-                    bCellAddrRangeOk = false;
-                }
-            }
-            if (bCellAddrRangeOk) {
-                //caList[-1].append(pCA)
-                int iEnd = PyList_Size(caList)-1;
-                if (iEnd == -1) {
-                    caRange = PyList_New(0);
-                    PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
-                    PyList_Append(caList, caRange);
-                } else {
-                    caRange = PyList_GetItem(caList, iEnd);
-                    PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
-                }
-            } else {
-                caRange = PyList_New(0);
-                PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
-                PyList_Append(caList, caRange);
-            }
-            bInCARange = false;
-        } else {
-            caRange = PyList_New(0);
-            PyList_Append(caRange, PyUnicode_FromString(sCleanCA));
-            PyList_Append(caList, caRange);
-        }
-        if (cCleanCALast == ':') {
-            PyObject *postCA = PyTuple_GetItem(raw, 2);
-            char *sPostCA = PyUnicode_AsUTF8AndSize(postCA, &caLen);
-            //Py_DECREF(postCA);
-            bool bCellAddrRangeOk = true;
-            for(j = 0; j < caLen; j++) {
-                if (sPostCA[j] != ' ') {
-                    bCellAddrRangeOk = false;
-                }
-            }
-            if (bCellAddrRangeOk)
-                bInCARange = true;
-        }
-        //Py_DECREF(raw);
-        //Py_DECREF(ca);
+        iS += 1;
     }
     return caList;
 }
@@ -346,6 +288,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
 
 static PyMethodDef CSVLoadMethods[] = {
     { "load_line", load_line, METH_VARARGS, load_line_doc },
+    { "get_celladdrs_incranges", get_celladdrs_incranges, METH_VARARGS, get_celladdrs_incranges_doc },
     { "get_celladdrs_incranges_fromre", get_celladdrs_incranges_fromre, METH_VARARGS, get_celladdrs_incranges_fromre_doc },
     { NULL, NULL, 0, NULL}
 };
