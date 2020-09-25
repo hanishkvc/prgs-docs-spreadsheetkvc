@@ -220,6 +220,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     }
     //printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
     iS = 0;
+    iC = 0;
     iToken = 0; // iToken = 0 (Not in token), 1 ($ found), 2 (alpha part), 3(num part)
     iCARange = 0; // 0 (Not CARange), 1 (1st part of CA), 2 (: found), 3 (2nd part of CA)
     while (true) {
