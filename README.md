@@ -1947,6 +1947,11 @@ Added csvload(.load\_line) c extension module. This speeds up parsing of lines f
 Added c based helper logic for getting list of all cell addresses and or ranges in a cell content, because re module of python was taking around
 5.5 seconds for a spreadsheet containing ~ 3 million expression filled cells. This new c based logic does the same job in around 1.5 seconds.
 
+Also commented out the timing logic in the cell\_updated, as one round a good enough speedup has been done wrt its and its users logic now.
+This inturn helps reduce the time by another 1.5 seconds (as the timing logic was getting triggerd for each cell).
+
+With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing,
+now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.
 
 
 
@@ -1987,6 +1992,7 @@ Explore any ideas that may pop up when trying to implement a spreadsheet just li
 
 Also scratch my immidiate itch of wanting a sufficiently sane and easy program given that libreoffice crashing left/right/center on me on a chromebook
 and the commandline sc also crashing once in a while, thus setting up the stage and giving me a reason to explore.
+
 
 
 ## Vasudhaiva Kutumbakam (the World is One Family)
