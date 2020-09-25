@@ -477,10 +477,9 @@ def get_celladdrs_incranges(sIn):
 
     NOTE: This doesnt ignore contents of quoted text within the string.
     '''
-    #rawList = RE_CAINCR.findall(sIn)
-    #caList = csvload.get_celladdrs_incranges_fromre(rawList)
-    #return caList
-    return []
+    rawList = RE_CAINCR.findall(sIn)
+    caList = csvload.get_celladdrs_incranges_fromre(rawList)
+    return caList
 
 
 def celladdr_valid_ex(sAddr):

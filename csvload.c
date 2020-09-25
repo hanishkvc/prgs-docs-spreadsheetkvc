@@ -110,7 +110,6 @@ static PyObject* get_celladdrs_incranges_fromre(PyObject *self, PyObject *args) 
     if (!PyArg_ParseTuple(args, "O", &rawList)) {
         return NULL;
     }
-    return caList;
     int listLen = PyList_Size(rawList);
     //printf("DBUG:GotList ofSize[%d] fromArgs\n", listLen);
     for(int i = 0; i < listLen; i++) {
