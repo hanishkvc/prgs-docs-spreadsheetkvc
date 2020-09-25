@@ -85,7 +85,7 @@
 </ul></li>
 <li><p>search and if required replace support.</p></li>
 <li><p>support markers including implicit ones (<span class="citation" data-cites="mCUR">@mCUR</span>, <span class="citation" data-cites="mEND">@mEND</span>).</p></li>
-<li><p>optional c based loading for spreadsheets with millions of cells with contents.</p></li>
+<li><p>optional c based loading and cell addr range parsing for spreadsheets with millions of cells with contents.</p></li>
 </ul></li>
 <li><p>Edit (Cut/Paste/Delete/Modify a cell) and Insert/Delete (rows/cols) operations trigger cell recalculations only for cells which are directly or indirectly affected by it (propogate the changes across dependent cells).</p>
 <p>Note: the actual recalculation occurs when a affected cell or its dependents become visible. While the =expressions are adjusted wrt cell addresses if any in them, as well as depedency lists are updated immidiately.</p></li>
@@ -992,6 +992,9 @@ the cell contents are parsed, so that there is no need to parse again in python.
 
     Also decided to do the extension using the c-api/extending spec directly rather than using any 3rd party tools for extension
     like cython or ..., because one never knows when the 3rd party tool may get dropped. And hopefully the c-api is stable.</code></pre>
+<p>Added c based helper logic for getting list of all cell addresses and or ranges in a cell content, because re module of python was taking around 5.5 seconds for a spreadsheet containing ~ 3 million expression filled cells. This new c based logic does the same job in around 1.5 seconds.</p>
+<p>Also commented out the timing logic in the cell_updated, as one round a good enough speedup has been done wrt its and its users logic now. This inturn helps reduce the time by another 1.5 seconds (as the timing logic was getting triggerd for each cell).</p>
+<p>With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing, now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Have a simple commandline program which allows one to store roughly structured data including calculations in a secure manner, which also allows one to identify when corruption occurs and or unauthorised modifications have been done.</p>
 <p>Explore any ideas that may pop up when trying to implement a spreadsheet just like that on the go like</p>

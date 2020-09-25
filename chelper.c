@@ -89,12 +89,6 @@ static PyObject* load_line(PyObject *self, PyObject *args) {
 }
 
 
-static str_empty(const char *str) {
-
-
-}
-
-
 //RE_CAINCR = re.compile("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)")
 PyDoc_STRVAR(
     get_celladdrs_incranges_fromre_doc,
