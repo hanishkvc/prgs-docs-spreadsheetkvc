@@ -275,6 +275,9 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                     iCARange = 0;
                 } else {
                     // Ideally shouldnt come here
+                    caRange = PyList_New(0);
+                    PyList_Append(caRange, PyUnicode_FromString(sCur));
+                    PyList_Append(caList, caRange);
                     iCARange = 0;
                 }
             }
