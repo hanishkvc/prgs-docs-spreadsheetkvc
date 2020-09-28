@@ -227,9 +227,6 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
     iCARange = 0; // 0 (Not CARange), 1 (CA inc 1st part of CA Range), 2 (: found)
     while (true) {
         c = sIn[iS];
-        if (c == 0) {
-            break;
-        }
         if (isalpha(c)) {
             if (iToken == 0) {
                 iToken = 2;
@@ -291,6 +288,9 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 }
             }
             iToken = 0;
+        }
+        if (c == 0) {
+            break;
         }
         iS += 1;
     }
