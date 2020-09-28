@@ -20,6 +20,7 @@ import re
 import fileio
 import edit, nav, syncd, cellval
 import taber
+import time
 
 
 THEQUOTE = "'"
@@ -853,7 +854,10 @@ def explicit_commandmode(stdscr, cmdArgs):
         if args == None:
             args = "1"
         cstatusbar(stdscr, ['[insert in progress...]'])
+        t1 = time.time()
         edit.insert_rc_ab(cmd, args)
+        t2 = time.time()
+        print("DBUG:InsertRC:{}".format(t2-t1), file=GERRFILE)
         cstatusbar(stdscr, ['[sync deps progress...]'])
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])
@@ -864,7 +868,10 @@ def explicit_commandmode(stdscr, cmdArgs):
         if args == None:
             args = "1"
         cstatusbar(stdscr, ['[delete in progress...]'])
+        t1 = time.time()
         edit.delete_rc(cmd, args)
+        t2 = time.time()
+        print("DBUG:DeleteRC:{}".format(t2-t1), file=GERRFILE)
         cstatusbar(stdscr, ['[sync deps progress...]'])
         syncd.create_links()
         cstatusbar(stdscr, ['                       '])

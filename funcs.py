@@ -224,6 +224,14 @@ def do_avg(args):
     return total/cnt
 
 
+def do_mode(args):
+    pass
+
+
+def do_median(args):
+    pass
+
+
 def do_config(args):
     '''
     Config spreadsheet from within
