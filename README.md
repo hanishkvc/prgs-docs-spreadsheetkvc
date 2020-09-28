@@ -1954,7 +1954,8 @@ This inturn helps reduce the time by another 1.5 seconds (as the timing logic wa
 With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing,
 now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.
 
-[TODO] Clip the last column in the spreadsheet, if only partially visible and or ...
+[DONE] Clip the last column in the spreadsheet, if only partially visible and or ... RATHER it was a issue with loadline not removing newline
+at the end of the line, which inturn was manifesting with the display of last column because it would have contained this newline.
 
 chelper's csv chars are updated to the latest fieldsep and textquote, before its load\_line is called.
 

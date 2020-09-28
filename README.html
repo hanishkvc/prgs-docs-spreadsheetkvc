@@ -985,7 +985,7 @@ the cell contents are parsed, so that there is no need to parse again in python.
 <p>Added c based helper logic for getting list of all cell addresses and or ranges in a cell content, because re module of python was taking around 5.5 seconds for a spreadsheet containing ~ 3 million expression filled cells. This new c based logic does the same job in around 1.5 seconds.</p>
 <p>Also commented out the timing logic in the cell_updated, as one round a good enough speedup has been done wrt its and its users logic now. This inturn helps reduce the time by another 1.5 seconds (as the timing logic was getting triggerd for each cell).</p>
 <p>With the 3 updates done i.e 2 wrt using c based helpers for some frequently used logics and the 1 related to commenting out finegrained timing, now loading of a spreadsheet with around 3 - 4 million expression filled cells has reduced from around 13+ seconds to 4 seconds.</p>
-<p>[TODO] Clip the last column in the spreadsheet, if only partially visible and or …</p>
+<p>[DONE] Clip the last column in the spreadsheet, if only partially visible and or … RATHER it was a issue with loadline not removing newline at the end of the line, which inturn was manifesting with the display of last column because it would have contained this newline.</p>
 <p>chelper’s csv chars are updated to the latest fieldsep and textquote, before its load_line is called.</p>
 <h2 id="thoughts-behind-this-program">thoughts behind this program</h2>
 <p>Wanting a simple commandline program which allows one to store and view roughly structured data including calculations in a secure manner, put differently a spreadsheet logic. It should also allow one to identify when corruption occurs and or unauthorised modifications have been done.</p>
