@@ -242,7 +242,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else { // Cant get alpha after numerals in cell addr
                 iToken = 0;
-                if (iCARange == 2)
+                if (iCARange > 0)
                     iCARange = 0;
             }
         } else if (isdigit(c)) {
@@ -252,7 +252,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else {
                 iToken = 0;
-                if (iCARange == 2)
+                if (iCARange > 0)
                     iCARange = 0;
             }
         } else if (c == '$') {
@@ -263,7 +263,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else {
                 iToken = 0;
-                if (iCARange == 2)
+                if (iCARange > 0)
                     iCARange = 0;
             }
         } else {
@@ -282,7 +282,7 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                     iCARange = 1;
                 }
             } else if (iToken == 2) {
-                if (iCARange == 2)
+                if (iCARange > 0)
                     iCARange = 0;
             }
             if (c == ':') {
