@@ -79,7 +79,7 @@ def cellstr(scr, y, x, msg, attr, clipToScreen=True):
         if msgLen > msgSpace:
             msgLen = msgSpace
         msg = msg[:msgLen]
-    dprint("cellstr:{},{}:[{}]".format(y, x, msg), file=GLOGFILE)
+    #dprint("cellstr:{},{}:[{}]".format(y, x, msg), file=GLOGFILE)
     scr.addstr(y, x, msg, attr)
 
 
