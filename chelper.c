@@ -242,6 +242,8 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else { // Cant get alpha after numerals in cell addr
                 iToken = 0;
+                if (iCARange == 2)
+                    iCARange = 0;
             }
         } else if (isdigit(c)) {
             if ((iToken == 2) || (iToken == 3)) {
@@ -250,6 +252,8 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else {
                 iToken = 0;
+                if (iCARange == 2)
+                    iCARange = 0;
             }
         } else if (c == '$') {
             if (iToken == 0) {
@@ -259,6 +263,8 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                 iC += 1;
             } else {
                 iToken = 0;
+                if (iCARange == 2)
+                    iCARange = 0;
             }
         } else {
             if (iToken == 3) { // Found a cell addr
@@ -275,6 +281,9 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
                     PyList_Append(caList, caRange);
                     iCARange = 1;
                 }
+            } else if (iToken == 2) {
+                if (iCARange == 2)
+                    iCARange = 0;
             }
             if (c == ':') {
                 if (((iToken == 3) || (iToken == 0)) && (iCARange == 1)) {
