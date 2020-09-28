@@ -214,7 +214,7 @@ def load_file(me, scr, sFile, filePass=None):
         t3 = time.time()
         syncd.create_links()
         t4 = time.time()
-        print("DBUG:loadFile:T1[{}] T2[{}]".format(t2-t1, t4-t3), file=GERRFILE)
+        print("DBUG:loadFile:TL[{}] TD[{}]".format(t2-t1, t4-t3), file=GERRFILE)
         cstatusbar(scr, ['[               ]'])
         me['dirty'] = False
         revertfrom_help_ifneeded(me)
