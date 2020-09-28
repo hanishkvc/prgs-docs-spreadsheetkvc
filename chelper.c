@@ -298,6 +298,97 @@ static PyObject* get_celladdrs_incranges(PyObject *self, PyObject *args) {
 }
 
 
+PyDoc_STRVAR(
+    celladdr_valid_ex_doc,
+    "bValidCA, (r, c), (bRowFixed, bColFixed) = celladdr_valid_ex(sAddr)\n"
+    "--\n\n"
+    "Check if the given string is a cell address or not.\n"
+    "Extract the numeric row and col address correponding to given cell address\n"
+    "Identify if there is fixed address $ prefix marker\n"
+    "\n"
+    "NOTE:If there is garbage beyond numeric row address, then mark invalid\n");
+static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
+    PyObject *caList = PyList_New(0);
+    PyObject *caRange = NULL;
+    char sCur[32];
+    char *sAddr;
+    int iS, iC;
+    int iToken, iCARange;
+    int c;
+
+    if (!PyArg_ParseTuple(args, "s", &sAddr)) {
+        return NULL;
+    }
+    iS = 0;
+    iC = 0;
+    iState = 0; // 0 (Not in CA yet), 1 (optional col$), 2 (alpha part), 3 (optional row$), 4 (num part), 5 (space at end), -1 (Err)
+    bool bColFixed = false;
+    bool bRowFixed = false;
+    while (true) {
+        c = sAddr[iS];
+        if (isalpha(c)) {
+
+        } else if(isdigit(c)) {
+        } else if (c == ' ') {
+            if ((iState == 0) || (iState == 5)) {
+            } else if (iState == 4) {
+                iState= 5;
+            } else {
+                iState = -1;
+                break;
+            }
+        } else if (c == '$') {
+            if (iState == 0) {
+                iState = 1;
+                bColFixed = true;
+            } else if (iState == 2) {
+                iState = 3;
+                bRowFixed = true;
+            } else {
+                iState = -1;
+                break;
+            }
+        } else {
+            iState = -1;
+            break;
+        }
+    }
+}
+
+RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
+def celladdr_valid_ex(sAddr):
+    '''
+    Check if the given string is a cell address or not.
+
+    Extract the alpha col address and numeric row address.
+    Ignore $ prefix if any wrt col or row address.
+    If there is garbage beyond numeric row address, then mark invalid
+    '''
+    m=RE_CA.fullmatch(sAddr)
+    if m == None:
+        return False, (None, None), (None, None)
+    if m['colFixed'] == '$':
+        bColFixed = True
+    else:
+        bColFixed = False
+    if m['rowFixed'] == '$':
+        bRowFixed = True
+    else:
+        bRowFixed = False
+    alphaAddr = m['colAddr']
+    numAddr = m['rowAddr']
+    # Get the data key for the cell
+    i = 0
+    alphaAddr = alphaAddr.upper()
+    numAlphaAddr = 0
+    while i < len(alphaAddr):
+        num = (ord(alphaAddr[i]) - ord('A'))+1
+        numAlphaAddr = numAlphaAddr*26 + num
+        i += 1
+    return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
+
+
+
 
 static PyMethodDef CSVLoadMethods[] = {
     { "load_line", load_line, METH_VARARGS, load_line_doc },
