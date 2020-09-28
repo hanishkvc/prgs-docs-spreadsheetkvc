@@ -6,6 +6,7 @@
 import sys
 import enum, re
 import importlib
+import time, timeit
 
 
 GLOGFILE = None
@@ -544,6 +545,25 @@ def celladdr_valid(sAddr):
 
 
 
+def test_111(sAddr="$Abcdef$256"):
+    t1 = time.time()
+    for i in range(1024*4096):
+        celladdr_valid_ex(sAddr)
+    t2 = time.time()
+    print("test111", sAddr, t2-t1)
+
+
+def test_111_c():
+    load_cext()
+    test_111()
+
+
+def test_111_py():
+    global chelper
+    chelper = None
+    test_111()
+
+
 def test_101():
     sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}"
     sFuncArgs = "123, BA12:BB20, { 1, 2, 3], 23;45, [1,2,{a,b,c}}, 'test what'  "
@@ -565,6 +585,8 @@ def test_101():
     print(re.findall(".*?([$]?[a-zA-Z]+[$]?[0-9]+).*?", "123+beA23-12+testit/$zze$54"))
     print(re.findall("(.*?)([$]?[a-zA-Z]+[$]?[0-9]+[ ]*[:]?)(.*?)", "123+beA23-12+testit/$zze$54 d  BE99     : CE10 :: MM1:NN99"))
 
+    print(timeit.timeit('chelper.celladdr_valid_ex("$Abdsase$22")', setup='import chelper', number=1024*4096))
+    print(timeit.timeit('parsekvc.celladdr_valid_ex_py("$Abdsase$22")', setup='import parsekvc', number=1024*4096))
 
 
 
