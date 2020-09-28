@@ -137,6 +137,7 @@ def cell_updated(cellKey, sContent, clearCache=True, clearedSet=None):
         sContent = ""
     if sContent.strip().startswith('='):
         lCellAddrs = parse.get_celladdrs_incranges(sContent)
+        print("DBUG2:syncdCellUpdated:{}:{}".format(sContent.strip(), lCellAddrs), file=GERRFILE)
         #lCellAddrs = parse.get_celladdrs_incranges_internal(sContent)
         #print(lCellAddrs, file=GERRFILE)
     else:
