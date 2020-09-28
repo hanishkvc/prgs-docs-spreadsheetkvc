@@ -308,7 +308,6 @@ PyDoc_STRVAR(
     "\n"
     "NOTE:If there is garbage beyond numeric row address, then mark invalid\n");
 static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
-    PyObject *retList = PyList_New(0);
     char sCol[32], sRow[32];
     char *sAddr;
     int iS, iR, iC;
@@ -321,7 +320,7 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
     iS = 0;
     iR = 0;
     iC = 0;
-    iState = 0; // 0 (Not in CA yet), 1 (optional col$), 2 (alpha part), 3 (optional row$), 4 (num part), 5 (space at end), 99 (done), -1 (Err)
+    int iState = 0; // 0 (Not in CA yet), 1 (optional col$), 2 (alpha part), 3 (optional row$), 4 (num part), 5 (space at end), 99 (done), -1 (Err)
     bool bColFixed = false;
     bool bRowFixed = false;
     while (true) {
@@ -377,7 +376,7 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
         iS += 1;
     }
     if (iState != 99) {
-        return NULL;
+        return Py_BuildValue("(O(ii)(OO))", Py_False, iRow, iCol, Py_False, Py_False);
     }
     // Convert row and col addr strings to numbers
     sRow[iR] = 0;
@@ -394,29 +393,15 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
         iCol = iCol*26 + iNum;
         iS += 1;
     }
+    return Py_BuildValue("(O(ii)(OO))", Py_True, iRow, iCol, Py_False, Py_False);
 }
-
-
-RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
-def celladdr_valid_ex(sAddr):
-    alphaAddr = m['colAddr']
-    numAddr = m['rowAddr']
-    # Get the data key for the cell
-    i = 0
-    alphaAddr = alphaAddr.upper()
-    numAlphaAddr = 0
-    while i < len(alphaAddr):
-        num = (ord(alphaAddr[i]) - ord('A'))+1
-        numAlphaAddr = numAlphaAddr*26 + num
-        i += 1
-    return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
-
 
 
 
 static PyMethodDef CSVLoadMethods[] = {
     { "load_line", load_line, METH_VARARGS, load_line_doc },
     { "get_celladdrs_incranges", get_celladdrs_incranges, METH_VARARGS, get_celladdrs_incranges_doc },
+    { "celladdr_valid_ex", celladdr_valid_ex, METH_VARARGS, celladdr_valid_ex_doc },
     { "config_csvchars", config_csvchars, METH_VARARGS, config_csvchars_doc },
     { "get_celladdrs_incranges_fromre", get_celladdrs_incranges_fromre, METH_VARARGS, get_celladdrs_incranges_fromre_doc },
     { NULL, NULL, 0, NULL}
