@@ -492,6 +492,7 @@ def get_celladdrs_incranges(sIn):
     return get_celladdrs_incranges_py(sIn)
 
 
+RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
 def celladdr_valid_ex(sAddr):
     '''
     Check if the given string is a cell address or not.
@@ -500,7 +501,7 @@ def celladdr_valid_ex(sAddr):
     Ignore $ prefix if any wrt col or row address.
     If there is garbage beyond numeric row address, then mark invalid
     '''
-    m=re.fullmatch("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)", sAddr)
+    m=RE_CA.fullmatch(sAddr)
     if m == None:
         return False, (None, None), (None, None)
     if m['colFixed'] == '$':
