@@ -493,7 +493,7 @@ def get_celladdrs_incranges(sIn):
 
 
 RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
-def celladdr_valid_ex(sAddr):
+def celladdr_valid_ex_py(sAddr):
     '''
     Check if the given string is a cell address or not.
 
@@ -523,6 +523,12 @@ def celladdr_valid_ex(sAddr):
         numAlphaAddr = numAlphaAddr*26 + num
         i += 1
     return True, (int(numAddr), int(numAlphaAddr)), (bRowFixed, bColFixed)
+
+
+def celladdr_valid_ex(sAddr):
+    if chelper != None:
+        return chelper.celladdr_valid_ex(sAddr)
+    return celladdr_valid_ex_py(sAddr)
 
 
 def celladdr_valid(sAddr):
