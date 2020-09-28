@@ -308,27 +308,41 @@ PyDoc_STRVAR(
     "\n"
     "NOTE:If there is garbage beyond numeric row address, then mark invalid\n");
 static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
-    PyObject *caList = PyList_New(0);
-    PyObject *caRange = NULL;
-    char sCur[32];
+    PyObject *retList = PyList_New(0);
+    char sCol[32], sRow[32];
     char *sAddr;
-    int iS, iC;
-    int iToken, iCARange;
+    int iS, iR, iC;
     int c;
 
     if (!PyArg_ParseTuple(args, "s", &sAddr)) {
         return NULL;
     }
     iS = 0;
+    iR = 0;
     iC = 0;
-    iState = 0; // 0 (Not in CA yet), 1 (optional col$), 2 (alpha part), 3 (optional row$), 4 (num part), 5 (space at end), -1 (Err)
+    iState = 0; // 0 (Not in CA yet), 1 (optional col$), 2 (alpha part), 3 (optional row$), 4 (num part), 5 (space at end), 99 (done), -1 (Err)
     bool bColFixed = false;
     bool bRowFixed = false;
     while (true) {
         c = sAddr[iS];
         if (isalpha(c)) {
-
+            if ((iState == 0) || (iState == 1) || (iState == 2)) {
+                iState = 2;
+                sCol[iC] = c;
+                iC += 1;
+            } else {
+                iState = -1;
+                break;
+            }
         } else if(isdigit(c)) {
+            if ((iState == 2) || (iState == 3) || (iState == 4)) {
+                iState = 4;
+                sRow[iR] = c;
+                iR += 1;
+            } else {
+                iState = -1;
+                break;
+            }
         } else if (c == ' ') {
             if ((iState == 0) || (iState == 5)) {
             } else if (iState == 4) {
@@ -348,12 +362,21 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
                 iState = -1;
                 break;
             }
+        } else if (c == 0) {
+            if ((iState == 4) || (iState == 5)) {
+                iState = 99;
+                break;
+            }
+            iState = -1;
+            break;
         } else {
             iState = -1;
             break;
         }
+        iS += 1;
     }
 }
+
 
 RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
 def celladdr_valid_ex(sAddr):
