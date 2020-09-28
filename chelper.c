@@ -313,6 +313,7 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
     char *sAddr;
     int iS, iR, iC;
     int c;
+    int iRow, iCol, iNum;
 
     if (!PyArg_ParseTuple(args, "s", &sAddr)) {
         return NULL;
@@ -375,29 +376,29 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
         }
         iS += 1;
     }
+    if (iState != 99) {
+        return NULL;
+    }
+    // Convert row and col addr strings to numbers
+    sRow[iR] = 0;
+    sCol[iC] = 0;
+    iRow = strtol(sRow, NULL, 0);
+    iCol = 0;
+    iS = 0;
+    while (iS < iC) {
+        if ((sCol[iS] >= 'A') && (sCol[iS] <= 'Z')) {
+            iNum = (sCol[iS] - 'A') + 1;
+        } else {
+            iNum = (sCol[iS] - 'a') + 1;
+        }
+        iCol = iCol*26 + iNum;
+        iS += 1;
+    }
 }
 
 
 RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<rowAddr>[0-9]+)")
 def celladdr_valid_ex(sAddr):
-    '''
-    Check if the given string is a cell address or not.
-
-    Extract the alpha col address and numeric row address.
-    Ignore $ prefix if any wrt col or row address.
-    If there is garbage beyond numeric row address, then mark invalid
-    '''
-    m=RE_CA.fullmatch(sAddr)
-    if m == None:
-        return False, (None, None), (None, None)
-    if m['colFixed'] == '$':
-        bColFixed = True
-    else:
-        bColFixed = False
-    if m['rowFixed'] == '$':
-        bRowFixed = True
-    else:
-        bRowFixed = False
     alphaAddr = m['colAddr']
     numAddr = m['rowAddr']
     # Get the data key for the cell
