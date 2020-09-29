@@ -393,7 +393,13 @@ static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
         iCol = iCol*26 + iNum;
         iS += 1;
     }
-    return Py_BuildValue("(O(ii)(OO))", Py_True, iRow, iCol, Py_False, Py_False);
+    PyObject *poBRowFixed = Py_False;
+    PyObject *poBColFixed = Py_False;
+    if (bRowFixed)
+        poBRowFixed = Py_True;
+    if (bColFixed)
+        poBColFixed = Py_True;
+    return Py_BuildValue("(O(ii)(OO))", Py_True, iRow, iCol, poBRowFixed, poBColFixed);
 }
 
 
