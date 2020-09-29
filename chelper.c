@@ -306,7 +306,7 @@ PyDoc_STRVAR(
     "Extract the numeric row and col address correponding to given cell address\n"
     "Identify if there is fixed address $ prefix marker\n"
     "\n"
-    "NOTE:If there is garbage beyond numeric row address, then mark invalid\n");
+    "NOTE:If there is anything other than space on either side of CA, then mark invalid\n");
 static PyObject* celladdr_valid_ex(PyObject *self, PyObject *args) {
     char sCol[32], sRow[32];
     char *sAddr;

@@ -1965,10 +1965,12 @@ the generic re with python wrapper/flow based previous logic.
 	TODO: TO match the python logic wrt lower level details like what is returned on failure as well as wrt white space around etc, OR
 	NOT TO MATCH, think once.
 
-[TODO] work throu the fwdlinks dictionary as the top control loop rather than the data dict during insert/delete rows/cols operation. This should
+[NOTE] work throu the fwdlinks dictionary as the top control loop rather than the data dict during insert/delete rows/cols operation. This should
 ensure that only =expression cells with references to other cells will get cross checked at updated as required, rather than the current logic,
 which iterates through all the cells with data/expression in them and inturn checks if they have any cell addresses to manipulate. i.e We can
-reduce our search space easily with this.
+reduce our search space easily with this. UPDATE: Rather too late into night the mind played bit of a trick ;-). As the key into dictionary
+changes for all cells beyond the insertion/deletion area, so one needs to move those cells. So for now keeping the original logic itself, as it
+handles the remaining optimisation of whether to check for CA adjustments is needed or not for any given cell's content.
 
 [TODO] Provide c based helpers for few more parse routines. Also note some of the buffer size as well as unicode char (or even multi byte utf-8)
 related limits of the c based helper in this readme and or make the logic more robust wrt these.

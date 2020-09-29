@@ -497,10 +497,10 @@ RE_CA=re.compile("(?P<colFixed>[$]?)(?P<colAddr>[a-zA-Z]+)(?P<rowFixed>[$]?)(?P<
 def celladdr_valid_ex_py(sAddr):
     '''
     Check if the given string is a cell address or not.
-
     Extract the alpha col address and numeric row address.
-    Ignore $ prefix if any wrt col or row address.
-    If there is garbage beyond numeric row address, then mark invalid
+    Identify if there is fixed address $ prefix marker.
+
+    If there is space or garbage on either side of CA, then mark invalid
     '''
     m=RE_CA.fullmatch(sAddr)
     if m == None:
