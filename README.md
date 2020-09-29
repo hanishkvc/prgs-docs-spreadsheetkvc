@@ -1962,6 +1962,9 @@ chelper's csv chars are updated to the latest fieldsep and textquote, before its
 chelper for celladdr\_valid\_ex which is btw 4 to 7 times faster, as it is a targetted parse logic that too executing natively, rather than
 the generic re with python wrapper/flow based previous logic.
 
+	TODO: TO match the python logic wrt lower level details like what is returned on failure as well as wrt white space around etc, OR
+	NOT TO MATCH, think once.
+
 [TODO] work throu the fwdlinks dictionary as the top control loop rather than the data dict during insert/delete rows/cols operation. This should
 ensure that only =expression cells with references to other cells will get cross checked at updated as required, rather than the current logic,
 which iterates through all the cells with data/expression in them and inturn checks if they have any cell addresses to manipulate. i.e We can
@@ -1971,6 +1974,7 @@ reduce our search space easily with this.
 related limits of the c based helper in this readme and or make the logic more robust wrt these.
 
 NOTE: One can fall back to the slower but more robust python logics by avoiding to install the c extension modules.
+
 
 
 
