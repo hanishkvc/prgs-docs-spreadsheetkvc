@@ -637,6 +637,8 @@ def _do_calign(cmd, lArgs):
     configure the global alignment
     '''
     global GALIGN
+
+    print("_do_calign:{},{}".format(cmd, lArgs), file=GERRFILE)
     if (lArgs[0] == 'left'):
         GALIGN = Align.Left
     elif (lArgs[0] == 'right'):
@@ -645,6 +647,7 @@ def _do_calign(cmd, lArgs):
         GALIGN = Align.Default
     else:
         raise Exception('calign: Invalid argument')
+    return "'calign:{}'".format(lArgs[0])
 
 
 def _do_cformat(cmd, lArgs):
@@ -1221,6 +1224,7 @@ def setup_funcs():
     funcs.GLOGFILE = GLOGFILE
     funcs.GERRFILE = GERRFILE
     funcs._do_cformat = _do_cformat
+    funcs._do_calign = _do_calign
 
 
 def setup_fileio(load=False):

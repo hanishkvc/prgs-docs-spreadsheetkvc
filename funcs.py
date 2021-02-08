@@ -16,6 +16,7 @@ me = None
 GLOGFILE = None
 GERRFILE = None
 _do_cformat = None
+_do_calign = None
 
 
 def _cellrange_to_list(lRange, bIgnoreEmpty=True):
@@ -241,6 +242,9 @@ def do_config(args):
     argsList = parse.get_funcargs(args)
     if argsList[0] == "cformat":
         return _do_cformat(argsList[0], argsList[1:])
+    elif argsList[0] == "calign":
+        print("do_config:calign called:{}".format(args), file=GERRFILE)
+        return _do_calign(argsList[0], argsList[1:])
 
 
 pyFuncs = [ 'min', 'round', 'pow', 'int', 'float', 'ord', 'chr', 'sin', 'cos', 'tan' ]
