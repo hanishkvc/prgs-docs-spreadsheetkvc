@@ -607,6 +607,12 @@ NOTE: Ensure that fieldsep, textquote and alt2inbtwquote are unique compared to 
 	Align text cells to left. Align numbers which fit within the cell to right else align to left.
 	Any content that doesnt fit within the cell will overflow into empty cells on the right.
 
+User can also trigger the same from with in a spreadsheet by using the following in a cell
+
+	=config(calign, left|right|default)
+
+	i.e specify one among left, right and default. Also it should be ideally specified in one of the initial cells in the spreadsheet.
+
 ##### Global formatting
 
 * cformat iffloat \<floatPrecision|None>
@@ -1979,6 +1985,12 @@ related limits of the c based helper in this readme and or make the logic more r
 NOTE: One can fall back to the slower but more robust python logics by avoiding to install the c extension modules.
 
 
+
+### 20210208IST1154 - InBetweenCovidATripToNative
+
+Allow the global calign to be specified from within the spreadsheet by using the =config(calign, ...) expression/function mechanism.
+
+TODO: Add mechanism to go back to the file, if any, that was being edited/viewed before :help is called.
 
 
 

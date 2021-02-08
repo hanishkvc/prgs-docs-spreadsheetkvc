@@ -243,7 +243,6 @@ def do_config(args):
     if argsList[0] == "cformat":
         return _do_cformat(argsList[0], argsList[1:])
     elif argsList[0] == "calign":
-        print("do_config:calign called:{}".format(args), file=GERRFILE)
         return _do_calign(argsList[0], argsList[1:])
 
 

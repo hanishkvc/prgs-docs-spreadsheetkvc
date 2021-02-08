@@ -637,8 +637,7 @@ def _do_calign(cmd, lArgs):
     configure the global alignment
     '''
     global GALIGN
-
-    print("_do_calign:{},{}".format(cmd, lArgs), file=GERRFILE)
+    #print("_do_calign:{},{}".format(cmd, lArgs), file=GERRFILE)
     if (lArgs[0] == 'left'):
         GALIGN = Align.Left
     elif (lArgs[0] == 'right'):
